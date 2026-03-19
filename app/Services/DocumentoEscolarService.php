@@ -742,6 +742,10 @@ class DocumentoEscolarService
 
     private function garantirAtendimentoPermitido(Usuario $usuario, AtendimentoPsicossocial $atendimento): void
     {
+        if ($usuario->acessaPortalPsicossocial()) {
+            return;
+        }
+
         if (! $usuario->escolas()->where('escolas.id', $atendimento->escola_id)->exists()) {
             throw new AuthorizationException('Documento sigiloso fora do contexto escolar permitido.');
         }
@@ -752,6 +756,10 @@ class DocumentoEscolarService
         if ($portal === 'secretaria') {
             $this->garantirUsuarioDeRede($usuario);
 
+            return Escola::query()->pluck('id');
+        }
+
+        if ($portal === 'psicossocial' && $usuario->acessaPortalPsicossocial()) {
             return Escola::query()->pluck('id');
         }
 

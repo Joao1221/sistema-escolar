@@ -66,6 +66,8 @@ class AuditoriaPortal
             str_starts_with((string) $routeName, 'secretaria-escolar.direcao.auditoria.') => 'direcao',
             str_starts_with((string) $routeName, 'professor.auditoria.') => 'professor',
             str_starts_with((string) $routeName, 'nutricionista.auditoria.') => 'nutricionista',
+            str_starts_with((string) $routeName, 'psicologia.auditoria.') => 'psicossocial',
+            str_starts_with((string) $routeName, 'psicologia.') => 'psicossocial',
             str_starts_with((string) $routeName, 'secretaria-escolar.psicossocial.auditoria.') => 'psicossocial',
             str_starts_with((string) $routeName, 'secretaria.') => 'secretaria',
             str_starts_with((string) $routeName, 'secretaria-escolar.coordenacao.') => 'coordenacao',

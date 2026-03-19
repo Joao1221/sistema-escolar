@@ -88,4 +88,9 @@ class Usuario extends Authenticatable implements MustVerifyEmail
             ->where('email', $this->email)
             ->first();
     }
+
+    public function acessaPortalPsicossocial(): bool
+    {
+        return $this->hasRole('Psicologia/Psicopedagogia');
+    }
 }

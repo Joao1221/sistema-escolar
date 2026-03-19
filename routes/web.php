@@ -44,6 +44,7 @@ use App\Http\Controllers\SecretariaEscolar\FornecedorAlimentoController;
 use App\Http\Controllers\SecretariaEscolar\MovimentacaoAlimentoController;
 use App\Http\Controllers\SecretariaEscolar\PsicossocialDocumentoController;
 use App\Http\Controllers\SecretariaEscolar\PsicossocialController;
+use App\Http\Controllers\PsicologiaPsicopedagogia\PortalPsicologiaPsicopedagogiaController;
 use App\Http\Controllers\Professor\DocumentoProfessorController;
 use App\Http\Controllers\Professor\AuditoriaProfessorController;
 use App\Http\Controllers\Professor\DiarioProfessorController;
@@ -312,6 +313,36 @@ Route::middleware(['auth', 'role:Administrador da Rede|Secretário Escolar|Admin
         });
     });
 
+});
+
+/*
+|--------------------------------------------------------------------------
+| PORTAL DA PSICOLOGIA / PSICOPEDAGOGIA
+|--------------------------------------------------------------------------
+*/
+Route::middleware(['auth', 'can:acessar modulo psicossocial', 'can:acessar dados sigilosos psicossociais'])->prefix('psicologia-psicopedagogia')->name('psicologia.')->group(function () {
+    Route::get('/', [PortalPsicologiaPsicopedagogiaController::class, 'index'])->name('index');
+    Route::get('/dashboard', [PortalPsicologiaPsicopedagogiaController::class, 'dashboard'])->name('dashboard');
+    Route::get('/agenda', [PortalPsicologiaPsicopedagogiaController::class, 'agenda'])->name('agenda');
+    Route::get('/atendimentos', [PortalPsicologiaPsicopedagogiaController::class, 'atendimentos'])->name('atendimentos.index');
+    Route::get('/atendimentos/criar', [PortalPsicologiaPsicopedagogiaController::class, 'create'])->name('create');
+    Route::post('/atendimentos', [PortalPsicologiaPsicopedagogiaController::class, 'store'])->name('store');
+    Route::get('/atendimentos/{atendimento}', [PortalPsicologiaPsicopedagogiaController::class, 'show'])->name('show');
+    Route::post('/atendimentos/{atendimento}/planos-intervencao', [PortalPsicologiaPsicopedagogiaController::class, 'storePlano'])->name('planos.store');
+    Route::post('/atendimentos/{atendimento}/encaminhamentos', [PortalPsicologiaPsicopedagogiaController::class, 'storeEncaminhamento'])->name('encaminhamentos.store');
+    Route::post('/atendimentos/{atendimento}/casos-disciplinares', [PortalPsicologiaPsicopedagogiaController::class, 'storeCaso'])->name('casos.store');
+    Route::post('/atendimentos/{atendimento}/relatorios-tecnicos', [PortalPsicologiaPsicopedagogiaController::class, 'storeRelatorio'])->name('relatorios_tecnicos.store');
+    Route::get('/historico', [PortalPsicologiaPsicopedagogiaController::class, 'historico'])->name('historico.index');
+    Route::get('/planos', [PortalPsicologiaPsicopedagogiaController::class, 'planos'])->name('planos.index');
+    Route::get('/encaminhamentos', [PortalPsicologiaPsicopedagogiaController::class, 'encaminhamentos'])->name('encaminhamentos.index');
+    Route::get('/casos-disciplinares', [PortalPsicologiaPsicopedagogiaController::class, 'casos'])->name('casos.index');
+    Route::get('/relatorios-tecnicos', [PortalPsicologiaPsicopedagogiaController::class, 'relatoriosTecnicos'])->name('relatorios_tecnicos.index');
+    Route::post('/documentos/{tipo}/visualizar', [PortalPsicologiaPsicopedagogiaController::class, 'previewDocumento'])->name('documentos.preview');
+    Route::post('/documentos/{tipo}/imprimir', [PortalPsicologiaPsicopedagogiaController::class, 'imprimirDocumento'])->name('documentos.print');
+    Route::get('/documentos', [PortalPsicologiaPsicopedagogiaController::class, 'documentos'])->name('documentos.index');
+    Route::post('/relatorios-tecnicos/{tipo}/visualizar', [PortalPsicologiaPsicopedagogiaController::class, 'previewRelatorioTecnico'])->name('relatorios_tecnicos.preview');
+    Route::post('/relatorios-tecnicos/{tipo}/imprimir', [PortalPsicologiaPsicopedagogiaController::class, 'imprimirRelatorioTecnico'])->name('relatorios_tecnicos.print');
+    Route::get('/auditoria', [PortalPsicologiaPsicopedagogiaController::class, 'auditoria'])->name('auditoria.index');
 });
 
 Route::middleware(['auth', 'can:criar diarios'])->prefix('professor')->name('professor.')->group(function () {

@@ -81,7 +81,7 @@
                             </a>
                         @endhasrole
 
-                        @hasanyrole('Administrador da Rede|Secretário Escolar|Administrador da Escola|Diretor Escolar|Coordenador Pedagógico|Psicologia/Psicopedagogia')
+                        @hasanyrole('Administrador da Rede|Secretário Escolar|Administrador da Escola|Diretor Escolar|Coordenador Pedagógico')
                             <a href="{{ route('secretaria-escolar.dashboard') }}" class="group relative overflow-hidden rounded-[2rem] border border-emerald-400/20 bg-white/8 p-7 shadow-2xl shadow-slate-950/30 transition duration-300 hover:-translate-y-1 hover:border-emerald-300/40 hover:bg-white/10">
                                 <div class="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-emerald-400 via-teal-300 to-cyan-300"></div>
                                 <div class="flex items-start justify-between gap-4">
@@ -107,6 +107,32 @@
                                 </div>
                             </a>
                         @endhasanyrole
+
+                        @if (Auth::user()->can('acessar modulo psicossocial') && Auth::user()->can('acessar dados sigilosos psicossociais'))
+                            <a href="{{ route('psicologia.dashboard') }}" class="group relative overflow-hidden rounded-[2rem] border border-cyan-400/20 bg-white/8 p-7 shadow-2xl shadow-slate-950/30 transition duration-300 hover:-translate-y-1 hover:border-cyan-300/40 hover:bg-white/10">
+                                <div class="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-cyan-300 via-emerald-300 to-teal-200"></div>
+                                <div class="flex items-start justify-between gap-4">
+                                    <div class="inline-flex rounded-2xl bg-cyan-400/15 p-4 text-cyan-200 ring-1 ring-cyan-300/20">
+                                        <svg class="h-9 w-9" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M12 11c1.657 0 3-1.343 3-3V7a3 3 0 10-6 0v1c0 1.657 1.343 3 3 3zm-7 9a7 7 0 1114 0H5z" />
+                                        </svg>
+                                    </div>
+                                    <span class="rounded-full border border-cyan-300/20 bg-cyan-400/10 px-3 py-1 text-xs font-semibold uppercase tracking-[0.2em] text-cyan-100/80">
+                                        Restrito
+                                    </span>
+                                </div>
+
+                                <h2 class="mt-8 text-2xl font-bold text-white">Portal da Psicologia</h2>
+                                <p class="mt-3 text-sm leading-7 text-slate-300">
+                                    Ambiente sigiloso para agenda, atendimentos, historico, planos, encaminhamentos, relatorios tecnicos e auditoria restrita.
+                                </p>
+
+                                <div class="mt-8 flex items-center gap-3 text-sm font-semibold text-cyan-100">
+                                    <span>Acessar portal</span>
+                                    <span class="transition group-hover:translate-x-1">&rarr;</span>
+                                </div>
+                            </a>
+                        @endif
 
                         @if (Auth::user()->can('criar diarios'))
                             <a href="{{ route('professor.dashboard') }}" class="group relative overflow-hidden rounded-[2rem] border border-amber-400/20 bg-white/8 p-7 shadow-2xl shadow-slate-950/30 transition duration-300 hover:-translate-y-1 hover:border-amber-300/40 hover:bg-white/10">

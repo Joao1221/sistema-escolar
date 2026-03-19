@@ -953,7 +953,7 @@ class RelatorioPortalService
 
     private function resolverEscolaIds(Usuario $usuario, string $portal): array
     {
-        if ($portal === 'secretaria' || $portal === 'nutricionista' || $usuario->hasRole('Administrador da Rede')) {
+        if ($portal === 'secretaria' || $portal === 'nutricionista' || $usuario->hasRole('Administrador da Rede') || ($portal === 'psicossocial' && $usuario->acessaPortalPsicossocial())) {
             return Escola::query()->pluck('id')->all();
         }
 
@@ -977,7 +977,7 @@ class RelatorioPortalService
     {
         $query = Matricula::query()->whereKey($matriculaId);
 
-        if ($portal !== 'secretaria' && $portal !== 'nutricionista' && ! $usuario->hasRole('Administrador da Rede')) {
+        if ($portal !== 'secretaria' && $portal !== 'nutricionista' && ! $usuario->hasRole('Administrador da Rede') && ! ($portal === 'psicossocial' && $usuario->acessaPortalPsicossocial())) {
             $query->whereIn('escola_id', $this->resolverEscolaIds($usuario, $portal) ?: [0]);
         }
 

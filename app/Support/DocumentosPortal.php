@@ -207,6 +207,8 @@ class DocumentosPortal
             str_starts_with((string) $routeName, 'secretaria-escolar.direcao.documentos.') => 'direcao',
             str_starts_with((string) $routeName, 'secretaria-escolar.coordenacao.documentos.') => 'coordenacao',
             str_starts_with((string) $routeName, 'professor.documentos.') => 'professor',
+            str_starts_with((string) $routeName, 'psicologia.documentos.') => 'psicossocial',
+            str_starts_with((string) $routeName, 'psicologia.') => 'psicossocial',
             str_starts_with((string) $routeName, 'secretaria-escolar.psicossocial.documentos.') => 'psicossocial',
             default => null,
         };

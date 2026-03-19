@@ -10,7 +10,7 @@
             @foreach ($payload as $chave => $valor)
                 <input type="hidden" name="{{ $chave }}" value="{{ $valor }}">
             @endforeach
-            <button type="submit" class="inline-flex items-center rounded-2xl bg-slate-900 px-4 py-2 text-sm font-semibold text-white transition hover:bg-slate-800">
+            <button type="submit" class="inline-flex items-center rounded-2xl border border-black bg-black px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-slate-900">
                 Abrir versao para impressao
             </button>
         </form>

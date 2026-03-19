@@ -34,4 +34,14 @@ class CasoDisciplinarSigiloso extends Model
     {
         return $this->belongsTo(AtendimentoPsicossocial::class, 'atendimento_psicossocial_id');
     }
+
+    public function escola()
+    {
+        return $this->belongsTo(Escola::class);
+    }
+
+    public function usuario()
+    {
+        return $this->belongsTo(Usuario::class);
+    }
 }

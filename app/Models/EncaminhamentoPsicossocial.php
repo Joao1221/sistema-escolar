@@ -36,4 +36,9 @@ class EncaminhamentoPsicossocial extends Model
     {
         return $this->belongsTo(AtendimentoPsicossocial::class, 'atendimento_psicossocial_id');
     }
+
+    public function usuario()
+    {
+        return $this->belongsTo(Usuario::class);
+    }
 }

@@ -63,7 +63,7 @@ class PsicossocialTest extends TestCase
         $usuario->assignRole('Psicologia/Psicopedagogia');
         $usuario->escolas()->attach($escola->id);
 
-        $this->actingAs($usuario)->post('/secretaria-escolar/psicologia-psicopedagogia/atendimentos', [
+        $this->actingAs($usuario)->post('/psicologia-psicopedagogia/atendimentos', [
             'escola_id' => $escola->id,
             'tipo_publico' => 'responsavel',
             'aluno_id' => $aluno->id,
@@ -83,6 +83,22 @@ class PsicossocialTest extends TestCase
         ])->assertRedirect();
 
         $atendimento = AtendimentoPsicossocial::query()->firstOrFail();
+
+        $this->actingAs($usuario)->post('/psicologia-psicopedagogia/atendimentos', [
+            'escola_id' => $escola->id,
+            'tipo_publico' => 'responsavel',
+            'aluno_id' => $aluno->id,
+            'responsavel_nome' => 'Agenda Futura',
+            'responsavel_tipo_vinculo' => 'mae',
+            'responsavel_telefone' => '(85) 98888-3333',
+            'tipo_atendimento' => 'psicopedagogia',
+            'natureza' => 'agendado',
+            'status' => 'agendado',
+            'data_agendada' => '2026-03-19 09:00:00',
+            'motivo_demanda' => 'Agendamento futuro. ',
+            'resumo_sigiloso' => 'Registro agendado para fluxo tecnico.',
+            'nivel_sigilo' => 'muito_restrito',
+        ])->assertRedirect();
 
         $this->actingAs($usuario)->post("/secretaria-escolar/psicologia-psicopedagogia/atendimentos/{$atendimento->id}/planos-intervencao", [
             'objetivo_geral' => 'Fortalecer rotinas de estudo.',
@@ -106,11 +122,17 @@ class PsicossocialTest extends TestCase
             'data_emissao' => '2026-03-18',
         ])->assertRedirect();
 
-        $agendaResponse = $this->actingAs($usuario)->get('/secretaria-escolar/psicologia-psicopedagogia/agenda');
+        $agendaResponse = $this->actingAs($usuario)->get('/psicologia-psicopedagogia/agenda');
         $agendaResponse->assertOk();
-        $agendaResponse->assertSee('Maria Responsavel');
+        $agendaResponse->assertSee('Agenda Futura');
+        $agendaResponse->assertDontSee('Maria Responsavel');
 
-        $historicoResponse = $this->actingAs($usuario)->get('/secretaria-escolar/psicologia-psicopedagogia/historico');
+        $atendimentosResponse = $this->actingAs($usuario)->get('/psicologia-psicopedagogia/atendimentos');
+        $atendimentosResponse->assertOk();
+        $atendimentosResponse->assertSee('Maria Responsavel');
+        $atendimentosResponse->assertDontSee('Agenda Futura');
+
+        $historicoResponse = $this->actingAs($usuario)->get('/psicologia-psicopedagogia/historico');
         $historicoResponse->assertOk();
         $historicoResponse->assertSee('Maria Responsavel');
 
@@ -135,7 +157,7 @@ class PsicossocialTest extends TestCase
         ]);
     }
 
-    public function test_profissional_de_outra_escola_nao_acessa_registro_sigiloso(): void
+    public function test_profissional_de_outra_escola_acessa_registro_sigiloso_do_portal(): void
     {
         [$escolaA, $aluno] = $this->criarContextoBase();
         $escolaB = $this->criarEscola('Escola B', '00.000.000/0001-42');
@@ -148,7 +170,7 @@ class PsicossocialTest extends TestCase
         $usuarioB->assignRole('Psicologia/Psicopedagogia');
         $usuarioB->escolas()->attach($escolaB->id);
 
-        $this->actingAs($usuarioA)->post('/secretaria-escolar/psicologia-psicopedagogia/atendimentos', [
+        $this->actingAs($usuarioA)->post('/psicologia-psicopedagogia/atendimentos', [
             'escola_id' => $escolaA->id,
             'tipo_publico' => 'aluno',
             'aluno_id' => $aluno->id,
@@ -163,8 +185,9 @@ class PsicossocialTest extends TestCase
         $atendimento = AtendimentoPsicossocial::query()->firstOrFail();
 
         $this->actingAs($usuarioB)
-            ->get("/secretaria-escolar/psicologia-psicopedagogia/atendimentos/{$atendimento->id}")
-            ->assertForbidden();
+            ->get("/psicologia-psicopedagogia/atendimentos/{$atendimento->id}")
+            ->assertOk()
+            ->assertSee('Aluno Sigiloso');
     }
 
     public function test_secretaria_escolar_sem_permissao_nao_acessa_modulo_sigiloso(): void
@@ -176,8 +199,23 @@ class PsicossocialTest extends TestCase
         $usuario->escolas()->attach($escola->id);
 
         $this->actingAs($usuario)
-            ->get('/secretaria-escolar/psicologia-psicopedagogia')
+            ->get('/psicologia-psicopedagogia')
             ->assertForbidden();
+    }
+
+    public function test_perfil_psicologia_visualiza_todas_as_escolas_no_seletor_do_portal(): void
+    {
+        $this->criarEscola('Escola Norte', '00.000.000/0001-44');
+        $this->criarEscola('Escola Sul', '00.000.000/0001-45');
+
+        $usuario = Usuario::factory()->create(['email' => 'psico.todas.escolas@example.com']);
+        $usuario->assignRole('Psicologia/Psicopedagogia');
+
+        $response = $this->actingAs($usuario)->get('/psicologia-psicopedagogia/atendimentos/criar');
+
+        $response->assertOk();
+        $response->assertSee('Escola Norte');
+        $response->assertSee('Escola Sul');
     }
 
     private function criarContextoBase(): array

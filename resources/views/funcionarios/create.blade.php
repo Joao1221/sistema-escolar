@@ -41,7 +41,7 @@
                             <x-input-label for="cargo" :value="__('Cargo / Função')" />
                             <select id="cargo" name="cargo" class="mt-1 block w-full border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm" required>
                                 <option value="">Selecione...</option>
-                                @foreach (['Professor', 'Diretor', 'Coordenador', 'Secretário Escolar', 'Nutricionista', 'Auxiliar de Serviços Gerais', 'Merendeira', 'Vigilante'] as $cargo)
+                                @foreach (['Professor', 'Diretor', 'Coordenador', 'Secretário Escolar', 'Nutricionista', 'Psicólogo', 'Psicopedagogo', 'Auxiliar de Serviços Gerais', 'Merendeira', 'Vigilante'] as $cargo)
                                     <option value="{{ $cargo }}" {{ old('cargo') === $cargo ? 'selected' : '' }}>{{ $cargo }}</option>
                                 @endforeach
                             </select>

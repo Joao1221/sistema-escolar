@@ -65,10 +65,10 @@
     </div>
 
     <div class="mt-5 flex flex-wrap gap-3">
-        <button type="submit" class="inline-flex items-center rounded-2xl bg-slate-900 px-4 py-2 text-sm font-semibold text-white transition hover:bg-slate-800">
+        <button type="submit" class="inline-flex items-center rounded-2xl border border-black bg-black px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-slate-900">
             Filtrar logs
         </button>
-        <a href="{{ $rotaIndex }}" class="inline-flex items-center rounded-2xl border border-slate-300 px-4 py-2 text-sm font-semibold text-slate-700 transition hover:bg-slate-50">
+        <a href="{{ $rotaIndex }}" class="inline-flex items-center rounded-2xl border border-black bg-black px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-slate-900">
             Limpar
         </a>
     </div>

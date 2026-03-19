@@ -45,6 +45,10 @@ class AtendimentoPsicossocialPolicy
 
     private function mesmaEscola(Usuario $usuario, AtendimentoPsicossocial $atendimento): bool
     {
+        if ($usuario->acessaPortalPsicossocial()) {
+            return true;
+        }
+
         $escolaIds = $usuario->escolas()->pluck('escolas.id');
 
         return $escolaIds->isNotEmpty() && $escolaIds->contains($atendimento->escola_id);

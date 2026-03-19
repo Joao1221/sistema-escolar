@@ -32,4 +32,14 @@ class RelatorioTecnicoPsicossocial extends Model
     {
         return $this->belongsTo(AtendimentoPsicossocial::class, 'atendimento_psicossocial_id');
     }
+
+    public function escola()
+    {
+        return $this->belongsTo(Escola::class);
+    }
+
+    public function usuarioEmissor()
+    {
+        return $this->belongsTo(Usuario::class, 'usuario_emissor_id');
+    }
 }

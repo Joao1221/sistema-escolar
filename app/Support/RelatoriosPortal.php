@@ -341,6 +341,8 @@ class RelatoriosPortal
             str_starts_with((string) $routeName, 'secretaria-escolar.coordenacao.relatorios.') => 'coordenacao',
             str_starts_with((string) $routeName, 'secretaria-escolar.direcao.relatorios.') => 'direcao',
             str_starts_with((string) $routeName, 'nutricionista.relatorios.') => 'nutricionista',
+            str_starts_with((string) $routeName, 'psicologia.relatorios_tecnicos.') => 'psicossocial',
+            str_starts_with((string) $routeName, 'psicologia.') => 'psicossocial',
             str_starts_with((string) $routeName, 'secretaria-escolar.psicossocial.relatorios') => 'psicossocial',
             default => null,
         };
