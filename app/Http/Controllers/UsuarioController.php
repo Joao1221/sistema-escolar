@@ -8,8 +8,8 @@ use App\Models\Escola;
 use App\Models\Funcionario;
 use App\Models\Usuario;
 use App\Services\UsuarioService;
-use Spatie\Permission\Models\Role;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
+use Spatie\Permission\Models\Role;
 
 class UsuarioController extends Controller
 {
@@ -29,6 +29,7 @@ class UsuarioController extends Controller
     {
         $this->authorize('visualizar usuarios');
         $usuarios = $this->usuarioService->obterTodos();
+
         return view('usuarios.index', compact('usuarios'));
     }
 
@@ -38,9 +39,11 @@ class UsuarioController extends Controller
     public function create()
     {
         $this->authorize('criar usuario');
+
         $perfis = Role::all();
         $escolas = Escola::where('ativo', true)->get();
-        $funcionarios = Funcionario::where('ativo', true)->orderBy('nome')->get();
+        $funcionarios = $this->obterFuncionariosDisponiveis();
+
         return view('usuarios.create', compact('perfis', 'escolas', 'funcionarios'));
     }
 
@@ -50,6 +53,7 @@ class UsuarioController extends Controller
     public function store(StoreUsuarioRequest $request)
     {
         $this->usuarioService->criar($request->validated());
+
         return redirect()->route('secretaria.usuarios.index')->with('success', 'Usuário criado com sucesso.');
     }
 
@@ -59,9 +63,11 @@ class UsuarioController extends Controller
     public function edit(Usuario $usuario)
     {
         $this->authorize('editar usuario');
+
         $perfis = Role::all();
         $escolas = Escola::where('ativo', true)->get();
-        $funcionarios = Funcionario::where('ativo', true)->orderBy('nome')->get();
+        $funcionarios = $this->obterFuncionariosDisponiveis($usuario);
+
         return view('usuarios.edit', compact('usuario', 'perfis', 'escolas', 'funcionarios'));
     }
 
@@ -71,6 +77,7 @@ class UsuarioController extends Controller
     public function update(UpdateUsuarioRequest $request, Usuario $usuario)
     {
         $this->usuarioService->atualizar($usuario, $request->validated());
+
         return redirect()->route('secretaria.usuarios.index')->with('success', 'Usuário atualizado com sucesso.');
     }
 
@@ -81,6 +88,27 @@ class UsuarioController extends Controller
     {
         $this->authorize('ativar inativar usuario');
         $this->usuarioService->alternarStatus($usuario);
+
         return redirect()->route('secretaria.usuarios.index')->with('success', 'Status do usuário alterado com sucesso.');
+    }
+
+    private function obterFuncionariosDisponiveis(?Usuario $usuario = null)
+    {
+        $query = Funcionario::query()->orderBy('nome');
+
+        if ($usuario?->funcionario_id) {
+            $query->where(function ($subquery) use ($usuario) {
+                $subquery->whereKey($usuario->funcionario_id)
+                    ->orWhere(function ($queryDisponiveis) {
+                        $queryDisponiveis->where('ativo', true)
+                            ->whereDoesntHave('usuario');
+                    });
+            });
+        } else {
+            $query->where('ativo', true)
+                ->whereDoesntHave('usuario');
+        }
+
+        return $query->get();
     }
 }

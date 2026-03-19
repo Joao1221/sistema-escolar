@@ -28,7 +28,7 @@
             <x-sidebar-secretaria-escolar />
 
             <!-- Main Content Area -->
-            <div class="flex-1 flex flex-col min-w-0 min-h-0 bg-slate-50 my-3 mr-[30px] ml-[30px] rounded-[3rem] overflow-hidden shadow-2xl relative border border-white/20">
+            <div class="flex-1 flex flex-col min-w-0 min-h-0 bg-slate-50 my-3 mr-[30px] ml-[30px] rounded-none overflow-hidden shadow-2xl relative border border-white/20">
                 
                 <!-- Navbar / Header -->
                 <header class="bg-white/80 backdrop-blur-md border-b border-emerald-100 h-20 flex-none flex items-center justify-between px-12 z-10 shadow-sm text-gray-800">
@@ -111,5 +111,7 @@
                 </main>
             </div>
         </div>
+
+        @stack('scripts')
     </body>
 </html>

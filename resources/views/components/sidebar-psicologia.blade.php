@@ -1,4 +1,4 @@
-<aside class="relative overflow-hidden bg-slate-950 text-slate-100 lg:h-full lg:min-h-0 lg:w-[320px] lg:flex-shrink-0 lg:overflow-y-auto">
+<aside class="fixed inset-y-0 left-0 w-64 bg-slate-950 text-slate-100 flex flex-col flex-shrink-0 overflow-y-auto shadow-xl">
     <div class="absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(34,211,238,0.16),_transparent_42%),linear-gradient(180deg,_rgba(2,6,23,1)_0%,_rgba(15,23,42,1)_100%)]"></div>
 
     <div class="relative flex min-h-full flex-col">
@@ -10,7 +10,7 @@
             </p>
         </div>
 
-        <div class="flex-1 px-3 py-4">
+        <div class="px-3 py-4">
             <div class="space-y-4">
                 <section>
                     <p class="mb-2 px-3 text-[11px] font-semibold uppercase tracking-[0.35em] text-cyan-300">Rotina sigilosa</p>
@@ -57,17 +57,6 @@
                     </nav>
                 </section>
 
-                <section>
-                    <p class="mb-2 px-3 text-[11px] font-semibold uppercase tracking-[0.35em] text-cyan-300">Futuras integracoes</p>
-                    <div class="rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-sm text-slate-200">
-                        <div class="flex flex-wrap gap-2">
-                            <span class="rounded-full border border-white/10 bg-white/10 px-3 py-1 text-[10px] uppercase tracking-[0.25em]">Alunos</span>
-                            <span class="rounded-full border border-white/10 bg-white/10 px-3 py-1 text-[10px] uppercase tracking-[0.25em]">AEE</span>
-                            <span class="rounded-full border border-white/10 bg-white/10 px-3 py-1 text-[10px] uppercase tracking-[0.25em]">Relatorios tecnicos</span>
-                            <span class="rounded-full border border-white/10 bg-white/10 px-3 py-1 text-[10px] uppercase tracking-[0.25em]">Auditoria restrita</span>
-                        </div>
-                    </div>
-                </section>
             </div>
         </div>
 

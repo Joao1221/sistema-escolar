@@ -3,8 +3,8 @@
         <section class="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
             <div>
                 <p class="text-sm uppercase tracking-[0.3em] text-amber-700 font-semibold">Portal do Professor</p>
-                <h2 class="text-3xl font-outfit font-bold text-stone-900">Meus diários ativos</h2>
-                <p class="text-stone-600 mt-2">Acesse os diários da sua rotina, registre aula, frequência, planejamentos, observações, ocorrências e pendências.</p>
+                <h2 class="text-3xl font-outfit font-bold" style="color:#f3efff;">Meus diários ativos</h2>
+                <p class="mt-2" style="color:rgba(239,238,255,0.78);">Acesse os diários da sua rotina, registre aula, frequência, planejamentos, observações, ocorrências e pendências.</p>
             </div>
 
             @can('criar diarios')

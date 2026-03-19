@@ -19,8 +19,9 @@
         </style>
     </head>
     <body class="min-h-full bg-[radial-gradient(circle_at_top,_#e7faf8_0%,_#edf4ff_42%,_#eef5ea_100%)] text-slate-900 antialiased lg:h-full lg:overflow-hidden">
-        <div class="min-h-screen lg:flex lg:h-full lg:min-h-0 lg:overflow-hidden">
+        <div class="min-h-screen flex">
             <x-sidebar-psicologia />
+            <div class="w-64 flex-shrink-0"></div>
 
             <div class="flex-1 min-w-0 p-3 lg:flex lg:h-full lg:min-h-0 lg:flex-col lg:overflow-hidden lg:p-5">
                 <div class="min-h-[calc(100vh-1.5rem)] overflow-hidden rounded-[2rem] border border-white/70 bg-white/90 shadow-[0_30px_90px_rgba(15,23,42,0.14)] backdrop-blur lg:flex lg:h-full lg:min-h-0 lg:flex-col">

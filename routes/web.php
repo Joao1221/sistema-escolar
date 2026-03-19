@@ -51,6 +51,7 @@ use App\Http\Controllers\Professor\DiarioProfessorController;
 use App\Http\Controllers\Professor\PortalProfessorController;
 use App\Http\Controllers\Professor\TurmaProfessorController;
 use App\Http\Controllers\Professor\HorarioProfessorController;
+use App\Http\Controllers\Professor\ThemeController;
 use App\Http\Controllers\Nutricionista\GestaoAlimentacaoController as NutricionistaGestaoAlimentacaoController;
 use App\Http\Controllers\Nutricionista\PortalNutricionistaController;
 use App\Http\Controllers\Nutricionista\AuditoriaNutricionistaController;
@@ -349,6 +350,7 @@ Route::middleware(['auth', 'can:criar diarios'])->prefix('professor')->name('pro
     Route::get('/dashboard', [PortalProfessorController::class, 'dashboard'])->name('dashboard');
     Route::get('/turmas', [TurmaProfessorController::class, 'index'])->name('turmas.index');
     Route::get('/horarios', [HorarioProfessorController::class, 'index'])->name('horarios.index');
+    Route::post('/theme', [ThemeController::class, 'update'])->name('theme.update');
 
     Route::get('/diario', [DiarioProfessorController::class, 'index'])->name('diario.index');
     Route::get('/diario/criar', [DiarioProfessorController::class, 'create'])->name('diario.create');

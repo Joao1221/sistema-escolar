@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use App\Models\Funcionario;
 use App\Models\Usuario;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Spatie\Permission\Models\Permission;
@@ -53,10 +54,16 @@ class UsuarioTest extends TestCase
     {
         $admin = Usuario::factory()->create();
         $admin->assignRole('Administrador da Rede');
+        $funcionario = Funcionario::create([
+            'nome' => 'Novo Professor Teste',
+            'cpf' => '123.456.789-00',
+            'email' => 'prof.teste@escola.com',
+            'cargo' => 'Professor',
+            'ativo' => true,
+        ]);
 
         $novoUsuarioData = [
-            'name' => 'Novo Professor Teste',
-            'email' => 'prof.teste@escola.com',
+            'funcionario_id' => $funcionario->id,
             'password' => 'senha1234',
             'password_confirmation' => 'senha1234',
             'ativo' => 1,
@@ -69,7 +76,58 @@ class UsuarioTest extends TestCase
         $this->assertDatabaseHas('usuarios', [
             'email' => 'prof.teste@escola.com',
             'ativo' => 1,
+            'funcionario_id' => $funcionario->id,
         ]);
+    }
+
+    public function test_administrador_nao_pode_criar_usuario_sem_funcionario_vinculado(): void
+    {
+        $admin = Usuario::factory()->create();
+        $admin->assignRole('Administrador da Rede');
+
+        $response = $this->actingAs($admin)
+            ->from(route('secretaria.usuarios.create'))
+            ->post(route('secretaria.usuarios.store'), [
+                'password' => 'senha1234',
+                'password_confirmation' => 'senha1234',
+                'ativo' => 1,
+            ]);
+
+        $response->assertRedirect(route('secretaria.usuarios.create'));
+        $response->assertSessionHasErrors('funcionario_id');
+        $this->assertDatabaseCount('usuarios', 1);
+    }
+
+    public function test_administrador_nao_pode_reutilizar_funcionario_que_ja_possui_usuario(): void
+    {
+        $admin = Usuario::factory()->create();
+        $admin->assignRole('Administrador da Rede');
+
+        $funcionario = Funcionario::create([
+            'nome' => 'Funcionario Ja Vinculado',
+            'cpf' => '987.654.321-00',
+            'email' => 'funcionario.vinculado@escola.com',
+            'cargo' => 'Professor',
+            'ativo' => true,
+        ]);
+
+        Usuario::factory()->create([
+            'email' => $funcionario->email,
+            'funcionario_id' => $funcionario->id,
+        ]);
+
+        $response = $this->actingAs($admin)
+            ->from(route('secretaria.usuarios.create'))
+            ->post(route('secretaria.usuarios.store'), [
+                'funcionario_id' => $funcionario->id,
+                'password' => 'senha1234',
+                'password_confirmation' => 'senha1234',
+                'ativo' => 1,
+            ]);
+
+        $response->assertRedirect(route('secretaria.usuarios.create'));
+        $response->assertSessionHasErrors('funcionario_id');
+        $this->assertDatabaseCount('usuarios', 2);
     }
 
     public function test_administrador_pode_alternar_status(): void

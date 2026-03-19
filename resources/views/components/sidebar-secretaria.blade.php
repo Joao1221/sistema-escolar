@@ -1,4 +1,4 @@
-<nav class="w-64 bg-slate-900 text-white min-h-screen flex flex-col flex-shrink-0 shadow-xl" style="background-color: #0f172a;">
+<nav class="fixed inset-y-0 left-0 w-64 bg-slate-900 text-white flex flex-col flex-shrink-0 shadow-xl" style="background-color: #0f172a;">
     {{-- Logo / Branding --}}
     <div class="p-6">
         <div class="flex items-center space-x-3">
@@ -186,5 +186,3 @@
         </div>
     </div>
 </nav>
-
-

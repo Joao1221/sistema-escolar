@@ -2,8 +2,8 @@
     <div class="max-w-4xl space-y-8">
         <div>
             <p class="text-sm uppercase tracking-[0.3em] text-amber-700 font-semibold">Portal do Professor</p>
-            <h2 class="text-3xl font-outfit font-bold text-stone-900">Abrir novo diário</h2>
-            <p class="text-stone-600 mt-2">O diário só pode ser aberto para combinações já vinculadas ao horário do professor.</p>
+            <h2 class="text-3xl font-outfit font-bold" style="color:#f3efff;">Abrir novo diário</h2>
+            <p class="mt-2" style="color:rgba(239,238,255,0.78);">O diário só pode ser aberto para combinações já vinculadas ao horário do professor.</p>
         </div>
 
         @if ($opcoesCriacao->isEmpty())
