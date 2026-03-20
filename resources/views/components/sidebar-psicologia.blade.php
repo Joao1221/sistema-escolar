@@ -1,17 +1,34 @@
-<aside class="fixed inset-y-0 left-0 w-64 bg-slate-950 text-slate-100 flex flex-col flex-shrink-0 overflow-y-auto shadow-xl">
+<aside class="fixed inset-y-0 left-0 w-64 bg-slate-950 flex flex-col flex-shrink-0 overflow-y-auto shadow-xl" style="color: #ffffff;">
     <div class="absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(34,211,238,0.16),_transparent_42%),linear-gradient(180deg,_rgba(2,6,23,1)_0%,_rgba(15,23,42,1)_100%)]"></div>
 
     <div class="relative flex min-h-full flex-col">
         <div class="border-b border-white/10 px-5 py-5">
             <p class="text-xs font-semibold uppercase tracking-[0.35em] text-cyan-300">Ambiente Restrito</p>
-            <h2 class="mt-3 max-w-[11.5rem] text-xl font-bold leading-tight font-fraunces text-white xl:text-2xl">Portal da Psicologia</h2>
-            <p class="mt-2 max-w-[15rem] text-sm leading-6 text-slate-300">
-                Rotina tecnica sigilosa com agenda, atendimentos, planos, encaminhamentos e relatorios restritos.
-            </p>
+            <h2 class="mt-3 max-w-[11.5rem] text-xl font-bold leading-tight font-fraunces xl:text-2xl text-white">Portal da Psicologia</h2>
+            <p class="mt-2 max-w-[15rem] text-sm leading-6 text-slate-300">Rotina tecnica sigilosa com agenda, atendimentos, planos, encaminhamentos e relatorios restritos.</p>
         </div>
 
         <div class="px-3 py-4">
             <div class="space-y-4">
+                <section>
+                    <p class="mb-2 px-3 text-[11px] font-semibold uppercase tracking-[0.35em] text-cyan-300">Fluxo de trabalho</p>
+                    <nav class="space-y-1">
+                        @php
+                            $linksFluxo = [
+                                ['rota' => 'psicologia.demandas.index', 'label' => 'Demandas'],
+                                ['rota' => 'psicologia.demandas.create', 'label' => 'Nova demanda'],
+                            ];
+                        @endphp
+
+                        @foreach ($linksFluxo as $link)
+                            <a href="{{ route($link['rota']) }}" class="flex items-center justify-between rounded-2xl px-4 py-2 text-xs font-semibold transition {{ request()->routeIs(str_replace('.index', '.*', $link['rota'])) || request()->routeIs($link['rota']) ? 'bg-white text-slate-900 shadow-lg' : 'text-slate-200 hover:bg-white/10 hover:text-white' }}">
+                                <span>{{ $link['label'] }}</span>
+                                <span class="text-[10px] uppercase tracking-[0.25em] {{ request()->routeIs(str_replace('.index', '.*', $link['rota'])) || request()->routeIs($link['rota']) ? 'text-slate-500' : 'text-slate-400' }}">Abrir</span>
+                            </a>
+                        @endforeach
+                    </nav>
+                </section>
+
                 <section>
                     <p class="mb-2 px-3 text-[11px] font-semibold uppercase tracking-[0.35em] text-cyan-300">Rotina sigilosa</p>
                     <nav class="space-y-1">
@@ -26,7 +43,7 @@
                         @endphp
 
                         @foreach ($links as $link)
-                            <a href="{{ route($link['rota']) }}" class="flex items-center justify-between rounded-2xl px-4 py-2 text-sm font-semibold transition {{ request()->routeIs(str_replace('.index', '.*', $link['rota'])) || request()->routeIs($link['rota']) ? 'bg-white text-slate-900 shadow-lg' : 'text-slate-200 hover:bg-white/10 hover:text-white' }}">
+                            <a href="{{ route($link['rota']) }}" class="flex items-center justify-between rounded-2xl px-4 py-2 text-xs font-semibold transition {{ request()->routeIs(str_replace('.index', '.*', $link['rota'])) || request()->routeIs($link['rota']) ? 'bg-white text-slate-900 shadow-lg' : 'text-slate-200 hover:bg-white/10 hover:text-white' }}">
                                 <span>{{ $link['label'] }}</span>
                                 <span class="text-[10px] uppercase tracking-[0.25em] {{ request()->routeIs(str_replace('.index', '.*', $link['rota'])) || request()->routeIs($link['rota']) ? 'text-slate-500' : 'text-slate-400' }}">Abrir</span>
                             </a>
@@ -49,7 +66,7 @@
                         @endphp
 
                         @foreach ($linksTecnicos as $link)
-                            <a href="{{ route($link['rota']) }}" class="flex items-center justify-between rounded-2xl px-4 py-2 text-sm font-semibold transition {{ request()->routeIs($link['rota']) || request()->routeIs(str_replace('.index', '.*', $link['rota'])) ? 'bg-white text-slate-900 shadow-lg' : 'text-slate-200 hover:bg-white/10 hover:text-white' }}">
+                            <a href="{{ route($link['rota']) }}" class="flex items-center justify-between rounded-2xl px-4 py-2 text-xs font-semibold transition {{ request()->routeIs($link['rota']) || request()->routeIs(str_replace('.index', '.*', $link['rota'])) ? 'bg-white text-slate-900 shadow-lg' : 'text-slate-200 hover:bg-white/10 hover:text-white' }}">
                                 <span>{{ $link['label'] }}</span>
                                 <span class="text-[10px] uppercase tracking-[0.25em] {{ request()->routeIs($link['rota']) || request()->routeIs(str_replace('.index', '.*', $link['rota'])) ? 'text-slate-500' : 'text-slate-400' }}">Abrir</span>
                             </a>
@@ -62,8 +79,8 @@
 
         <div class="border-t border-white/10 px-5 py-4">
             <div class="rounded-2xl bg-white/8 p-4">
-                <p class="text-xs font-semibold uppercase tracking-[0.3em] text-cyan-300">Sigilo maximo</p>
-                <p class="mt-2 text-sm text-slate-300">
+                <p class="text-[11px] font-semibold uppercase tracking-[0.3em] text-cyan-300">Sigilo maximo</p>
+                <p class="mt-2 text-[11px] text-slate-300">
                     Registros sensiveis, historicos e relatorios permanecem restritos ao perfil habilitado.
                 </p>
             </div>

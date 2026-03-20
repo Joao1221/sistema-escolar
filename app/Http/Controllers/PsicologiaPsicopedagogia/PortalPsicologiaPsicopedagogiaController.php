@@ -11,6 +11,7 @@ use App\Http\Requests\StoreEncaminhamentoPsicossocialRequest;
 use App\Http\Requests\StorePlanoIntervencaoPsicossocialRequest;
 use App\Http\Requests\StoreRelatorioTecnicoPsicossocialRequest;
 use App\Models\AtendimentoPsicossocial;
+use App\Models\DemandaPsicossocial;
 use App\Services\AuditoriaService;
 use App\Services\DocumentoEscolarService;
 use App\Services\PsicossocialService;
@@ -239,6 +240,19 @@ class PortalPsicologiaPsicopedagogiaController extends Controller implements Has
             ->with('success', 'Atendimento registrado com sucesso.');
     }
 
+    public function finalizar(Request $request, AtendimentoPsicossocial $atendimento)
+    {
+        $this->authorize('view', $atendimento);
+
+        $atendimento->update([
+            'status' => 'realizado',
+            'data_realizacao' => now(),
+        ]);
+
+        return redirect()->route('psicologia.show', $atendimento)
+            ->with('success', 'Atendimento iniciado com sucesso.');
+    }
+
     public function show(Request $request, AtendimentoPsicossocial $atendimento)
     {
         $this->authorize('view', $atendimento);
@@ -304,5 +318,213 @@ class PortalPsicologiaPsicopedagogiaController extends Controller implements Has
                 ['label' => 'Auditoria restrita'],
             ]),
         ]);
+    }
+
+    public function demandas(Request $request)
+    {
+        return view('psicologia-psicopedagogia.demandas.index', [
+            'demandas' => $this->psicossocialService->listarDemandasa($request->user(), $request->all()),
+            ...$this->psicossocialService->opcoesFormulario($request->user()),
+            'filtros' => $request->all(),
+            'tituloPagina' => 'Demandas',
+            'subtituloPagina' => 'Entrada formal de demandas para atendimento psicologico e psicopedagogico.',
+            'breadcrumbs' => $this->psicossocialService->construirBreadcrumbs([
+                ['label' => 'Demandas'],
+            ]),
+        ]);
+    }
+
+    public function criarDemanda(Request $request)
+    {
+        return view('psicologia-psicopedagogia.demandas.create', [
+            ...$this->psicossocialService->opcoesFormulario($request->user()),
+            'tituloPagina' => 'Nova demanda',
+            'subtituloPagina' => 'Cadastro de nova demanda de atendimento.',
+            'breadcrumbs' => $this->psicossocialService->construirBreadcrumbs([
+                ['label' => 'Demandas', 'url' => route('psicologia.demandas.index')],
+                ['label' => 'Nova demanda'],
+            ]),
+        ]);
+    }
+
+    public function dadosEscola(Request $request, int $escolaId)
+    {
+        try {
+            $escola = \App\Models\Escola::findOrFail($escolaId);
+            
+            $alunos = \App\Models\Aluno::query()
+                ->whereHas('matriculas', fn ($query) => $query->where('escola_id', $escolaId)->where('status', 'ativa'))
+                ->where('ativo', true)
+                ->orderBy('nome_completo')
+                ->get(['id', 'nome_completo']);
+            
+            $funcionarios = \App\Models\Funcionario::query()
+                ->whereHas('escolas', fn ($query) => $query->where('escolas.id', $escolaId))
+                ->orderBy('nome')
+                ->get(['id', 'nome']);
+            
+            return response()->json([
+                'alunos' => $alunos,
+                'funcionarios' => $funcionarios,
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'error' => $e->getMessage(),
+                'trace' => $e->getTraceAsString(),
+            ], 500);
+        }
+    }
+
+    public function salvarDemanda(Request $request)
+    {
+        $validated = $request->validate([
+            'escola_id' => 'required|exists:escolas,id',
+            'origem_demanda' => 'required|in:coordenacao,direcao,professor,familia,triagem_interna,demanda_espontanea,outro',
+            'tipo_publico' => 'required|in:aluno,professor,funcionario,responsavel',
+            'aluno_id' => 'nullable|exists:alunos,id',
+            'funcionario_id' => 'nullable|exists:funcionarios,id',
+            'responsavel_nome' => 'nullable|string|max:255',
+            'responsavel_telefone' => 'nullable|string|max:20',
+            'responsavel_vinculo' => 'nullable|string|max:100',
+            'tipo_atendimento' => 'nullable|in:psicologia,psicopedagogia,psicossocial',
+            'motivo_inicial' => 'required|string',
+            'prioridade' => 'nullable|in:baixa,media,alta,urgente',
+            'data_solicitacao' => 'nullable|date',
+            'observacoes' => 'nullable|string',
+        ]);
+
+        $demanda = $this->psicossocialService->criarDemanda($request->user(), $validated);
+
+        return redirect()->route('psicologia.demandas.show', $demanda)
+            ->with('success', 'Demanda registrada com sucesso.');
+    }
+
+    public function verDemanda(Request $request, DemandaPsicossocial $demanda)
+    {
+        return view('psicologia-psicopedagogia.demandas.show', [
+            'demanda' => $this->psicossocialService->carregarDemanda($request->user(), $demanda),
+            ...$this->psicossocialService->opcoesFormulario($request->user()),
+            'tituloPagina' => 'Demanda: ' . $demanda->nome_atendido,
+            'subtituloPagina' => 'Detalhes da demanda e opcoes de triagem.',
+            'breadcrumbs' => $this->psicossocialService->construirBreadcrumbs([
+                ['label' => 'Demandas', 'url' => route('psicologia.demandas.index')],
+                ['label' => 'Detalhe'],
+            ]),
+        ]);
+    }
+
+    public function salvarTriagem(Request $request, DemandaPsicossocial $demanda)
+    {
+        $validated = $request->validate([
+            'resumo_caso' => 'nullable|string',
+            'sinais_observados' => 'nullable|string',
+            'historico_breve' => 'nullable|string',
+            'urgencia' => 'nullable|in:baixa,media,alta,critica',
+            'risco_identificado' => 'nullable|boolean',
+            'descricao_risco' => 'nullable|string',
+            'nivel_sigilo' => 'nullable|in:normal,reforcado',
+            'decisao' => 'required|in:iniciar_atendimento,observar,encaminhar_externo,devolver_pedagogico,encerrar_sem_atendimento',
+            'justificativa_decisao' => 'nullable|string',
+            'profissional_responsavel_id' => 'nullable|exists:funcionarios,id',
+            'data_triagem' => 'nullable|date',
+            'observacoes' => 'nullable|string',
+        ]);
+
+        $this->psicossocialService->criarTriagem($request->user(), $demanda, $validated);
+        $atendimento = $this->psicossocialService->finalizarTriagem($request->user(), $demanda, $validated);
+
+        if ($atendimento) {
+            return redirect()->route('psicologia.show', $atendimento)
+                ->with('success', 'Triagem concluida. Atendimento criado com sucesso.');
+        }
+
+        return redirect()->route('psicologia.demandas.show', $demanda)
+            ->with('success', 'Triagem concluida.');
+    }
+
+    public function registrarSessao(Request $request, AtendimentoPsicossocial $atendimento)
+    {
+        $this->authorize('view', $atendimento);
+
+        $validated = $request->validate([
+            'data_sessao' => 'required|date',
+            'hora_inicio' => 'nullable',
+            'hora_fim' => 'nullable',
+            'tipo_sessao' => 'required|in:avaliacao,intervencao,retorno,emergencial,acolhimento,devolutiva,reavaliacao',
+            'objetivo_sessao' => 'nullable|string',
+            'relato_sessao' => 'nullable|string',
+            'estrategias_utilizadas' => 'nullable|string',
+            'comportamento_observado' => 'nullable|string',
+            'evolucao_percebida' => 'nullable|string',
+            'encaminhamentos_definidos' => 'nullable|string',
+            'necessita_retorno' => 'nullable|boolean',
+            'proximo_passo' => 'nullable|string',
+            'status' => 'nullable|in:realizado,remarcado,faltou,cancelado',
+            'observacoes' => 'nullable|string',
+        ]);
+
+        $this->psicossocialService->criarSessao($request->user(), $atendimento, $validated);
+
+        return redirect()->route('psicologia.show', $atendimento)
+            ->with('success', 'Sessao registrada com sucesso.');
+    }
+
+    public function salvarDevolutiva(Request $request, AtendimentoPsicossocial $atendimento)
+    {
+        $this->authorize('view', $atendimento);
+
+        $validated = $request->validate([
+            'destinatario' => 'required|in:familia,professor,coordenacao,direcao,funcionario,outro',
+            'nome_destinatario' => 'nullable|string|max:255',
+            'data_devolutiva' => 'required|date',
+            'resumo_devolutiva' => 'nullable|string',
+            'orientacoes' => 'nullable|string',
+            'encaminhamentos_combinados' => 'nullable|string',
+            'necessita_acompanhamento' => 'nullable|boolean',
+            'observacoes' => 'nullable|string',
+        ]);
+
+        $this->psicossocialService->criarDevolutiva($request->user(), $atendimento, $validated);
+
+        return redirect()->route('psicologia.show', $atendimento)
+            ->with('success', 'Devolutiva registrada com sucesso.');
+    }
+
+    public function salvarReavaliacao(Request $request, AtendimentoPsicossocial $atendimento)
+    {
+        $this->authorize('view', $atendimento);
+
+        $validated = $request->validate([
+            'data_reavaliacao' => 'required|date',
+            'progresso_observado' => 'nullable|string',
+            'dificuldades_persistentes' => 'nullable|string',
+            'ajuste_plano' => 'nullable|string',
+            'frequencia_nova' => 'nullable|in:semanal,quinzenal,mensal,outra',
+            'decisao' => 'required|in:manter_plano,ajustar_plano,suspender,encaminhar,encerrar',
+            'justificativa' => 'nullable|string',
+            'proxima_reavaliacao' => 'nullable|date',
+        ]);
+
+        $this->psicossocialService->criarReavaliacao($request->user(), $atendimento, $validated);
+
+        return redirect()->route('psicologia.show', $atendimento)
+            ->with('success', 'Reavaliacao registrada com sucesso.');
+    }
+
+    public function encerrarAtendimento(Request $request, AtendimentoPsicossocial $atendimento)
+    {
+        $this->authorize('view', $atendimento);
+
+        $validated = $request->validate([
+            'data_encerramento' => 'nullable|date',
+            'motivo_encerramento' => 'nullable|string',
+            'resumo_encerramento' => 'nullable|string',
+            'orientacoes_finais' => 'nullable|string',
+        ]);
+
+        $this->psicossocialService->encerrarAtendimento($request->user(), $atendimento, $validated);
+
+        return redirect()->route('psicologia.show', $atendimento)
+            ->with('success', 'Atendimento encerrado com sucesso.');
     }
 }

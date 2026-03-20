@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" class="h-full lg:overflow-hidden">
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -18,37 +18,37 @@
             .font-fraunces { font-family: 'Fraunces', serif; }
         </style>
     </head>
-    <body class="min-h-full bg-[radial-gradient(circle_at_top,_#e7faf8_0%,_#edf4ff_42%,_#eef5ea_100%)] text-slate-900 antialiased lg:h-full lg:overflow-hidden">
-        <div class="min-h-screen flex">
+    <body class="bg-[radial-gradient(circle_at_top,_#e7faf8_0%,_#edf4ff_42%,_#eef5ea_100%)] text-slate-900 antialiased">
+        <div class="flex">
             <x-sidebar-psicologia />
             <div class="w-64 flex-shrink-0"></div>
 
-            <div class="flex-1 min-w-0 p-3 lg:flex lg:h-full lg:min-h-0 lg:flex-col lg:overflow-hidden lg:p-5">
-                <div class="min-h-[calc(100vh-1.5rem)] overflow-hidden rounded-[2rem] border border-white/70 bg-white/90 shadow-[0_30px_90px_rgba(15,23,42,0.14)] backdrop-blur lg:flex lg:h-full lg:min-h-0 lg:flex-col">
-                    <header class="border-b border-cyan-100 bg-[linear-gradient(135deg,#fbfffe_0%,#eef8fb_45%,#f3f8ef_100%)] px-6 py-5 lg:px-10">
+            <div class="flex-1 p-5">
+                <div class="rounded-[2rem] border border-white/70 bg-white shadow-[0_30px_90px_rgba(15,23,42,0.14)]">
+                    <header class="border-b border-blue-800 px-6 py-5 lg:px-10" style="background: linear-gradient(to right, #0f172a, #1e3a5f, #1e40af);">
                         <div class="flex flex-col gap-5 lg:flex-row lg:items-end lg:justify-between">
                             <div class="min-w-0">
                                 <x-psicologia-breadcrumbs :items="$breadcrumbs" />
-                                <h1 class="mt-3 text-3xl font-bold tracking-tight text-[#17353a] font-fraunces">{{ $titulo }}</h1>
+                                <h1 class="mt-3 text-3xl font-bold tracking-tight text-white font-fraunces" style="color: #ffffff !important;">{{ $titulo }}</h1>
                                 @if ($subtitulo)
-                                    <p class="mt-2 max-w-3xl text-sm text-[#52686f] lg:text-base">{{ $subtitulo }}</p>
+                                    <p class="mt-2 max-w-3xl text-sm lg:text-base" style="color: rgba(255,255,255,0.9) !important;">{{ $subtitulo }}</p>
                                 @endif
                             </div>
 
                             <div class="flex flex-wrap items-center gap-3 self-start lg:self-auto">
-                                <div class="rounded-2xl border border-cyan-100 bg-white/90 px-4 py-3 text-right shadow-sm">
-                                    <p class="text-[11px] font-semibold uppercase tracking-[0.28em] text-cyan-700">Profissional logado</p>
-                                    <p class="mt-1 text-sm font-bold text-[#17353a]">{{ auth()->user()?->name }}</p>
-                                    <p class="mt-1 text-xs text-slate-500">{{ auth()->user()?->roles->first()?->name ?? 'Psicologia/Psicopedagogia' }}</p>
+                                <div class="rounded-2xl border border-white/30 bg-white/10 px-4 py-3 text-right shadow-sm backdrop-blur">
+                                    <p class="text-[11px] font-semibold uppercase tracking-[0.28em] text-white/80">Profissional logado</p>
+                                    <p class="mt-1 text-sm font-bold text-white">{{ auth()->user()?->name }}</p>
+                                    <p class="mt-1 text-xs text-white/60">{{ auth()->user()?->roles->first()?->name ?? 'Psicologia/Psicopedagogia' }}</p>
                                 </div>
 
-                                <a href="{{ route('hub') }}" class="inline-flex items-center rounded-xl border border-[#b8d7d7] bg-white/80 px-4 py-2 text-xs font-bold uppercase tracking-widest text-[#2b5f64] transition hover:bg-white">
+                                <a href="{{ route('hub') }}" class="inline-flex items-center rounded-xl border border-white/30 bg-white/10 px-4 py-2 text-xs font-bold uppercase tracking-widest text-white transition hover:bg-white/20 backdrop-blur">
                                     Trocar de portal
                                 </a>
 
                                 <form method="POST" action="{{ route('logout') }}">
                                     @csrf
-                                    <button type="submit" class="inline-flex items-center rounded-xl bg-[#14363a] px-4 py-2 text-xs font-bold uppercase tracking-widest text-white transition hover:bg-[#2b6f73]">
+                                    <button type="submit" class="inline-flex items-center rounded-xl bg-white/20 px-4 py-2 text-xs font-bold uppercase tracking-widest text-white transition hover:bg-white/30 backdrop-blur">
                                         Sair
                                     </button>
                                 </form>
@@ -56,7 +56,7 @@
                         </div>
                     </header>
 
-                    <main class="px-6 py-6 lg:flex-1 lg:min-h-0 lg:overflow-y-auto lg:px-10 lg:py-8">
+                    <main class="px-6 py-6 lg:px-10 lg:py-8">
                         @if (session('success'))
                             <div class="mb-6 rounded-2xl border border-emerald-200 bg-emerald-50 px-5 py-4 text-emerald-900 shadow-sm">
                                 {{ session('success') }}

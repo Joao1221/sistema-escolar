@@ -29,14 +29,22 @@ class AtendimentoPsicossocial extends Model
         'observacoes_restritas',
         'nivel_sigilo',
         'requer_acompanhamento',
+        'data_encerramento',
+        'motivo_encerramento',
+        'resumo_encerramento',
+        'orientacoes_finais',
     ];
 
     protected $casts = [
         'data_agendada' => 'datetime',
         'data_realizacao' => 'datetime',
+        'data_encerramento' => 'datetime',
         'motivo_demanda' => 'encrypted',
         'resumo_sigiloso' => 'encrypted',
         'observacoes_restritas' => 'encrypted',
+        'motivo_encerramento' => 'encrypted',
+        'resumo_encerramento' => 'encrypted',
+        'orientacoes_finais' => 'encrypted',
         'requer_acompanhamento' => 'boolean',
     ];
 
@@ -78,6 +86,26 @@ class AtendimentoPsicossocial extends Model
     public function relatoriosTecnicos()
     {
         return $this->hasMany(RelatorioTecnicoPsicossocial::class)->latest('data_emissao');
+    }
+
+    public function sessoes()
+    {
+        return $this->hasMany(SessaoAtendimento::class)->latest('data_sessao');
+    }
+
+    public function devolutivas()
+    {
+        return $this->hasMany(DevolutivaPsicossocial::class)->latest('data_devolutiva');
+    }
+
+    public function reavaliacoes()
+    {
+        return $this->hasMany(ReavaliacaoPsicossocial::class)->latest('data_reavaliacao');
+    }
+
+    public function demanda()
+    {
+        return $this->belongsTo(DemandaPsicossocial::class, 'demanda_id');
     }
 
     public function getNomeAtendidoAttribute(): string

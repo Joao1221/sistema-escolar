@@ -4,11 +4,37 @@
             <div>
                 <p class="text-sm font-semibold uppercase tracking-[0.3em] text-cyan-700">Registro sigiloso</p>
                 <h1 class="mt-2 text-3xl font-bold text-[#14363a]">{{ $atendimento->nome_atendido }}</h1>
-                <p class="mt-2 text-sm text-slate-500">{{ ucfirst($atendimento->tipo_publico) }} | {{ ucfirst($atendimento->tipo_atendimento) }} | {{ $atendimento->data_agendada->format('d/m/Y H:i') }}</p>
+                <p class="mt-2 text-sm text-slate-500">
+                    {{ ucfirst($atendimento->tipo_publico) }} | 
+                    {{ ucfirst($atendimento->tipo_atendimento) }} | 
+                    {{ $atendimento->data_agendada->format('d/m/Y H:i') }}
+                </p>
             </div>
-            <div class="flex gap-3">
+            <div class="flex gap-3 flex-wrap">
+                @if ($atendimento->status === 'agendado')
+                    <form method="POST" action="{{ route('psicologia.atendimento.finalizar', $atendimento) }}">
+                        @csrf
+                        @method('PATCH')
+                        <button type="submit" class="rounded-xl border border-emerald-600 bg-emerald-600 px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-emerald-700">Iniciar Atendimento</button>
+                    </form>
+                @endif
+                @if (in_array($atendimento->status, ['realizado', 'em_acompanhamento']))
+                    <button type="button" onclick="showModal('modal-sessao')" class="rounded-xl border border-blue-600 bg-blue-600 px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-blue-700">
+                        Registrar Sessao
+                    </button>
+                    <button type="button" onclick="showModal('modal-devolutiva')" class="rounded-xl border border-purple-600 bg-purple-600 px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-purple-700">
+                        Devolutiva
+                    </button>
+                    <button type="button" onclick="showModal('modal-reavaliacao')" class="rounded-xl border border-amber-600 bg-amber-600 px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-amber-700">
+                        Reavaliacao
+                    </button>
+                @endif
+                @if (in_array($atendimento->status, ['em_acompanhamento', 'agendado']))
+                    <button type="button" onclick="showModal('modal-encerrar')" class="rounded-xl border border-red-600 bg-red-600 px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-red-700">
+                        Encerrar
+                    </button>
+                @endif
                 <a href="{{ route('psicologia.historico.index') }}" class="rounded-xl border border-black bg-black px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-slate-900">Historico</a>
-                <a href="{{ route('psicologia.relatorios_tecnicos.index') }}" class="rounded-xl border border-black bg-black px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-slate-900">Relatorios</a>
             </div>
         </div>
 
@@ -25,6 +51,17 @@
                     <div><span class="text-xs uppercase tracking-widest text-slate-500">Motivo da demanda</span><p class="mt-1 whitespace-pre-line">{{ $atendimento->motivo_demanda }}</p></div>
                     <div><span class="text-xs uppercase tracking-widest text-slate-500">Resumo sigiloso</span><p class="mt-1 whitespace-pre-line">{{ $atendimento->resumo_sigiloso ?: 'Nao informado' }}</p></div>
                     <div><span class="text-xs uppercase tracking-widest text-slate-500">Observacoes restritas</span><p class="mt-1 whitespace-pre-line">{{ $atendimento->observacoes_restritas ?: 'Nao informado' }}</p></div>
+                    @if ($atendimento->status === 'encerrado')
+                        <div class="mt-4 rounded-xl bg-red-50 p-4">
+                            <h3 class="text-sm font-bold text-red-700">Atendimento Encerrado</h3>
+                            @if ($atendimento->data_encerramento)
+                                <p class="mt-1 text-xs text-red-600">Data: {{ $atendimento->data_encerramento->format('d/m/Y') }}</p>
+                            @endif
+                            @if ($atendimento->motivo_encerramento)
+                                <p class="mt-2 text-sm text-red-700">{{ $atendimento->motivo_encerramento }}</p>
+                            @endif
+                        </div>
+                    @endif
                 </div>
             </section>
 
@@ -148,5 +185,278 @@
                 </div>
             </section>
         </div>
+
+        <div class="grid gap-6 xl:grid-cols-3">
+            <section class="rounded-[1.75rem] border border-slate-200 bg-white p-6 shadow-sm">
+                <h2 class="text-lg font-bold text-[#14363a]">Sessoes realizadas</h2>
+                <div class="mt-4 space-y-3">
+                    @forelse ($atendimento->sessoes as $sessao)
+                        <div class="rounded-2xl border border-slate-100 p-4">
+                            <p class="font-semibold text-[#14363a]">{{ $sessao->data_sessao->format('d/m/Y') }}</p>
+                            <p class="mt-1 text-xs text-slate-500">{{ ucfirst($sessao->tipo_sessao) }} | {{ ucfirst($sessao->status) }}</p>
+                        </div>
+                    @empty
+                        <p class="text-sm text-slate-500">Nenhuma sessao registrada.</p>
+                    @endforelse
+                </div>
+            </section>
+
+            <section class="rounded-[1.75rem] border border-slate-200 bg-white p-6 shadow-sm">
+                <h2 class="text-lg font-bold text-[#14363a]">Devolutivas</h2>
+                <div class="mt-4 space-y-3">
+                    @forelse ($atendimento->devolutivas as $devolutiva)
+                        <div class="rounded-2xl border border-slate-100 p-4">
+                            <p class="font-semibold text-[#14363a]">{{ ucfirst($devolutiva->destinatario) }}</p>
+                            <p class="mt-1 text-xs text-slate-500">{{ $devolutiva->data_devolutiva->format('d/m/Y') }}</p>
+                        </div>
+                    @empty
+                        <p class="text-sm text-slate-500">Nenhuma devolutiva registrada.</p>
+                    @endforelse
+                </div>
+            </section>
+
+            <section class="rounded-[1.75rem] border border-slate-200 bg-white p-6 shadow-sm">
+                <h2 class="text-lg font-bold text-[#14363a]">Reavaliacoes</h2>
+                <div class="mt-4 space-y-3">
+                    @forelse ($atendimento->reavaliacoes as $reavaliacao)
+                        <div class="rounded-2xl border border-slate-100 p-4">
+                            <p class="font-semibold text-[#14363a]">{{ $reavaliacao->data_reavaliacao->format('d/m/Y') }}</p>
+                            <p class="mt-1 text-xs text-slate-500">{{ ucfirst(str_replace('_', ' ', $reavaliacao->decisao)) }}</p>
+                        </div>
+                    @empty
+                        <p class="text-sm text-slate-500">Nenhuma reavaliacao registrada.</p>
+                    @endforelse
+                </div>
+            </section>
+        </div>
     </div>
+
+    <div id="modal-sessao" class="fixed inset-0 z-50 hidden">
+        <div class="absolute inset-0 bg-black/50" onclick="hideModal('modal-sessao')"></div>
+        <div class="absolute inset-4 flex items-center justify-center">
+            <div class="max-h-full w-full max-w-2xl overflow-y-auto rounded-2xl bg-white p-6 shadow-xl">
+                <div class="mb-4 flex items-center justify-between">
+                    <h3 class="text-xl font-bold text-[#14363a]">Registrar Sessao</h3>
+                    <button onclick="hideModal('modal-sessao')" class="text-slate-400 hover:text-slate-600">&times;</button>
+                </div>
+                <form method="POST" action="{{ route('psicologia.atendimento.sessao.store', $atendimento) }}" class="space-y-4">
+                    @csrf
+                    <div class="grid gap-4 md:grid-cols-2">
+                        <div>
+                            <label class="block text-xs font-semibold uppercase tracking-wider text-slate-500">Data *</label>
+                            <input type="date" name="data_sessao" value="{{ now()->toDateString() }}" required class="mt-1 w-full rounded-xl border-slate-300 shadow-sm">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold uppercase tracking-wider text-slate-500">Tipo de sessao *</label>
+                            <select name="tipo_sessao" required class="mt-1 w-full rounded-xl border-slate-300 shadow-sm">
+                                <option value="avaliacao">Avaliacao</option>
+                                <option value="intervencao" selected>Intervencao</option>
+                                <option value="retorno">Retorno</option>
+                                <option value="emergencial">Emergencial</option>
+                                <option value="acolhimento">Acolhimento</option>
+                                <option value="devolutiva">Devolutiva</option>
+                                <option value="reavaliacao">Reavaliacao</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="grid gap-4 md:grid-cols-2">
+                        <div>
+                            <label class="block text-xs font-semibold uppercase tracking-wider text-slate-500">Hora inicio</label>
+                            <input type="time" name="hora_inicio" class="mt-1 w-full rounded-xl border-slate-300 shadow-sm">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold uppercase tracking-wider text-slate-500">Hora fim</label>
+                            <input type="time" name="hora_fim" class="mt-1 w-full rounded-xl border-slate-300 shadow-sm">
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold uppercase tracking-wider text-slate-500">Objetivo da sessao</label>
+                        <textarea name="objetivo_sessao" rows="2" class="mt-1 w-full rounded-xl border-slate-300 shadow-sm"></textarea>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold uppercase tracking-wider text-slate-500">Relato da sessao</label>
+                        <textarea name="relato_sessao" rows="4" placeholder="Descreva o que ocorreu na sessao..." class="mt-1 w-full rounded-xl border-slate-300 shadow-sm"></textarea>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold uppercase tracking-wider text-slate-500">Estrategias utilizadas</label>
+                        <textarea name="estrategias_utilizadas" rows="2" class="mt-1 w-full rounded-xl border-slate-300 shadow-sm"></textarea>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold uppercase tracking-wider text-slate-500">Comportamento observado</label>
+                        <textarea name="comportamento_observado" rows="2" class="mt-1 w-full rounded-xl border-slate-300 shadow-sm"></textarea>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold uppercase tracking-wider text-slate-500">Evolucao percebida</label>
+                        <textarea name="evolucao_percebida" rows="2" class="mt-1 w-full rounded-xl border-slate-300 shadow-sm"></textarea>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold uppercase tracking-wider text-slate-500">Proximo passo</label>
+                        <textarea name="proximo_passo" rows="2" class="mt-1 w-full rounded-xl border-slate-300 shadow-sm"></textarea>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold uppercase tracking-wider text-slate-500">Status</label>
+                        <select name="status" class="mt-1 w-full rounded-xl border-slate-300 shadow-sm">
+                            <option value="realizado">Realizado</option>
+                            <option value="remarcado">Remarcado</option>
+                            <option value="faltou">Faltou</option>
+                            <option value="cancelado">Cancelado</option>
+                        </select>
+                    </div>
+                    <div class="flex justify-end gap-3 pt-4">
+                        <button type="button" onclick="hideModal('modal-sessao')" class="rounded-xl border border-slate-300 bg-white px-4 py-2 text-sm font-semibold hover:bg-slate-50">Cancelar</button>
+                        <button type="submit" class="rounded-xl border border-blue-600 bg-blue-600 px-4 py-2 text-sm font-semibold text-white hover:bg-blue-700">Salvar sessao</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div id="modal-devolutiva" class="fixed inset-0 z-50 hidden">
+        <div class="absolute inset-0 bg-black/50" onclick="hideModal('modal-devolutiva')"></div>
+        <div class="absolute inset-4 flex items-center justify-center">
+            <div class="max-h-full w-full max-w-2xl overflow-y-auto rounded-2xl bg-white p-6 shadow-xl">
+                <div class="mb-4 flex items-center justify-between">
+                    <h3 class="text-xl font-bold text-[#14363a]">Registrar Devolutiva</h3>
+                    <button onclick="hideModal('modal-devolutiva')" class="text-slate-400 hover:text-slate-600">&times;</button>
+                </div>
+                <form method="POST" action="{{ route('psicologia.atendimento.devolutiva.store', $atendimento) }}" class="space-y-4">
+                    @csrf
+                    <div class="grid gap-4 md:grid-cols-2">
+                        <div>
+                            <label class="block text-xs font-semibold uppercase tracking-wider text-slate-500">Destinatario *</label>
+                            <select name="destinatario" required class="mt-1 w-full rounded-xl border-slate-300 shadow-sm">
+                                <option value="familia">Familia</option>
+                                <option value="professor">Professor</option>
+                                <option value="coordenacao">Coordenacao</option>
+                                <option value="direcao">Direcao</option>
+                                <option value="funcionario">Funcionario</option>
+                                <option value="outro">Outro</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold uppercase tracking-wider text-slate-500">Data *</label>
+                            <input type="date" name="data_devolutiva" value="{{ now()->toDateString() }}" required class="mt-1 w-full rounded-xl border-slate-300 shadow-sm">
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold uppercase tracking-wider text-slate-500">Resumo da devolutiva</label>
+                        <textarea name="resumo_devolutiva" rows="3" placeholder="Resumo do que foi comunicado..." class="mt-1 w-full rounded-xl border-slate-300 shadow-sm"></textarea>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold uppercase tracking-wider text-slate-500">Orientacoes</label>
+                        <textarea name="orientacoes" rows="2" class="mt-1 w-full rounded-xl border-slate-300 shadow-sm"></textarea>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold uppercase tracking-wider text-slate-500">Encaminhamentos combinados</label>
+                        <textarea name="encaminhamentos_combinados" rows="2" class="mt-1 w-full rounded-xl border-slate-300 shadow-sm"></textarea>
+                    </div>
+                    <div class="flex justify-end gap-3 pt-4">
+                        <button type="button" onclick="hideModal('modal-devolutiva')" class="rounded-xl border border-slate-300 bg-white px-4 py-2 text-sm font-semibold hover:bg-slate-50">Cancelar</button>
+                        <button type="submit" class="rounded-xl border border-purple-600 bg-purple-600 px-4 py-2 text-sm font-semibold text-white hover:bg-purple-700">Salvar devolutiva</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div id="modal-reavaliacao" class="fixed inset-0 z-50 hidden">
+        <div class="absolute inset-0 bg-black/50" onclick="hideModal('modal-reavaliacao')"></div>
+        <div class="absolute inset-4 flex items-center justify-center">
+            <div class="max-h-full w-full max-w-2xl overflow-y-auto rounded-2xl bg-white p-6 shadow-xl">
+                <div class="mb-4 flex items-center justify-between">
+                    <h3 class="text-xl font-bold text-[#14363a]">Reavaliacao do Caso</h3>
+                    <button onclick="hideModal('modal-reavaliacao')" class="text-slate-400 hover:text-slate-600">&times;</button>
+                </div>
+                <form method="POST" action="{{ route('psicologia.atendimento.reavaliacao.store', $atendimento) }}" class="space-y-4">
+                    @csrf
+                    <div>
+                        <label class="block text-xs font-semibold uppercase tracking-wider text-slate-500">Data da reavaliacao *</label>
+                        <input type="date" name="data_reavaliacao" value="{{ now()->toDateString() }}" required class="mt-1 w-full rounded-xl border-slate-300 shadow-sm">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold uppercase tracking-wider text-slate-500">Progresso observado</label>
+                        <textarea name="progresso_observado" rows="2" class="mt-1 w-full rounded-xl border-slate-300 shadow-sm"></textarea>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold uppercase tracking-wider text-slate-500">Dificuldades persistentes</label>
+                        <textarea name="dificuldades_persistentes" rows="2" class="mt-1 w-full rounded-xl border-slate-300 shadow-sm"></textarea>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold uppercase tracking-wider text-slate-500">Ajuste do plano</label>
+                        <textarea name="ajuste_plano" rows="2" class="mt-1 w-full rounded-xl border-slate-300 shadow-sm"></textarea>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold uppercase tracking-wider text-slate-500">Decisao *</label>
+                        <select name="decisao" required class="mt-1 w-full rounded-xl border-slate-300 shadow-sm">
+                            <option value="manter_plano">Manter plano</option>
+                            <option value="ajustar_plano">Ajustar plano</option>
+                            <option value="suspender">Suspender</option>
+                            <option value="encaminhar">Encaminhar</option>
+                            <option value="encerrar">Encerrar</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold uppercase tracking-wider text-slate-500">Justificativa</label>
+                        <textarea name="justificativa" rows="2" class="mt-1 w-full rounded-xl border-slate-300 shadow-sm"></textarea>
+                    </div>
+                    <div class="flex justify-end gap-3 pt-4">
+                        <button type="button" onclick="hideModal('modal-reavaliacao')" class="rounded-xl border border-slate-300 bg-white px-4 py-2 text-sm font-semibold hover:bg-slate-50">Cancelar</button>
+                        <button type="submit" class="rounded-xl border border-amber-600 bg-amber-600 px-4 py-2 text-sm font-semibold text-white hover:bg-amber-700">Salvar reavaliacao</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div id="modal-encerrar" class="fixed inset-0 z-50 hidden">
+        <div class="absolute inset-0 bg-black/50" onclick="hideModal('modal-encerrar')"></div>
+        <div class="absolute inset-4 flex items-center justify-center">
+            <div class="max-h-full w-full max-w-2xl overflow-y-auto rounded-2xl bg-white p-6 shadow-xl">
+                <div class="mb-4 flex items-center justify-between">
+                    <h3 class="text-xl font-bold text-red-700">Encerrar Atendimento</h3>
+                    <button onclick="hideModal('modal-encerrar')" class="text-slate-400 hover:text-slate-600">&times;</button>
+                </div>
+                <form method="POST" action="{{ route('psicologia.atendimento.encerrar', $atendimento) }}" class="space-y-4">
+                    @csrf
+                    <div>
+                        <label class="block text-xs font-semibold uppercase tracking-wider text-slate-500">Data de encerramento</label>
+                        <input type="date" name="data_encerramento" value="{{ now()->toDateString() }}" class="mt-1 w-full rounded-xl border-slate-300 shadow-sm">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold uppercase tracking-wider text-slate-500">Motivo do encerramento</label>
+                        <select name="motivo_encerramento" class="mt-1 w-full rounded-xl border-slate-300 shadow-sm">
+                            <option value="objetivo_alcancado">Objetivo alcancado</option>
+                            <option value="encaminhamento_externo">Encaminhamento externo definitivo</option>
+                            <option value="interrupcao_familia">Interrupcao pela familia</option>
+                            <option value="evasao">Evasao/abandono</option>
+                            <option value="mudanca_escola">Mudanca de escola</option>
+                            <option value="decisao_tecnica">Decisao tecnica</option>
+                            <option value="outro">Outro</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold uppercase tracking-wider text-slate-500">Resumo final</label>
+                        <textarea name="resumo_encerramento" rows="4" placeholder="Resumo da evolucao do caso..." class="mt-1 w-full rounded-xl border-slate-300 shadow-sm"></textarea>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold uppercase tracking-wider text-slate-500">Orientacoes finais</label>
+                        <textarea name="orientacoes_finais" rows="3" placeholder="Orientacoes para continuidade..." class="mt-1 w-full rounded-xl border-slate-300 shadow-sm"></textarea>
+                    </div>
+                    <div class="flex justify-end gap-3 pt-4">
+                        <button type="button" onclick="hideModal('modal-encerrar')" class="rounded-xl border border-slate-300 bg-white px-4 py-2 text-sm font-semibold hover:bg-slate-50">Cancelar</button>
+                        <button type="submit" class="rounded-xl border border-red-600 bg-red-600 px-4 py-2 text-sm font-semibold text-white hover:bg-red-700">Encerrar atendimento</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function showModal(id) {
+            document.getElementById(id).classList.remove('hidden');
+        }
+        function hideModal(id) {
+            document.getElementById(id).classList.add('hidden');
+        }
+    </script>
 </x-psicologia-layout>

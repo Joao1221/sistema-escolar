@@ -6,11 +6,16 @@ use App\Models\Aluno;
 use App\Models\AtendidoExterno;
 use App\Models\AtendimentoPsicossocial;
 use App\Models\CasoDisciplinarSigiloso;
+use App\Models\DemandaPsicossocial;
+use App\Models\DevolutivaPsicossocial;
 use App\Models\EncaminhamentoPsicossocial;
 use App\Models\Escola;
 use App\Models\Funcionario;
+use App\Models\ReavaliacaoPsicossocial;
 use App\Models\RelatorioTecnicoPsicossocial;
 use App\Models\PlanoIntervencaoPsicossocial;
+use App\Models\SessaoAtendimento;
+use App\Models\TriagemPsicossocial;
 use App\Models\Usuario;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Collection;
@@ -398,5 +403,183 @@ class PsicossocialService
             'email' => $dados['responsavel_email'] ?? null,
             'ativo' => true,
         ]);
+    }
+
+    public function listarDemandasa(Usuario $usuario, array $filtros = []): LengthAwarePaginator
+    {
+        return DemandaPsicossocial::query()
+            ->with(['escola', 'aluno', 'funcionario', 'profissionalResponsavel'])
+            ->whereIn('escola_id', $this->escolaIdsPermitidas($usuario))
+            ->when(! empty($filtros['escola_id']), fn ($query) => $query->where('escola_id', $filtros['escola_id']))
+            ->when(! empty($filtros['status']), fn ($query) => $query->where('status', $filtros['status']))
+            ->when(! empty($filtros['tipo_publico']), fn ($query) => $query->where('tipo_publico', $filtros['tipo_publico']))
+            ->when(! empty($filtros['prioridade']), fn ($query) => $query->where('prioridade', $filtros['prioridade']))
+            ->orderByDesc('data_solicitacao')
+            ->paginate(15)
+            ->withQueryString();
+    }
+
+    public function criarDemanda(Usuario $usuario, array $dados): DemandaPsicossocial
+    {
+        $this->garantirEscolaPermitida($usuario, (int) $dados['escola_id']);
+
+        return DB::transaction(function () use ($usuario, $dados) {
+            return DemandaPsicossocial::create([
+                'escola_id' => $dados['escola_id'],
+                'usuario_registro_id' => $usuario->id,
+                'profissional_responsavel_id' => $dados['profissional_responsavel_id'] ?? null,
+                'tipo_atendimento' => $dados['tipo_atendimento'] ?? 'psicologia',
+                'origem_demanda' => $dados['origem_demanda'],
+                'tipo_publico' => $dados['tipo_publico'],
+                'aluno_id' => $dados['aluno_id'] ?? null,
+                'funcionario_id' => $dados['funcionario_id'] ?? null,
+                'responsavel_nome' => $dados['responsavel_nome'] ?? null,
+                'responsavel_telefone' => $dados['responsavel_telefone'] ?? null,
+                'responsavel_vinculo' => $dados['responsavel_vinculo'] ?? null,
+                'motivo_inicial' => $dados['motivo_inicial'],
+                'prioridade' => $dados['prioridade'] ?? 'media',
+                'status' => 'aberta',
+                'data_solicitacao' => $dados['data_solicitacao'] ?? now()->toDateString(),
+                'observacoes' => $dados['observacoes'] ?? null,
+            ]);
+        });
+    }
+
+    public function carregarDemanda(Usuario $usuario, DemandaPsicossocial $demanda): DemandaPsicossocial
+    {
+        $this->garantirEscolaPermitida($usuario, $demanda->escola_id);
+
+        return $demanda->load(['escola', 'aluno', 'funcionario', 'usuarioRegistro', 'profissionalResponsavel', 'atendimento']);
+    }
+
+    public function criarTriagem(Usuario $usuario, DemandaPsicossocial $demanda, array $dados): TriagemPsicossocial
+    {
+        $this->garantirEscolaPermitida($usuario, $demanda->escola_id);
+
+        return DB::transaction(function () use ($usuario, $demanda, $dados) {
+            $triagem = $demanda->triagem()->create([
+                ...$dados,
+                'usuario_triador_id' => $usuario->id,
+                'data_triagem' => $dados['data_triagem'] ?? now()->toDateString(),
+            ]);
+
+            $demanda->update(['status' => 'em_triagem']);
+
+            return $triagem;
+        });
+    }
+
+    public function finalizarTriagem(Usuario $usuario, DemandaPsicossocial $demanda, array $dados): ?AtendimentoPsicossocial
+    {
+        $this->garantirEscolaPermitida($usuario, $demanda->escola_id);
+
+        if ($dados['decisao'] !== 'iniciar_atendimento') {
+            $demanda->update(['status' => $dados['decisao'] === 'encerrar_sem_atendimento' ? 'encerrada' : 'observacao']);
+            return null;
+        }
+
+        $atendimento = $this->criarAtendimentoAPartirDeDemanda($usuario, $demanda);
+        $demanda->update([
+            'status' => 'em_atendimento',
+            'profissional_responsavel_id' => $dados['profissional_responsavel_id'] ?? null,
+            'encaminhado_para_atendimento' => true,
+            'atendimento_id' => $atendimento->id,
+        ]);
+
+        return $atendimento;
+    }
+
+    private function criarAtendimentoAPartirDeDemanda(Usuario $usuario, DemandaPsicossocial $demanda): AtendimentoPsicossocial
+    {
+        $dados = [
+            'escola_id' => $demanda->escola_id,
+            'usuario_registro_id' => $usuario->id,
+            'profissional_responsavel_id' => $demanda->profissional_responsavel_id,
+            'tipo_publico' => $demanda->tipo_publico,
+            'tipo_atendimento' => $demanda->tipo_atendimento,
+            'natureza' => 'agendado',
+            'status' => 'agendado',
+            'data_agendada' => now()->addDays(7)->toDateString(),
+            'motivo_demanda' => $demanda->motivo_inicial,
+            'nivel_sigilo' => $demanda->origem_demanda === 'familia' ? 'restrito' : 'normal',
+            'requer_acompanhamento' => false,
+        ];
+
+        if ($demanda->tipo_publico === 'aluno' && $demanda->aluno_id) {
+            $dados['aluno_id'] = $demanda->aluno_id;
+        } elseif (in_array($demanda->tipo_publico, ['professor', 'funcionario']) && $demanda->funcionario_id) {
+            $dados['funcionario_id'] = $demanda->funcionario_id;
+        } else {
+            $dados['responsavel_nome'] = $demanda->responsavel_nome;
+            $dados['responsavel_tipo_vinculo'] = $demanda->responsavel_vinculo;
+            $dados['responsavel_telefone'] = $demanda->responsavel_telefone;
+        }
+
+        return $this->criarAtendimento($usuario, $dados);
+    }
+
+    public function criarSessao(Usuario $usuario, AtendimentoPsicossocial $atendimento, array $dados): SessaoAtendimento
+    {
+        $this->garantirEscolaPermitida($usuario, $atendimento->escola_id);
+
+        return DB::transaction(function () use ($usuario, $atendimento, $dados) {
+            $sessao = $atendimento->sessoes()->create([
+                ...$dados,
+                'usuario_profissional_id' => $usuario->id,
+                'funcionario_profissional_id' => $dados['funcionario_profissional_id'] ?? $usuario->resolverFuncionario()?->id,
+            ]);
+
+            if ($dados['status'] === 'realizado') {
+                $atendimento->update([
+                    'status' => 'em_acompanhamento',
+                    'data_realizacao' => $dados['data_sessao'],
+                ]);
+            }
+
+            return $sessao;
+        });
+    }
+
+    public function criarDevolutiva(Usuario $usuario, AtendimentoPsicossocial $atendimento, array $dados): DevolutivaPsicossocial
+    {
+        $this->garantirEscolaPermitida($usuario, $atendimento->escola_id);
+
+        return $atendimento->devolutivas()->create([
+            ...$dados,
+            'usuario_responsavel_id' => $usuario->id,
+        ]);
+    }
+
+    public function criarReavaliacao(Usuario $usuario, AtendimentoPsicossocial $atendimento, array $dados): ReavaliacaoPsicossocial
+    {
+        $this->garantirEscolaPermitida($usuario, $atendimento->escola_id);
+
+        return DB::transaction(function () use ($usuario, $atendimento, $dados) {
+            $reavaliacao = $atendimento->reavaliacoes()->create([
+                ...$dados,
+                'usuario_responsavel_id' => $usuario->id,
+            ]);
+
+            if ($dados['decisao'] === 'encerrar') {
+                $atendimento->update(['status' => 'encerrado']);
+            }
+
+            return $reavaliacao;
+        });
+    }
+
+    public function encerrarAtendimento(Usuario $usuario, AtendimentoPsicossocial $atendimento, array $dados): AtendimentoPsicossocial
+    {
+        $this->garantirEscolaPermitida($usuario, $atendimento->escola_id);
+
+        $atendimento->update([
+            'status' => 'encerrado',
+            'data_encerramento' => $dados['data_encerramento'] ?? now()->toDateString(),
+            'motivo_encerramento' => $dados['motivo_encerramento'] ?? null,
+            'resumo_encerramento' => $dados['resumo_encerramento'] ?? null,
+            'orientacoes_finais' => $dados['orientacoes_finais'] ?? null,
+        ]);
+
+        return $atendimento;
     }
 }

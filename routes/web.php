@@ -13,6 +13,26 @@ use App\Http\Controllers\Secretaria\RelatorioRedeController;
 use App\Http\Controllers\Secretaria\TurmaConsultaController;
 use App\Http\Controllers\Secretaria\MatriculaConsultaController;
 use App\Http\Controllers\Secretaria\SecretariaController;
+
+Route::get('/psicologia-api/dados-escola/{escolaId}', function (int $escolaId) {
+    $escola = \App\Models\Escola::findOrFail($escolaId);
+    
+    $alunos = \App\Models\Aluno::query()
+        ->whereHas('matriculas', fn ($query) => $query->where('escola_id', $escolaId)->where('status', 'ativa'))
+        ->where('ativo', true)
+        ->orderBy('nome_completo')
+        ->get(['id', 'nome_completo']);
+    
+    $funcionarios = \App\Models\Funcionario::query()
+        ->whereHas('escolas', fn ($query) => $query->where('escolas.id', $escolaId))
+        ->orderBy('nome')
+        ->get(['id', 'nome']);
+    
+    return response()->json([
+        'alunos' => $alunos,
+        'funcionarios' => $funcionarios,
+    ]);
+})->middleware(['auth']);
 use App\Http\Controllers\Secretaria\DisciplinaController;
 use App\Http\Controllers\Secretaria\MatrizCurricularController;
 use App\Http\Controllers\SecretariaEscolar\DashboardController as EscolarDashboardController;
@@ -44,7 +64,6 @@ use App\Http\Controllers\SecretariaEscolar\FornecedorAlimentoController;
 use App\Http\Controllers\SecretariaEscolar\MovimentacaoAlimentoController;
 use App\Http\Controllers\SecretariaEscolar\PsicossocialDocumentoController;
 use App\Http\Controllers\SecretariaEscolar\PsicossocialController;
-use App\Http\Controllers\PsicologiaPsicopedagogia\PortalPsicologiaPsicopedagogiaController;
 use App\Http\Controllers\Professor\DocumentoProfessorController;
 use App\Http\Controllers\Professor\AuditoriaProfessorController;
 use App\Http\Controllers\Professor\DiarioProfessorController;
@@ -321,14 +340,28 @@ Route::middleware(['auth', 'role:Administrador da Rede|Secretário Escolar|Admin
 | PORTAL DA PSICOLOGIA / PSICOPEDAGOGIA
 |--------------------------------------------------------------------------
 */
+use App\Http\Controllers\PsicologiaPsicopedagogia\PortalPsicologiaPsicopedagogiaController;
 Route::middleware(['auth', 'can:acessar modulo psicossocial', 'can:acessar dados sigilosos psicossociais'])->prefix('psicologia-psicopedagogia')->name('psicologia.')->group(function () {
     Route::get('/', [PortalPsicologiaPsicopedagogiaController::class, 'index'])->name('index');
     Route::get('/dashboard', [PortalPsicologiaPsicopedagogiaController::class, 'dashboard'])->name('dashboard');
     Route::get('/agenda', [PortalPsicologiaPsicopedagogiaController::class, 'agenda'])->name('agenda');
+    
+    Route::get('/demandas', [PortalPsicologiaPsicopedagogiaController::class, 'demandas'])->name('demandas.index');
+    Route::get('/demandas/criar', [PortalPsicologiaPsicopedagogiaController::class, 'criarDemanda'])->name('demandas.create');
+    Route::get('/demandas/dados-escola/{escolaId}', [PortalPsicologiaPsicopedagogiaController::class, 'dadosEscola'])->withoutMiddleware(['can:acessar modulo psicossocial', 'can:acessar dados sigilosos psicossociais']);
+    Route::post('/demandas', [PortalPsicologiaPsicopedagogiaController::class, 'salvarDemanda'])->name('demandas.store');
+    Route::get('/demandas/{demanda}', [PortalPsicologiaPsicopedagogiaController::class, 'verDemanda'])->name('demandas.show');
+    Route::post('/demandas/{demanda}/triagem', [PortalPsicologiaPsicopedagogiaController::class, 'salvarTriagem'])->name('demandas.triagem');
+    
     Route::get('/atendimentos', [PortalPsicologiaPsicopedagogiaController::class, 'atendimentos'])->name('atendimentos.index');
     Route::get('/atendimentos/criar', [PortalPsicologiaPsicopedagogiaController::class, 'create'])->name('create');
     Route::post('/atendimentos', [PortalPsicologiaPsicopedagogiaController::class, 'store'])->name('store');
     Route::get('/atendimentos/{atendimento}', [PortalPsicologiaPsicopedagogiaController::class, 'show'])->name('show');
+    Route::patch('/atendimentos/{atendimento}/finalizar', [PortalPsicologiaPsicopedagogiaController::class, 'finalizar'])->name('atendimento.finalizar');
+    Route::post('/atendimentos/{atendimento}/sessao', [PortalPsicologiaPsicopedagogiaController::class, 'registrarSessao'])->name('atendimento.sessao.store');
+    Route::post('/atendimentos/{atendimento}/devolutiva', [PortalPsicologiaPsicopedagogiaController::class, 'salvarDevolutiva'])->name('atendimento.devolutiva.store');
+    Route::post('/atendimentos/{atendimento}/reavaliacao', [PortalPsicologiaPsicopedagogiaController::class, 'salvarReavaliacao'])->name('atendimento.reavaliacao.store');
+    Route::post('/atendimentos/{atendimento}/encerrar', [PortalPsicologiaPsicopedagogiaController::class, 'encerrarAtendimento'])->name('atendimento.encerrar');
     Route::post('/atendimentos/{atendimento}/planos-intervencao', [PortalPsicologiaPsicopedagogiaController::class, 'storePlano'])->name('planos.store');
     Route::post('/atendimentos/{atendimento}/encaminhamentos', [PortalPsicologiaPsicopedagogiaController::class, 'storeEncaminhamento'])->name('encaminhamentos.store');
     Route::post('/atendimentos/{atendimento}/casos-disciplinares', [PortalPsicologiaPsicopedagogiaController::class, 'storeCaso'])->name('casos.store');

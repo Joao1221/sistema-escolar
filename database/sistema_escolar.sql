@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Tempo de geração: 19/03/2026 às 22:26
--- Versão do servidor: 10.4.32-MariaDB
--- Versão do PHP: 8.2.12
+-- Tempo de geração: 20/03/2026 às 17:31
+-- Versão do servidor: 10.4.28-MariaDB
+-- Versão do PHP: 8.2.4
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -167,6 +167,14 @@ CREATE TABLE `atendimentos_psicossociais` (
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+--
+-- Despejando dados para a tabela `atendimentos_psicossociais`
+--
+
+INSERT INTO `atendimentos_psicossociais` (`id`, `escola_id`, `usuario_registro_id`, `profissional_responsavel_id`, `atendivel_type`, `atendivel_id`, `tipo_publico`, `tipo_atendimento`, `natureza`, `status`, `data_agendada`, `data_realizacao`, `local_atendimento`, `motivo_demanda`, `resumo_sigiloso`, `observacoes_restritas`, `nivel_sigilo`, `requer_acompanhamento`, `created_at`, `updated_at`) VALUES
+(2, 6, 11, 5, 'App\\Models\\Aluno', 4, 'aluno', 'psicologia', 'agendado', 'realizado', '2026-03-19 10:00:00', '2026-03-20 15:08:53', 'Secretaria de Educação', 'eyJpdiI6IkxwMDNIa0wwR0F0WCtuVnZCRU1laWc9PSIsInZhbHVlIjoiOFJsL3VSS1pCZmFmTlBuTjIva2pZTktWWVA1S0l5U1Q2OGFrOEJnaVZRND0iLCJtYWMiOiI5Yzg2ZWM1MDg0Y2FkNWViMzk5YTI4MDg0MDFkNTlmOTBmOTU1YmNkY2VjOWE3YWEzMzM4ZTg2NzdlYmNlNGVlIiwidGFnIjoiIn0=', 'eyJpdiI6Ind0NzgxVitObFQrMkxHTVJka2tab1E9PSIsInZhbHVlIjoiL3BJMzR3NDk0SThmY29haDNibWIvZS8vbkFZR1dTUWFqUlp4Sm5hclJzaU1odkZaOFRmeEZMMlJqTVpheDd6SiIsIm1hYyI6ImE0YWU0YjU0MDAxNWQ4M2M4ZGU0ZjM3ZTgxNTQwMTM1ZTUxMTNjYjBmZWM1NGI4ODFjM2RkMjkzNzQxZWEyODIiLCJ0YWciOiIifQ==', 'eyJpdiI6IklwNkloR0hZVHZCY0tmRGIwdERYVXc9PSIsInZhbHVlIjoiUXU5dlBsOGZBaWlEN05jRG1CVCs4K1Vkalc5UmVSZkZwQVdKd3NZMU02VzM2elluU3o1alVjNFV2REdId3gwM1JFYUxCS2x1N1F0UHNLK1JmTDhJYnk4L1JBZ2xmOEh2b2gyNkhkN0RkQTB5NTh3UkdEODVBdEVOL1RmVDdMTm8iLCJtYWMiOiIwZjlhODFjMThjN2RiYThlMThiYzlkZTE0YWY4ODlmODIyMDkwNWZiZDFlYmM5ZDY5OTIxZGViZWM3OWViODUzIiwidGFnIjoiIn0=', 'restrito', 1, '2026-03-20 17:45:46', '2026-03-20 18:08:53'),
+(3, 6, 11, 5, 'App\\Models\\Aluno', 4, 'aluno', 'psicologia', 'retorno', 'realizado', '2026-03-20 09:00:00', '2026-03-20 09:00:00', 'Secretaria de Educação', 'eyJpdiI6Ik5FRnZvb2JKS0dxYXBlME4yVG4raFE9PSIsInZhbHVlIjoiSE50NVhjTUFYTmVqZ09yczFXM1JyV3NSM1dRaDFpck9zZWsyVFJkTlUxc3FkcTlVZlFJUnBlMW9FNXRpdlFOdzI1L0Y1NnljNjFBaW9LVk5ocXkybUE9PSIsIm1hYyI6IjI5Y2NjMDVkNjgwN2RiZThiZDczN2FmYmE0Y2YwN2VjNzkyODBhZDk5ZDkzZmI1MGEzN2JjM2RmNDBlNTVhMGQiLCJ0YWciOiIifQ==', 'eyJpdiI6Im9CY3UvM0NWaSt4blZCcUlhT095T2c9PSIsInZhbHVlIjoiK0grTkJHWFZNTGU3Qm5mZXduVDRyQTdVOVlQSVZNeHNINlk0dDVSTXhpaW1TWHpabmJ2ZHhWWkMzcC9lOHk5U0VFYytRQnVyb0ExL01ZVEVHK3AvWlE9PSIsIm1hYyI6ImFhMzRkNGJkMGRkNGQzMDkwZTAzYjU5OWMzNzEwNzcwMDlhZDY1MmRkNzgzMjRlOGNmM2I3ZmI2ODg0MjZjNzMiLCJ0YWciOiIifQ==', 'eyJpdiI6Ik1uZG9iajJxNURNbzhSa1BRSlIwK1E9PSIsInZhbHVlIjoiRmVMc3NpZmt2dkh3Q0ZNZzZyODFvbDJ4dm81K3BSUUJUS1ZmNHQwaVJPWT0iLCJtYWMiOiJiNTUzOTAxNGQ0MDA1OTRmYWRlZjU0MzA1NDg3NjgwZTY3ZWFkZDYwNWUzYzU0Y2YzMjYyYzVkMjU0Y2EzMjE4IiwidGFnIjoiIn0=', 'restrito', 1, '2026-03-20 18:07:16', '2026-03-20 18:07:16');
+
 -- --------------------------------------------------------
 
 --
@@ -184,9 +192,7 @@ CREATE TABLE `cache` (
 --
 
 INSERT INTO `cache` (`key`, `value`, `expiration`) VALUES
-('escola@gmail.com|::1', 'i:1;', 1773954396),
-('escola@gmail.com|::1:timer', 'i:1773954396;', 1773954396),
-('spatie.permission.cache', 'a:3:{s:5:\"alias\";a:4:{s:1:\"a\";s:2:\"id\";s:1:\"b\";s:4:\"name\";s:1:\"c\";s:10:\"guard_name\";s:1:\"r\";s:5:\"roles\";}s:11:\"permissions\";a:163:{i:0;a:4:{s:1:\"a\";i:1;s:1:\"b\";s:17:\"visualizar alunos\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:2:{i:0;i:1;i:1;i:2;}}i:1;a:4:{s:1:\"a\";i:2;s:1:\"b\";s:11:\"criar aluno\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:2:{i:0;i:1;i:1;i:2;}}i:2;a:4:{s:1:\"a\";i:3;s:1:\"b\";s:12:\"editar aluno\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:2:{i:0;i:1;i:1;i:2;}}i:3;a:4:{s:1:\"a\";i:4;s:1:\"b\";s:14:\"detalhar aluno\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:2:{i:0;i:1;i:1;i:2;}}i:4;a:4:{s:1:\"a\";i:5;s:1:\"b\";s:21:\"ativar inativar aluno\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:2:{i:0;i:1;i:1;i:2;}}i:5;a:4:{s:1:\"a\";i:6;s:1:\"b\";s:16:\"consultar turmas\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:2:{i:0;i:1;i:1;i:2;}}i:6;a:4:{s:1:\"a\";i:7;s:1:\"b\";s:14:\"detalhar turma\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:2:{i:0;i:1;i:1;i:2;}}i:7;a:4:{s:1:\"a\";i:8;s:1:\"b\";s:16:\"cadastrar turmas\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:2:{i:0;i:1;i:1;i:2;}}i:8;a:4:{s:1:\"a\";i:9;s:1:\"b\";s:13:\"editar turmas\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:2:{i:0;i:1;i:1;i:2;}}i:9;a:4:{s:1:\"a\";i:10;s:1:\"b\";s:14:\"excluir turmas\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:2:{i:0;i:1;i:1;i:2;}}i:10;a:4:{s:1:\"a\";i:11;s:1:\"b\";s:21:\"consultar matrículas\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:2:{i:0;i:1;i:1;i:2;}}i:11;a:4:{s:1:\"a\";i:12;s:1:\"b\";s:20:\"cadastrar matrícula\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:2:{i:0;i:1;i:1;i:2;}}i:12;a:4:{s:1:\"a\";i:13;s:1:\"b\";s:33:\"visualizar detalhes da matrícula\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:2:{i:0;i:1;i:1;i:2;}}i:13;a:4:{s:1:\"a\";i:14;s:1:\"b\";s:8:\"enturmar\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:2:{i:0;i:1;i:1;i:2;}}i:14;a:4:{s:1:\"a\";i:15;s:1:\"b\";s:10:\"transferir\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:2:{i:0;i:1;i:1;i:2;}}i:15;a:4:{s:1:\"a\";i:16;s:1:\"b\";s:12:\"rematricular\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:2:{i:0;i:1;i:1;i:2;}}i:16;a:3:{s:1:\"a\";i:17;s:1:\"b\";s:21:\"gerenciar disciplinas\";s:1:\"c\";s:3:\"web\";}i:17;a:3:{s:1:\"a\";i:18;s:1:\"b\";s:18:\"gerenciar matrizes\";s:1:\"c\";s:3:\"web\";}i:18;a:3:{s:1:\"a\";i:19;s:1:\"b\";s:18:\"consultar matrizes\";s:1:\"c\";s:3:\"web\";}i:19;a:4:{s:1:\"a\";i:20;s:1:\"b\";s:17:\"consultar diarios\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:5:{i:0;i:1;i:1;i:2;i:2;i:4;i:3;i:5;i:4;i:6;}}i:20;a:4:{s:1:\"a\";i:21;s:1:\"b\";s:13:\"criar diarios\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:2:{i:0;i:3;i:1;i:6;}}i:21;a:4:{s:1:\"a\";i:22;s:1:\"b\";s:15:\"registrar aulas\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:2:{i:0;i:3;i:1;i:6;}}i:22;a:4:{s:1:\"a\";i:23;s:1:\"b\";s:17:\"lancar frequencia\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:2:{i:0;i:3;i:1;i:6;}}i:23;a:4:{s:1:\"a\";i:24;s:1:\"b\";s:23:\"gerenciar planejamentos\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:2:{i:0;i:3;i:1;i:6;}}i:24;a:4:{s:1:\"a\";i:25;s:1:\"b\";s:33:\"registrar observacoes pedagogicas\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:2:{i:0;i:3;i:1;i:6;}}i:25;a:4:{s:1:\"a\";i:26;s:1:\"b\";s:33:\"registrar ocorrencias pedagogicas\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:2:{i:0;i:3;i:1;i:6;}}i:26;a:4:{s:1:\"a\";i:27;s:1:\"b\";s:33:\"gerenciar pendencias do professor\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:2:{i:0;i:3;i:1;i:6;}}i:27;a:4:{s:1:\"a\";i:28;s:1:\"b\";s:34:\"acompanhar diarios pedagogicamente\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:2:{i:0;i:4;i:1;i:6;}}i:28;a:4:{s:1:\"a\";i:29;s:1:\"b\";s:26:\"validar planejamento anual\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:2:{i:0;i:4;i:1;i:6;}}i:29;a:4:{s:1:\"a\";i:30;s:1:\"b\";s:28:\"validar planejamento semanal\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:2:{i:0;i:4;i:1;i:6;}}i:30;a:4:{s:1:\"a\";i:31;s:1:\"b\";s:25:\"validar aulas registradas\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:2:{i:0;i:4;i:1;i:6;}}i:31;a:4:{s:1:\"a\";i:32;s:1:\"b\";s:32:\"acompanhar frequencia pedagogica\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:2:{i:0;i:4;i:1;i:6;}}i:32;a:4:{s:1:\"a\";i:33;s:1:\"b\";s:32:\"acompanhar rendimento pedagogico\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:2:{i:0;i:4;i:1;i:6;}}i:33;a:4:{s:1:\"a\";i:34;s:1:\"b\";s:26:\"acompanhar alunos em risco\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:2:{i:0;i:4;i:1;i:6;}}i:34;a:4:{s:1:\"a\";i:35;s:1:\"b\";s:29:\"gerenciar pendencias docentes\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:2:{i:0;i:4;i:1;i:6;}}i:35;a:4:{s:1:\"a\";i:36;s:1:\"b\";s:12:\"ver horarios\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:2:{i:0;i:5;i:1;i:6;}}i:36;a:4:{s:1:\"a\";i:37;s:1:\"b\";s:29:\"acompanhar diarios da direcao\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:2:{i:0;i:5;i:1;i:6;}}i:37;a:4:{s:1:\"a\";i:38;s:1:\"b\";s:33:\"validar planejamento pela direcao\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:2:{i:0;i:5;i:1;i:6;}}i:38;a:4:{s:1:\"a\";i:39;s:1:\"b\";s:26:\"validar aulas pela direcao\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:2:{i:0;i:5;i:1;i:6;}}i:39;a:4:{s:1:\"a\";i:40;s:1:\"b\";s:27:\"justificar faltas de alunos\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:2:{i:0;i:5;i:1;i:6;}}i:40;a:4:{s:1:\"a\";i:41;s:1:\"b\";s:27:\"liberar prazo de lancamento\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:2:{i:0;i:5;i:1;i:6;}}i:41;a:4:{s:1:\"a\";i:42;s:1:\"b\";s:32:\"registrar faltas de funcionarios\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:2:{i:0;i:5;i:1;i:6;}}i:42;a:4:{s:1:\"a\";i:43;s:1:\"b\";s:25:\"iniciar fechamento letivo\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:2:{i:0;i:5;i:1;i:6;}}i:43;a:4:{s:1:\"a\";i:44;s:1:\"b\";s:26:\"concluir fechamento letivo\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:2:{i:0;i:5;i:1;i:6;}}i:44;a:4:{s:1:\"a\";i:45;s:1:\"b\";s:32:\"validar planejamento por periodo\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:2:{i:0;i:4;i:1;i:6;}}i:45;a:4:{s:1:\"a\";i:46;s:1:\"b\";s:39:\"consultar notas e conceitos pedagogicos\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:2:{i:0;i:4;i:1;i:6;}}i:46;a:4:{s:1:\"a\";i:47;s:1:\"b\";s:37:\"alterar notas e conceitos pedagogicos\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:2:{i:0;i:4;i:1;i:6;}}i:47;a:4:{s:1:\"a\";i:48;s:1:\"b\";s:34:\"consultar horarios pedagogicamente\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:2:{i:0;i:4;i:1;i:6;}}i:48;a:4:{s:1:\"a\";i:49;s:1:\"b\";s:34:\"cadastrar horarios pedagogicamente\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:2:{i:0;i:4;i:1;i:6;}}i:49;a:4:{s:1:\"a\";i:50;s:1:\"b\";s:31:\"editar horarios pedagogicamente\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:2:{i:0;i:4;i:1;i:6;}}i:50;a:4:{s:1:\"a\";i:51;s:1:\"b\";s:36:\"reorganizar horarios pedagogicamente\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:2:{i:0;i:4;i:1;i:6;}}i:51;a:4:{s:1:\"a\";i:52;s:1:\"b\";s:31:\"consultar aulas pedagogicamente\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:2:{i:0;i:4;i:1;i:6;}}i:52;a:4:{s:1:\"a\";i:53;s:1:\"b\";s:29:\"ajustar aulas pedagogicamente\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:2:{i:0;i:4;i:1;i:6;}}i:53;a:4:{s:1:\"a\";i:54;s:1:\"b\";s:45:\"validar planejamento por periodo pela direcao\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:2:{i:0;i:5;i:1;i:6;}}i:54;a:4:{s:1:\"a\";i:55;s:1:\"b\";s:38:\"consultar notas e conceitos da direcao\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:2:{i:0;i:5;i:1;i:6;}}i:55;a:4:{s:1:\"a\";i:56;s:1:\"b\";s:36:\"alterar notas e conceitos da direcao\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:2:{i:0;i:5;i:1;i:6;}}i:56;a:4:{s:1:\"a\";i:57;s:1:\"b\";s:29:\"consultar horarios da direcao\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:2:{i:0;i:5;i:1;i:6;}}i:57;a:4:{s:1:\"a\";i:58;s:1:\"b\";s:29:\"cadastrar horarios da direcao\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:2:{i:0;i:5;i:1;i:6;}}i:58;a:4:{s:1:\"a\";i:59;s:1:\"b\";s:26:\"editar horarios da direcao\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:2:{i:0;i:5;i:1;i:6;}}i:59;a:4:{s:1:\"a\";i:60;s:1:\"b\";s:31:\"reorganizar horarios da direcao\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:2:{i:0;i:5;i:1;i:6;}}i:60;a:4:{s:1:\"a\";i:61;s:1:\"b\";s:26:\"consultar aulas da direcao\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:2:{i:0;i:5;i:1;i:6;}}i:61;a:4:{s:1:\"a\";i:62;s:1:\"b\";s:24:\"ajustar aulas da direcao\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:2:{i:0;i:5;i:1;i:6;}}i:62;a:4:{s:1:\"a\";i:63;s:1:\"b\";s:29:\"consultar alimentacao escolar\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:3:{i:0;i:1;i:1;i:2;i:2;i:5;}}i:63;a:4:{s:1:\"a\";i:64;s:1:\"b\";s:19:\"cadastrar alimentos\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:4:{i:0;i:1;i:1;i:2;i:2;i:5;i:3;i:7;}}i:64;a:4:{s:1:\"a\";i:65;s:1:\"b\";s:16:\"editar alimentos\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:4:{i:0;i:1;i:1;i:2;i:2;i:5;i:3;i:7;}}i:65;a:4:{s:1:\"a\";i:66;s:1:\"b\";s:30:\"registrar entrada de alimentos\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:4:{i:0;i:1;i:1;i:2;i:2;i:5;i:3;i:7;}}i:66;a:4:{s:1:\"a\";i:67;s:1:\"b\";s:28:\"registrar saida de alimentos\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:4:{i:0;i:1;i:1;i:2;i:2;i:5;i:3;i:7;}}i:67;a:4:{s:1:\"a\";i:68;s:1:\"b\";s:22:\"lancar cardapio diario\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:4:{i:0;i:1;i:1;i:2;i:2;i:5;i:3;i:7;}}i:68;a:4:{s:1:\"a\";i:69;s:1:\"b\";s:30:\"consultar estoque de alimentos\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:3:{i:0;i:1;i:1;i:2;i:2;i:5;}}i:69;a:4:{s:1:\"a\";i:70;s:1:\"b\";s:36:\"consultar movimentacoes de alimentos\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:3:{i:0;i:1;i:1;i:2;i:2;i:5;}}i:70;a:4:{s:1:\"a\";i:71;s:1:\"b\";s:33:\"cadastrar categorias de alimentos\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:4:{i:0;i:1;i:1;i:2;i:2;i:5;i:3;i:7;}}i:71;a:4:{s:1:\"a\";i:72;s:1:\"b\";s:35:\"cadastrar fornecedores de alimentos\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:4:{i:0;i:1;i:1;i:2;i:2;i:5;i:3;i:7;}}i:72;a:4:{s:1:\"a\";i:73;s:1:\"b\";s:30:\"editar categorias de alimentos\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:4:{i:0;i:1;i:1;i:2;i:2;i:5;i:3;i:7;}}i:73;a:4:{s:1:\"a\";i:74;s:1:\"b\";s:32:\"editar fornecedores de alimentos\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:4:{i:0;i:1;i:1;i:2;i:2;i:5;i:3;i:7;}}i:74;a:4:{s:1:\"a\";i:75;s:1:\"b\";s:31:\"acessar portal da nutricionista\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:1:{i:0;i:7;}}i:75;a:4:{s:1:\"a\";i:76;s:1:\"b\";s:36:\"consultar alimentos da nutricionista\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:1:{i:0;i:7;}}i:76;a:4:{s:1:\"a\";i:77;s:1:\"b\";s:37:\"consultar categorias da nutricionista\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:1:{i:0;i:7;}}i:77;a:4:{s:1:\"a\";i:78;s:1:\"b\";s:39:\"consultar fornecedores da nutricionista\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:1:{i:0;i:7;}}i:78;a:4:{s:1:\"a\";i:79;s:1:\"b\";s:36:\"consultar cardapios da nutricionista\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:1:{i:0;i:7;}}i:79;a:4:{s:1:\"a\";i:80;s:1:\"b\";s:34:\"consultar estoque da nutricionista\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:1:{i:0;i:7;}}i:80;a:4:{s:1:\"a\";i:81;s:1:\"b\";s:35:\"consultar validade da nutricionista\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:1:{i:0;i:7;}}i:81;a:4:{s:1:\"a\";i:82;s:1:\"b\";s:40:\"consultar movimentacoes da nutricionista\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:1:{i:0;i:7;}}i:82;a:4:{s:1:\"a\";i:83;s:1:\"b\";s:50:\"consultar comparativo de alimentacao entre escolas\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:1:{i:0;i:7;}}i:83;a:4:{s:1:\"a\";i:84;s:1:\"b\";s:46:\"consultar relatorios gerenciais da alimentacao\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:1:{i:0;i:7;}}i:84;a:4:{s:1:\"a\";i:85;s:1:\"b\";s:27:\"acessar modulo psicossocial\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:1:{i:0;i:8;}}i:85;a:4:{s:1:\"a\";i:86;s:1:\"b\";s:29:\"consultar agenda psicossocial\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:1:{i:0;i:8;}}i:86;a:4:{s:1:\"a\";i:87;s:1:\"b\";s:36:\"registrar atendimentos psicossociais\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:1:{i:0;i:8;}}i:87;a:4:{s:1:\"a\";i:88;s:1:\"b\";s:32:\"consultar historico psicossocial\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:1:{i:0;i:8;}}i:88;a:4:{s:1:\"a\";i:89;s:1:\"b\";s:45:\"registrar planos de intervencao psicossociais\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:1:{i:0;i:8;}}i:89;a:4:{s:1:\"a\";i:90;s:1:\"b\";s:39:\"registrar encaminhamentos psicossociais\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:1:{i:0;i:8;}}i:90;a:4:{s:1:\"a\";i:91;s:1:\"b\";s:39:\"registrar casos disciplinares sigilosos\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:1:{i:0;i:8;}}i:91;a:4:{s:1:\"a\";i:92;s:1:\"b\";s:40:\"emitir relatorios tecnicos psicossociais\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:1:{i:0;i:8;}}i:92;a:4:{s:1:\"a\";i:93;s:1:\"b\";s:37:\"acessar dados sigilosos psicossociais\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:1:{i:0;i:8;}}i:93;a:4:{s:1:\"a\";i:94;s:1:\"b\";s:30:\"consultar documentos escolares\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:1:{i:0;i:1;}}i:94;a:4:{s:1:\"a\";i:95;s:1:\"b\";s:30:\"emitir declaracao de matricula\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:1:{i:0;i:1;}}i:95;a:4:{s:1:\"a\";i:96;s:1:\"b\";s:31:\"emitir declaracao de frequencia\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:1:{i:0;i:1;}}i:96;a:4:{s:1:\"a\";i:97;s:1:\"b\";s:31:\"emitir comprovante de matricula\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:1:{i:0;i:1;}}i:97;a:4:{s:1:\"a\";i:98;s:1:\"b\";s:31:\"emitir ficha cadastral do aluno\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:1:{i:0;i:1;}}i:98;a:4:{s:1:\"a\";i:99;s:1:\"b\";s:32:\"emitir ficha individual do aluno\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:1:{i:0;i:1;}}i:99;a:4:{s:1:\"a\";i:100;s:1:\"b\";s:28:\"emitir guia de transferencia\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:1:{i:0;i:1;}}i:100;a:4:{s:1:\"a\";i:101;s:1:\"b\";s:24:\"emitir historico escolar\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:1:{i:0;i:1;}}i:101;a:4:{s:1:\"a\";i:102;s:1:\"b\";s:18:\"emitir ata escolar\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:1:{i:0;i:1;}}i:102;a:4:{s:1:\"a\";i:103;s:1:\"b\";s:21:\"emitir oficio escolar\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:1:{i:0;i:1;}}i:103;a:4:{s:1:\"a\";i:104;s:1:\"b\";s:43:\"consultar documentos institucionais da rede\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:1:{i:0;i:6;}}i:104;a:4:{s:1:\"a\";i:105;s:1:\"b\";s:35:\"emitir oficio institucional da rede\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:1:{i:0;i:6;}}i:105;a:4:{s:1:\"a\";i:106;s:1:\"b\";s:35:\"emitir modelo institucional da rede\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:1:{i:0;i:6;}}i:106;a:4:{s:1:\"a\";i:107;s:1:\"b\";s:39:\"consultar documentos da direcao escolar\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:1:{i:0;i:5;}}i:107;a:4:{s:1:\"a\";i:108;s:1:\"b\";s:36:\"emitir documentos da direcao escolar\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:1:{i:0;i:5;}}i:108;a:4:{s:1:\"a\";i:109;s:1:\"b\";s:32:\"consultar documentos pedagogicos\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:1:{i:0;i:4;}}i:109;a:4:{s:1:\"a\";i:110;s:1:\"b\";s:29:\"emitir documentos pedagogicos\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:1:{i:0;i:4;}}i:110;a:4:{s:1:\"a\";i:111;s:1:\"b\";s:33:\"consultar documentos do professor\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:1:{i:0;i:3;}}i:111;a:4:{s:1:\"a\";i:112;s:1:\"b\";s:30:\"emitir documentos do professor\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:1:{i:0;i:3;}}i:112;a:4:{s:1:\"a\";i:113;s:1:\"b\";s:34:\"consultar documentos psicossociais\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:1:{i:0;i:8;}}i:113;a:4:{s:1:\"a\";i:114;s:1:\"b\";s:31:\"emitir documentos psicossociais\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:1:{i:0;i:8;}}i:114;a:4:{s:1:\"a\";i:115;s:1:\"b\";s:28:\"consultar relatorios da rede\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:1:{i:0;i:6;}}i:115;a:4:{s:1:\"a\";i:116;s:1:\"b\";s:38:\"emitir relatorio institucional da rede\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:1:{i:0;i:6;}}i:116;a:4:{s:1:\"a\";i:117;s:1:\"b\";s:38:\"emitir relatorio de matriculas da rede\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:1:{i:0;i:6;}}i:117;a:4:{s:1:\"a\";i:118;s:1:\"b\";s:42:\"emitir relatorio de situacao de matriculas\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:1:{i:0;i:6;}}i:118;a:4:{s:1:\"a\";i:119;s:1:\"b\";s:30:\"emitir relatorio de alunos aee\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:3:{i:0;i:1;i:1;i:2;i:2;i:6;}}i:119;a:4:{s:1:\"a\";i:120;s:1:\"b\";s:43:\"emitir relatorio quantitativo de matriculas\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:3:{i:0;i:1;i:1;i:2;i:2;i:6;}}i:120;a:4:{s:1:\"a\";i:121;s:1:\"b\";s:31:\"emitir relatorio mapa de turmas\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:3:{i:0;i:1;i:1;i:2;i:2;i:6;}}i:121;a:4:{s:1:\"a\";i:122;s:1:\"b\";s:41:\"emitir relatorio de professores por turma\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:3:{i:0;i:1;i:1;i:2;i:2;i:6;}}i:122;a:4:{s:1:\"a\";i:123;s:1:\"b\";s:29:\"emitir relatorio de auditoria\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:1:{i:0;i:6;}}i:123;a:4:{s:1:\"a\";i:124;s:1:\"b\";s:30:\"consultar relatorios escolares\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:2:{i:0;i:1;i:1;i:2;}}i:124;a:4:{s:1:\"a\";i:125;s:1:\"b\";s:43:\"emitir relatorios administrativos escolares\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:2:{i:0;i:1;i:1;i:2;}}i:125;a:4:{s:1:\"a\";i:126;s:1:\"b\";s:42:\"emitir relatorio de frequencia consolidada\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:2:{i:0;i:1;i:1;i:2;}}i:126;a:4:{s:1:\"a\";i:127;s:1:\"b\";s:34:\"emitir relatorio historico escolar\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:3:{i:0;i:1;i:1;i:2;i:2;i:5;}}i:127;a:4:{s:1:\"a\";i:128;s:1:\"b\";s:33:\"emitir relatorio ficha individual\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:4:{i:0;i:1;i:1;i:2;i:2;i:4;i:3;i:5;}}i:128;a:4:{s:1:\"a\";i:129;s:1:\"b\";s:39:\"emitir relatorio de alimentacao escolar\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:2:{i:0;i:1;i:1;i:2;}}i:129;a:4:{s:1:\"a\";i:130;s:1:\"b\";s:41:\"consultar notas e conceitos em relatorios\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:2:{i:0;i:1;i:1;i:2;}}i:130;a:4:{s:1:\"a\";i:131;s:1:\"b\";s:32:\"consultar relatorios pedagogicos\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:1:{i:0;i:4;}}i:131;a:4:{s:1:\"a\";i:132;s:1:\"b\";s:29:\"emitir relatorios pedagogicos\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:1:{i:0;i:4;}}i:132;a:4:{s:1:\"a\";i:133;s:1:\"b\";s:39:\"consultar relatorios da direcao escolar\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:1:{i:0;i:5;}}i:133;a:4:{s:1:\"a\";i:134;s:1:\"b\";s:36:\"emitir relatorios da direcao escolar\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:1:{i:0;i:5;}}i:134;a:4:{s:1:\"a\";i:135;s:1:\"b\";s:37:\"consultar relatorios da nutricionista\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:1:{i:0;i:7;}}i:135;a:4:{s:1:\"a\";i:136;s:1:\"b\";s:34:\"emitir relatorios da nutricionista\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:1:{i:0;i:7;}}i:136;a:4:{s:1:\"a\";i:137;s:1:\"b\";s:45:\"consultar relatorios tecnicos do psicossocial\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:1:{i:0;i:8;}}i:137;a:4:{s:1:\"a\";i:138;s:1:\"b\";s:42:\"emitir relatorios tecnicos do psicossocial\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:1:{i:0;i:8;}}i:138;a:4:{s:1:\"a\";i:139;s:1:\"b\";s:27:\"consultar auditoria da rede\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:1:{i:0;i:6;}}i:139;a:4:{s:1:\"a\";i:140;s:1:\"b\";s:27:\"consultar auditoria escolar\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:2:{i:0;i:1;i:1;i:2;}}i:140;a:4:{s:1:\"a\";i:141;s:1:\"b\";s:30:\"consultar auditoria pedagogica\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:1:{i:0;i:4;}}i:141;a:4:{s:1:\"a\";i:142;s:1:\"b\";s:38:\"consultar auditoria da direcao escolar\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:1:{i:0;i:5;}}i:142;a:4:{s:1:\"a\";i:143;s:1:\"b\";s:47:\"consultar auditoria do proprio trabalho docente\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:1:{i:0;i:3;}}i:143;a:4:{s:1:\"a\";i:144;s:1:\"b\";s:42:\"consultar auditoria da alimentacao escolar\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:1:{i:0;i:7;}}i:144;a:4:{s:1:\"a\";i:145;s:1:\"b\";s:41:\"consultar auditoria psicossocial sigilosa\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:1:{i:0;i:8;}}i:145;a:4:{s:1:\"a\";i:146;s:1:\"b\";s:39:\"visualizar dados sensiveis de auditoria\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:3:{i:0;i:5;i:1;i:6;i:2;i:8;}}i:146;a:4:{s:1:\"a\";i:147;s:1:\"b\";s:14:\"acessar painel\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:1:{i:0;i:6;}}i:147;a:4:{s:1:\"a\";i:148;s:1:\"b\";s:19:\"visualizar usuarios\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:1:{i:0;i:6;}}i:148;a:4:{s:1:\"a\";i:149;s:1:\"b\";s:13:\"criar usuario\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:1:{i:0;i:6;}}i:149;a:4:{s:1:\"a\";i:150;s:1:\"b\";s:14:\"editar usuario\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:1:{i:0;i:6;}}i:150;a:4:{s:1:\"a\";i:151;s:1:\"b\";s:23:\"ativar inativar usuario\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:1:{i:0;i:6;}}i:151;a:4:{s:1:\"a\";i:152;s:1:\"b\";s:22:\"visualizar instituicao\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:1:{i:0;i:6;}}i:152;a:4:{s:1:\"a\";i:153;s:1:\"b\";s:18:\"editar instituicao\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:1:{i:0;i:6;}}i:153;a:4:{s:1:\"a\";i:154;s:1:\"b\";s:24:\"visualizar configuracoes\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:1:{i:0;i:6;}}i:154;a:4:{s:1:\"a\";i:155;s:1:\"b\";s:20:\"editar configuracoes\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:1:{i:0;i:6;}}i:155;a:4:{s:1:\"a\";i:156;s:1:\"b\";s:18:\"visualizar escolas\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:1:{i:0;i:6;}}i:156;a:4:{s:1:\"a\";i:157;s:1:\"b\";s:12:\"criar escola\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:1:{i:0;i:6;}}i:157;a:4:{s:1:\"a\";i:158;s:1:\"b\";s:13:\"editar escola\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:1:{i:0;i:6;}}i:158;a:4:{s:1:\"a\";i:159;s:1:\"b\";s:22:\"ativar inativar escola\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:1:{i:0;i:6;}}i:159;a:4:{s:1:\"a\";i:160;s:1:\"b\";s:23:\"visualizar funcionarios\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:1:{i:0;i:6;}}i:160;a:4:{s:1:\"a\";i:161;s:1:\"b\";s:17:\"criar funcionario\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:1:{i:0;i:6;}}i:161;a:4:{s:1:\"a\";i:162;s:1:\"b\";s:18:\"editar funcionario\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:1:{i:0;i:6;}}i:162;a:4:{s:1:\"a\";i:163;s:1:\"b\";s:27:\"ativar inativar funcionario\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:1:{i:0;i:6;}}}s:5:\"roles\";a:8:{i:0;a:3:{s:1:\"a\";i:1;s:1:\"b\";s:19:\"Secretário Escolar\";s:1:\"c\";s:3:\"web\";}i:1;a:3:{s:1:\"a\";i:2;s:1:\"b\";s:23:\"Administrador da Escola\";s:1:\"c\";s:3:\"web\";}i:2;a:3:{s:1:\"a\";i:4;s:1:\"b\";s:23:\"Coordenador Pedagógico\";s:1:\"c\";s:3:\"web\";}i:3;a:3:{s:1:\"a\";i:5;s:1:\"b\";s:15:\"Diretor Escolar\";s:1:\"c\";s:3:\"web\";}i:4;a:3:{s:1:\"a\";i:6;s:1:\"b\";s:21:\"Administrador da Rede\";s:1:\"c\";s:3:\"web\";}i:5;a:3:{s:1:\"a\";i:3;s:1:\"b\";s:9:\"Professor\";s:1:\"c\";s:3:\"web\";}i:6;a:3:{s:1:\"a\";i:7;s:1:\"b\";s:13:\"Nutricionista\";s:1:\"c\";s:3:\"web\";}i:7;a:3:{s:1:\"a\";i:8;s:1:\"b\";s:25:\"Psicologia/Psicopedagogia\";s:1:\"c\";s:3:\"web\";}}}', 1774028917);
+('spatie.permission.cache', 'a:3:{s:5:\"alias\";a:4:{s:1:\"a\";s:2:\"id\";s:1:\"b\";s:4:\"name\";s:1:\"c\";s:10:\"guard_name\";s:1:\"r\";s:5:\"roles\";}s:11:\"permissions\";a:163:{i:0;a:4:{s:1:\"a\";i:1;s:1:\"b\";s:17:\"visualizar alunos\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:2:{i:0;i:1;i:1;i:2;}}i:1;a:4:{s:1:\"a\";i:2;s:1:\"b\";s:11:\"criar aluno\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:2:{i:0;i:1;i:1;i:2;}}i:2;a:4:{s:1:\"a\";i:3;s:1:\"b\";s:12:\"editar aluno\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:2:{i:0;i:1;i:1;i:2;}}i:3;a:4:{s:1:\"a\";i:4;s:1:\"b\";s:14:\"detalhar aluno\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:2:{i:0;i:1;i:1;i:2;}}i:4;a:4:{s:1:\"a\";i:5;s:1:\"b\";s:21:\"ativar inativar aluno\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:2:{i:0;i:1;i:1;i:2;}}i:5;a:4:{s:1:\"a\";i:6;s:1:\"b\";s:16:\"consultar turmas\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:2:{i:0;i:1;i:1;i:2;}}i:6;a:4:{s:1:\"a\";i:7;s:1:\"b\";s:14:\"detalhar turma\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:2:{i:0;i:1;i:1;i:2;}}i:7;a:4:{s:1:\"a\";i:8;s:1:\"b\";s:16:\"cadastrar turmas\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:2:{i:0;i:1;i:1;i:2;}}i:8;a:4:{s:1:\"a\";i:9;s:1:\"b\";s:13:\"editar turmas\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:2:{i:0;i:1;i:1;i:2;}}i:9;a:4:{s:1:\"a\";i:10;s:1:\"b\";s:14:\"excluir turmas\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:2:{i:0;i:1;i:1;i:2;}}i:10;a:4:{s:1:\"a\";i:11;s:1:\"b\";s:21:\"consultar matrículas\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:2:{i:0;i:1;i:1;i:2;}}i:11;a:4:{s:1:\"a\";i:12;s:1:\"b\";s:20:\"cadastrar matrícula\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:2:{i:0;i:1;i:1;i:2;}}i:12;a:4:{s:1:\"a\";i:13;s:1:\"b\";s:33:\"visualizar detalhes da matrícula\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:2:{i:0;i:1;i:1;i:2;}}i:13;a:4:{s:1:\"a\";i:14;s:1:\"b\";s:8:\"enturmar\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:2:{i:0;i:1;i:1;i:2;}}i:14;a:4:{s:1:\"a\";i:15;s:1:\"b\";s:10:\"transferir\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:2:{i:0;i:1;i:1;i:2;}}i:15;a:4:{s:1:\"a\";i:16;s:1:\"b\";s:12:\"rematricular\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:2:{i:0;i:1;i:1;i:2;}}i:16;a:3:{s:1:\"a\";i:17;s:1:\"b\";s:21:\"gerenciar disciplinas\";s:1:\"c\";s:3:\"web\";}i:17;a:3:{s:1:\"a\";i:18;s:1:\"b\";s:18:\"gerenciar matrizes\";s:1:\"c\";s:3:\"web\";}i:18;a:3:{s:1:\"a\";i:19;s:1:\"b\";s:18:\"consultar matrizes\";s:1:\"c\";s:3:\"web\";}i:19;a:4:{s:1:\"a\";i:20;s:1:\"b\";s:17:\"consultar diarios\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:5:{i:0;i:1;i:1;i:2;i:2;i:4;i:3;i:5;i:4;i:6;}}i:20;a:4:{s:1:\"a\";i:21;s:1:\"b\";s:13:\"criar diarios\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:2:{i:0;i:3;i:1;i:6;}}i:21;a:4:{s:1:\"a\";i:22;s:1:\"b\";s:15:\"registrar aulas\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:2:{i:0;i:3;i:1;i:6;}}i:22;a:4:{s:1:\"a\";i:23;s:1:\"b\";s:17:\"lancar frequencia\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:2:{i:0;i:3;i:1;i:6;}}i:23;a:4:{s:1:\"a\";i:24;s:1:\"b\";s:23:\"gerenciar planejamentos\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:2:{i:0;i:3;i:1;i:6;}}i:24;a:4:{s:1:\"a\";i:25;s:1:\"b\";s:33:\"registrar observacoes pedagogicas\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:2:{i:0;i:3;i:1;i:6;}}i:25;a:4:{s:1:\"a\";i:26;s:1:\"b\";s:33:\"registrar ocorrencias pedagogicas\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:2:{i:0;i:3;i:1;i:6;}}i:26;a:4:{s:1:\"a\";i:27;s:1:\"b\";s:33:\"gerenciar pendencias do professor\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:2:{i:0;i:3;i:1;i:6;}}i:27;a:4:{s:1:\"a\";i:28;s:1:\"b\";s:34:\"acompanhar diarios pedagogicamente\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:2:{i:0;i:4;i:1;i:6;}}i:28;a:4:{s:1:\"a\";i:29;s:1:\"b\";s:26:\"validar planejamento anual\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:2:{i:0;i:4;i:1;i:6;}}i:29;a:4:{s:1:\"a\";i:30;s:1:\"b\";s:28:\"validar planejamento semanal\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:2:{i:0;i:4;i:1;i:6;}}i:30;a:4:{s:1:\"a\";i:31;s:1:\"b\";s:25:\"validar aulas registradas\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:2:{i:0;i:4;i:1;i:6;}}i:31;a:4:{s:1:\"a\";i:32;s:1:\"b\";s:32:\"acompanhar frequencia pedagogica\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:2:{i:0;i:4;i:1;i:6;}}i:32;a:4:{s:1:\"a\";i:33;s:1:\"b\";s:32:\"acompanhar rendimento pedagogico\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:2:{i:0;i:4;i:1;i:6;}}i:33;a:4:{s:1:\"a\";i:34;s:1:\"b\";s:26:\"acompanhar alunos em risco\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:2:{i:0;i:4;i:1;i:6;}}i:34;a:4:{s:1:\"a\";i:35;s:1:\"b\";s:29:\"gerenciar pendencias docentes\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:2:{i:0;i:4;i:1;i:6;}}i:35;a:4:{s:1:\"a\";i:36;s:1:\"b\";s:12:\"ver horarios\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:2:{i:0;i:5;i:1;i:6;}}i:36;a:4:{s:1:\"a\";i:37;s:1:\"b\";s:29:\"acompanhar diarios da direcao\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:2:{i:0;i:5;i:1;i:6;}}i:37;a:4:{s:1:\"a\";i:38;s:1:\"b\";s:33:\"validar planejamento pela direcao\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:2:{i:0;i:5;i:1;i:6;}}i:38;a:4:{s:1:\"a\";i:39;s:1:\"b\";s:26:\"validar aulas pela direcao\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:2:{i:0;i:5;i:1;i:6;}}i:39;a:4:{s:1:\"a\";i:40;s:1:\"b\";s:27:\"justificar faltas de alunos\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:2:{i:0;i:5;i:1;i:6;}}i:40;a:4:{s:1:\"a\";i:41;s:1:\"b\";s:27:\"liberar prazo de lancamento\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:2:{i:0;i:5;i:1;i:6;}}i:41;a:4:{s:1:\"a\";i:42;s:1:\"b\";s:32:\"registrar faltas de funcionarios\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:2:{i:0;i:5;i:1;i:6;}}i:42;a:4:{s:1:\"a\";i:43;s:1:\"b\";s:25:\"iniciar fechamento letivo\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:2:{i:0;i:5;i:1;i:6;}}i:43;a:4:{s:1:\"a\";i:44;s:1:\"b\";s:26:\"concluir fechamento letivo\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:2:{i:0;i:5;i:1;i:6;}}i:44;a:4:{s:1:\"a\";i:45;s:1:\"b\";s:32:\"validar planejamento por periodo\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:2:{i:0;i:4;i:1;i:6;}}i:45;a:4:{s:1:\"a\";i:46;s:1:\"b\";s:39:\"consultar notas e conceitos pedagogicos\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:2:{i:0;i:4;i:1;i:6;}}i:46;a:4:{s:1:\"a\";i:47;s:1:\"b\";s:37:\"alterar notas e conceitos pedagogicos\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:2:{i:0;i:4;i:1;i:6;}}i:47;a:4:{s:1:\"a\";i:48;s:1:\"b\";s:34:\"consultar horarios pedagogicamente\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:2:{i:0;i:4;i:1;i:6;}}i:48;a:4:{s:1:\"a\";i:49;s:1:\"b\";s:34:\"cadastrar horarios pedagogicamente\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:2:{i:0;i:4;i:1;i:6;}}i:49;a:4:{s:1:\"a\";i:50;s:1:\"b\";s:31:\"editar horarios pedagogicamente\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:2:{i:0;i:4;i:1;i:6;}}i:50;a:4:{s:1:\"a\";i:51;s:1:\"b\";s:36:\"reorganizar horarios pedagogicamente\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:2:{i:0;i:4;i:1;i:6;}}i:51;a:4:{s:1:\"a\";i:52;s:1:\"b\";s:31:\"consultar aulas pedagogicamente\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:2:{i:0;i:4;i:1;i:6;}}i:52;a:4:{s:1:\"a\";i:53;s:1:\"b\";s:29:\"ajustar aulas pedagogicamente\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:2:{i:0;i:4;i:1;i:6;}}i:53;a:4:{s:1:\"a\";i:54;s:1:\"b\";s:45:\"validar planejamento por periodo pela direcao\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:2:{i:0;i:5;i:1;i:6;}}i:54;a:4:{s:1:\"a\";i:55;s:1:\"b\";s:38:\"consultar notas e conceitos da direcao\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:2:{i:0;i:5;i:1;i:6;}}i:55;a:4:{s:1:\"a\";i:56;s:1:\"b\";s:36:\"alterar notas e conceitos da direcao\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:2:{i:0;i:5;i:1;i:6;}}i:56;a:4:{s:1:\"a\";i:57;s:1:\"b\";s:29:\"consultar horarios da direcao\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:2:{i:0;i:5;i:1;i:6;}}i:57;a:4:{s:1:\"a\";i:58;s:1:\"b\";s:29:\"cadastrar horarios da direcao\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:2:{i:0;i:5;i:1;i:6;}}i:58;a:4:{s:1:\"a\";i:59;s:1:\"b\";s:26:\"editar horarios da direcao\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:2:{i:0;i:5;i:1;i:6;}}i:59;a:4:{s:1:\"a\";i:60;s:1:\"b\";s:31:\"reorganizar horarios da direcao\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:2:{i:0;i:5;i:1;i:6;}}i:60;a:4:{s:1:\"a\";i:61;s:1:\"b\";s:26:\"consultar aulas da direcao\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:2:{i:0;i:5;i:1;i:6;}}i:61;a:4:{s:1:\"a\";i:62;s:1:\"b\";s:24:\"ajustar aulas da direcao\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:2:{i:0;i:5;i:1;i:6;}}i:62;a:4:{s:1:\"a\";i:63;s:1:\"b\";s:29:\"consultar alimentacao escolar\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:3:{i:0;i:1;i:1;i:2;i:2;i:5;}}i:63;a:4:{s:1:\"a\";i:64;s:1:\"b\";s:19:\"cadastrar alimentos\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:4:{i:0;i:1;i:1;i:2;i:2;i:5;i:3;i:7;}}i:64;a:4:{s:1:\"a\";i:65;s:1:\"b\";s:16:\"editar alimentos\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:4:{i:0;i:1;i:1;i:2;i:2;i:5;i:3;i:7;}}i:65;a:4:{s:1:\"a\";i:66;s:1:\"b\";s:30:\"registrar entrada de alimentos\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:4:{i:0;i:1;i:1;i:2;i:2;i:5;i:3;i:7;}}i:66;a:4:{s:1:\"a\";i:67;s:1:\"b\";s:28:\"registrar saida de alimentos\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:4:{i:0;i:1;i:1;i:2;i:2;i:5;i:3;i:7;}}i:67;a:4:{s:1:\"a\";i:68;s:1:\"b\";s:22:\"lancar cardapio diario\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:4:{i:0;i:1;i:1;i:2;i:2;i:5;i:3;i:7;}}i:68;a:4:{s:1:\"a\";i:69;s:1:\"b\";s:30:\"consultar estoque de alimentos\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:3:{i:0;i:1;i:1;i:2;i:2;i:5;}}i:69;a:4:{s:1:\"a\";i:70;s:1:\"b\";s:36:\"consultar movimentacoes de alimentos\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:3:{i:0;i:1;i:1;i:2;i:2;i:5;}}i:70;a:4:{s:1:\"a\";i:71;s:1:\"b\";s:33:\"cadastrar categorias de alimentos\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:4:{i:0;i:1;i:1;i:2;i:2;i:5;i:3;i:7;}}i:71;a:4:{s:1:\"a\";i:72;s:1:\"b\";s:35:\"cadastrar fornecedores de alimentos\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:4:{i:0;i:1;i:1;i:2;i:2;i:5;i:3;i:7;}}i:72;a:4:{s:1:\"a\";i:73;s:1:\"b\";s:30:\"editar categorias de alimentos\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:4:{i:0;i:1;i:1;i:2;i:2;i:5;i:3;i:7;}}i:73;a:4:{s:1:\"a\";i:74;s:1:\"b\";s:32:\"editar fornecedores de alimentos\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:4:{i:0;i:1;i:1;i:2;i:2;i:5;i:3;i:7;}}i:74;a:4:{s:1:\"a\";i:75;s:1:\"b\";s:31:\"acessar portal da nutricionista\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:1:{i:0;i:7;}}i:75;a:4:{s:1:\"a\";i:76;s:1:\"b\";s:36:\"consultar alimentos da nutricionista\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:1:{i:0;i:7;}}i:76;a:4:{s:1:\"a\";i:77;s:1:\"b\";s:37:\"consultar categorias da nutricionista\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:1:{i:0;i:7;}}i:77;a:4:{s:1:\"a\";i:78;s:1:\"b\";s:39:\"consultar fornecedores da nutricionista\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:1:{i:0;i:7;}}i:78;a:4:{s:1:\"a\";i:79;s:1:\"b\";s:36:\"consultar cardapios da nutricionista\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:1:{i:0;i:7;}}i:79;a:4:{s:1:\"a\";i:80;s:1:\"b\";s:34:\"consultar estoque da nutricionista\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:1:{i:0;i:7;}}i:80;a:4:{s:1:\"a\";i:81;s:1:\"b\";s:35:\"consultar validade da nutricionista\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:1:{i:0;i:7;}}i:81;a:4:{s:1:\"a\";i:82;s:1:\"b\";s:40:\"consultar movimentacoes da nutricionista\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:1:{i:0;i:7;}}i:82;a:4:{s:1:\"a\";i:83;s:1:\"b\";s:50:\"consultar comparativo de alimentacao entre escolas\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:1:{i:0;i:7;}}i:83;a:4:{s:1:\"a\";i:84;s:1:\"b\";s:46:\"consultar relatorios gerenciais da alimentacao\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:1:{i:0;i:7;}}i:84;a:4:{s:1:\"a\";i:85;s:1:\"b\";s:27:\"acessar modulo psicossocial\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:1:{i:0;i:8;}}i:85;a:4:{s:1:\"a\";i:86;s:1:\"b\";s:29:\"consultar agenda psicossocial\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:1:{i:0;i:8;}}i:86;a:4:{s:1:\"a\";i:87;s:1:\"b\";s:36:\"registrar atendimentos psicossociais\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:1:{i:0;i:8;}}i:87;a:4:{s:1:\"a\";i:88;s:1:\"b\";s:32:\"consultar historico psicossocial\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:1:{i:0;i:8;}}i:88;a:4:{s:1:\"a\";i:89;s:1:\"b\";s:45:\"registrar planos de intervencao psicossociais\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:1:{i:0;i:8;}}i:89;a:4:{s:1:\"a\";i:90;s:1:\"b\";s:39:\"registrar encaminhamentos psicossociais\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:1:{i:0;i:8;}}i:90;a:4:{s:1:\"a\";i:91;s:1:\"b\";s:39:\"registrar casos disciplinares sigilosos\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:1:{i:0;i:8;}}i:91;a:4:{s:1:\"a\";i:92;s:1:\"b\";s:40:\"emitir relatorios tecnicos psicossociais\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:1:{i:0;i:8;}}i:92;a:4:{s:1:\"a\";i:93;s:1:\"b\";s:37:\"acessar dados sigilosos psicossociais\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:1:{i:0;i:8;}}i:93;a:4:{s:1:\"a\";i:94;s:1:\"b\";s:30:\"consultar documentos escolares\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:1:{i:0;i:1;}}i:94;a:4:{s:1:\"a\";i:95;s:1:\"b\";s:30:\"emitir declaracao de matricula\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:1:{i:0;i:1;}}i:95;a:4:{s:1:\"a\";i:96;s:1:\"b\";s:31:\"emitir declaracao de frequencia\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:1:{i:0;i:1;}}i:96;a:4:{s:1:\"a\";i:97;s:1:\"b\";s:31:\"emitir comprovante de matricula\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:1:{i:0;i:1;}}i:97;a:4:{s:1:\"a\";i:98;s:1:\"b\";s:31:\"emitir ficha cadastral do aluno\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:1:{i:0;i:1;}}i:98;a:4:{s:1:\"a\";i:99;s:1:\"b\";s:32:\"emitir ficha individual do aluno\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:1:{i:0;i:1;}}i:99;a:4:{s:1:\"a\";i:100;s:1:\"b\";s:28:\"emitir guia de transferencia\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:1:{i:0;i:1;}}i:100;a:4:{s:1:\"a\";i:101;s:1:\"b\";s:24:\"emitir historico escolar\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:1:{i:0;i:1;}}i:101;a:4:{s:1:\"a\";i:102;s:1:\"b\";s:18:\"emitir ata escolar\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:1:{i:0;i:1;}}i:102;a:4:{s:1:\"a\";i:103;s:1:\"b\";s:21:\"emitir oficio escolar\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:1:{i:0;i:1;}}i:103;a:4:{s:1:\"a\";i:104;s:1:\"b\";s:43:\"consultar documentos institucionais da rede\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:1:{i:0;i:6;}}i:104;a:4:{s:1:\"a\";i:105;s:1:\"b\";s:35:\"emitir oficio institucional da rede\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:1:{i:0;i:6;}}i:105;a:4:{s:1:\"a\";i:106;s:1:\"b\";s:35:\"emitir modelo institucional da rede\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:1:{i:0;i:6;}}i:106;a:4:{s:1:\"a\";i:107;s:1:\"b\";s:39:\"consultar documentos da direcao escolar\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:1:{i:0;i:5;}}i:107;a:4:{s:1:\"a\";i:108;s:1:\"b\";s:36:\"emitir documentos da direcao escolar\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:1:{i:0;i:5;}}i:108;a:4:{s:1:\"a\";i:109;s:1:\"b\";s:32:\"consultar documentos pedagogicos\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:1:{i:0;i:4;}}i:109;a:4:{s:1:\"a\";i:110;s:1:\"b\";s:29:\"emitir documentos pedagogicos\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:1:{i:0;i:4;}}i:110;a:4:{s:1:\"a\";i:111;s:1:\"b\";s:33:\"consultar documentos do professor\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:1:{i:0;i:3;}}i:111;a:4:{s:1:\"a\";i:112;s:1:\"b\";s:30:\"emitir documentos do professor\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:1:{i:0;i:3;}}i:112;a:4:{s:1:\"a\";i:113;s:1:\"b\";s:34:\"consultar documentos psicossociais\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:1:{i:0;i:8;}}i:113;a:4:{s:1:\"a\";i:114;s:1:\"b\";s:31:\"emitir documentos psicossociais\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:1:{i:0;i:8;}}i:114;a:4:{s:1:\"a\";i:115;s:1:\"b\";s:28:\"consultar relatorios da rede\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:1:{i:0;i:6;}}i:115;a:4:{s:1:\"a\";i:116;s:1:\"b\";s:38:\"emitir relatorio institucional da rede\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:1:{i:0;i:6;}}i:116;a:4:{s:1:\"a\";i:117;s:1:\"b\";s:38:\"emitir relatorio de matriculas da rede\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:1:{i:0;i:6;}}i:117;a:4:{s:1:\"a\";i:118;s:1:\"b\";s:42:\"emitir relatorio de situacao de matriculas\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:1:{i:0;i:6;}}i:118;a:4:{s:1:\"a\";i:119;s:1:\"b\";s:30:\"emitir relatorio de alunos aee\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:3:{i:0;i:1;i:1;i:2;i:2;i:6;}}i:119;a:4:{s:1:\"a\";i:120;s:1:\"b\";s:43:\"emitir relatorio quantitativo de matriculas\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:3:{i:0;i:1;i:1;i:2;i:2;i:6;}}i:120;a:4:{s:1:\"a\";i:121;s:1:\"b\";s:31:\"emitir relatorio mapa de turmas\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:3:{i:0;i:1;i:1;i:2;i:2;i:6;}}i:121;a:4:{s:1:\"a\";i:122;s:1:\"b\";s:41:\"emitir relatorio de professores por turma\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:3:{i:0;i:1;i:1;i:2;i:2;i:6;}}i:122;a:4:{s:1:\"a\";i:123;s:1:\"b\";s:29:\"emitir relatorio de auditoria\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:1:{i:0;i:6;}}i:123;a:4:{s:1:\"a\";i:124;s:1:\"b\";s:30:\"consultar relatorios escolares\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:2:{i:0;i:1;i:1;i:2;}}i:124;a:4:{s:1:\"a\";i:125;s:1:\"b\";s:43:\"emitir relatorios administrativos escolares\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:2:{i:0;i:1;i:1;i:2;}}i:125;a:4:{s:1:\"a\";i:126;s:1:\"b\";s:42:\"emitir relatorio de frequencia consolidada\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:2:{i:0;i:1;i:1;i:2;}}i:126;a:4:{s:1:\"a\";i:127;s:1:\"b\";s:34:\"emitir relatorio historico escolar\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:3:{i:0;i:1;i:1;i:2;i:2;i:5;}}i:127;a:4:{s:1:\"a\";i:128;s:1:\"b\";s:33:\"emitir relatorio ficha individual\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:4:{i:0;i:1;i:1;i:2;i:2;i:4;i:3;i:5;}}i:128;a:4:{s:1:\"a\";i:129;s:1:\"b\";s:39:\"emitir relatorio de alimentacao escolar\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:2:{i:0;i:1;i:1;i:2;}}i:129;a:4:{s:1:\"a\";i:130;s:1:\"b\";s:41:\"consultar notas e conceitos em relatorios\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:2:{i:0;i:1;i:1;i:2;}}i:130;a:4:{s:1:\"a\";i:131;s:1:\"b\";s:32:\"consultar relatorios pedagogicos\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:1:{i:0;i:4;}}i:131;a:4:{s:1:\"a\";i:132;s:1:\"b\";s:29:\"emitir relatorios pedagogicos\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:1:{i:0;i:4;}}i:132;a:4:{s:1:\"a\";i:133;s:1:\"b\";s:39:\"consultar relatorios da direcao escolar\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:1:{i:0;i:5;}}i:133;a:4:{s:1:\"a\";i:134;s:1:\"b\";s:36:\"emitir relatorios da direcao escolar\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:1:{i:0;i:5;}}i:134;a:4:{s:1:\"a\";i:135;s:1:\"b\";s:37:\"consultar relatorios da nutricionista\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:1:{i:0;i:7;}}i:135;a:4:{s:1:\"a\";i:136;s:1:\"b\";s:34:\"emitir relatorios da nutricionista\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:1:{i:0;i:7;}}i:136;a:4:{s:1:\"a\";i:137;s:1:\"b\";s:45:\"consultar relatorios tecnicos do psicossocial\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:1:{i:0;i:8;}}i:137;a:4:{s:1:\"a\";i:138;s:1:\"b\";s:42:\"emitir relatorios tecnicos do psicossocial\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:1:{i:0;i:8;}}i:138;a:4:{s:1:\"a\";i:139;s:1:\"b\";s:27:\"consultar auditoria da rede\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:1:{i:0;i:6;}}i:139;a:4:{s:1:\"a\";i:140;s:1:\"b\";s:27:\"consultar auditoria escolar\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:2:{i:0;i:1;i:1;i:2;}}i:140;a:4:{s:1:\"a\";i:141;s:1:\"b\";s:30:\"consultar auditoria pedagogica\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:1:{i:0;i:4;}}i:141;a:4:{s:1:\"a\";i:142;s:1:\"b\";s:38:\"consultar auditoria da direcao escolar\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:1:{i:0;i:5;}}i:142;a:4:{s:1:\"a\";i:143;s:1:\"b\";s:47:\"consultar auditoria do proprio trabalho docente\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:1:{i:0;i:3;}}i:143;a:4:{s:1:\"a\";i:144;s:1:\"b\";s:42:\"consultar auditoria da alimentacao escolar\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:1:{i:0;i:7;}}i:144;a:4:{s:1:\"a\";i:145;s:1:\"b\";s:41:\"consultar auditoria psicossocial sigilosa\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:1:{i:0;i:8;}}i:145;a:4:{s:1:\"a\";i:146;s:1:\"b\";s:39:\"visualizar dados sensiveis de auditoria\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:3:{i:0;i:5;i:1;i:6;i:2;i:8;}}i:146;a:4:{s:1:\"a\";i:147;s:1:\"b\";s:14:\"acessar painel\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:1:{i:0;i:6;}}i:147;a:4:{s:1:\"a\";i:148;s:1:\"b\";s:19:\"visualizar usuarios\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:1:{i:0;i:6;}}i:148;a:4:{s:1:\"a\";i:149;s:1:\"b\";s:13:\"criar usuario\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:1:{i:0;i:6;}}i:149;a:4:{s:1:\"a\";i:150;s:1:\"b\";s:14:\"editar usuario\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:1:{i:0;i:6;}}i:150;a:4:{s:1:\"a\";i:151;s:1:\"b\";s:23:\"ativar inativar usuario\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:1:{i:0;i:6;}}i:151;a:4:{s:1:\"a\";i:152;s:1:\"b\";s:22:\"visualizar instituicao\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:1:{i:0;i:6;}}i:152;a:4:{s:1:\"a\";i:153;s:1:\"b\";s:18:\"editar instituicao\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:1:{i:0;i:6;}}i:153;a:4:{s:1:\"a\";i:154;s:1:\"b\";s:24:\"visualizar configuracoes\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:1:{i:0;i:6;}}i:154;a:4:{s:1:\"a\";i:155;s:1:\"b\";s:20:\"editar configuracoes\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:1:{i:0;i:6;}}i:155;a:4:{s:1:\"a\";i:156;s:1:\"b\";s:18:\"visualizar escolas\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:1:{i:0;i:6;}}i:156;a:4:{s:1:\"a\";i:157;s:1:\"b\";s:12:\"criar escola\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:1:{i:0;i:6;}}i:157;a:4:{s:1:\"a\";i:158;s:1:\"b\";s:13:\"editar escola\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:1:{i:0;i:6;}}i:158;a:4:{s:1:\"a\";i:159;s:1:\"b\";s:22:\"ativar inativar escola\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:1:{i:0;i:6;}}i:159;a:4:{s:1:\"a\";i:160;s:1:\"b\";s:23:\"visualizar funcionarios\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:1:{i:0;i:6;}}i:160;a:4:{s:1:\"a\";i:161;s:1:\"b\";s:17:\"criar funcionario\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:1:{i:0;i:6;}}i:161;a:4:{s:1:\"a\";i:162;s:1:\"b\";s:18:\"editar funcionario\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:1:{i:0;i:6;}}i:162;a:4:{s:1:\"a\";i:163;s:1:\"b\";s:27:\"ativar inativar funcionario\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:1:{i:0;i:6;}}}s:5:\"roles\";a:8:{i:0;a:3:{s:1:\"a\";i:1;s:1:\"b\";s:19:\"Secretário Escolar\";s:1:\"c\";s:3:\"web\";}i:1;a:3:{s:1:\"a\";i:2;s:1:\"b\";s:23:\"Administrador da Escola\";s:1:\"c\";s:3:\"web\";}i:2;a:3:{s:1:\"a\";i:4;s:1:\"b\";s:23:\"Coordenador Pedagógico\";s:1:\"c\";s:3:\"web\";}i:3;a:3:{s:1:\"a\";i:5;s:1:\"b\";s:15:\"Diretor Escolar\";s:1:\"c\";s:3:\"web\";}i:4;a:3:{s:1:\"a\";i:6;s:1:\"b\";s:21:\"Administrador da Rede\";s:1:\"c\";s:3:\"web\";}i:5;a:3:{s:1:\"a\";i:3;s:1:\"b\";s:9:\"Professor\";s:1:\"c\";s:3:\"web\";}i:6;a:3:{s:1:\"a\";i:7;s:1:\"b\";s:13:\"Nutricionista\";s:1:\"c\";s:3:\"web\";}i:7;a:3:{s:1:\"a\";i:8;s:1:\"b\";s:25:\"Psicologia/Psicopedagogia\";s:1:\"c\";s:3:\"web\";}}}', 1774110608);
 
 -- --------------------------------------------------------
 
@@ -255,6 +261,14 @@ CREATE TABLE `casos_disciplinares_sigilosos` (
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+--
+-- Despejando dados para a tabela `casos_disciplinares_sigilosos`
+--
+
+INSERT INTO `casos_disciplinares_sigilosos` (`id`, `atendimento_psicossocial_id`, `escola_id`, `aluno_id`, `funcionario_id`, `usuario_id`, `data_ocorrencia`, `titulo`, `descricao_sigilosa`, `medidas_adotadas`, `status`, `created_at`, `updated_at`) VALUES
+(1, 2, 6, 4, NULL, 11, '2026-03-20', 'Caso disciplinar vinculado ao atendimento', 'eyJpdiI6Im4wRi9EQ0JDSFVUSGdVczdOMmIvdGc9PSIsInZhbHVlIjoiWlhLbHE2MjJEeXRDK2N2N0xLY2tqZWszbVJ2L3NteGtnSzFPd2trZmNaM2NLeEgrQ2p5NzM5QnRsWFNXbW80cUlVZmM4VmpJODJLNmg5TUdLWStxa2c9PSIsIm1hYyI6IjMzMTNmYzc5OGVlZjA0NzQxN2I0Yjc0M2JhZWIwNjNkYzJjZmZhMmM3YTNjMzcyYTZlZTY2OWIzZDIyZDdmZTkiLCJ0YWciOiIifQ==', NULL, 'aberto', '2026-03-20 17:48:39', '2026-03-20 17:48:39'),
+(2, 2, 6, 4, NULL, 11, '2026-03-20', 'Caso disciplinar vinculado ao atendimento', 'eyJpdiI6Ild2Q2FLNTJnT1RPS1VwRlhWYkZ2Y1E9PSIsInZhbHVlIjoiUmh6VzM5NVlTekFuRDdpSkhta0NnMGl0dXBVb05xWldRWGg0bm90RmpGMnZPMFNQajJsMFpzNmUrR2NTait3UTJNci9nNlhzWHM5djZkSklyeDhqU2c9PSIsIm1hYyI6ImQ2YTZkMzZkZWJhOWUwZmRhMzI0ZTgxYzZkNzY3Y2M2YjU4ZmRkYjg3ZmQwNTE5ZjJlODVkZjcyZTNjMWIzMGQiLCJ0YWciOiIifQ==', NULL, 'aberto', '2026-03-20 18:13:27', '2026-03-20 18:13:27');
+
 -- --------------------------------------------------------
 
 --
@@ -283,6 +297,58 @@ INSERT INTO `categorias_alimentos` (`id`, `nome`, `descricao`, `ativo`, `created
 (7, 'Panificacao', 'Pao, biscoitos e massas usadas na alimentacao escolar', 1, '2026-03-18 02:32:14', '2026-03-18 02:32:14'),
 (8, 'Bebidas', 'Sucos, leite e outras bebidas servidas', 1, '2026-03-18 02:32:25', '2026-03-18 02:32:25'),
 (9, 'Temperos e Complementos', 'Sal, alho, cebola, oleo, acucar e itens de apoio ao preparo', 1, '2026-03-18 02:32:43', '2026-03-18 02:32:43');
+
+-- --------------------------------------------------------
+
+--
+-- Estrutura para tabela `demandas_psicossociais`
+--
+
+CREATE TABLE `demandas_psicossociais` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `escola_id` bigint(20) UNSIGNED NOT NULL,
+  `usuario_registro_id` bigint(20) UNSIGNED NOT NULL,
+  `profissional_responsavel_id` bigint(20) UNSIGNED DEFAULT NULL,
+  `tipo_atendimento` enum('psicologia','psicopedagogia','psicossocial') NOT NULL DEFAULT 'psicologia',
+  `origem_demanda` enum('coordenacao','direcao','professor','familia','triagem_interna','demanda_espontanea','outro') NOT NULL,
+  `tipo_publico` enum('aluno','professor','funcionario','responsavel') NOT NULL,
+  `aluno_id` bigint(20) UNSIGNED DEFAULT NULL,
+  `funcionario_id` bigint(20) UNSIGNED DEFAULT NULL,
+  `responsavel_nome` varchar(255) DEFAULT NULL,
+  `responsavel_telefone` varchar(255) DEFAULT NULL,
+  `responsavel_vinculo` varchar(255) DEFAULT NULL,
+  `motivo_inicial` text DEFAULT NULL,
+  `prioridade` enum('baixa','media','alta','urgente') NOT NULL DEFAULT 'media',
+  `status` enum('aberta','em_triagem','em_atendimento','encaminhada','observacao','encerrada') NOT NULL DEFAULT 'aberta',
+  `data_solicitacao` date NOT NULL,
+  `observacoes` text DEFAULT NULL,
+  `encaminhado_para_atendimento` tinyint(1) NOT NULL DEFAULT 0,
+  `atendimento_id` bigint(20) UNSIGNED DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Estrutura para tabela `devolutivas_psicossociais`
+--
+
+CREATE TABLE `devolutivas_psicossociais` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `atendimento_id` bigint(20) UNSIGNED NOT NULL,
+  `usuario_responsavel_id` bigint(20) UNSIGNED NOT NULL,
+  `destinatario` enum('familia','professor','coordenacao','direcao','funcionario','outro') NOT NULL,
+  `nome_destinatario` varchar(255) DEFAULT NULL,
+  `data_devolutiva` date NOT NULL,
+  `resumo_devolutiva` text DEFAULT NULL,
+  `orientacoes` text DEFAULT NULL,
+  `encaminhamentos_combinados` text DEFAULT NULL,
+  `necessita_acompanhamento` tinyint(1) NOT NULL DEFAULT 0,
+  `observacoes` text DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -367,6 +433,13 @@ CREATE TABLE `encaminhamentos_psicossociais` (
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Despejando dados para a tabela `encaminhamentos_psicossociais`
+--
+
+INSERT INTO `encaminhamentos_psicossociais` (`id`, `atendimento_psicossocial_id`, `usuario_id`, `tipo`, `destino`, `profissional_destino`, `instituicao_destino`, `motivo`, `orientacoes_sigilosas`, `status`, `data_encaminhamento`, `retorno_previsto_em`, `created_at`, `updated_at`) VALUES
+(1, 3, 11, 'externo', 'Secretaria de Saúde', 'Psiquiatra', 'Secretaria Municipal de Saúde', 'eyJpdiI6Img0Z3dnOEUvWXBubUxPazdZOVYrMkE9PSIsInZhbHVlIjoiVmdCT3c4RmRpb3dOaThNT24yMGRwZ1RLdDBHbHlHK3ptbUtRMjJyUVNPTGk1SmJkb1phTnI1UzNHR0lpdVZlRlFXRGt1RDRDVWErYWFrOHZWNXVoc3c9PSIsIm1hYyI6ImM1OTNjMTczMzRlNTVlMjhkMzQyMDJhNDI3OTIxYjhhZjY0NmYwZjE3MDRmNWU0NzdiZTNkMjFkOWU4MzUxNTAiLCJ0YWciOiIifQ==', 'eyJpdiI6IjJHNVAyRFVhNlFzazNESXYxMnloMWc9PSIsInZhbHVlIjoiZEhNcG1XRk43dVM1WVJ4cjhKMC9HRVZnL05WZWZyZlBUeisvZlF6K281MHpOMXJ4SkRkNUsxVS9iZjhoZVNDeCIsIm1hYyI6IjkxNjQ3ZjIxYjQ5Zjg5ZDYxNWE0Yjk0MzlmNDExMjI2MTQyNzQ0OTk4NDg2MjdhYTIwMmE3Y2E3ZTliOGY2YmYiLCJ0YWciOiIifQ==', 'concluido', '2026-03-20', '2026-03-20', '2026-03-20 18:24:37', '2026-03-20 18:24:37');
 
 -- --------------------------------------------------------
 
@@ -744,7 +817,8 @@ CREATE TABLE `matriculas` (
 --
 
 INSERT INTO `matriculas` (`id`, `aluno_id`, `escola_id`, `turma_id`, `ano_letivo`, `tipo`, `status`, `matricula_regular_id`, `data_matricula`, `data_encerramento`, `observacoes`, `created_at`, `updated_at`) VALUES
-(2, 3, 5, 2, '2026', 'regular', 'ativa', NULL, '2026-03-17', NULL, NULL, '2026-03-18 01:59:30', '2026-03-18 01:59:30');
+(2, 3, 5, 2, '2026', 'regular', 'ativa', NULL, '2026-03-17', NULL, NULL, '2026-03-18 01:59:30', '2026-03-18 01:59:30'),
+(3, 4, 5, 2, '2026', 'regular', 'ativa', NULL, '2026-03-20', NULL, NULL, '2026-03-20 19:10:50', '2026-03-20 19:10:50');
 
 -- --------------------------------------------------------
 
@@ -766,7 +840,8 @@ CREATE TABLE `matricula_historicos` (
 --
 
 INSERT INTO `matricula_historicos` (`id`, `matricula_id`, `acao`, `descricao`, `usuario_id`, `created_at`) VALUES
-(1, 2, 'criacao', 'Matrícula regular realizada para o ano letivo 2026.', 9, '2026-03-18 01:59:30');
+(1, 2, 'criacao', 'Matrícula regular realizada para o ano letivo 2026.', 9, '2026-03-18 01:59:30'),
+(2, 3, 'criacao', 'Matrícula regular realizada para o ano letivo 2026.', 8, '2026-03-20 19:10:50');
 
 -- --------------------------------------------------------
 
@@ -898,7 +973,12 @@ INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES
 (44, '2026_03_17_090000_create_registros_auditoria_table', 1),
 (45, '2026_03_17_090100_add_auditoria_permissions', 1),
 (46, '2026_03_17_101000_expand_nutricionista_management_permissions', 2),
-(47, '2026_03_19_000001_add_theme_to_users_table', 3);
+(47, '2026_03_19_000001_add_theme_to_users_table', 3),
+(48, '2026_03_20_153318_create_demandas_psicossociais_table', 4),
+(49, '2026_03_20_153343_create_triagens_psicossociais_table', 4),
+(50, '2026_03_20_153412_create_sessoes_atendimentos_table', 4),
+(51, '2026_03_20_153444_create_devolutivas_psicossociais_table', 4),
+(52, '2026_03_20_153511_create_reavaliacoes_psicossociais_table', 4);
 
 -- --------------------------------------------------------
 
@@ -1692,6 +1772,36 @@ CREATE TABLE `planos_intervencao_psicossociais` (
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+--
+-- Despejando dados para a tabela `planos_intervencao_psicossociais`
+--
+
+INSERT INTO `planos_intervencao_psicossociais` (`id`, `atendimento_psicossocial_id`, `usuario_id`, `objetivo_geral`, `objetivos_especificos`, `estrategias`, `responsaveis_execucao`, `data_inicio`, `data_fim`, `status`, `observacoes_sigilosas`, `created_at`, `updated_at`) VALUES
+(1, 2, 11, 'eyJpdiI6InJ1eTdLV3Y0amcvMm5MaUxGY2RzRVE9PSIsInZhbHVlIjoiejU3bmxwOWZqbVdZbSs1RjR1WTlUSDNJS000Q1RFYjFkSGwzOFhWQlROTT0iLCJtYWMiOiI4YTVmZGY2YmMxYmIzNWZmMmM3OTY2ODAyZTgxZDNiYjhiNjg1MTg3ZTU5Mzg4YTVlYTVmMzVhNWE5MTU0NzY2IiwidGFnIjoiIn0=', NULL, 'eyJpdiI6IlQwWlRWc3BWOUNmNWF5N0tFNVlaVUE9PSIsInZhbHVlIjoiYWRxYUc5SW1BMWlZQVd1MW9ubnp0K01WRFErVmUzNk9UNDhUYXVTVGc5TGpSVHZuZnRGdExiSzZONXM5ZFkwY2orMWZNY1VKbjgxbG1UTWpzK0cwa0dNVk4rc00rNG40amsyVDhON0srVkdDRzBOWm52QWRVWml0bWhMYm9IV0ciLCJtYWMiOiJjNmExMTI3ZWY2NGQ3Y2UxNWZkYTc2ZTJjNGIzMGY5OTE0MWEzOTJkNzY2MjVlYTQxNmVlNTlkMGJhNmYzYWM5IiwidGFnIjoiIn0=', NULL, '2026-03-19', NULL, 'concluido', NULL, '2026-03-20 17:48:20', '2026-03-20 17:48:20'),
+(2, 2, 11, 'eyJpdiI6IlBMVldVN3p2b01iRU9WejJ1c0owVXc9PSIsInZhbHVlIjoiem1obm1TYU9nR3NZSjlkUWp2a09CSVVad0ZGNjI2b3d6OEpDWkdicVdwUT0iLCJtYWMiOiIyYWY1YjBmZGJjZDJhZGFhMThlNjYwZWFlOTE4ODlkY2E5OTI1ZTVjNGJiZmE2NjBhMzE2YzczY2FkMDU2NTkxIiwidGFnIjoiIn0=', NULL, 'eyJpdiI6ImVJWklyU0FIcVdDdmRSQ3BsUXdVSkE9PSIsInZhbHVlIjoiWVorOTRzUVNkTHJVVXpwamh5WForYVBmMk1QUmdSbzFvVjdiN0s0OFFKRDdyeUthUDZTc1dYUlZROWlYQWQ0dzI1azRSZGNUeXdUYjdPZUZBTEpMK1E9PSIsIm1hYyI6IjkxNmUxYjRjOTY1ZmFhYTc1ZDBlZDkyYzQ1ZTAwMjEzNzIxNWFlOWYwOWYzODQ0NjYyODdmNGU5NDk1ODg5MTMiLCJ0YWciOiIifQ==', NULL, '2026-03-20', NULL, 'em_acompanhamento', NULL, '2026-03-20 18:10:59', '2026-03-20 18:10:59');
+
+-- --------------------------------------------------------
+
+--
+-- Estrutura para tabela `reavaliacoes_psicossociais`
+--
+
+CREATE TABLE `reavaliacoes_psicossociais` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `atendimento_id` bigint(20) UNSIGNED NOT NULL,
+  `usuario_responsavel_id` bigint(20) UNSIGNED NOT NULL,
+  `data_reavaliacao` date NOT NULL,
+  `progresso_observado` text DEFAULT NULL,
+  `dificuldades_persistentes` text DEFAULT NULL,
+  `ajuste_plano` text DEFAULT NULL,
+  `frequencia_nova` enum('semanal','quinzenal','mensal','outra') DEFAULT NULL,
+  `decisao` enum('manter_plano','ajustar_plano','suspender','encaminhar','encerrar') NOT NULL,
+  `justificativa` text DEFAULT NULL,
+  `proxima_reavaliacao` date DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
 -- --------------------------------------------------------
 
 --
@@ -1770,7 +1880,40 @@ INSERT INTO `registros_auditoria` (`id`, `usuario_id`, `escola_id`, `modulo`, `a
 (76, 13, 6, 'horarios', 'criacao', 'Horario de Aula', 'App\\Models\\HorarioAula', 3, 'medio', '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36', NULL, '{\"escola_id\":\"6\",\"turma_id\":\"3\",\"disciplina_id\":\"6\",\"professor_id\":\"6\",\"dia_semana\":\"2\",\"horario_inicial\":\"15:15\",\"horario_final\":\"16:05\",\"ordem_aula\":null,\"ativo\":true}', '{\"rota\":\"secretaria-escolar.coordenacao.horarios.store\",\"portal_origem\":\"coordenacao\",\"metodo_http\":\"POST\"}', '2026-03-20 00:20:39', '2026-03-20 00:20:39'),
 (77, 13, 6, 'horarios', 'criacao', 'Horario de Aula', 'App\\Models\\HorarioAula', 4, 'medio', '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36', NULL, '{\"escola_id\":\"6\",\"turma_id\":\"3\",\"disciplina_id\":\"9\",\"professor_id\":\"6\",\"dia_semana\":\"2\",\"horario_inicial\":\"16:05\",\"horario_final\":\"16:55\",\"ordem_aula\":null,\"ativo\":true}', '{\"rota\":\"secretaria-escolar.coordenacao.horarios.store\",\"portal_origem\":\"coordenacao\",\"metodo_http\":\"POST\"}', '2026-03-20 00:20:39', '2026-03-20 00:20:39'),
 (78, 12, 6, 'diarios', 'criacao', 'Diario do Professor', 'App\\Models\\DiarioProfessor', 2, 'medio', '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36 Edg/146.0.0.0', NULL, '{\"escola_id\":\"6\",\"turma_id\":\"3\",\"disciplina_id\":\"3\",\"professor_id\":6,\"ano_letivo\":\"2026\",\"periodo_tipo\":\"bimestre\",\"periodo_referencia\":\"1\"}', '{\"rota\":\"professor.diario.store\",\"portal_origem\":\"professor\",\"metodo_http\":\"POST\",\"professor_id\":6,\"turma_id\":\"3\"}', '2026-03-20 00:22:41', '2026-03-20 00:22:41'),
-(79, 12, 6, 'aulas', 'criacao', 'Registro de Aula', 'App\\Models\\RegistroAula', 1, 'medio', '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36 Edg/146.0.0.0', NULL, '{\"data_aula\":\"2026-03-16 00:00:00\",\"titulo\":\"N\\u00fameros naturais - Opera\\u00e7\\u00f5es de soma e subtra\\u00e7\\u00e3o\",\"conteudo_ministrado\":\"Opera\\u00e7\\u00f5es com n\\u00fameros naturais, opera\\u00e7\\u00f5es de soma e subtra\\u00e7\\u00e3o, problemas envolvendo as opera\\u00e7\\u00f5es.\",\"quantidade_aulas\":\"2\",\"aula_dada\":true}', '{\"rota\":\"professor.diario.registro-aula.store\",\"portal_origem\":\"professor\",\"metodo_http\":\"POST\",\"diario_professor_id\":2,\"professor_id\":6,\"turma_id\":3,\"disciplina_id\":3,\"ano_letivo\":2026}', '2026-03-20 00:24:56', '2026-03-20 00:24:56');
+(79, 12, 6, 'aulas', 'criacao', 'Registro de Aula', 'App\\Models\\RegistroAula', 1, 'medio', '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36 Edg/146.0.0.0', NULL, '{\"data_aula\":\"2026-03-16 00:00:00\",\"titulo\":\"N\\u00fameros naturais - Opera\\u00e7\\u00f5es de soma e subtra\\u00e7\\u00e3o\",\"conteudo_ministrado\":\"Opera\\u00e7\\u00f5es com n\\u00fameros naturais, opera\\u00e7\\u00f5es de soma e subtra\\u00e7\\u00e3o, problemas envolvendo as opera\\u00e7\\u00f5es.\",\"quantidade_aulas\":\"2\",\"aula_dada\":true}', '{\"rota\":\"professor.diario.registro-aula.store\",\"portal_origem\":\"professor\",\"metodo_http\":\"POST\",\"diario_professor_id\":2,\"professor_id\":6,\"turma_id\":3,\"disciplina_id\":3,\"ano_letivo\":2026}', '2026-03-20 00:24:56', '2026-03-20 00:24:56'),
+(80, 11, 6, 'psicossocial', 'criacao', 'Atendimento Psicossocial', 'App\\Models\\AtendimentoPsicossocial', 2, 'sigiloso', '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36', NULL, '{\"escola_id\":\"6\",\"tipo_publico\":\"aluno\",\"tipo_atendimento\":\"psicologia\",\"natureza\":\"agendado\",\"status\":\"agendado\",\"data_agendada\":\"2026-03-19 10:00:00\",\"data_realizacao\":\"2026-03-19 10:30:00\",\"nivel_sigilo\":\"restrito\",\"requer_acompanhamento\":true}', '{\"rota\":\"psicologia.store\",\"portal_origem\":\"psicossocial\",\"metodo_http\":\"POST\"}', '2026-03-20 17:45:46', '2026-03-20 17:45:46'),
+(81, 11, 6, 'psicossocial', 'visualizacao_sensivel', 'Atendimento Psicossocial', 'App\\Models\\AtendimentoPsicossocial', 2, 'sigiloso', '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36', NULL, NULL, '{\"rota\":\"psicologia.show\",\"portal_origem\":\"psicossocial\",\"metodo_http\":\"GET\",\"atendimento_id\":2,\"tipo_publico\":\"aluno\",\"nivel_sigilo\":\"restrito\"}', '2026-03-20 17:45:47', '2026-03-20 17:45:47'),
+(82, 11, 6, 'psicossocial', 'visualizacao_sensivel', 'Atendimento Psicossocial', 'App\\Models\\AtendimentoPsicossocial', 2, 'sigiloso', '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36', NULL, NULL, '{\"rota\":\"psicologia.show\",\"portal_origem\":\"psicossocial\",\"metodo_http\":\"GET\",\"atendimento_id\":2,\"tipo_publico\":\"aluno\",\"nivel_sigilo\":\"restrito\"}', '2026-03-20 17:46:16', '2026-03-20 17:46:16'),
+(83, 11, 6, 'psicossocial', 'visualizacao_sensivel', 'Atendimento Psicossocial', 'App\\Models\\AtendimentoPsicossocial', 2, 'sigiloso', '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36', NULL, NULL, '{\"rota\":\"psicologia.show\",\"portal_origem\":\"psicossocial\",\"metodo_http\":\"GET\",\"atendimento_id\":2,\"tipo_publico\":\"aluno\",\"nivel_sigilo\":\"restrito\"}', '2026-03-20 17:46:50', '2026-03-20 17:46:50'),
+(84, 11, 6, 'psicossocial', 'criacao', 'Plano de Intervencao', 'App\\Models\\PlanoIntervencaoPsicossocial', 1, 'sigiloso', '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36', NULL, '{\"objetivo_geral\":\"eyJpdiI6InJ1eTdLV3Y0amcvMm5MaUxGY2RzRVE9PSIsInZhbHVlIjoiejU3bmxwOWZqbVdZbSs1RjR1WTlUSDNJS000Q1RFYjFkSGwzOFhWQlROTT0iLCJtYWMiOiI4YTVmZGY2YmMxYmIzNWZmMmM3OTY2ODAyZTgxZDNiYjhiNjg1MTg3ZTU5Mzg4YTVlYTVmMzVhNWE5MTU0NzY2IiwidGFnIjoiIn0=\",\"estrategias\":\"eyJpdiI6IlQwWlRWc3BWOUNmNWF5N0tFNVlaVUE9PSIsInZhbHVlIjoiYWRxYUc5SW1BMWlZQVd1MW9ubnp0K01WRFErVmUzNk9UNDhUYXVTVGc5TGpSVHZuZnRGdExiSzZONXM5ZFkwY2orMWZNY1VKbjgxbG1UTWpzK0cwa0dNVk4rc00rNG40amsyVDhON0srVkdDRzBOWm52QWRVWml0bWhMYm9IV0ciLCJtYWMiOiJjNmExMTI3ZWY2NGQ3Y2UxNWZkYTc2ZTJjNGIzMGY5OTE0MWEzOTJkNzY2MjVlYTQxNmVlNTlkMGJhNmYzYWM5IiwidGFnIjoiIn0=\",\"data_inicio\":\"2026-03-19 00:00:00\",\"status\":\"concluido\"}', '{\"rota\":\"psicologia.planos.store\",\"portal_origem\":\"psicossocial\",\"metodo_http\":\"POST\"}', '2026-03-20 17:48:20', '2026-03-20 17:48:20'),
+(85, 11, 6, 'psicossocial', 'visualizacao_sensivel', 'Atendimento Psicossocial', 'App\\Models\\AtendimentoPsicossocial', 2, 'sigiloso', '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36', NULL, NULL, '{\"rota\":\"psicologia.show\",\"portal_origem\":\"psicossocial\",\"metodo_http\":\"GET\",\"atendimento_id\":2,\"tipo_publico\":\"aluno\",\"nivel_sigilo\":\"restrito\"}', '2026-03-20 17:48:21', '2026-03-20 17:48:21'),
+(86, 11, 6, 'psicossocial', 'criacao', 'Caso Disciplinar Sigiloso', 'App\\Models\\CasoDisciplinarSigiloso', 1, 'sigiloso', '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36', NULL, '{\"titulo\":\"Caso disciplinar vinculado ao atendimento\",\"status\":\"aberto\",\"escola_id\":6}', '{\"rota\":\"psicologia.casos.store\",\"portal_origem\":\"psicossocial\",\"metodo_http\":\"POST\"}', '2026-03-20 17:48:39', '2026-03-20 17:48:39'),
+(87, 11, 6, 'psicossocial', 'visualizacao_sensivel', 'Atendimento Psicossocial', 'App\\Models\\AtendimentoPsicossocial', 2, 'sigiloso', '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36', NULL, NULL, '{\"rota\":\"psicologia.show\",\"portal_origem\":\"psicossocial\",\"metodo_http\":\"GET\",\"atendimento_id\":2,\"tipo_publico\":\"aluno\",\"nivel_sigilo\":\"restrito\"}', '2026-03-20 17:48:40', '2026-03-20 17:48:40'),
+(88, 11, 6, 'psicossocial', 'visualizacao_sensivel', 'Atendimento Psicossocial', 'App\\Models\\AtendimentoPsicossocial', 2, 'sigiloso', '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36', NULL, NULL, '{\"rota\":\"psicologia.show\",\"portal_origem\":\"psicossocial\",\"metodo_http\":\"GET\",\"atendimento_id\":2,\"tipo_publico\":\"aluno\",\"nivel_sigilo\":\"restrito\"}', '2026-03-20 17:49:08', '2026-03-20 17:49:08'),
+(89, 11, 6, 'psicossocial', 'visualizacao_sensivel', 'Atendimento Psicossocial', 'App\\Models\\AtendimentoPsicossocial', 2, 'sigiloso', '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36', NULL, NULL, '{\"rota\":\"psicologia.show\",\"portal_origem\":\"psicossocial\",\"metodo_http\":\"GET\",\"atendimento_id\":2,\"tipo_publico\":\"aluno\",\"nivel_sigilo\":\"restrito\"}', '2026-03-20 17:58:32', '2026-03-20 17:58:32'),
+(90, 11, 6, 'psicossocial', 'visualizacao_sensivel', 'Atendimento Psicossocial', 'App\\Models\\AtendimentoPsicossocial', 2, 'sigiloso', '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36', NULL, NULL, '{\"rota\":\"psicologia.show\",\"portal_origem\":\"psicossocial\",\"metodo_http\":\"GET\",\"atendimento_id\":2,\"tipo_publico\":\"aluno\",\"nivel_sigilo\":\"restrito\"}', '2026-03-20 18:02:08', '2026-03-20 18:02:08'),
+(91, 11, 6, 'psicossocial', 'criacao', 'Atendimento Psicossocial', 'App\\Models\\AtendimentoPsicossocial', 3, 'sigiloso', '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36', NULL, '{\"escola_id\":\"6\",\"tipo_publico\":\"aluno\",\"tipo_atendimento\":\"psicologia\",\"natureza\":\"retorno\",\"status\":\"realizado\",\"data_agendada\":\"2026-03-20 09:00:00\",\"data_realizacao\":\"2026-03-20 09:00:00\",\"nivel_sigilo\":\"restrito\",\"requer_acompanhamento\":true}', '{\"rota\":\"psicologia.store\",\"portal_origem\":\"psicossocial\",\"metodo_http\":\"POST\"}', '2026-03-20 18:07:16', '2026-03-20 18:07:16'),
+(92, 11, 6, 'psicossocial', 'visualizacao_sensivel', 'Atendimento Psicossocial', 'App\\Models\\AtendimentoPsicossocial', 3, 'sigiloso', '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36', NULL, NULL, '{\"rota\":\"psicologia.show\",\"portal_origem\":\"psicossocial\",\"metodo_http\":\"GET\",\"atendimento_id\":3,\"tipo_publico\":\"aluno\",\"nivel_sigilo\":\"restrito\"}', '2026-03-20 18:07:16', '2026-03-20 18:07:16'),
+(93, 11, 6, 'psicossocial', 'visualizacao_sensivel', 'Atendimento Psicossocial', 'App\\Models\\AtendimentoPsicossocial', 3, 'sigiloso', '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36', NULL, NULL, '{\"rota\":\"psicologia.show\",\"portal_origem\":\"psicossocial\",\"metodo_http\":\"GET\",\"atendimento_id\":3,\"tipo_publico\":\"aluno\",\"nivel_sigilo\":\"restrito\"}', '2026-03-20 18:07:47', '2026-03-20 18:07:47'),
+(94, 11, 6, 'psicossocial', 'visualizacao_sensivel', 'Atendimento Psicossocial', 'App\\Models\\AtendimentoPsicossocial', 3, 'sigiloso', '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36', NULL, NULL, '{\"rota\":\"psicologia.show\",\"portal_origem\":\"psicossocial\",\"metodo_http\":\"GET\",\"atendimento_id\":3,\"tipo_publico\":\"aluno\",\"nivel_sigilo\":\"restrito\"}', '2026-03-20 18:08:39', '2026-03-20 18:08:39'),
+(95, 11, 6, 'psicossocial', 'visualizacao_sensivel', 'Atendimento Psicossocial', 'App\\Models\\AtendimentoPsicossocial', 2, 'sigiloso', '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36', NULL, NULL, '{\"rota\":\"psicologia.show\",\"portal_origem\":\"psicossocial\",\"metodo_http\":\"GET\",\"atendimento_id\":2,\"tipo_publico\":\"aluno\",\"nivel_sigilo\":\"restrito\"}', '2026-03-20 18:08:49', '2026-03-20 18:08:49'),
+(96, 11, 6, 'psicossocial', 'alteracao', 'Atendimento Psicossocial', 'App\\Models\\AtendimentoPsicossocial', 2, 'sigiloso', '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36', '{\"status\":\"agendado\",\"data_realizacao\":\"2026-03-19 10:30:00\"}', '{\"status\":\"realizado\",\"data_realizacao\":\"2026-03-20 15:08:53\"}', '{\"rota\":\"psicologia.atendimento.finalizar\",\"portal_origem\":\"psicossocial\",\"metodo_http\":\"PATCH\"}', '2026-03-20 18:08:53', '2026-03-20 18:08:53'),
+(97, 11, 6, 'psicossocial', 'visualizacao_sensivel', 'Atendimento Psicossocial', 'App\\Models\\AtendimentoPsicossocial', 2, 'sigiloso', '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36', NULL, NULL, '{\"rota\":\"psicologia.show\",\"portal_origem\":\"psicossocial\",\"metodo_http\":\"GET\",\"atendimento_id\":2,\"tipo_publico\":\"aluno\",\"nivel_sigilo\":\"restrito\"}', '2026-03-20 18:08:53', '2026-03-20 18:08:53'),
+(98, 11, 6, 'psicossocial', 'criacao', 'Plano de Intervencao', 'App\\Models\\PlanoIntervencaoPsicossocial', 2, 'sigiloso', '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36', NULL, '{\"objetivo_geral\":\"eyJpdiI6IlBMVldVN3p2b01iRU9WejJ1c0owVXc9PSIsInZhbHVlIjoiem1obm1TYU9nR3NZSjlkUWp2a09CSVVad0ZGNjI2b3d6OEpDWkdicVdwUT0iLCJtYWMiOiIyYWY1YjBmZGJjZDJhZGFhMThlNjYwZWFlOTE4ODlkY2E5OTI1ZTVjNGJiZmE2NjBhMzE2YzczY2FkMDU2NTkxIiwidGFnIjoiIn0=\",\"estrategias\":\"eyJpdiI6ImVJWklyU0FIcVdDdmRSQ3BsUXdVSkE9PSIsInZhbHVlIjoiWVorOTRzUVNkTHJVVXpwamh5WForYVBmMk1QUmdSbzFvVjdiN0s0OFFKRDdyeUthUDZTc1dYUlZROWlYQWQ0dzI1azRSZGNUeXdUYjdPZUZBTEpMK1E9PSIsIm1hYyI6IjkxNmUxYjRjOTY1ZmFhYTc1ZDBlZDkyYzQ1ZTAwMjEzNzIxNWFlOWYwOWYzODQ0NjYyODdmNGU5NDk1ODg5MTMiLCJ0YWciOiIifQ==\",\"data_inicio\":\"2026-03-20 00:00:00\",\"status\":\"em_acompanhamento\"}', '{\"rota\":\"psicologia.planos.store\",\"portal_origem\":\"psicossocial\",\"metodo_http\":\"POST\"}', '2026-03-20 18:10:59', '2026-03-20 18:10:59'),
+(99, 11, 6, 'psicossocial', 'visualizacao_sensivel', 'Atendimento Psicossocial', 'App\\Models\\AtendimentoPsicossocial', 2, 'sigiloso', '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36', NULL, NULL, '{\"rota\":\"psicologia.show\",\"portal_origem\":\"psicossocial\",\"metodo_http\":\"GET\",\"atendimento_id\":2,\"tipo_publico\":\"aluno\",\"nivel_sigilo\":\"restrito\"}', '2026-03-20 18:11:00', '2026-03-20 18:11:00'),
+(100, 11, 6, 'psicossocial', 'visualizacao_sensivel', 'Atendimento Psicossocial', 'App\\Models\\AtendimentoPsicossocial', 2, 'sigiloso', '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36', NULL, NULL, '{\"rota\":\"psicologia.show\",\"portal_origem\":\"psicossocial\",\"metodo_http\":\"GET\",\"atendimento_id\":2,\"tipo_publico\":\"aluno\",\"nivel_sigilo\":\"restrito\"}', '2026-03-20 18:11:29', '2026-03-20 18:11:29'),
+(101, 11, 6, 'psicossocial', 'criacao', 'Relatorio Tecnico Psicossocial', 'App\\Models\\RelatorioTecnicoPsicossocial', 2, 'sigiloso', '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36', NULL, '{\"tipo_relatorio\":\"parecer_inicial\",\"titulo\":\"Paciente apresenta quadro de desaten\\u00e7\\u00e3o severa\",\"data_emissao\":\"2026-03-20 00:00:00\",\"escola_id\":6}', '{\"rota\":\"psicologia.relatorios_tecnicos.store\",\"portal_origem\":\"psicossocial\",\"metodo_http\":\"POST\"}', '2026-03-20 18:12:59', '2026-03-20 18:12:59'),
+(102, 11, 6, 'psicossocial', 'visualizacao_sensivel', 'Atendimento Psicossocial', 'App\\Models\\AtendimentoPsicossocial', 2, 'sigiloso', '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36', NULL, NULL, '{\"rota\":\"psicologia.show\",\"portal_origem\":\"psicossocial\",\"metodo_http\":\"GET\",\"atendimento_id\":2,\"tipo_publico\":\"aluno\",\"nivel_sigilo\":\"restrito\"}', '2026-03-20 18:13:00', '2026-03-20 18:13:00'),
+(103, 11, 6, 'psicossocial', 'criacao', 'Caso Disciplinar Sigiloso', 'App\\Models\\CasoDisciplinarSigiloso', 2, 'sigiloso', '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36', NULL, '{\"titulo\":\"Caso disciplinar vinculado ao atendimento\",\"status\":\"aberto\",\"escola_id\":6}', '{\"rota\":\"psicologia.casos.store\",\"portal_origem\":\"psicossocial\",\"metodo_http\":\"POST\"}', '2026-03-20 18:13:27', '2026-03-20 18:13:27'),
+(104, 11, 6, 'psicossocial', 'visualizacao_sensivel', 'Atendimento Psicossocial', 'App\\Models\\AtendimentoPsicossocial', 2, 'sigiloso', '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36', NULL, NULL, '{\"rota\":\"psicologia.show\",\"portal_origem\":\"psicossocial\",\"metodo_http\":\"GET\",\"atendimento_id\":2,\"tipo_publico\":\"aluno\",\"nivel_sigilo\":\"restrito\"}', '2026-03-20 18:13:28', '2026-03-20 18:13:28'),
+(105, 11, 6, 'psicossocial', 'visualizacao_sensivel', 'Atendimento Psicossocial', 'App\\Models\\AtendimentoPsicossocial', 2, 'sigiloso', '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36', NULL, NULL, '{\"rota\":\"psicologia.show\",\"portal_origem\":\"psicossocial\",\"metodo_http\":\"GET\",\"atendimento_id\":2,\"tipo_publico\":\"aluno\",\"nivel_sigilo\":\"restrito\"}', '2026-03-20 18:14:26', '2026-03-20 18:14:26'),
+(106, 11, 6, 'psicossocial', 'visualizacao_sensivel', 'Atendimento Psicossocial', 'App\\Models\\AtendimentoPsicossocial', 3, 'sigiloso', '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36', NULL, NULL, '{\"rota\":\"psicologia.show\",\"portal_origem\":\"psicossocial\",\"metodo_http\":\"GET\",\"atendimento_id\":3,\"tipo_publico\":\"aluno\",\"nivel_sigilo\":\"restrito\"}', '2026-03-20 18:14:47', '2026-03-20 18:14:47'),
+(107, 11, 6, 'psicossocial', 'visualizacao_sensivel', 'Atendimento Psicossocial', 'App\\Models\\AtendimentoPsicossocial', 3, 'sigiloso', '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36', NULL, NULL, '{\"rota\":\"psicologia.show\",\"portal_origem\":\"psicossocial\",\"metodo_http\":\"GET\",\"atendimento_id\":3,\"tipo_publico\":\"aluno\",\"nivel_sigilo\":\"restrito\"}', '2026-03-20 18:23:19', '2026-03-20 18:23:19'),
+(108, 11, 6, 'psicossocial', 'criacao', 'Encaminhamento Psicossocial', 'App\\Models\\EncaminhamentoPsicossocial', 1, 'sigiloso', '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36', NULL, '{\"tipo\":\"externo\",\"destino\":\"Secretaria de Sa\\u00fade\",\"motivo\":\"eyJpdiI6Img0Z3dnOEUvWXBubUxPazdZOVYrMkE9PSIsInZhbHVlIjoiVmdCT3c4RmRpb3dOaThNT24yMGRwZ1RLdDBHbHlHK3ptbUtRMjJyUVNPTGk1SmJkb1phTnI1UzNHR0lpdVZlRlFXRGt1RDRDVWErYWFrOHZWNXVoc3c9PSIsIm1hYyI6ImM1OTNjMTczMzRlNTVlMjhkMzQyMDJhNDI3OTIxYjhhZjY0NmYwZjE3MDRmNWU0NzdiZTNkMjFkOWU4MzUxNTAiLCJ0YWciOiIifQ==\",\"status\":\"concluido\",\"data_encaminhamento\":\"2026-03-20 00:00:00\"}', '{\"rota\":\"psicologia.encaminhamentos.store\",\"portal_origem\":\"psicossocial\",\"metodo_http\":\"POST\"}', '2026-03-20 18:24:37', '2026-03-20 18:24:37'),
+(109, 11, 6, 'psicossocial', 'visualizacao_sensivel', 'Atendimento Psicossocial', 'App\\Models\\AtendimentoPsicossocial', 3, 'sigiloso', '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36', NULL, NULL, '{\"rota\":\"psicologia.show\",\"portal_origem\":\"psicossocial\",\"metodo_http\":\"GET\",\"atendimento_id\":3,\"tipo_publico\":\"aluno\",\"nivel_sigilo\":\"restrito\"}', '2026-03-20 18:24:38', '2026-03-20 18:24:38'),
+(110, 11, 6, 'psicossocial', 'visualizacao_sensivel', 'Atendimento Psicossocial', 'App\\Models\\AtendimentoPsicossocial', 3, 'sigiloso', '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36', NULL, NULL, '{\"rota\":\"psicologia.show\",\"portal_origem\":\"psicossocial\",\"metodo_http\":\"GET\",\"atendimento_id\":3,\"tipo_publico\":\"aluno\",\"nivel_sigilo\":\"restrito\"}', '2026-03-20 18:45:18', '2026-03-20 18:45:18'),
+(111, 11, 6, 'psicossocial', 'visualizacao_sensivel', 'Atendimento Psicossocial', 'App\\Models\\AtendimentoPsicossocial', 3, 'sigiloso', '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36', NULL, NULL, '{\"rota\":\"psicologia.show\",\"portal_origem\":\"psicossocial\",\"metodo_http\":\"GET\",\"atendimento_id\":3,\"tipo_publico\":\"aluno\",\"nivel_sigilo\":\"restrito\"}', '2026-03-20 18:46:30', '2026-03-20 18:46:30'),
+(112, 8, 5, 'matriculas', 'criacao', 'Matricula', 'App\\Models\\Matricula', 3, 'alto', '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36 Edg/145.0.0.0', NULL, '{\"aluno_id\":\"4\",\"escola_id\":5,\"turma_id\":\"2\",\"ano_letivo\":\"2026\",\"tipo\":\"regular\",\"status\":\"ativa\",\"data_matricula\":\"2026-03-20 00:00:00\"}', '{\"rota\":\"secretaria-escolar.matriculas.store\",\"portal_origem\":\"secretaria-escolar\",\"metodo_http\":\"POST\",\"aluno_id\":\"4\",\"turma_id\":\"2\",\"ano_letivo\":2026,\"tipo_matricula\":\"regular\"}', '2026-03-20 19:10:50', '2026-03-20 19:10:50');
 
 -- --------------------------------------------------------
 
@@ -1822,6 +1965,13 @@ CREATE TABLE `relatorios_tecnicos_psicossociais` (
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+--
+-- Despejando dados para a tabela `relatorios_tecnicos_psicossociais`
+--
+
+INSERT INTO `relatorios_tecnicos_psicossociais` (`id`, `atendimento_psicossocial_id`, `escola_id`, `usuario_emissor_id`, `tipo_relatorio`, `titulo`, `conteudo_sigiloso`, `data_emissao`, `observacoes_restritas`, `created_at`, `updated_at`) VALUES
+(2, 2, 6, 11, 'parecer_inicial', 'Paciente apresenta quadro de desatenção severa', 'eyJpdiI6IlNRYU1KdGFoWGxiQTI4eUlHcnVWQWc9PSIsInZhbHVlIjoiNHp3bjNlSzVacFBBa1dNNEdWeFZwT3ZYcmh5VlFoQ3hpb2ZDV0dyeUdaYjhtYzRBNVZZR0V2dVE0MW15MFg3SUVDMit5QXY2QjNUN2gzMEU5REVvbytyU3MwZU9oTU9QVDZONUZSb2JNTnYwTjRaWUlGSk1hdmZqN3l6Q2MxWDdUSUJvN1gxU095MHk1cUFQTEZLbURBPT0iLCJtYWMiOiJjODJjNTVjNDY3OTgzYjdlMzNjMjE1NTU2MjBkM2ZlMTU4NGVlMDU1YjkwY2Q1YzI3OGU1OTk1YzViNjE1YmFlIiwidGFnIjoiIn0=', '2026-03-20', NULL, '2026-03-20 18:12:59', '2026-03-20 18:12:59');
+
 -- --------------------------------------------------------
 
 --
@@ -1842,8 +1992,62 @@ CREATE TABLE `sessions` (
 --
 
 INSERT INTO `sessions` (`id`, `user_id`, `ip_address`, `user_agent`, `payload`, `last_activity`) VALUES
-('IHyAt6x0urMEfhDTs8NdAvR1huQX0xBkoaeJ8nG3', 13, '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36', 'YTo1OntzOjY6Il90b2tlbiI7czo0MDoiOEQ2dVFuT21mZXU1TUxaV2E1VlpoOUtDbHJiSWYzNlZPcTl3ZEl5SSI7czo2OiJfZmxhc2giO2E6Mjp7czozOiJvbGQiO2E6MDp7fXM6MzoibmV3IjthOjA6e319czozOiJ1cmwiO2E6MDp7fXM6OToiX3ByZXZpb3VzIjthOjE6e3M6MzoidXJsIjtzOjkwOiJodHRwOi8vbG9jYWxob3N0L3Npc3RlbWEtZXNjb2xhci9wdWJsaWMvc2VjcmV0YXJpYS1lc2NvbGFyL2Nvb3JkZW5hY2FvLXBlZGFnb2dpY2EvaG9yYXJpb3MiO31zOjUwOiJsb2dpbl93ZWJfNTliYTM2YWRkYzJiMmY5NDAxNTgwZjAxNGM3ZjU4ZWE0ZTMwOTg5ZCI7aToxMzt9', 1773955239),
-('lFB2mCLpPGFV3lPTVzhIgFuBGSAg9ldi38llxKOg', 12, '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36 Edg/146.0.0.0', 'YTo1OntzOjY6Il90b2tlbiI7czo0MDoiWFkzcWRVaHE5SG04cUUzMEkySmEzamlvVE5KMW9rS0NVQm81eTM3SiI7czo2OiJfZmxhc2giO2E6Mjp7czozOiJvbGQiO2E6MDp7fXM6MzoibmV3IjthOjA6e319czozOiJ1cmwiO2E6MDp7fXM6OToiX3ByZXZpb3VzIjthOjE6e3M6MzoidXJsIjtzOjU4OiJodHRwOi8vbG9jYWxob3N0L3Npc3RlbWEtZXNjb2xhci9wdWJsaWMvcHJvZmVzc29yL2RpYXJpby8yIjt9czo1MDoibG9naW5fd2ViXzU5YmEzNmFkZGMyYjJmOTQwMTU4MGYwMTRjN2Y1OGVhNGUzMDk4OWQiO2k6MTI7fQ==', 1773955505);
+('9ThbH1UzEGHEqTPK22FUEGRdmWELXTnKE0jfYVSU', 11, '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36', 'YTo1OntzOjY6Il90b2tlbiI7czo0MDoiNHVIbGRwQnRIcHF1V2NiZmVKWWJEUTg2UWFYRUNtd3BpanBCdWlJUyI7czozOiJ1cmwiO2E6MDp7fXM6OToiX3ByZXZpb3VzIjthOjE6e3M6MzoidXJsIjtzOjgwOiJodHRwOi8vbG9jYWxob3N0L3Npc3RlbWEtZXNjb2xhci9wdWJsaWMvcHNpY29sb2dpYS1wc2ljb3BlZGFnb2dpYS9kZW1hbmRhcy9jcmlhciI7fXM6NjoiX2ZsYXNoIjthOjI6e3M6Mzoib2xkIjthOjA6e31zOjM6Im5ldyI7YTowOnt9fXM6NTA6ImxvZ2luX3dlYl81OWJhMzZhZGRjMmIyZjk0MDE1ODBmMDE0YzdmNThlYTRlMzA5ODlkIjtpOjExO30=', 1774024292),
+('fT500boW0GVPjePdb8CLBVELrylvo2xW7fnWitt2', 8, '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36 Edg/145.0.0.0', 'YTo1OntzOjY6Il90b2tlbiI7czo0MDoiRHN4aDh5WUNObUFudUJSellnWThQVTBFS1ZXVDZzak9XcDN6amhpQiI7czo2OiJfZmxhc2giO2E6Mjp7czozOiJvbGQiO2E6MDp7fXM6MzoibmV3IjthOjA6e319czozOiJ1cmwiO2E6MDp7fXM6OToiX3ByZXZpb3VzIjthOjE6e3M6MzoidXJsIjtzOjY5OiJodHRwOi8vbG9jYWxob3N0L3Npc3RlbWEtZXNjb2xhci9wdWJsaWMvc2VjcmV0YXJpYS1lc2NvbGFyL21hdHJpY3VsYXMiO31zOjUwOiJsb2dpbl93ZWJfNTliYTM2YWRkYzJiMmY5NDAxNTgwZjAxNGM3ZjU4ZWE0ZTMwOTg5ZCI7aTo4O30=', 1774023051);
+
+-- --------------------------------------------------------
+
+--
+-- Estrutura para tabela `sessoes_atendimentos`
+--
+
+CREATE TABLE `sessoes_atendimentos` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `atendimento_id` bigint(20) UNSIGNED NOT NULL,
+  `usuario_profissional_id` bigint(20) UNSIGNED NOT NULL,
+  `funcionario_profissional_id` bigint(20) UNSIGNED DEFAULT NULL,
+  `data_sessao` date NOT NULL,
+  `hora_inicio` time DEFAULT NULL,
+  `hora_fim` time DEFAULT NULL,
+  `tipo_sessao` enum('avaliacao','intervencao','retorno','emergencial','acolhimento','devolutiva','reavaliacao') NOT NULL DEFAULT 'intervencao',
+  `objetivo_sessao` text DEFAULT NULL,
+  `relato_sessao` text DEFAULT NULL,
+  `estrategias_utilizadas` text DEFAULT NULL,
+  `comportamento_observado` text DEFAULT NULL,
+  `evolucao_percebida` text DEFAULT NULL,
+  `encaminhamentos_definidos` text DEFAULT NULL,
+  `necessita_retorno` tinyint(1) NOT NULL DEFAULT 1,
+  `proximo_passo` text DEFAULT NULL,
+  `observacoes` text DEFAULT NULL,
+  `status` enum('realizado','remarcado','faltou','cancelado') NOT NULL DEFAULT 'realizado',
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Estrutura para tabela `triagens_psicossociais`
+--
+
+CREATE TABLE `triagens_psicossociais` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `demanda_id` bigint(20) UNSIGNED NOT NULL,
+  `usuario_triador_id` bigint(20) UNSIGNED NOT NULL,
+  `resumo_caso` text DEFAULT NULL,
+  `sinais_observados` text DEFAULT NULL,
+  `historico_breve` text DEFAULT NULL,
+  `urgencia` enum('baixa','media','alta','critica') NOT NULL DEFAULT 'media',
+  `risco_identificado` tinyint(1) NOT NULL DEFAULT 0,
+  `descricao_risco` text DEFAULT NULL,
+  `nivel_sigilo` enum('normal','reforcado') NOT NULL DEFAULT 'normal',
+  `decisao` enum('iniciar_atendimento','observar','encaminhar_externo','devolver_pedagogico','encerrar_sem_atendimento') NOT NULL,
+  `justificativa_decisao` text DEFAULT NULL,
+  `observacoes` text DEFAULT NULL,
+  `data_triagem` date NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -1900,7 +2104,7 @@ CREATE TABLE `usuarios` (
 --
 
 INSERT INTO `usuarios` (`id`, `name`, `email`, `email_verified_at`, `password`, `ativo`, `funcionario_id`, `remember_token`, `theme`, `created_at`, `updated_at`) VALUES
-(8, 'Administrador', 'admin@sistema.com', NULL, '$2y$12$RensC3/A9hYERx9QhiZaWetcgJ3.7IpLJpnFoNS6UWerBUS2oWWZq', 1, NULL, 'HPK7EWYwDfcVcgT2oHmL7XT8UTlZ5EmeZx1ZVBGt0yYdJjw32K8BDMfG7n1Q', 'lilas', '2026-03-18 01:23:19', '2026-03-18 01:23:19'),
+(8, 'Administrador', 'admin@sistema.com', NULL, '$2y$12$RensC3/A9hYERx9QhiZaWetcgJ3.7IpLJpnFoNS6UWerBUS2oWWZq', 1, NULL, 'F0xneK8jUjLCC3uIOWwJpoJeyFjqppl2pdrCYvp9Ic3mRSU9WTRUhALkdPoF', 'lilas', '2026-03-18 01:23:19', '2026-03-18 01:23:19'),
 (9, 'José da Silva', 'jose@gmail.com', NULL, '$2y$12$xLQPyKL7Jaw1tMqGVqmiK.9fSHatOVA0NwCF5lO.2SHotIA385yee', 1, 2, NULL, 'lilas', '2026-03-18 01:37:13', '2026-03-18 01:37:13'),
 (10, 'Ane Ravenala da Silva', 'nutricionista@sistema.local', NULL, '$2y$12$7UUouXCqUj..S8qs.ACYouoJZSNxywHLKe58ip4jOQW81/ia6sIDy', 1, 3, NULL, 'lilas', '2026-03-18 02:10:56', '2026-03-18 02:10:56'),
 (11, 'Naíne Ferreira dos Santos', 'naine@gmail.com', NULL, '$2y$12$fw1zBmIdUCKpiUV/SojTvuK1k/y9HFJcdw9zLctMRqay99UXs/R.i', 1, 5, NULL, 'lilas', '2026-03-19 21:37:38', '2026-03-19 21:37:38'),
@@ -2069,6 +2273,26 @@ ALTER TABLE `casos_disciplinares_sigilosos`
 ALTER TABLE `categorias_alimentos`
   ADD PRIMARY KEY (`id`),
   ADD UNIQUE KEY `categorias_alimentos_nome_unique` (`nome`);
+
+--
+-- Índices de tabela `demandas_psicossociais`
+--
+ALTER TABLE `demandas_psicossociais`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `demandas_psicossociais_escola_id_foreign` (`escola_id`),
+  ADD KEY `demandas_psicossociais_usuario_registro_id_foreign` (`usuario_registro_id`),
+  ADD KEY `demandas_psicossociais_profissional_responsavel_id_foreign` (`profissional_responsavel_id`),
+  ADD KEY `demandas_psicossociais_aluno_id_foreign` (`aluno_id`),
+  ADD KEY `demandas_psicossociais_funcionario_id_foreign` (`funcionario_id`),
+  ADD KEY `demandas_psicossociais_atendimento_id_foreign` (`atendimento_id`);
+
+--
+-- Índices de tabela `devolutivas_psicossociais`
+--
+ALTER TABLE `devolutivas_psicossociais`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `devolutivas_psicossociais_atendimento_id_foreign` (`atendimento_id`),
+  ADD KEY `devolutivas_psicossociais_usuario_responsavel_id_foreign` (`usuario_responsavel_id`);
 
 --
 -- Índices de tabela `diarios_professor`
@@ -2376,6 +2600,14 @@ ALTER TABLE `planos_intervencao_psicossociais`
   ADD KEY `planos_intervencao_psicossociais_usuario_id_foreign` (`usuario_id`);
 
 --
+-- Índices de tabela `reavaliacoes_psicossociais`
+--
+ALTER TABLE `reavaliacoes_psicossociais`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `reavaliacoes_psicossociais_atendimento_id_foreign` (`atendimento_id`),
+  ADD KEY `reavaliacoes_psicossociais_usuario_responsavel_id_foreign` (`usuario_responsavel_id`);
+
+--
 -- Índices de tabela `registros_auditoria`
 --
 ALTER TABLE `registros_auditoria`
@@ -2411,6 +2643,23 @@ ALTER TABLE `sessions`
   ADD PRIMARY KEY (`id`),
   ADD KEY `sessions_user_id_index` (`user_id`),
   ADD KEY `sessions_last_activity_index` (`last_activity`);
+
+--
+-- Índices de tabela `sessoes_atendimentos`
+--
+ALTER TABLE `sessoes_atendimentos`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `sessoes_atendimentos_atendimento_id_foreign` (`atendimento_id`),
+  ADD KEY `sessoes_atendimentos_usuario_profissional_id_foreign` (`usuario_profissional_id`),
+  ADD KEY `sessoes_atendimentos_funcionario_profissional_id_foreign` (`funcionario_profissional_id`);
+
+--
+-- Índices de tabela `triagens_psicossociais`
+--
+ALTER TABLE `triagens_psicossociais`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `triagens_psicossociais_demanda_id_foreign` (`demanda_id`),
+  ADD KEY `triagens_psicossociais_usuario_triador_id_foreign` (`usuario_triador_id`);
 
 --
 -- Índices de tabela `turmas`
@@ -2489,7 +2738,7 @@ ALTER TABLE `atendidos_externos`
 -- AUTO_INCREMENT de tabela `atendimentos_psicossociais`
 --
 ALTER TABLE `atendimentos_psicossociais`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT de tabela `cardapios_diarios`
@@ -2507,13 +2756,25 @@ ALTER TABLE `cardapio_diario_itens`
 -- AUTO_INCREMENT de tabela `casos_disciplinares_sigilosos`
 --
 ALTER TABLE `casos_disciplinares_sigilosos`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT de tabela `categorias_alimentos`
 --
 ALTER TABLE `categorias_alimentos`
   MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+
+--
+-- AUTO_INCREMENT de tabela `demandas_psicossociais`
+--
+ALTER TABLE `demandas_psicossociais`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT de tabela `devolutivas_psicossociais`
+--
+ALTER TABLE `devolutivas_psicossociais`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT de tabela `diarios_professor`
@@ -2531,7 +2792,7 @@ ALTER TABLE `disciplinas`
 -- AUTO_INCREMENT de tabela `encaminhamentos_psicossociais`
 --
 ALTER TABLE `encaminhamentos_psicossociais`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT de tabela `escolas`
@@ -2621,13 +2882,13 @@ ALTER TABLE `liberacoes_prazo_professor`
 -- AUTO_INCREMENT de tabela `matriculas`
 --
 ALTER TABLE `matriculas`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT de tabela `matricula_historicos`
 --
 ALTER TABLE `matricula_historicos`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT de tabela `matrizes_curriculares`
@@ -2645,7 +2906,7 @@ ALTER TABLE `matriz_disciplina`
 -- AUTO_INCREMENT de tabela `migrations`
 --
 ALTER TABLE `migrations`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=48;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=53;
 
 --
 -- AUTO_INCREMENT de tabela `modalidades_ensino`
@@ -2717,13 +2978,19 @@ ALTER TABLE `planejamentos_semanais`
 -- AUTO_INCREMENT de tabela `planos_intervencao_psicossociais`
 --
 ALTER TABLE `planos_intervencao_psicossociais`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
+--
+-- AUTO_INCREMENT de tabela `reavaliacoes_psicossociais`
+--
+ALTER TABLE `reavaliacoes_psicossociais`
   MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT de tabela `registros_auditoria`
 --
 ALTER TABLE `registros_auditoria`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=80;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=113;
 
 --
 -- AUTO_INCREMENT de tabela `registros_aula`
@@ -2735,7 +3002,19 @@ ALTER TABLE `registros_aula`
 -- AUTO_INCREMENT de tabela `relatorios_tecnicos_psicossociais`
 --
 ALTER TABLE `relatorios_tecnicos_psicossociais`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
+--
+-- AUTO_INCREMENT de tabela `sessoes_atendimentos`
+--
+ALTER TABLE `sessoes_atendimentos`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT de tabela `triagens_psicossociais`
+--
+ALTER TABLE `triagens_psicossociais`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT de tabela `turmas`
@@ -2823,6 +3102,24 @@ ALTER TABLE `casos_disciplinares_sigilosos`
   ADD CONSTRAINT `casos_disciplinares_sigilosos_escola_id_foreign` FOREIGN KEY (`escola_id`) REFERENCES `escolas` (`id`),
   ADD CONSTRAINT `casos_disciplinares_sigilosos_funcionario_id_foreign` FOREIGN KEY (`funcionario_id`) REFERENCES `funcionarios` (`id`) ON DELETE SET NULL,
   ADD CONSTRAINT `casos_disciplinares_sigilosos_usuario_id_foreign` FOREIGN KEY (`usuario_id`) REFERENCES `usuarios` (`id`);
+
+--
+-- Restrições para tabelas `demandas_psicossociais`
+--
+ALTER TABLE `demandas_psicossociais`
+  ADD CONSTRAINT `demandas_psicossociais_aluno_id_foreign` FOREIGN KEY (`aluno_id`) REFERENCES `alunos` (`id`),
+  ADD CONSTRAINT `demandas_psicossociais_atendimento_id_foreign` FOREIGN KEY (`atendimento_id`) REFERENCES `atendimentos_psicossociais` (`id`) ON DELETE SET NULL,
+  ADD CONSTRAINT `demandas_psicossociais_escola_id_foreign` FOREIGN KEY (`escola_id`) REFERENCES `escolas` (`id`),
+  ADD CONSTRAINT `demandas_psicossociais_funcionario_id_foreign` FOREIGN KEY (`funcionario_id`) REFERENCES `funcionarios` (`id`),
+  ADD CONSTRAINT `demandas_psicossociais_profissional_responsavel_id_foreign` FOREIGN KEY (`profissional_responsavel_id`) REFERENCES `funcionarios` (`id`) ON DELETE SET NULL,
+  ADD CONSTRAINT `demandas_psicossociais_usuario_registro_id_foreign` FOREIGN KEY (`usuario_registro_id`) REFERENCES `usuarios` (`id`);
+
+--
+-- Restrições para tabelas `devolutivas_psicossociais`
+--
+ALTER TABLE `devolutivas_psicossociais`
+  ADD CONSTRAINT `devolutivas_psicossociais_atendimento_id_foreign` FOREIGN KEY (`atendimento_id`) REFERENCES `atendimentos_psicossociais` (`id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `devolutivas_psicossociais_usuario_responsavel_id_foreign` FOREIGN KEY (`usuario_responsavel_id`) REFERENCES `usuarios` (`id`);
 
 --
 -- Restrições para tabelas `diarios_professor`
@@ -3011,6 +3308,13 @@ ALTER TABLE `planos_intervencao_psicossociais`
   ADD CONSTRAINT `planos_intervencao_psicossociais_usuario_id_foreign` FOREIGN KEY (`usuario_id`) REFERENCES `usuarios` (`id`);
 
 --
+-- Restrições para tabelas `reavaliacoes_psicossociais`
+--
+ALTER TABLE `reavaliacoes_psicossociais`
+  ADD CONSTRAINT `reavaliacoes_psicossociais_atendimento_id_foreign` FOREIGN KEY (`atendimento_id`) REFERENCES `atendimentos_psicossociais` (`id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `reavaliacoes_psicossociais_usuario_responsavel_id_foreign` FOREIGN KEY (`usuario_responsavel_id`) REFERENCES `usuarios` (`id`);
+
+--
 -- Restrições para tabelas `registros_auditoria`
 --
 ALTER TABLE `registros_auditoria`
@@ -3032,6 +3336,21 @@ ALTER TABLE `relatorios_tecnicos_psicossociais`
   ADD CONSTRAINT `rel_tec_psico_atend_fk` FOREIGN KEY (`atendimento_psicossocial_id`) REFERENCES `atendimentos_psicossociais` (`id`) ON DELETE SET NULL,
   ADD CONSTRAINT `relatorios_tecnicos_psicossociais_escola_id_foreign` FOREIGN KEY (`escola_id`) REFERENCES `escolas` (`id`),
   ADD CONSTRAINT `relatorios_tecnicos_psicossociais_usuario_emissor_id_foreign` FOREIGN KEY (`usuario_emissor_id`) REFERENCES `usuarios` (`id`);
+
+--
+-- Restrições para tabelas `sessoes_atendimentos`
+--
+ALTER TABLE `sessoes_atendimentos`
+  ADD CONSTRAINT `sessoes_atendimentos_atendimento_id_foreign` FOREIGN KEY (`atendimento_id`) REFERENCES `atendimentos_psicossociais` (`id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `sessoes_atendimentos_funcionario_profissional_id_foreign` FOREIGN KEY (`funcionario_profissional_id`) REFERENCES `funcionarios` (`id`) ON DELETE SET NULL,
+  ADD CONSTRAINT `sessoes_atendimentos_usuario_profissional_id_foreign` FOREIGN KEY (`usuario_profissional_id`) REFERENCES `usuarios` (`id`);
+
+--
+-- Restrições para tabelas `triagens_psicossociais`
+--
+ALTER TABLE `triagens_psicossociais`
+  ADD CONSTRAINT `triagens_psicossociais_demanda_id_foreign` FOREIGN KEY (`demanda_id`) REFERENCES `demandas_psicossociais` (`id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `triagens_psicossociais_usuario_triador_id_foreign` FOREIGN KEY (`usuario_triador_id`) REFERENCES `usuarios` (`id`);
 
 --
 -- Restrições para tabelas `turmas`
