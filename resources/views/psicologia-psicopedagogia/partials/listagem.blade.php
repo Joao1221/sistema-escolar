@@ -1,11 +1,11 @@
 @php
-    $statusOptions = $statusOptions ?? ['agendado', 'realizado', 'cancelado', 'faltou'];
+    $statusOptions = $statusOptions ?? ['agendado', 'realizado', 'cancelado', 'faltou', 'encerrado'];
     $tipoPublicoOptions = $tipoPublicoOptions ?? ['aluno', 'professor', 'funcionario', 'responsavel'];
 @endphp
 
 <div class="space-y-6">
     <div class="rounded-[1.75rem] border border-slate-200 bg-white p-6 shadow-sm">
-        <form method="GET" action="{{ $rota }}" class="grid gap-4 md:grid-cols-4">
+        <form id="filtros-atendimentos" method="GET" action="{{ $rota }}" class="grid gap-4 md:grid-cols-5">
             <div>
                 <label class="text-xs font-semibold uppercase tracking-widest text-slate-500">Escola</label>
                 <select name="escola_id" class="mt-2 w-full rounded-xl border-slate-300 shadow-sm">
@@ -33,6 +33,16 @@
                     @endforeach
                 </select>
             </div>
+            <div>
+                <label class="text-xs font-semibold uppercase tracking-widest text-slate-500">Paciente</label>
+                <input
+                    type="text"
+                    name="nome"
+                    value="{{ $filtros['nome'] ?? '' }}"
+                    placeholder="Nome do paciente"
+                    class="mt-2 w-full rounded-xl border-slate-300 shadow-sm"
+                >
+            </div>
             <div class="flex items-end gap-3">
                 <button type="submit" class="w-full rounded-xl border border-black bg-black px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-slate-900">Filtrar</button>
                 <a href="{{ $rota }}" class="rounded-xl border border-black bg-black px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-slate-900">Limpar</a>
@@ -40,7 +50,7 @@
         </form>
     </div>
 
-    <div class="overflow-hidden rounded-[1.75rem] border border-slate-200 bg-white shadow-sm">
+    <div id="listagem-container" class="overflow-hidden rounded-[1.75rem] border border-slate-200 bg-white shadow-sm">
         <div class="overflow-x-auto">
             <table class="min-w-full divide-y divide-slate-100 text-sm">
                 <thead class="bg-slate-50 text-left text-xs font-semibold uppercase tracking-widest text-slate-500">
@@ -77,3 +87,32 @@
         @endif
     </div>
 </div>
+
+<script>
+    (function() {
+        const form = document.getElementById('filtros-atendimentos');
+        const nomeInput = form?.querySelector('input[name="nome"]');
+        const container = document.getElementById('listagem-container');
+        if (!form || !nomeInput || !container) return;
+
+        let debounce;
+        nomeInput.addEventListener('input', () => {
+            clearTimeout(debounce);
+            debounce = setTimeout(fetchResults, 250);
+        });
+
+        function fetchResults() {
+            const params = new URLSearchParams(new FormData(form)).toString();
+            fetch(form.action + '?' + params, { headers: { 'X-Requested-With': 'XMLHttpRequest' } })
+                .then(r => r.text())
+                .then(html => {
+                    // extrai somente o novo container para evitar substituir o resto da página
+                    const temp = document.createElement('div');
+                    temp.innerHTML = html;
+                    const updated = temp.querySelector('#listagem-container');
+                    if (updated) container.innerHTML = updated.innerHTML;
+                })
+                .catch(console.error);
+        }
+    })();
+</script>

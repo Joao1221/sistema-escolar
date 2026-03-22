@@ -10,6 +10,13 @@
 
         <div class="px-3 py-4">
             <div class="space-y-4">
+                <nav class="space-y-1 mb-4">
+                    <a href="{{ route('psicologia.dashboard') }}" class="flex items-center justify-between rounded-2xl px-4 py-2 text-xs font-semibold transition {{ request()->routeIs('psicologia.dashboard') ? 'bg-white text-slate-900 shadow-lg' : 'text-slate-200 hover:bg-white/10 hover:text-white' }}">
+                        <span>Dashboard</span>
+                        <span class="text-[10px] uppercase tracking-[0.25em] {{ request()->routeIs('psicologia.dashboard') ? 'text-slate-500' : 'text-slate-400' }}">Abrir</span>
+                    </a>
+                </nav>
+
                 <section>
                     <p class="mb-2 px-3 text-[11px] font-semibold uppercase tracking-[0.35em] text-cyan-300">Fluxo de trabalho</p>
                     <nav class="space-y-1">
@@ -17,32 +24,11 @@
                             $linksFluxo = [
                                 ['rota' => 'psicologia.demandas.index', 'label' => 'Demandas'],
                                 ['rota' => 'psicologia.demandas.create', 'label' => 'Nova demanda'],
-                            ];
-                        @endphp
-
-                        @foreach ($linksFluxo as $link)
-                            <a href="{{ route($link['rota']) }}" class="flex items-center justify-between rounded-2xl px-4 py-2 text-xs font-semibold transition {{ request()->routeIs(str_replace('.index', '.*', $link['rota'])) || request()->routeIs($link['rota']) ? 'bg-white text-slate-900 shadow-lg' : 'text-slate-200 hover:bg-white/10 hover:text-white' }}">
-                                <span>{{ $link['label'] }}</span>
-                                <span class="text-[10px] uppercase tracking-[0.25em] {{ request()->routeIs(str_replace('.index', '.*', $link['rota'])) || request()->routeIs($link['rota']) ? 'text-slate-500' : 'text-slate-400' }}">Abrir</span>
-                            </a>
-                        @endforeach
-                    </nav>
-                </section>
-
-                <section>
-                    <p class="mb-2 px-3 text-[11px] font-semibold uppercase tracking-[0.35em] text-cyan-300">Rotina sigilosa</p>
-                    <nav class="space-y-1">
-                        @php
-                            $links = [
-                                ['rota' => 'psicologia.dashboard', 'label' => 'Dashboard'],
-                                ['rota' => 'psicologia.agenda', 'label' => 'Agenda'],
-                                ['rota' => 'psicologia.atendimentos.index', 'label' => 'Atendimentos'],
-                                ['rota' => 'psicologia.create', 'label' => 'Novo atendimento'],
                                 ['rota' => 'psicologia.historico.index', 'label' => 'Historico'],
                             ];
                         @endphp
 
-                        @foreach ($links as $link)
+                        @foreach ($linksFluxo as $link)
                             <a href="{{ route($link['rota']) }}" class="flex items-center justify-between rounded-2xl px-4 py-2 text-xs font-semibold transition {{ request()->routeIs(str_replace('.index', '.*', $link['rota'])) || request()->routeIs($link['rota']) ? 'bg-white text-slate-900 shadow-lg' : 'text-slate-200 hover:bg-white/10 hover:text-white' }}">
                                 <span>{{ $link['label'] }}</span>
                                 <span class="text-[10px] uppercase tracking-[0.25em] {{ request()->routeIs(str_replace('.index', '.*', $link['rota'])) || request()->routeIs($link['rota']) ? 'text-slate-500' : 'text-slate-400' }}">Abrir</span>

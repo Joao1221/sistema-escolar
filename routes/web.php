@@ -357,6 +357,7 @@ Route::middleware(['auth', 'can:acessar modulo psicossocial', 'can:acessar dados
     Route::get('/atendimentos/criar', [PortalPsicologiaPsicopedagogiaController::class, 'create'])->name('create');
     Route::post('/atendimentos', [PortalPsicologiaPsicopedagogiaController::class, 'store'])->name('store');
     Route::get('/atendimentos/{atendimento}', [PortalPsicologiaPsicopedagogiaController::class, 'show'])->name('show');
+    Route::get('/atendimentos/{atendimento}/relatorio-sessoes', [PortalPsicologiaPsicopedagogiaController::class, 'relatorioSessoes'])->name('atendimentos.relatorio_sessoes');
     Route::patch('/atendimentos/{atendimento}/finalizar', [PortalPsicologiaPsicopedagogiaController::class, 'finalizar'])->name('atendimento.finalizar');
     Route::post('/atendimentos/{atendimento}/sessao', [PortalPsicologiaPsicopedagogiaController::class, 'registrarSessao'])->name('atendimento.sessao.store');
     Route::post('/atendimentos/{atendimento}/devolutiva', [PortalPsicologiaPsicopedagogiaController::class, 'salvarDevolutiva'])->name('atendimento.devolutiva.store');

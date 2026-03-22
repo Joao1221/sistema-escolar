@@ -70,42 +70,44 @@ class AtendimentoPsicossocial extends Model
 
     public function planosIntervencao()
     {
-        return $this->hasMany(PlanoIntervencaoPsicossocial::class)->latest();
+        return $this->hasMany(PlanoIntervencaoPsicossocial::class, 'atendimento_psicossocial_id')->latest();
     }
 
     public function encaminhamentos()
     {
-        return $this->hasMany(EncaminhamentoPsicossocial::class)->latest();
+        return $this->hasMany(EncaminhamentoPsicossocial::class, 'atendimento_psicossocial_id')->latest();
     }
 
     public function casosDisciplinares()
     {
-        return $this->hasMany(CasoDisciplinarSigiloso::class)->latest();
+        return $this->hasMany(CasoDisciplinarSigiloso::class, 'atendimento_psicossocial_id')->latest();
     }
 
     public function relatoriosTecnicos()
     {
-        return $this->hasMany(RelatorioTecnicoPsicossocial::class)->latest('data_emissao');
+        return $this->hasMany(RelatorioTecnicoPsicossocial::class, 'atendimento_psicossocial_id')->latest('data_emissao');
     }
 
     public function sessoes()
     {
-        return $this->hasMany(SessaoAtendimento::class)->latest('data_sessao');
+        // chave estrangeira correta na tabela: atendimento_id
+        return $this->hasMany(SessaoAtendimento::class, 'atendimento_id')->latest('data_sessao');
     }
 
     public function devolutivas()
     {
-        return $this->hasMany(DevolutivaPsicossocial::class)->latest('data_devolutiva');
+        return $this->hasMany(DevolutivaPsicossocial::class, 'atendimento_id')->latest('data_devolutiva');
     }
 
     public function reavaliacoes()
     {
-        return $this->hasMany(ReavaliacaoPsicossocial::class)->latest('data_reavaliacao');
+        return $this->hasMany(ReavaliacaoPsicossocial::class, 'atendimento_id')->latest('data_reavaliacao');
     }
 
     public function demanda()
     {
-        return $this->belongsTo(DemandaPsicossocial::class, 'demanda_id');
+        // demanda referencia atendimento via coluna atendimento_id
+        return $this->hasOne(DemandaPsicossocial::class, 'atendimento_id');
     }
 
     public function getNomeAtendidoAttribute(): string

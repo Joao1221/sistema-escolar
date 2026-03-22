@@ -73,12 +73,14 @@ class DemandaPsicossocial extends Model
 
     public function atendimento(): BelongsTo
     {
-        return $this->belongsTo(AtendimentoPsicossocial::class);
+        // campo na tabela demandas: atendimento_id
+        return $this->belongsTo(AtendimentoPsicossocial::class, 'atendimento_id');
     }
 
     public function triagem()
     {
-        return $this->hasOne(TriagemPsicossocial::class);
+        // tabela de triagens usa a coluna demanda_id (nao demanda_psicossocial_id)
+        return $this->hasOne(TriagemPsicossocial::class, 'demanda_id');
     }
 
     public function getNomeAtendidoAttribute(): ?string

@@ -168,6 +168,8 @@
             }
         }
 
+        const dadosEscolaUrl = "{{ url('/psicologia-psicopedagogia/demandas/dados-escola') }}";
+
         function carregarAlunos(escolaId) {
             var select = document.getElementById('aluno_id');
             select.innerHTML = '<option value="">Carregando...</option>';
@@ -177,7 +179,7 @@
                 return;
             }
             
-            fetch('/psicologia-api/dados-escola/' + escolaId, {
+            fetch(dadosEscolaUrl + '/' + escolaId, {
                 credentials: 'include'
             })
                 .then(function(response) {
@@ -214,7 +216,7 @@
                 return;
             }
             
-            fetch('/psicologia-api/dados-escola/' + escolaId, {
+            fetch(dadosEscolaUrl + '/' + escolaId, {
                 credentials: 'include'
             })
                 .then(function(response) {

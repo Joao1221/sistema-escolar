@@ -172,13 +172,13 @@
         </div>
 
         <div class="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
-            <a href="{{ route('psicologia.agenda') }}" class="rounded-[1.75rem] border border-cyan-100 bg-gradient-to-r from-cyan-50 via-cyan-25 to-cyan-100 p-5 transition hover:-translate-y-0.5 hover:shadow-md">
+            <a href="{{ route('psicologia.demandas.index') }}" class="rounded-[1.75rem] border border-cyan-100 bg-gradient-to-r from-cyan-50 via-cyan-25 to-cyan-100 p-5 transition hover:-translate-y-0.5 hover:shadow-md">
                 <p class="text-xs font-semibold uppercase tracking-[0.24em] text-cyan-700">Fluxo</p>
-                <p class="mt-3 text-lg font-bold text-[#14363a]">Acessar agenda</p>
+                <p class="mt-3 text-lg font-bold text-[#14363a]">Demandas</p>
             </a>
-            <a href="{{ route('psicologia.create') }}" class="rounded-[1.75rem] border border-emerald-100 bg-gradient-to-r from-emerald-50 via-emerald-25 to-emerald-100 p-5 transition hover:-translate-y-0.5 hover:shadow-md">
+            <a href="{{ route('psicologia.demandas.create') }}" class="rounded-[1.75rem] border border-emerald-100 bg-gradient-to-r from-emerald-50 via-emerald-25 to-emerald-100 p-5 transition hover:-translate-y-0.5 hover:shadow-md">
                 <p class="text-xs font-semibold uppercase tracking-[0.24em] text-emerald-700">Fluxo</p>
-                <p class="mt-3 text-lg font-bold text-[#14363a]">Novo atendimento</p>
+                <p class="mt-3 text-lg font-bold text-[#14363a]">Nova demanda</p>
             </a>
             <a href="{{ route('psicologia.planos.index') }}" class="rounded-[1.75rem] border border-amber-100 bg-gradient-to-r from-amber-50 via-amber-25 to-amber-100 p-5 transition hover:-translate-y-0.5 hover:shadow-md">
                 <p class="text-xs font-semibold uppercase tracking-[0.24em] text-amber-700">Tecnico</p>

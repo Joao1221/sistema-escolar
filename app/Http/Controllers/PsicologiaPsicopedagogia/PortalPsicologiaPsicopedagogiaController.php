@@ -81,16 +81,8 @@ class PortalPsicologiaPsicopedagogiaController extends Controller implements Has
 
     public function atendimentos(Request $request)
     {
-        return view('psicologia-psicopedagogia.atendimentos.index', [
-            'atendimentos' => $this->psicossocialService->listarAtendimentos($request->user(), $request->all()),
-            ...$this->psicossocialService->opcoesFormulario($request->user()),
-            'filtros' => $request->all(),
-            'tituloPagina' => 'Atendimentos',
-            'subtituloPagina' => 'Registro consolidado dos atendimentos em andamento, realizados ou pendentes.',
-            'breadcrumbs' => $this->psicossocialService->construirBreadcrumbs([
-                ['label' => 'Atendimentos'],
-            ]),
-        ]);
+        // Página de atendimentos passa a ser atendida pelo Histórico
+        return redirect()->route('psicologia.historico.index');
     }
 
     public function historico(Request $request)
@@ -467,6 +459,24 @@ class PortalPsicologiaPsicopedagogiaController extends Controller implements Has
 
         return redirect()->route('psicologia.show', $atendimento)
             ->with('success', 'Sessao registrada com sucesso.');
+    }
+
+    public function relatorioSessoes(Request $request, AtendimentoPsicossocial $atendimento)
+    {
+        $this->authorize('view', $atendimento);
+
+        $atendimento->load(['escola', 'profissionalResponsavel', 'atendivel', 'sessoes' => function ($q) {
+            $q->orderByDesc('data_sessao');
+        }]);
+
+        $instituicao = \App\Models\Instituicao::query()->first();
+
+        return view('psicologia-psicopedagogia.relatorios.sessoes', [
+            'atendimento' => $atendimento,
+            'instituicao' => $instituicao,
+            'tituloPagina' => 'Relatorio de sessoes',
+            'subtituloPagina' => 'Resumo imprimivel das sessoes e procedimentos realizados.',
+        ]);
     }
 
     public function salvarDevolutiva(Request $request, AtendimentoPsicossocial $atendimento)

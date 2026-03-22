@@ -12,7 +12,7 @@
             'atendimentos' => $atendimentos,
             'escolas' => $escolas,
             'filtros' => $filtros,
-            'statusOptions' => ['realizado', 'cancelado', 'faltou'],
+            'statusOptions' => ['realizado', 'cancelado', 'faltou', 'encerrado'],
         ])
     </div>
 </x-psicologia-layout>

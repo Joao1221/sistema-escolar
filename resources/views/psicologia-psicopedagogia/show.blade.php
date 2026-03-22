@@ -18,18 +18,35 @@
                         <button type="submit" class="rounded-xl border border-emerald-600 bg-emerald-600 px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-emerald-700">Iniciar Atendimento</button>
                     </form>
                 @endif
-                @if (in_array($atendimento->status, ['realizado', 'em_acompanhamento']))
+                @if (in_array($atendimento->status, ['em_atendimento', 'realizado', 'em_acompanhamento']))
                     <button type="button" onclick="showModal('modal-sessao')" class="rounded-xl border border-blue-600 bg-blue-600 px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-blue-700">
                         Registrar Sessao
                     </button>
-                    <button type="button" onclick="showModal('modal-devolutiva')" class="rounded-xl border border-purple-600 bg-purple-600 px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-purple-700">
+                    <button
+                        type="button"
+                        onclick="showModal('modal-devolutiva')"
+                        class="rounded-xl px-4 py-2 text-sm font-semibold shadow-sm transition"
+                        style="background-color:#fbbf24;border:1px solid #d97706;color:#000;"
+                        onmouseover="this.style.backgroundColor='#f59e0b'"
+                        onmouseout="this.style.backgroundColor='#fbbf24'"
+                    >
                         Devolutiva
                     </button>
-                    <button type="button" onclick="showModal('modal-reavaliacao')" class="rounded-xl border border-amber-600 bg-amber-600 px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-amber-700">
+                    <button
+                        type="button"
+                        onclick="showModal('modal-reavaliacao')"
+                        class="rounded-xl px-4 py-2 text-sm font-semibold shadow-sm transition"
+                        style="background-color:#fff;border:1px solid #2563eb;color:#2563eb;"
+                        onmouseover="this.style.backgroundColor='#eef2ff'"
+                        onmouseout="this.style.backgroundColor='#fff'"
+                    >
                         Reavaliacao
                     </button>
                 @endif
-                @if (in_array($atendimento->status, ['em_acompanhamento', 'agendado']))
+                <a href="{{ route('psicologia.atendimentos.relatorio_sessoes', $atendimento) }}" target="_blank" class="rounded-xl px-4 py-2 text-sm font-semibold shadow-sm transition" style="background-color:#fbbf24;border:1px solid #d97706;color:#000;" onmouseover="this.style.backgroundColor='#f59e0b'" onmouseout="this.style.backgroundColor='#fbbf24'">
+                    Imprimir relatorio do atendimento
+                </a>
+                @if (in_array($atendimento->status, ['em_atendimento', 'em_acompanhamento', 'agendado']))
                     <button type="button" onclick="showModal('modal-encerrar')" class="rounded-xl border border-red-600 bg-red-600 px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-red-700">
                         Encerrar
                     </button>
@@ -191,10 +208,45 @@
                 <h2 class="text-lg font-bold text-[#14363a]">Sessoes realizadas</h2>
                 <div class="mt-4 space-y-3">
                     @forelse ($atendimento->sessoes as $sessao)
-                        <div class="rounded-2xl border border-slate-100 p-4">
-                            <p class="font-semibold text-[#14363a]">{{ $sessao->data_sessao->format('d/m/Y') }}</p>
-                            <p class="mt-1 text-xs text-slate-500">{{ ucfirst($sessao->tipo_sessao) }} | {{ ucfirst($sessao->status) }}</p>
-                        </div>
+                        <details class="group rounded-2xl border border-slate-100 p-4 shadow-[0_4px_12px_rgba(15,23,42,0.04)]" @if($loop->first) open @endif>
+                            <summary class="flex items-center justify-between cursor-pointer">
+                                <div>
+                                    <p class="font-semibold text-[#14363a]">{{ $sessao->data_sessao->format('d/m/Y') }}</p>
+                                    <p class="mt-1 text-xs text-slate-500">{{ ucfirst($sessao->tipo_sessao) }} | {{ ucfirst($sessao->status) }}</p>
+                                </div>
+                                <span class="text-xs font-semibold text-cyan-700 group-open:rotate-180 transition">▼</span>
+                            </summary>
+                            <div class="mt-3 grid gap-3 md:grid-cols-2 text-sm text-slate-700">
+                                <div>
+                                    <p class="text-xs uppercase tracking-widest text-slate-500">Objetivo</p>
+                                    <p class="mt-1 whitespace-pre-line">{{ $sessao->objetivo_sessao ?: 'Nao informado' }}</p>
+                                </div>
+                                <div>
+                                    <p class="text-xs uppercase tracking-widest text-slate-500">Relato</p>
+                                    <p class="mt-1 whitespace-pre-line">{{ $sessao->relato_sessao ?: 'Nao informado' }}</p>
+                                </div>
+                                <div>
+                                    <p class="text-xs uppercase tracking-widest text-slate-500">Estrategias</p>
+                                    <p class="mt-1 whitespace-pre-line">{{ $sessao->estrategias_utilizadas ?: 'Nao informado' }}</p>
+                                </div>
+                                <div>
+                                    <p class="text-xs uppercase tracking-widest text-slate-500">Comportamento observado</p>
+                                    <p class="mt-1 whitespace-pre-line">{{ $sessao->comportamento_observado ?: 'Nao informado' }}</p>
+                                </div>
+                                <div>
+                                    <p class="text-xs uppercase tracking-widest text-slate-500">Evolucao percebida</p>
+                                    <p class="mt-1 whitespace-pre-line">{{ $sessao->evolucao_percebida ?: 'Nao informado' }}</p>
+                                </div>
+                                <div>
+                                    <p class="text-xs uppercase tracking-widest text-slate-500">Proximo passo</p>
+                                    <p class="mt-1 whitespace-pre-line">{{ $sessao->proximo_passo ?: 'Nao informado' }}</p>
+                                </div>
+                                <div class="md:col-span-2">
+                                    <p class="text-xs uppercase tracking-widest text-slate-500">Encaminhamentos definidos</p>
+                                    <p class="mt-1 whitespace-pre-line">{{ $sessao->encaminhamentos_definidos ?: 'Nao informado' }}</p>
+                                </div>
+                            </div>
+                        </details>
                     @empty
                         <p class="text-sm text-slate-500">Nenhuma sessao registrada.</p>
                     @endforelse
@@ -233,8 +285,8 @@
 
     <div id="modal-sessao" class="fixed inset-0 z-50 hidden">
         <div class="absolute inset-0 bg-black/50" onclick="hideModal('modal-sessao')"></div>
-        <div class="absolute inset-4 flex items-center justify-center">
-            <div class="max-h-full w-full max-w-2xl overflow-y-auto rounded-2xl bg-white p-6 shadow-xl">
+        <div class="relative flex min-h-full items-center justify-center p-4">
+            <div class="max-h-[90vh] w-full max-w-3xl overflow-y-auto rounded-2xl bg-white p-6 shadow-xl">
                 <div class="mb-4 flex items-center justify-between">
                     <h3 class="text-xl font-bold text-[#14363a]">Registrar Sessao</h3>
                     <button onclick="hideModal('modal-sessao')" class="text-slate-400 hover:text-slate-600">&times;</button>
@@ -269,42 +321,44 @@
                             <input type="time" name="hora_fim" class="mt-1 w-full rounded-xl border-slate-300 shadow-sm">
                         </div>
                     </div>
-                    <div>
-                        <label class="block text-xs font-semibold uppercase tracking-wider text-slate-500">Objetivo da sessao</label>
-                        <textarea name="objetivo_sessao" rows="2" class="mt-1 w-full rounded-xl border-slate-300 shadow-sm"></textarea>
+                    <div class="grid gap-4 md:grid-cols-2">
+                        <div>
+                            <label class="block text-xs font-semibold uppercase tracking-wider text-slate-500">Objetivo da sessao</label>
+                            <textarea name="objetivo_sessao" rows="2" class="mt-1 w-full rounded-xl border-slate-300 shadow-sm"></textarea>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold uppercase tracking-wider text-slate-500">Relato da sessao</label>
+                            <textarea name="relato_sessao" rows="3" placeholder="Descreva o que ocorreu na sessao..." class="mt-1 w-full rounded-xl border-slate-300 shadow-sm"></textarea>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold uppercase tracking-wider text-slate-500">Estrategias utilizadas</label>
+                            <textarea name="estrategias_utilizadas" rows="2" class="mt-1 w-full rounded-xl border-slate-300 shadow-sm"></textarea>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold uppercase tracking-wider text-slate-500">Comportamento observado</label>
+                            <textarea name="comportamento_observado" rows="2" class="mt-1 w-full rounded-xl border-slate-300 shadow-sm"></textarea>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold uppercase tracking-wider text-slate-500">Evolucao percebida</label>
+                            <textarea name="evolucao_percebida" rows="2" class="mt-1 w-full rounded-xl border-slate-300 shadow-sm"></textarea>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold uppercase tracking-wider text-slate-500">Proximo passo</label>
+                            <textarea name="proximo_passo" rows="2" class="mt-1 w-full rounded-xl border-slate-300 shadow-sm"></textarea>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold uppercase tracking-wider text-slate-500">Status</label>
+                            <select name="status" class="mt-1 w-full rounded-xl border-slate-300 shadow-sm">
+                                <option value="realizado">Realizado</option>
+                                <option value="remarcado">Remarcado</option>
+                                <option value="faltou">Faltou</option>
+                                <option value="cancelado">Cancelado</option>
+                            </select>
+                        </div>
                     </div>
-                    <div>
-                        <label class="block text-xs font-semibold uppercase tracking-wider text-slate-500">Relato da sessao</label>
-                        <textarea name="relato_sessao" rows="4" placeholder="Descreva o que ocorreu na sessao..." class="mt-1 w-full rounded-xl border-slate-300 shadow-sm"></textarea>
-                    </div>
-                    <div>
-                        <label class="block text-xs font-semibold uppercase tracking-wider text-slate-500">Estrategias utilizadas</label>
-                        <textarea name="estrategias_utilizadas" rows="2" class="mt-1 w-full rounded-xl border-slate-300 shadow-sm"></textarea>
-                    </div>
-                    <div>
-                        <label class="block text-xs font-semibold uppercase tracking-wider text-slate-500">Comportamento observado</label>
-                        <textarea name="comportamento_observado" rows="2" class="mt-1 w-full rounded-xl border-slate-300 shadow-sm"></textarea>
-                    </div>
-                    <div>
-                        <label class="block text-xs font-semibold uppercase tracking-wider text-slate-500">Evolucao percebida</label>
-                        <textarea name="evolucao_percebida" rows="2" class="mt-1 w-full rounded-xl border-slate-300 shadow-sm"></textarea>
-                    </div>
-                    <div>
-                        <label class="block text-xs font-semibold uppercase tracking-wider text-slate-500">Proximo passo</label>
-                        <textarea name="proximo_passo" rows="2" class="mt-1 w-full rounded-xl border-slate-300 shadow-sm"></textarea>
-                    </div>
-                    <div>
-                        <label class="block text-xs font-semibold uppercase tracking-wider text-slate-500">Status</label>
-                        <select name="status" class="mt-1 w-full rounded-xl border-slate-300 shadow-sm">
-                            <option value="realizado">Realizado</option>
-                            <option value="remarcado">Remarcado</option>
-                            <option value="faltou">Faltou</option>
-                            <option value="cancelado">Cancelado</option>
-                        </select>
-                    </div>
-                    <div class="flex justify-end gap-3 pt-4">
-                        <button type="button" onclick="hideModal('modal-sessao')" class="rounded-xl border border-slate-300 bg-white px-4 py-2 text-sm font-semibold hover:bg-slate-50">Cancelar</button>
-                        <button type="submit" class="rounded-xl border border-blue-600 bg-blue-600 px-4 py-2 text-sm font-semibold text-white hover:bg-blue-700">Salvar sessao</button>
+                    <div class="sticky bottom-0 flex justify-end gap-3 bg-white py-3">
+                        <button type="button" onclick="hideModal('modal-sessao')" class="rounded-xl border border-slate-300 bg-white px-4 py-2 text-sm font-semibold shadow-sm hover:bg-slate-50">Cancelar</button>
+                        <button type="submit" class="rounded-xl border border-blue-600 bg-blue-600 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-blue-700">Salvar sessao</button>
                     </div>
                 </form>
             </div>
@@ -313,8 +367,8 @@
 
     <div id="modal-devolutiva" class="fixed inset-0 z-50 hidden">
         <div class="absolute inset-0 bg-black/50" onclick="hideModal('modal-devolutiva')"></div>
-        <div class="absolute inset-4 flex items-center justify-center">
-            <div class="max-h-full w-full max-w-2xl overflow-y-auto rounded-2xl bg-white p-6 shadow-xl">
+        <div class="relative flex min-h-full items-center justify-center p-4">
+            <div class="max-h-[90vh] w-full max-w-3xl overflow-y-auto rounded-2xl bg-white p-6 shadow-xl">
                 <div class="mb-4 flex items-center justify-between">
                     <h3 class="text-xl font-bold text-[#14363a]">Registrar Devolutiva</h3>
                     <button onclick="hideModal('modal-devolutiva')" class="text-slate-400 hover:text-slate-600">&times;</button>
@@ -350,9 +404,22 @@
                         <label class="block text-xs font-semibold uppercase tracking-wider text-slate-500">Encaminhamentos combinados</label>
                         <textarea name="encaminhamentos_combinados" rows="2" class="mt-1 w-full rounded-xl border-slate-300 shadow-sm"></textarea>
                     </div>
-                    <div class="flex justify-end gap-3 pt-4">
-                        <button type="button" onclick="hideModal('modal-devolutiva')" class="rounded-xl border border-slate-300 bg-white px-4 py-2 text-sm font-semibold hover:bg-slate-50">Cancelar</button>
-                        <button type="submit" class="rounded-xl border border-purple-600 bg-purple-600 px-4 py-2 text-sm font-semibold text-white hover:bg-purple-700">Salvar devolutiva</button>
+                    <div class="sticky bottom-0 flex justify-end gap-3 bg-white py-3">
+                        <button
+                            type="button"
+                            onclick="hideModal('modal-devolutiva')"
+                            class="rounded-xl px-4 py-2 text-sm font-semibold shadow-sm transition"
+                            style="background-color:#fbbf24;border:1px solid #d97706;color:#000;"
+                            onmouseover="this.style.backgroundColor='#f59e0b'"
+                            onmouseout="this.style.backgroundColor='#fbbf24'"
+                        >Cancelar</button>
+                        <button
+                            type="submit"
+                            class="rounded-xl px-4 py-2 text-sm font-semibold shadow-sm transition"
+                            style="background-color:#2563eb;border:1px solid #1d4ed8;color:#ffffff;"
+                            onmouseover="this.style.backgroundColor='#1d4ed8'"
+                            onmouseout="this.style.backgroundColor='#2563eb'"
+                        >Salvar devolutiva</button>
                     </div>
                 </form>
             </div>
@@ -361,8 +428,8 @@
 
     <div id="modal-reavaliacao" class="fixed inset-0 z-50 hidden">
         <div class="absolute inset-0 bg-black/50" onclick="hideModal('modal-reavaliacao')"></div>
-        <div class="absolute inset-4 flex items-center justify-center">
-            <div class="max-h-full w-full max-w-2xl overflow-y-auto rounded-2xl bg-white p-6 shadow-xl">
+        <div class="relative flex min-h-full items-center justify-center p-4">
+            <div class="max-h-[90vh] w-full max-w-3xl overflow-y-auto rounded-2xl bg-white p-6 shadow-xl">
                 <div class="mb-4 flex items-center justify-between">
                     <h3 class="text-xl font-bold text-[#14363a]">Reavaliacao do Caso</h3>
                     <button onclick="hideModal('modal-reavaliacao')" class="text-slate-400 hover:text-slate-600">&times;</button>
@@ -400,8 +467,21 @@
                         <textarea name="justificativa" rows="2" class="mt-1 w-full rounded-xl border-slate-300 shadow-sm"></textarea>
                     </div>
                     <div class="flex justify-end gap-3 pt-4">
-                        <button type="button" onclick="hideModal('modal-reavaliacao')" class="rounded-xl border border-slate-300 bg-white px-4 py-2 text-sm font-semibold hover:bg-slate-50">Cancelar</button>
-                        <button type="submit" class="rounded-xl border border-amber-600 bg-amber-600 px-4 py-2 text-sm font-semibold text-white hover:bg-amber-700">Salvar reavaliacao</button>
+                        <button
+                            type="button"
+                            onclick="hideModal('modal-reavaliacao')"
+                            class="rounded-xl px-4 py-2 text-sm font-semibold shadow-sm transition"
+                            style="background-color:#fbbf24;border:1px solid #d97706;color:#000;"
+                            onmouseover="this.style.backgroundColor='#f59e0b'"
+                            onmouseout="this.style.backgroundColor='#fbbf24'"
+                        >Cancelar</button>
+                        <button
+                            type="submit"
+                            class="rounded-xl px-4 py-2 text-sm font-semibold shadow-sm transition"
+                            style="background-color:#2563eb;border:1px solid #1d4ed8;color:#ffffff;"
+                            onmouseover="this.style.backgroundColor='#1d4ed8'"
+                            onmouseout="this.style.backgroundColor='#2563eb'"
+                        >Salvar reavaliacao</button>
                     </div>
                 </form>
             </div>
@@ -410,8 +490,8 @@
 
     <div id="modal-encerrar" class="fixed inset-0 z-50 hidden">
         <div class="absolute inset-0 bg-black/50" onclick="hideModal('modal-encerrar')"></div>
-        <div class="absolute inset-4 flex items-center justify-center">
-            <div class="max-h-full w-full max-w-2xl overflow-y-auto rounded-2xl bg-white p-6 shadow-xl">
+        <div class="relative flex min-h-full items-center justify-center p-4">
+            <div class="max-h-[90vh] w-full max-w-3xl overflow-y-auto rounded-2xl bg-white p-6 shadow-xl">
                 <div class="mb-4 flex items-center justify-between">
                     <h3 class="text-xl font-bold text-red-700">Encerrar Atendimento</h3>
                     <button onclick="hideModal('modal-encerrar')" class="text-slate-400 hover:text-slate-600">&times;</button>
@@ -442,9 +522,9 @@
                         <label class="block text-xs font-semibold uppercase tracking-wider text-slate-500">Orientacoes finais</label>
                         <textarea name="orientacoes_finais" rows="3" placeholder="Orientacoes para continuidade..." class="mt-1 w-full rounded-xl border-slate-300 shadow-sm"></textarea>
                     </div>
-                    <div class="flex justify-end gap-3 pt-4">
-                        <button type="button" onclick="hideModal('modal-encerrar')" class="rounded-xl border border-slate-300 bg-white px-4 py-2 text-sm font-semibold hover:bg-slate-50">Cancelar</button>
-                        <button type="submit" class="rounded-xl border border-red-600 bg-red-600 px-4 py-2 text-sm font-semibold text-white hover:bg-red-700">Encerrar atendimento</button>
+                    <div class="sticky bottom-0 flex justify-end gap-3 bg-white py-3">
+                        <button type="button" onclick="hideModal('modal-encerrar')" class="rounded-xl border border-slate-300 bg-white px-4 py-2 text-sm font-semibold shadow-sm hover:bg-slate-50">Cancelar</button>
+                        <button type="submit" class="rounded-xl border border-red-600 bg-red-600 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-red-700">Encerrar atendimento</button>
                     </div>
                 </form>
             </div>

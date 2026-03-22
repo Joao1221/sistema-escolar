@@ -113,7 +113,8 @@ class PsicossocialService
         $query = $this->baseAtendimentos($usuario, $filtros);
 
         if (empty($filtros['status'])) {
-            $query->whereIn('status', ['realizado', 'cancelado', 'faltou']);
+            // Historico deve trazer todos os atendimentos finalizados
+            $query->whereIn('status', ['realizado', 'cancelado', 'faltou', 'encerrado']);
         }
 
         return $query->orderByDesc('data_agendada')->paginate(15)->withQueryString();
@@ -336,6 +337,19 @@ class PsicossocialService
 
         if (! empty($filtros['tipo_publico'])) {
             $query->where('tipo_publico', $filtros['tipo_publico']);
+        }
+
+        if (! empty($filtros['nome'])) {
+            $nome = $filtros['nome'];
+            $query->where(function ($sub) use ($nome) {
+                $sub->whereHasMorph('atendivel', [Aluno::class], function ($q) use ($nome) {
+                    $q->where('nome_completo', 'like', "%{$nome}%");
+                })->orWhereHasMorph('atendivel', [Funcionario::class], function ($q) use ($nome) {
+                    $q->where('nome', 'like', "%{$nome}%");
+                })->orWhereHasMorph('atendivel', [AtendidoExterno::class], function ($q) use ($nome) {
+                    $q->where('nome', 'like', "%{$nome}%");
+                });
+            });
         }
 
         return $query;
