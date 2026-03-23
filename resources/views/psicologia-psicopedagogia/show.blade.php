@@ -193,8 +193,15 @@
                 <div class="mt-4 space-y-3">
                     @forelse ($atendimento->relatoriosTecnicos as $relatorio)
                         <div class="rounded-2xl border border-slate-100 p-4">
-                            <p class="font-semibold text-[#14363a]">{{ $relatorio->titulo }}</p>
-                            <p class="mt-1 text-xs text-slate-500">{{ $relatorio->data_emissao->format('d/m/Y') }} | {{ ucfirst(str_replace('_', ' ', $relatorio->tipo_relatorio)) }}</p>
+                            <div class="flex items-start justify-between gap-3">
+                                <div>
+                                    <p class="font-semibold text-[#14363a]">{{ $relatorio->titulo }}</p>
+                                    <p class="mt-1 text-xs text-slate-500">{{ $relatorio->data_emissao->format('d/m/Y') }} | {{ ucfirst(str_replace('_', ' ', $relatorio->tipo_relatorio)) }}</p>
+                                </div>
+                                <a href="{{ route('psicologia.relatorios_tecnicos.show', $relatorio) }}" class="inline-flex items-center rounded-xl border border-slate-300 px-3 py-2 text-[11px] font-semibold uppercase tracking-widest text-slate-700 transition hover:bg-slate-100">
+                                    Abrir
+                                </a>
+                            </div>
                         </div>
                     @empty
                         <p class="text-sm text-slate-500">Nenhum relatorio emitido.</p>

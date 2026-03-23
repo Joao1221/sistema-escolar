@@ -14,7 +14,7 @@ class AtendimentoPsicossocialPolicy
 
     public function view(Usuario $usuario, AtendimentoPsicossocial $atendimento): bool
     {
-        return $this->mesmaEscola($usuario, $atendimento)
+        return $atendimento->visivelParaUsuario($usuario)
             && $usuario->can('acessar dados sigilosos psicossociais');
     }
 
@@ -41,16 +41,5 @@ class AtendimentoPsicossocialPolicy
     public function emitirRelatorio(Usuario $usuario, AtendimentoPsicossocial $atendimento): bool
     {
         return $this->view($usuario, $atendimento) && $usuario->can('emitir relatorios tecnicos psicossociais');
-    }
-
-    private function mesmaEscola(Usuario $usuario, AtendimentoPsicossocial $atendimento): bool
-    {
-        if ($usuario->acessaPortalPsicossocial()) {
-            return true;
-        }
-
-        $escolaIds = $usuario->escolas()->pluck('escolas.id');
-
-        return $escolaIds->isNotEmpty() && $escolaIds->contains($atendimento->escola_id);
     }
 }

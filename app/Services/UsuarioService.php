@@ -2,7 +2,10 @@
 
 namespace App\Services;
 
+use App\Models\Escola;
+use App\Models\Funcionario;
 use App\Models\Usuario;
+use App\Support\CargosPsicossociais;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Spatie\Permission\Models\Role;
@@ -40,9 +43,7 @@ class UsuarioService
             }
 
             // Sincronizar Escolas
-            if (isset($dados['escolas']) && is_array($dados['escolas'])) {
-                $usuario->escolas()->sync($dados['escolas']);
-            }
+            $usuario->escolas()->sync($this->resolverEscolaIds($dados));
 
             return $usuario;
         });
@@ -80,11 +81,7 @@ class UsuarioService
             }
 
             // Sincronizar Escolas
-            if (isset($dados['escolas']) && is_array($dados['escolas'])) {
-                $usuario->escolas()->sync($dados['escolas']);
-            } else {
-                $usuario->escolas()->sync([]);
-            }
+            $usuario->escolas()->sync($this->resolverEscolaIds($dados));
 
             return $usuario;
         });
@@ -97,5 +94,43 @@ class UsuarioService
     {
         $usuario->update(['ativo' => !$usuario->ativo]);
         return $usuario;
+    }
+
+    private function resolverEscolaIds(array $dados): array
+    {
+        if ($this->deveVincularTodasEscolas($dados)) {
+            return Escola::query()->where('ativo', true)->pluck('id')->all();
+        }
+
+        return array_values($dados['escolas'] ?? []);
+    }
+
+    private function deveVincularTodasEscolas(array $dados): bool
+    {
+        return CargosPsicossociais::contains($this->resolverCargoFuncionario($dados))
+            || $this->possuiPerfilPsicossocial($dados['role'] ?? null);
+    }
+
+    private function resolverCargoFuncionario(array $dados): ?string
+    {
+        if (empty($dados['funcionario_id'])) {
+            return null;
+        }
+
+        return Funcionario::query()
+            ->whereKey($dados['funcionario_id'])
+            ->value('cargo');
+    }
+
+    private function possuiPerfilPsicossocial(mixed $roleId): bool
+    {
+        if (blank($roleId)) {
+            return false;
+        }
+
+        return Role::query()
+            ->whereKey($roleId)
+            ->where('name', 'Psicologia/Psicopedagogia')
+            ->exists();
     }
 }

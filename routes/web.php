@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\ArquivoPublicoController;
 use App\Http\Controllers\UsuarioController;
 use App\Http\Controllers\InstituicaoController;
 use App\Http\Controllers\ConfiguracoesController;
@@ -85,6 +86,10 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('portal-select');
 })->middleware(['auth'])->name('hub');
+
+Route::get('/arquivos-publicos/{path}', [ArquivoPublicoController::class, 'show'])
+    ->where('path', '.*')
+    ->name('arquivos.publicos.show');
 
 Route::get('/dashboard', function () {
     return redirect()->route('hub');
@@ -372,6 +377,8 @@ Route::middleware(['auth', 'can:acessar modulo psicossocial', 'can:acessar dados
     Route::get('/encaminhamentos', [PortalPsicologiaPsicopedagogiaController::class, 'encaminhamentos'])->name('encaminhamentos.index');
     Route::get('/casos-disciplinares', [PortalPsicologiaPsicopedagogiaController::class, 'casos'])->name('casos.index');
     Route::get('/relatorios-tecnicos', [PortalPsicologiaPsicopedagogiaController::class, 'relatoriosTecnicos'])->name('relatorios_tecnicos.index');
+    Route::get('/relatorios-tecnicos/emitidos/{relatorio}', [PortalPsicologiaPsicopedagogiaController::class, 'showRelatorioTecnicoEmitido'])->name('relatorios_tecnicos.show');
+    Route::get('/relatorios-tecnicos/emitidos/{relatorio}/imprimir', [PortalPsicologiaPsicopedagogiaController::class, 'imprimirRelatorioTecnicoEmitido'])->name('relatorios_tecnicos.emitidos.print');
     Route::post('/documentos/{tipo}/visualizar', [PortalPsicologiaPsicopedagogiaController::class, 'previewDocumento'])->name('documentos.preview');
     Route::post('/documentos/{tipo}/imprimir', [PortalPsicologiaPsicopedagogiaController::class, 'imprimirDocumento'])->name('documentos.print');
     Route::get('/documentos', [PortalPsicologiaPsicopedagogiaController::class, 'documentos'])->name('documentos.index');

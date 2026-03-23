@@ -17,24 +17,24 @@
         <div class="col-span-1 space-y-6">
             <div class="bg-white overflow-hidden shadow-sm rounded-2xl border border-gray-100 p-6 flex flex-col items-center">
                 <h3 class="text-base font-bold mb-4 w-full border-b pb-2">Brasão</h3>
-                @if ($instituicao->brasao_path)
-                    <img src="{{ asset('storage/' . $instituicao->brasao_path) }}" alt="Brasão" class="max-h-40 object-contain rounded">
+                @if ($instituicao->brasao_url)
+                    <img src="{{ $instituicao->brasao_url }}" alt="Brasão" class="max-h-40 object-contain rounded">
                 @else
                     <div class="h-40 w-full bg-gray-100 border-2 border-dashed border-gray-300 flex items-center justify-center text-gray-400 rounded">Sem Imagem</div>
                 @endif
             </div>
             <div class="bg-white overflow-hidden shadow-sm rounded-2xl border border-gray-100 p-6 flex flex-col items-center">
                 <h3 class="text-base font-bold mb-4 w-full border-b pb-2">Logo Prefeitura</h3>
-                @if ($instituicao->logo_prefeitura_path)
-                    <img src="{{ asset('storage/' . $instituicao->logo_prefeitura_path) }}" alt="Logo Prefeitura" class="max-h-32 object-contain rounded">
+                @if ($instituicao->logo_prefeitura_url)
+                    <img src="{{ $instituicao->logo_prefeitura_url }}" alt="Logo Prefeitura" class="max-h-32 object-contain rounded">
                 @else
                     <div class="h-32 w-full bg-gray-100 border-2 border-dashed border-gray-300 flex items-center justify-center text-gray-400 rounded">Sem Imagem</div>
                 @endif
             </div>
             <div class="bg-white overflow-hidden shadow-sm rounded-2xl border border-gray-100 p-6 flex flex-col items-center">
                 <h3 class="text-base font-bold mb-4 w-full border-b pb-2">Logo Secretaria</h3>
-                @if ($instituicao->logo_secretaria_path)
-                    <img src="{{ asset('storage/' . $instituicao->logo_secretaria_path) }}" alt="Logo Secretaria" class="max-h-32 object-contain rounded">
+                @if ($instituicao->logo_secretaria_url)
+                    <img src="{{ $instituicao->logo_secretaria_url }}" alt="Logo Secretaria" class="max-h-32 object-contain rounded">
                 @else
                     <div class="h-32 w-full bg-gray-100 border-2 border-dashed border-gray-300 flex items-center justify-center text-gray-400 rounded">Sem Imagem</div>
                 @endif

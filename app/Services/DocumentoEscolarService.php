@@ -8,16 +8,17 @@ use App\Models\AtendimentoPsicossocial;
 use App\Models\DiarioProfessor;
 use App\Models\EncaminhamentoPsicossocial;
 use App\Models\Escola;
+use App\Models\Funcionario;
 use App\Models\Instituicao;
 use App\Models\LancamentoAvaliativo;
 use App\Models\Matricula;
 use App\Models\RelatorioTecnicoPsicossocial;
 use App\Models\Usuario;
+use App\Support\ArquivoPublicoUrl;
 use App\Support\DocumentosPortal;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Gate;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
 class DocumentoEscolarService
@@ -74,18 +75,21 @@ class DocumentoEscolarService
         $atendimentos = AtendimentoPsicossocial::query()
             ->with(['escola:id,nome', 'atendivel'])
             ->whereIn('escola_id', $escolaIds)
+            ->when($portal === 'psicossocial', fn ($query) => $query->visivelParaUsuario($usuario))
             ->orderByDesc('data_agendada')
             ->get();
 
         $relatoriosPsicossociais = RelatorioTecnicoPsicossocial::query()
             ->with('atendimento.atendivel')
             ->whereIn('escola_id', $escolaIds)
+            ->when($portal === 'psicossocial', fn ($query) => $query->whereHas('atendimento', fn ($subquery) => $subquery->visivelParaUsuario($usuario)))
             ->orderByDesc('data_emissao')
             ->get();
 
         $encaminhamentosPsicossociais = EncaminhamentoPsicossocial::query()
             ->with('atendimento.atendivel')
             ->whereHas('atendimento', fn ($query) => $query->whereIn('escola_id', $escolaIds))
+            ->when($portal === 'psicossocial', fn ($query) => $query->whereHas('atendimento', fn ($subquery) => $subquery->visivelParaUsuario($usuario)))
             ->latest('data_encaminhamento')
             ->get();
 
@@ -582,16 +586,26 @@ class DocumentoEscolarService
     private function relatorioTecnico(Usuario $usuario, array $dados): array
     {
         $relatorio = RelatorioTecnicoPsicossocial::query()
-            ->with('atendimento.escola', 'atendimento.atendivel')
+            ->with('atendimento.escola', 'atendimento.atendivel', 'atendimento.profissionalResponsavel', 'usuarioEmissor')
             ->findOrFail($dados['relatorio_id']);
 
         $this->garantirAtendimentoPermitido($usuario, $relatorio->atendimento);
+        $tipoAtendimento = $this->descricaoTipoAtendimento(
+            $relatorio->atendimento->profissionalResponsavel,
+            $relatorio->atendimento->tipo_atendimento
+        );
+        $tipoProfissional = $this->descricaoTipoProfissional(
+            $relatorio->atendimento->profissionalResponsavel,
+            $relatorio->atendimento->tipo_atendimento
+        );
+        $nomeProfissional = $relatorio->usuarioEmissor?->resolverFuncionario()?->nome ?: $relatorio->usuarioEmissor?->name;
 
         return $this->montarDocumentoBase(
             'Relatorio Tecnico',
             $relatorio->atendimento->escola,
             [
                 'Atendido' => $relatorio->atendimento->nome_atendido,
+                'Tipo de atendimento' => $tipoAtendimento ?: 'Nao informado',
                 'Tipo de relatorio' => Str::title(str_replace('_', ' ', $relatorio->tipo_relatorio)),
                 'Data de emissao' => optional($relatorio->data_emissao)->format('d/m/Y') ?: '-',
             ],
@@ -604,6 +618,14 @@ class DocumentoEscolarService
                     'tipo' => 'texto',
                     'conteudo' => $relatorio->conteudo_sigiloso,
                 ],
+            ],
+            [
+                'layout' => 'relatorio-tecnico',
+                'assinaturas_personalizadas' => array_values(array_filter([
+                    $nomeProfissional
+                        ? trim($nomeProfissional . ' - ' . ($tipoProfissional ?: 'Nao informado'))
+                        : null,
+                ])),
             ]
         );
     }
@@ -644,7 +666,8 @@ class DocumentoEscolarService
         ?Escola $escola,
         array $dadosChave,
         array $paragrafos = [],
-        array $secoes = []
+        array $secoes = [],
+        array $meta = []
     ): array {
         $instituicao = Instituicao::query()->first();
         $assinaturas = collect(preg_split('/\r\n|\r|\n/', (string) ($instituicao?->assinaturas_cargos ?? '')))
@@ -682,6 +705,7 @@ class DocumentoEscolarService
             'dados_chave' => $dadosChave,
             'paragrafos' => $paragrafos,
             'secoes' => $secoes,
+            ...$meta,
         ];
     }
 
@@ -743,6 +767,10 @@ class DocumentoEscolarService
     private function garantirAtendimentoPermitido(Usuario $usuario, AtendimentoPsicossocial $atendimento): void
     {
         if ($usuario->acessaPortalPsicossocial()) {
+            if (! $atendimento->visivelParaUsuario($usuario)) {
+                throw new AuthorizationException('Documento sigiloso fora do escopo do profissional responsavel.');
+            }
+
             return;
         }
 
@@ -778,12 +806,61 @@ class DocumentoEscolarService
 
     private function resolverArquivoPublico(?string $caminho): ?string
     {
-        if (! $caminho) {
-            return null;
+        return ArquivoPublicoUrl::resolver($caminho);
+    }
+
+    private function descricaoTipoAtendimento(?Funcionario $profissional, ?string $tipoAtendimento): ?string
+    {
+        $tipoNormalizado = $this->normalizarTipoPsicossocial($profissional?->cargo);
+
+        if ($tipoNormalizado === 'psicopedagogico') {
+            return 'Psicopedagógico';
         }
 
-        return Storage::disk('public')->exists($caminho)
-            ? Storage::disk('public')->url($caminho)
-            : null;
+        if ($tipoNormalizado === 'psicologico') {
+            return 'Psicológico';
+        }
+
+        $tipoNormalizado = $this->normalizarTipoPsicossocial($tipoAtendimento);
+
+        return match ($tipoNormalizado) {
+            'psicopedagogico' => 'Psicopedagógico',
+            'psicologico' => 'Psicológico',
+            default => null,
+        };
+    }
+
+    private function descricaoTipoProfissional(?Funcionario $profissional, ?string $tipoAtendimento): ?string
+    {
+        $tipoNormalizado = $this->normalizarTipoPsicossocial($profissional?->cargo);
+
+        if ($tipoNormalizado === 'psicopedagogico') {
+            return 'Psicopedagogo(a)';
+        }
+
+        if ($tipoNormalizado === 'psicologico') {
+            return 'Psicólogo(a)';
+        }
+
+        $tipoNormalizado = $this->normalizarTipoPsicossocial($tipoAtendimento);
+
+        return match ($tipoNormalizado) {
+            'psicopedagogico' => 'Psicopedagogo(a)',
+            'psicologico' => 'Psicólogo(a)',
+            default => null,
+        };
+    }
+
+    private function normalizarTipoPsicossocial(?string $valor): ?string
+    {
+        $normalizado = Str::lower(Str::ascii((string) $valor));
+
+        return match (true) {
+            str_contains($normalizado, 'psicopedag') => 'psicopedagogico',
+            str_contains($normalizado, 'psicolog') => 'psicologico',
+            str_contains($normalizado, 'psicopedagogia') => 'psicopedagogico',
+            str_contains($normalizado, 'psicologia') => 'psicologico',
+            default => null,
+        };
     }
 }

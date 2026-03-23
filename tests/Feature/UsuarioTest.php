@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use App\Models\Escola;
 use App\Models\Funcionario;
 use App\Models\Usuario;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -26,6 +27,8 @@ class UsuarioTest extends TestCase
 
         Role::findOrCreate('Administrador da Rede', 'web')
             ->givePermissionTo(Permission::all());
+
+        Role::findOrCreate('Psicologia/Psicopedagogia', 'web');
     }
 
     public function test_usuario_sem_permissao_nao_pode_ver_lista_de_usuarios(): void
@@ -145,5 +148,57 @@ class UsuarioTest extends TestCase
             'id' => $userInativo->id,
             'ativo' => 1,
         ]);
+    }
+
+    public function test_usuario_psicossocial_recebe_vinculo_com_todas_as_escolas_ativas(): void
+    {
+        $admin = Usuario::factory()->create();
+        $admin->assignRole('Administrador da Rede');
+
+        $escolaA = Escola::create([
+            'nome' => 'Escola A',
+            'cnpj' => '00.000.000/0001-10',
+            'ativo' => true,
+        ]);
+
+        $escolaB = Escola::create([
+            'nome' => 'Escola B',
+            'cnpj' => '00.000.000/0001-11',
+            'ativo' => true,
+        ]);
+
+        Escola::create([
+            'nome' => 'Escola Inativa',
+            'cnpj' => '00.000.000/0001-12',
+            'ativo' => false,
+        ]);
+
+        $funcionario = Funcionario::create([
+            'nome' => 'Psicologo da Rede',
+            'cpf' => '123.456.789-01',
+            'email' => 'psicologo.rede@escola.com',
+            'cargo' => 'Psicólogo',
+            'ativo' => true,
+        ]);
+
+        $papelPsicossocial = Role::findByName('Psicologia/Psicopedagogia', 'web');
+
+        $response = $this->actingAs($admin)
+            ->post(route('secretaria.usuarios.store'), [
+                'funcionario_id' => $funcionario->id,
+                'role' => $papelPsicossocial->id,
+                'password' => 'senha1234',
+                'password_confirmation' => 'senha1234',
+                'ativo' => 1,
+            ]);
+
+        $response->assertRedirect(route('secretaria.usuarios.index'));
+
+        $usuario = Usuario::query()->where('funcionario_id', $funcionario->id)->firstOrFail();
+
+        $this->assertEqualsCanonicalizing(
+            [$escolaA->id, $escolaB->id],
+            $usuario->escolas()->pluck('escolas.id')->all()
+        );
     }
 }

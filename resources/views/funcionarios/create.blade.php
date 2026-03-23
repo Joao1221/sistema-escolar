@@ -1,4 +1,7 @@
 <x-secretaria-layout>
+    @php
+        $cargosPsicossociais = \App\Support\CargosPsicossociais::labels();
+    @endphp
 
     <div class="flex justify-between items-center mb-6">
         <div>
@@ -13,9 +16,8 @@
             <form action="{{ route('secretaria.funcionarios.store') }}" method="POST" class="space-y-8">
                 @csrf
 
-                {{-- Dados Pessoais --}}
                 <div class="border-b border-gray-100 pb-6">
-                    <h3 class="text-base font-bold text-gray-800 mb-4">👤 Informações Pessoais</h3>
+                    <h3 class="text-base font-bold text-gray-800 mb-4">Informações Pessoais</h3>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div class="md:col-span-2">
                             <x-input-label for="nome" :value="__('Nome Completo')" />
@@ -42,7 +44,7 @@
                             <select id="cargo" name="cargo" class="mt-1 block w-full border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm" required>
                                 <option value="">Selecione...</option>
                                 @foreach (['Professor', 'Diretor', 'Coordenador', 'Secretário Escolar', 'Nutricionista', 'Psicólogo', 'Psicopedagogo', 'Auxiliar de Serviços Gerais', 'Merendeira', 'Vigilante'] as $cargo)
-                                    <option value="{{ $cargo }}" {{ old('cargo') === $cargo ? 'selected' : '' }}>{{ $cargo }}</option>
+                                    <option value="{{ $cargo }}" {{ old('cargo') === $cargo || (\App\Support\CargosPsicossociais::contains(old('cargo')) && \App\Support\CargosPsicossociais::contains($cargo)) ? 'selected' : '' }}>{{ $cargo }}</option>
                                 @endforeach
                             </select>
                             <x-input-error class="mt-2" :messages="$errors->get('cargo')" />
@@ -50,16 +52,16 @@
                     </div>
                 </div>
 
-                {{-- Vínculo Escolar --}}
                 <div>
-                    <h3 class="text-base font-bold text-gray-800 mb-2">🏫 Atribuição de Unidades Escolares</h3>
-                    <p class="text-sm text-gray-500 mb-4">Selecione uma ou mais escolas onde o funcionário atuará:</p>
-                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 bg-gray-50 p-4 rounded-lg border border-gray-200">
+                    <h3 class="text-base font-bold text-gray-800 mb-2">Atribuição de Unidades Escolares</h3>
+                    <p id="escolas-help" class="text-sm text-gray-500 mb-4">Selecione uma ou mais escolas onde o funcionário atuará.</p>
+                    <p id="escolas-auto" class="hidden text-sm font-medium text-amber-700 mb-4">Para psicólogo e psicopedagogo, o acesso é definido automaticamente para todas as escolas ativas da rede.</p>
+                    <div id="escolas-wrapper" class="grid grid-cols-1 md:grid-cols-3 gap-4 bg-gray-50 p-4 rounded-lg border border-gray-200">
                         @foreach ($escolas as $escola)
-                        <label class="inline-flex items-center p-3 bg-white rounded border border-gray-200 cursor-pointer hover:bg-blue-50 transition">
-                            <input type="checkbox" name="escolas[]" value="{{ $escola->id }}" class="rounded border-gray-300 text-indigo-600 shadow-sm focus:ring-indigo-500" {{ is_array(old('escolas')) && in_array($escola->id, old('escolas')) ? 'checked' : '' }}>
-                            <span class="ml-2 text-sm text-gray-700 font-medium">{{ $escola->nome }}</span>
-                        </label>
+                            <label class="inline-flex items-center p-3 bg-white rounded border border-gray-200 cursor-pointer hover:bg-blue-50 transition">
+                                <input type="checkbox" name="escolas[]" value="{{ $escola->id }}" class="escola-checkbox rounded border-gray-300 text-indigo-600 shadow-sm focus:ring-indigo-500" {{ is_array(old('escolas')) && in_array($escola->id, old('escolas')) ? 'checked' : '' }}>
+                                <span class="ml-2 text-sm text-gray-700 font-medium">{{ $escola->nome }}</span>
+                            </label>
                         @endforeach
                     </div>
                     <x-input-error class="mt-2" :messages="$errors->get('escolas')" />
@@ -72,4 +74,40 @@
         </div>
     </div>
 
+    @push('scripts')
+        <script>
+            document.addEventListener('DOMContentLoaded', function () {
+                const cargoSelect = document.getElementById('cargo');
+                const escolasWrapper = document.getElementById('escolas-wrapper');
+                const escolasHelp = document.getElementById('escolas-help');
+                const escolasAuto = document.getElementById('escolas-auto');
+                const escolasCheckboxes = document.querySelectorAll('.escola-checkbox');
+                const cargosPsicossociais = @json($cargosPsicossociais);
+
+                function normalizarCargo(valor) {
+                    return (valor || '')
+                        .normalize('NFD')
+                        .replace(/[\u0300-\u036f]/g, '')
+                        .toLowerCase();
+                }
+
+                function atualizarVisibilidadeEscolas() {
+                    const acessoAutomatico = cargosPsicossociais
+                        .map(normalizarCargo)
+                        .includes(normalizarCargo(cargoSelect.value));
+
+                    escolasWrapper.classList.toggle('hidden', acessoAutomatico);
+                    escolasHelp.classList.toggle('hidden', acessoAutomatico);
+                    escolasAuto.classList.toggle('hidden', !acessoAutomatico);
+
+                    escolasCheckboxes.forEach(function (checkbox) {
+                        checkbox.disabled = acessoAutomatico;
+                    });
+                }
+
+                cargoSelect.addEventListener('change', atualizarVisibilidadeEscolas);
+                atualizarVisibilidadeEscolas();
+            });
+        </script>
+    @endpush
 </x-secretaria-layout>

@@ -16,11 +16,11 @@ use App\Models\MovimentacaoAlimento;
 use App\Models\RelatorioTecnicoPsicossocial;
 use App\Models\Turma;
 use App\Models\Usuario;
+use App\Support\ArquivoPublicoUrl;
 use App\Support\RelatoriosPortal;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection as EloquentCollection;
 use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 
@@ -839,6 +839,7 @@ class RelatorioPortalService
 
         $relatorios = RelatorioTecnicoPsicossocial::query()
             ->with(['atendimento.atendivel', 'atendimento.escola'])
+            ->when($portal === 'psicossocial', fn (Builder $query) => $query->whereHas('atendimento', fn (Builder $subquery) => $subquery->visivelParaUsuario($usuario)))
             ->when(! empty($filtros['escola_id']), fn (Builder $query) => $query->where('escola_id', $filtros['escola_id']))
             ->when($portal !== 'secretaria', fn (Builder $query) => $query->whereIn('escola_id', $escolaIds ?: [0]))
             ->when(! empty($filtros['data_inicio']), fn (Builder $query) => $query->whereDate('data_emissao', '>=', $filtros['data_inicio']))
@@ -847,6 +848,7 @@ class RelatorioPortalService
             ->get();
 
         $atendimentos = AtendimentoPsicossocial::query()
+            ->when($portal === 'psicossocial', fn (Builder $query) => $query->visivelParaUsuario($usuario))
             ->when(! empty($filtros['escola_id']), fn (Builder $query) => $query->where('escola_id', $filtros['escola_id']))
             ->when($portal !== 'secretaria', fn (Builder $query) => $query->whereIn('escola_id', $escolaIds ?: [0]))
             ->get();
@@ -1028,24 +1030,14 @@ class RelatorioPortalService
                 ->values()
                 ->all(),
             'brasao_url' => $this->resolverArquivoPublico($instituicao?->brasao_path),
+            'logo_prefeitura_url' => $this->resolverArquivoPublico($instituicao?->logo_prefeitura_path),
+            'logo_secretaria_url' => $this->resolverArquivoPublico($instituicao?->logo_secretaria_path),
         ];
     }
 
     private function resolverArquivoPublico(?string $path): ?string
     {
-        if (! $path) {
-            return null;
-        }
-
-        if (Str::startsWith($path, ['http://', 'https://', '/storage/'])) {
-            return $path;
-        }
-
-        if (Storage::disk('public')->exists($path)) {
-            return Storage::url($path);
-        }
-
-        return null;
+        return ArquivoPublicoUrl::resolver($path);
     }
 
     private function formatarFiltros(array $filtros): array

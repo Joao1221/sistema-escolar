@@ -4,6 +4,7 @@ namespace Tests\Feature;
 
 use App\Models\Aluno;
 use App\Models\AtendimentoPsicossocial;
+use App\Models\DemandaPsicossocial;
 use App\Models\Escola;
 use App\Models\Funcionario;
 use App\Models\Usuario;
@@ -59,9 +60,7 @@ class PsicossocialTest extends TestCase
     {
         [$escola, $aluno] = $this->criarContextoBase();
 
-        $usuario = Usuario::factory()->create(['email' => 'psico@example.com']);
-        $usuario->assignRole('Psicologia/Psicopedagogia');
-        $usuario->escolas()->attach($escola->id);
+        [$usuario] = $this->criarUsuarioPsicossocial($escola, 'Profissional Psicologia 1', 'psico@example.com');
 
         $this->actingAs($usuario)->post('/psicologia-psicopedagogia/atendimentos', [
             'escola_id' => $escola->id,
@@ -127,7 +126,7 @@ class PsicossocialTest extends TestCase
         $agendaResponse->assertSee('Agenda Futura');
         $agendaResponse->assertDontSee('Maria Responsavel');
 
-        $atendimentosResponse = $this->actingAs($usuario)->get('/psicologia-psicopedagogia/atendimentos');
+        $atendimentosResponse = $this->actingAs($usuario)->followingRedirects()->get('/psicologia-psicopedagogia/atendimentos');
         $atendimentosResponse->assertOk();
         $atendimentosResponse->assertSee('Maria Responsavel');
         $atendimentosResponse->assertDontSee('Agenda Futura');
@@ -157,21 +156,16 @@ class PsicossocialTest extends TestCase
         ]);
     }
 
-    public function test_profissional_de_outra_escola_acessa_registro_sigiloso_do_portal(): void
+    public function test_profissional_nao_acessa_atendimento_de_outro_profissional_mesmo_na_mesma_escola(): void
     {
-        [$escolaA, $aluno] = $this->criarContextoBase();
-        $escolaB = $this->criarEscola('Escola B', '00.000.000/0001-42');
+        [$escola, $aluno] = $this->criarContextoBase();
 
-        $usuarioA = Usuario::factory()->create(['email' => 'psico.a@example.com']);
-        $usuarioA->assignRole('Psicologia/Psicopedagogia');
-        $usuarioA->escolas()->attach($escolaA->id);
-
-        $usuarioB = Usuario::factory()->create(['email' => 'psico.b@example.com']);
-        $usuarioB->assignRole('Psicologia/Psicopedagogia');
-        $usuarioB->escolas()->attach($escolaB->id);
+        [$usuarioA, $funcionarioA] = $this->criarUsuarioPsicossocial($escola, 'Psicologo A', 'psico.a@example.com');
+        [$usuarioB] = $this->criarUsuarioPsicossocial($escola, 'Psicopedagoga B', 'psico.b@example.com');
 
         $this->actingAs($usuarioA)->post('/psicologia-psicopedagogia/atendimentos', [
-            'escola_id' => $escolaA->id,
+            'escola_id' => $escola->id,
+            'profissional_responsavel_id' => $funcionarioA->id,
             'tipo_publico' => 'aluno',
             'aluno_id' => $aluno->id,
             'tipo_atendimento' => 'psicologia',
@@ -186,8 +180,12 @@ class PsicossocialTest extends TestCase
 
         $this->actingAs($usuarioB)
             ->get("/psicologia-psicopedagogia/atendimentos/{$atendimento->id}")
+            ->assertForbidden();
+
+        $this->actingAs($usuarioB)
+            ->get('/psicologia-psicopedagogia/agenda')
             ->assertOk()
-            ->assertSee('Aluno Sigiloso');
+            ->assertDontSee('Aluno Sigiloso');
     }
 
     public function test_secretaria_escolar_sem_permissao_nao_acessa_modulo_sigiloso(): void
@@ -216,6 +214,82 @@ class PsicossocialTest extends TestCase
         $response->assertOk();
         $response->assertSee('Escola Norte');
         $response->assertSee('Escola Sul');
+    }
+
+    public function test_encerrar_atendimento_sincroniza_status_da_demanda_vinculada(): void
+    {
+        [$escola, $aluno] = $this->criarContextoBase();
+        [$usuario, $funcionario] = $this->criarUsuarioPsicossocial($escola, 'Psicologo Encerramento', 'psico.encerramento@example.com');
+
+        $atendimento = AtendimentoPsicossocial::create([
+            'escola_id' => $escola->id,
+            'usuario_registro_id' => $usuario->id,
+            'profissional_responsavel_id' => $funcionario->id,
+            'atendivel_type' => Aluno::class,
+            'atendivel_id' => $aluno->id,
+            'tipo_publico' => 'aluno',
+            'tipo_atendimento' => 'psicologia',
+            'natureza' => 'agendado',
+            'status' => 'em_acompanhamento',
+            'data_agendada' => '2026-03-18 09:00:00',
+            'data_realizacao' => '2026-03-18 09:30:00',
+            'local_atendimento' => 'Sala tecnica',
+            'motivo_demanda' => 'Acompanhamento emocional.',
+            'resumo_sigiloso' => 'Resumo do caso.',
+            'nivel_sigilo' => 'muito_restrito',
+            'requer_acompanhamento' => true,
+        ]);
+
+        $demanda = DemandaPsicossocial::create([
+            'escola_id' => $escola->id,
+            'usuario_registro_id' => $usuario->id,
+            'profissional_responsavel_id' => $funcionario->id,
+            'tipo_atendimento' => 'psicologia',
+            'origem_demanda' => 'familia',
+            'tipo_publico' => 'aluno',
+            'aluno_id' => $aluno->id,
+            'motivo_inicial' => 'Solicitacao da familia.',
+            'prioridade' => 'media',
+            'status' => 'em_atendimento',
+            'data_solicitacao' => '2026-03-17',
+            'encaminhado_para_atendimento' => true,
+            'atendimento_id' => $atendimento->id,
+        ]);
+
+        $this->actingAs($usuario)->post("/psicologia-psicopedagogia/atendimentos/{$atendimento->id}/encerrar", [
+            'data_encerramento' => '2026-03-23',
+            'motivo_encerramento' => 'Objetivos alcancados.',
+            'resumo_encerramento' => 'Evolucao satisfatoria.',
+            'orientacoes_finais' => 'Monitorar e retornar se necessario.',
+        ])->assertRedirect();
+
+        $this->assertDatabaseHas('atendimentos_psicossociais', [
+            'id' => $atendimento->id,
+            'status' => 'encerrado',
+        ]);
+
+        $this->assertDatabaseHas('demandas_psicossociais', [
+            'id' => $demanda->id,
+            'status' => 'encerrada',
+        ]);
+
+        $this->actingAs($usuario)
+            ->get('/psicologia-psicopedagogia/historico')
+            ->assertOk()
+            ->assertSee('Aluno Sigiloso')
+            ->assertSee('Encerrado');
+
+        $this->actingAs($usuario)
+            ->get('/psicologia-psicopedagogia/demandas')
+            ->assertOk()
+            ->assertSee('Aluno Sigiloso')
+            ->assertSee('Encerrada');
+
+        $this->actingAs($usuario)
+            ->get("/psicologia-psicopedagogia/demandas/{$demanda->id}")
+            ->assertOk()
+            ->assertSee('Encerrada')
+            ->assertDontSee('Ver atendimento');
     }
 
     private function criarContextoBase(): array
@@ -250,6 +324,28 @@ class PsicossocialTest extends TestCase
         ]);
 
         return [$escola, $aluno];
+    }
+
+    private function criarUsuarioPsicossocial(Escola $escola, string $nome, string $email): array
+    {
+        $funcionario = Funcionario::create([
+            'nome' => $nome,
+            'cpf' => fake()->unique()->numerify('###########'),
+            'email' => $email,
+            'telefone' => '(85) 98888-5555',
+            'cargo' => 'Psicologia/Psicopedagogia',
+            'ativo' => true,
+        ]);
+        $funcionario->escolas()->attach($escola->id);
+
+        $usuario = Usuario::factory()->create([
+            'email' => $email,
+            'funcionario_id' => $funcionario->id,
+        ]);
+        $usuario->assignRole('Psicologia/Psicopedagogia');
+        $usuario->escolas()->attach($escola->id);
+
+        return [$usuario, $funcionario];
     }
 
     private function criarEscola(string $nome, string $cnpj): Escola

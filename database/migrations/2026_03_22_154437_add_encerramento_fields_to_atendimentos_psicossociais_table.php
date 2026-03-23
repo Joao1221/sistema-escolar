@@ -12,10 +12,21 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('atendimentos_psicossociais', function (Blueprint $table) {
-            $table->dateTime('data_encerramento')->nullable()->after('requer_acompanhamento');
-            $table->text('motivo_encerramento')->nullable()->after('data_encerramento');
-            $table->text('resumo_encerramento')->nullable()->after('motivo_encerramento');
-            $table->text('orientacoes_finais')->nullable()->after('resumo_encerramento');
+            if (! Schema::hasColumn('atendimentos_psicossociais', 'data_encerramento')) {
+                $table->dateTime('data_encerramento')->nullable()->after('requer_acompanhamento');
+            }
+
+            if (! Schema::hasColumn('atendimentos_psicossociais', 'motivo_encerramento')) {
+                $table->text('motivo_encerramento')->nullable()->after('data_encerramento');
+            }
+
+            if (! Schema::hasColumn('atendimentos_psicossociais', 'resumo_encerramento')) {
+                $table->text('resumo_encerramento')->nullable()->after('motivo_encerramento');
+            }
+
+            if (! Schema::hasColumn('atendimentos_psicossociais', 'orientacoes_finais')) {
+                $table->text('orientacoes_finais')->nullable()->after('resumo_encerramento');
+            }
         });
     }
 
@@ -25,7 +36,16 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('atendimentos_psicossociais', function (Blueprint $table) {
-            $table->dropColumn(['data_encerramento', 'motivo_encerramento', 'resumo_encerramento', 'orientacoes_finais']);
+            $colunas = collect([
+                'data_encerramento',
+                'motivo_encerramento',
+                'resumo_encerramento',
+                'orientacoes_finais',
+            ])->filter(fn (string $coluna) => Schema::hasColumn('atendimentos_psicossociais', $coluna))->all();
+
+            if ($colunas !== []) {
+                $table->dropColumn($colunas);
+            }
         });
     }
 };

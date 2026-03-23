@@ -6,9 +6,11 @@
 <div class="rounded-[2rem] border border-slate-200 bg-white p-8 shadow-sm print:rounded-none print:border-0 print:shadow-none print:p-0">
     <div class="flex flex-wrap items-start justify-between gap-6 border-b border-slate-200 pb-6">
         <div class="flex items-center gap-4">
-            @if ($instituicao['brasao_url'])
-                <img src="{{ $instituicao['brasao_url'] }}" alt="Brasao" class="h-16 w-16 rounded-2xl object-cover">
-            @endif
+            <div class="flex items-center gap-3">
+                @if (! empty($instituicao['brasao_url']))
+                    <img src="{{ $instituicao['brasao_url'] }}" alt="Brasao da prefeitura" class="h-16 w-16 rounded-2xl object-cover">
+                @endif
+            </div>
             <div>
                 <p class="text-sm font-semibold uppercase tracking-[0.28em] text-slate-500">{{ $instituicao['nome_prefeitura'] ?: 'Prefeitura Municipal' }}</p>
                 <h2 class="mt-2 text-2xl font-bold text-slate-900">{{ $instituicao['nome_secretaria'] ?: 'Secretaria de Educacao' }}</h2>

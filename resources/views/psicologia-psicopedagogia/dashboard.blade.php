@@ -10,11 +10,11 @@
 
     <div class="space-y-6">
         <div class="grid gap-4 grid-cols-2 md:grid-cols-5">
-            <div class="rounded-[1.75rem] border border-cyan-100 bg-gradient-to-r from-cyan-50 via-cyan-25 to-cyan-100 p-4 shadow-sm">
+            <a href="{{ route('psicologia.demandas.index', ['escola_id' => '', 'status' => 'aberta', 'prioridade' => '']) }}" class="rounded-[1.75rem] border border-cyan-100 bg-gradient-to-r from-cyan-50 via-cyan-25 to-cyan-100 p-4 shadow-sm block transition hover:-translate-y-0.5 hover:shadow-md">
                 <div class="h-1.5 w-16 rounded-full bg-cyan-400"></div>
-                <p class="mt-4 text-xs font-semibold uppercase tracking-[0.24em] text-cyan-700 break-words leading-tight">Agendados hoje</p>
-                <p class="mt-4 text-3xl font-bold text-[#14363a]">{{ $totais['agendados_hoje'] }}</p>
-            </div>
+                <p class="mt-4 text-xs font-semibold uppercase tracking-[0.24em] text-cyan-700 break-words leading-tight">Demandas abertas</p>
+                <p class="mt-4 text-3xl font-bold text-[#14363a]">{{ $totais['demandas_abertas'] }}</p>
+            </a>
             <div class="rounded-[1.75rem] border border-emerald-100 bg-gradient-to-r from-emerald-50 via-emerald-25 to-emerald-100 p-4 shadow-sm">
                 <div class="h-1.5 w-16 rounded-full bg-emerald-400"></div>
                 <p class="mt-4 text-xs font-semibold uppercase tracking-[0.24em] text-emerald-700 break-words leading-tight">Atendimentos em aberto</p>
@@ -112,10 +112,10 @@
                     </div>
                     <div class="divide-y divide-slate-100">
                         @forelse ($relatoriosRecentes as $relatorio)
-                            <div class="px-6 py-4">
+                            <a href="{{ route('psicologia.relatorios_tecnicos.show', $relatorio) }}" class="block px-6 py-4 transition hover:bg-slate-50">
                                 <p class="font-semibold text-[#14363a]">{{ $relatorio->titulo }}</p>
                                 <p class="mt-1 text-xs text-slate-500">{{ $relatorio->data_emissao->format('d/m/Y') }} | {{ ucfirst(str_replace('_', ' ', $relatorio->tipo_relatorio)) }}</p>
-                            </div>
+                            </a>
                         @empty
                             <p class="px-6 py-8 text-sm text-slate-500">Nenhum relatorio tecnico emitido.</p>
                         @endforelse

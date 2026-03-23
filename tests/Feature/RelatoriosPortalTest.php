@@ -143,14 +143,13 @@ class RelatoriosPortalTest extends TestCase
         $escola = $this->criarEscola('Escola Sigilo Relatorios');
         $aluno = $this->criarAluno('Aluno Sigiloso Relatorio');
 
-        $usuarioPsico = Usuario::factory()->create(['email' => 'psico.relatorios@example.com']);
-        $usuarioPsico->assignRole('Psicologia/Psicopedagogia');
-        $usuarioPsico->escolas()->attach($escola->id);
+        [$usuarioPsico, $funcionarioPsico] = $this->criarUsuarioPsicossocial($escola, 'Psicologa Relatorios', 'psico.relatorios@example.com');
+        [$usuarioOutroPsico] = $this->criarUsuarioPsicossocial($escola, 'Psicopedagoga Relatorios', 'psico.outra@example.com');
 
         $atendimento = AtendimentoPsicossocial::create([
             'escola_id' => $escola->id,
             'usuario_registro_id' => $usuarioPsico->id,
-            'profissional_responsavel_id' => null,
+            'profissional_responsavel_id' => $funcionarioPsico->id,
             'atendivel_type' => Aluno::class,
             'atendivel_id' => $aluno->id,
             'tipo_publico' => 'aluno',
@@ -187,6 +186,15 @@ class RelatoriosPortalTest extends TestCase
         $response->assertOk();
         $response->assertSee('Relatorio Tecnico da Psicologia/Psicopedagogia');
         $response->assertSee('Parecer sigiloso');
+
+        $responseOutroProfissional = $this->actingAs($usuarioOutroPsico)->post('/secretaria-escolar/psicologia-psicopedagogia/relatorios/tecnico-psicossocial/visualizar', [
+            'escola_id' => $escola->id,
+            'data_inicio' => '2026-03-01',
+            'data_fim' => '2026-03-31',
+        ]);
+
+        $responseOutroProfissional->assertOk();
+        $responseOutroProfissional->assertDontSee('Parecer sigiloso');
 
         $usuarioSemSigilo = Usuario::factory()->create(['email' => 'secretaria.sem.sigilo.relatorios@example.com']);
         $usuarioSemSigilo->assignRole('Secretário Escolar');
@@ -395,5 +403,27 @@ class RelatoriosPortalTest extends TestCase
             'uf' => 'CE',
             'ativo' => true,
         ]);
+    }
+
+    private function criarUsuarioPsicossocial(Escola $escola, string $nome, string $email): array
+    {
+        $funcionario = Funcionario::create([
+            'nome' => $nome,
+            'cpf' => fake()->unique()->numerify('###########'),
+            'email' => $email,
+            'telefone' => '(85) 99999-2222',
+            'cargo' => 'Psicologia/Psicopedagogia',
+            'ativo' => true,
+        ]);
+        $funcionario->escolas()->attach($escola->id);
+
+        $usuario = Usuario::factory()->create([
+            'email' => $email,
+            'funcionario_id' => $funcionario->id,
+        ]);
+        $usuario->assignRole('Psicologia/Psicopedagogia');
+        $usuario->escolas()->attach($escola->id);
+
+        return [$usuario, $funcionario];
     }
 }

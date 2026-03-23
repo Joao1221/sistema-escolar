@@ -2,7 +2,9 @@
 
 namespace App\Services;
 
+use App\Models\Escola;
 use App\Models\Funcionario;
+use App\Support\CargosPsicossociais;
 use Illuminate\Support\Facades\DB;
 
 class FuncionarioService
@@ -42,10 +44,7 @@ class FuncionarioService
     {
         return DB::transaction(function () use ($dados) {
             $funcionario = Funcionario::create($dados);
-
-            if (!empty($dados['escolas'])) {
-                $funcionario->escolas()->sync($dados['escolas']);
-            }
+            $funcionario->escolas()->sync($this->resolverEscolaIds($dados));
 
             return $funcionario;
         });
@@ -58,10 +57,7 @@ class FuncionarioService
     {
         return DB::transaction(function () use ($funcionario, $dados) {
             $funcionario->update($dados);
-
-            if (isset($dados['escolas'])) {
-                $funcionario->escolas()->sync($dados['escolas']);
-            }
+            $funcionario->escolas()->sync($this->resolverEscolaIds($dados));
 
             return $funcionario;
         });
@@ -75,5 +71,14 @@ class FuncionarioService
         $funcionario->ativo = !$funcionario->ativo;
         $funcionario->save();
         return $funcionario;
+    }
+
+    private function resolverEscolaIds(array $dados): array
+    {
+        if (CargosPsicossociais::contains($dados['cargo'] ?? null)) {
+            return Escola::query()->where('ativo', true)->pluck('id')->all();
+        }
+
+        return array_values($dados['escolas'] ?? []);
     }
 }

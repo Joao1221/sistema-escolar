@@ -16,6 +16,7 @@
                             <th class="px-6 py-3">Tipo</th>
                             <th class="px-6 py-3">Atendido</th>
                             <th class="px-6 py-3">Escola</th>
+                            <th class="px-6 py-3 text-right">Acoes</th>
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-slate-100">
@@ -26,9 +27,14 @@
                                 <td class="px-6 py-4 text-slate-700">{{ ucfirst(str_replace('_', ' ', $relatorio->tipo_relatorio)) }}</td>
                                 <td class="px-6 py-4 text-slate-700">{{ $relatorio->atendimento?->nome_atendido ?? 'Sem vinculo' }}</td>
                                 <td class="px-6 py-4 text-slate-700">{{ $relatorio->atendimento?->escola?->nome ?? $relatorio->escola?->nome }}</td>
+                                <td class="px-6 py-4 text-right">
+                                    <a href="{{ route('psicologia.relatorios_tecnicos.show', $relatorio) }}" class="inline-flex items-center rounded-xl border border-slate-300 px-3 py-2 text-xs font-semibold uppercase tracking-widest text-slate-700 transition hover:bg-slate-100">
+                                        Visualizar
+                                    </a>
+                                </td>
                             </tr>
                         @empty
-                            <tr><td colspan="5" class="px-6 py-10 text-center text-slate-500">Nenhum relatorio tecnico encontrado.</td></tr>
+                            <tr><td colspan="6" class="px-6 py-10 text-center text-slate-500">Nenhum relatorio tecnico encontrado.</td></tr>
                         @endforelse
                     </tbody>
                 </table>

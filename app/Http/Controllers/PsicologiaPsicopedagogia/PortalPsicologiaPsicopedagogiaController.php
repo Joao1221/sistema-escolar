@@ -12,6 +12,7 @@ use App\Http\Requests\StorePlanoIntervencaoPsicossocialRequest;
 use App\Http\Requests\StoreRelatorioTecnicoPsicossocialRequest;
 use App\Models\AtendimentoPsicossocial;
 use App\Models\DemandaPsicossocial;
+use App\Models\RelatorioTecnicoPsicossocial;
 use App\Services\AuditoriaService;
 use App\Services\DocumentoEscolarService;
 use App\Services\PsicossocialService;
@@ -43,7 +44,7 @@ class PortalPsicologiaPsicopedagogiaController extends Controller implements Has
             new Middleware('can:registrar casos disciplinares sigilosos', only: ['storeCaso']),
             new Middleware('can:emitir relatorios tecnicos psicossociais', only: ['storeRelatorio']),
             new Middleware('can:consultar documentos psicossociais', only: ['documentos', 'previewDocumento', 'imprimirDocumento']),
-            new Middleware('can:consultar relatorios tecnicos do psicossocial', only: ['relatoriosTecnicos', 'previewRelatorioTecnico', 'imprimirRelatorioTecnico']),
+            new Middleware('can:consultar relatorios tecnicos do psicossocial', only: ['relatoriosTecnicos', 'previewRelatorioTecnico', 'imprimirRelatorioTecnico', 'showRelatorioTecnicoEmitido', 'imprimirRelatorioTecnicoEmitido']),
             new Middleware('can:consultar auditoria psicossocial sigilosa', only: ['auditoria']),
         ];
     }
@@ -190,6 +191,35 @@ class PortalPsicologiaPsicopedagogiaController extends Controller implements Has
         ]);
     }
 
+    public function showRelatorioTecnicoEmitido(Request $request, RelatorioTecnicoPsicossocial $relatorio)
+    {
+        $documento = $this->documentoEscolarService->emitir('psicossocial', 'relatorio-tecnico', $request->user(), [
+            'relatorio_id' => $relatorio->id,
+        ]);
+
+        return view('psicologia-psicopedagogia.documentos.preview', [
+            'documento' => $documento,
+            'tipoDocumento' => 'relatorio-tecnico',
+            'payload' => ['relatorio_id' => $relatorio->id],
+            'urlImpressaoDireta' => route('psicologia.relatorios_tecnicos.emitidos.print', $relatorio),
+            'tituloPagina' => 'Relatorio tecnico emitido',
+            'subtituloPagina' => 'Visualizacao do documento tecnico salvo no atendimento.',
+            'breadcrumbs' => $this->psicossocialService->construirBreadcrumbs([
+                ['label' => 'Relatorios tecnicos', 'url' => route('psicologia.relatorios_tecnicos.index')],
+                ['label' => 'Visualizacao'],
+            ]),
+        ]);
+    }
+
+    public function imprimirRelatorioTecnicoEmitido(Request $request, RelatorioTecnicoPsicossocial $relatorio)
+    {
+        return view('documentos.impressao', [
+            'documento' => $this->documentoEscolarService->emitir('psicossocial', 'relatorio-tecnico', $request->user(), [
+                'relatorio_id' => $relatorio->id,
+            ]),
+        ]);
+    }
+
     public function previewRelatorioTecnico(GerarRelatorioRequest $request, string $tipo)
     {
         return view('psicologia-psicopedagogia.relatorios-tecnicos.preview', [
@@ -228,7 +258,11 @@ class PortalPsicologiaPsicopedagogiaController extends Controller implements Has
     {
         $atendimento = $this->psicossocialService->criarAtendimento($request->user(), $request->validated());
 
-        return redirect()->route('psicologia.show', $atendimento)
+        $rotaDestino = $atendimento->visivelParaUsuario($request->user())
+            ? route('psicologia.show', $atendimento)
+            : route('psicologia.dashboard');
+
+        return redirect()->to($rotaDestino)
             ->with('success', 'Atendimento registrado com sucesso.');
     }
 
@@ -426,7 +460,11 @@ class PortalPsicologiaPsicopedagogiaController extends Controller implements Has
         $atendimento = $this->psicossocialService->finalizarTriagem($request->user(), $demanda, $validated);
 
         if ($atendimento) {
-            return redirect()->route('psicologia.show', $atendimento)
+            $rotaDestino = $atendimento->visivelParaUsuario($request->user())
+                ? route('psicologia.show', $atendimento)
+                : route('psicologia.demandas.show', $demanda);
+
+            return redirect()->to($rotaDestino)
                 ->with('success', 'Triagem concluida. Atendimento criado com sucesso.');
         }
 

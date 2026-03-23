@@ -38,7 +38,7 @@
     <div class="header">
         <div class="flex" style="gap:14px; align-items:center;">
             @php
-                $brasao = $instituicao?->brasao_path ? asset('storage/'.$instituicao->brasao_path) : null;
+                $brasao = $instituicao?->brasao_url;
             @endphp
             <div style="width:70px;height:70px; border-radius:14px; overflow:hidden; background:#f1f5f9; display:flex; align-items:center; justify-content:center;">
                 @if($brasao)

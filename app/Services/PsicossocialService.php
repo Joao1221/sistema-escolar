@@ -34,31 +34,36 @@ class PsicossocialService
         $escolaIds = $this->escolaIdsPermitidas($usuario);
         $atendimentos = AtendimentoPsicossocial::query()
             ->with(['escola', 'atendivel', 'profissionalResponsavel'])
-            ->whereIn('escola_id', $escolaIds);
+            ->visivelParaUsuario($usuario);
         $agendaHoje = (clone $atendimentos)
             ->whereDate('data_agendada', now()->toDateString())
             ->orderBy('data_agendada')
             ->get();
 
+        $demandasAbertas = DemandaPsicossocial::query()
+            ->whereIn('escola_id', $escolaIds)
+            ->where('status', 'aberta')
+            ->count();
+
         return [
             'totais' => [
-                'agendados_hoje' => $agendaHoje->count(),
+                'demandas_abertas' => $demandasAbertas,
                 'atendimentos_abertos' => (clone $atendimentos)->whereIn('status', ['agendado', 'em_acompanhamento'])->count(),
                 'atendimentos_realizados' => (clone $atendimentos)->where('status', 'realizado')->count(),
                 'planos_ativos' => PlanoIntervencaoPsicossocial::query()
-                    ->whereHas('atendimento', fn ($query) => $query->whereIn('escola_id', $escolaIds))
+                    ->whereHas('atendimento', fn ($query) => $query->visivelParaUsuario($usuario))
                     ->whereIn('status', ['ativo', 'em_acompanhamento'])
                     ->count(),
                 'encaminhamentos_abertos' => EncaminhamentoPsicossocial::query()
-                    ->whereHas('atendimento', fn ($query) => $query->whereIn('escola_id', $escolaIds))
+                    ->whereHas('atendimento', fn ($query) => $query->visivelParaUsuario($usuario))
                     ->whereIn('status', ['emitido', 'em_acompanhamento'])
                     ->count(),
                 'casos_abertos' => CasoDisciplinarSigiloso::query()
-                    ->whereIn('escola_id', $escolaIds)
+                    ->whereHas('atendimento', fn ($query) => $query->visivelParaUsuario($usuario))
                     ->whereIn('status', ['aberto', 'em_acompanhamento'])
                     ->count(),
                 'relatorios_restritos' => RelatorioTecnicoPsicossocial::query()
-                    ->whereIn('escola_id', $escolaIds)
+                    ->whereHas('atendimento', fn ($query) => $query->visivelParaUsuario($usuario))
                     ->count(),
             ],
             'porPublico' => collect(['aluno', 'professor', 'funcionario', 'responsavel'])
@@ -73,24 +78,24 @@ class PsicossocialService
                 ->get(),
             'planosRecentes' => PlanoIntervencaoPsicossocial::query()
                 ->with('atendimento.atendivel')
-                ->whereHas('atendimento', fn ($query) => $query->whereIn('escola_id', $escolaIds))
+                ->whereHas('atendimento', fn ($query) => $query->visivelParaUsuario($usuario))
                 ->latest('data_inicio')
                 ->take(6)
                 ->get(),
             'encaminhamentosRecentes' => EncaminhamentoPsicossocial::query()
                 ->with('atendimento.atendivel')
-                ->whereHas('atendimento', fn ($query) => $query->whereIn('escola_id', $escolaIds))
+                ->whereHas('atendimento', fn ($query) => $query->visivelParaUsuario($usuario))
                 ->latest('data_encaminhamento')
                 ->take(6)
                 ->get(),
             'casosRecentes' => CasoDisciplinarSigiloso::query()
                 ->with(['atendimento.atendivel'])
-                ->whereIn('escola_id', $escolaIds)
+                ->whereHas('atendimento', fn ($query) => $query->visivelParaUsuario($usuario))
                 ->latest('data_ocorrencia')
                 ->take(6)
                 ->get(),
             'relatoriosRecentes' => RelatorioTecnicoPsicossocial::query()
-                ->whereIn('escola_id', $escolaIds)
+                ->whereHas('atendimento', fn ($query) => $query->visivelParaUsuario($usuario))
                 ->latest('data_emissao')
                 ->take(6)
                 ->get(),
@@ -122,11 +127,9 @@ class PsicossocialService
 
     public function listarRelatorios(Usuario $usuario): Collection
     {
-        $escolaIds = $this->escolaIdsPermitidas($usuario);
-
         return RelatorioTecnicoPsicossocial::query()
             ->with('atendimento.atendivel')
-            ->whereIn('escola_id', $escolaIds)
+            ->whereHas('atendimento', fn ($query) => $query->visivelParaUsuario($usuario))
             ->latest('data_emissao')
             ->get();
     }
@@ -146,7 +149,7 @@ class PsicossocialService
     {
         return PlanoIntervencaoPsicossocial::query()
             ->with(['atendimento.atendivel', 'atendimento.escola'])
-            ->whereHas('atendimento', fn ($query) => $query->whereIn('escola_id', $this->escolaIdsPermitidas($usuario)))
+            ->whereHas('atendimento', fn ($query) => $query->visivelParaUsuario($usuario))
             ->when(! empty($filtros['escola_id']), fn ($query) => $query->whereHas('atendimento', fn ($subquery) => $subquery->where('escola_id', $filtros['escola_id'])))
             ->when(! empty($filtros['status']), fn ($query) => $query->where('status', $filtros['status']))
             ->orderByDesc('data_inicio')
@@ -158,7 +161,7 @@ class PsicossocialService
     {
         return EncaminhamentoPsicossocial::query()
             ->with(['atendimento.atendivel', 'atendimento.escola'])
-            ->whereHas('atendimento', fn ($query) => $query->whereIn('escola_id', $this->escolaIdsPermitidas($usuario)))
+            ->whereHas('atendimento', fn ($query) => $query->visivelParaUsuario($usuario))
             ->when(! empty($filtros['escola_id']), fn ($query) => $query->whereHas('atendimento', fn ($subquery) => $subquery->where('escola_id', $filtros['escola_id'])))
             ->when(! empty($filtros['tipo']), fn ($query) => $query->where('tipo', $filtros['tipo']))
             ->when(! empty($filtros['status']), fn ($query) => $query->where('status', $filtros['status']))
@@ -171,7 +174,7 @@ class PsicossocialService
     {
         return CasoDisciplinarSigiloso::query()
             ->with(['atendimento.atendivel', 'escola'])
-            ->whereIn('escola_id', $this->escolaIdsPermitidas($usuario))
+            ->whereHas('atendimento', fn ($query) => $query->visivelParaUsuario($usuario))
             ->when(! empty($filtros['escola_id']), fn ($query) => $query->where('escola_id', $filtros['escola_id']))
             ->when(! empty($filtros['status']), fn ($query) => $query->where('status', $filtros['status']))
             ->orderByDesc('data_ocorrencia')
@@ -183,7 +186,7 @@ class PsicossocialService
     {
         return RelatorioTecnicoPsicossocial::query()
             ->with(['atendimento.atendivel', 'atendimento.escola'])
-            ->whereIn('escola_id', $this->escolaIdsPermitidas($usuario))
+            ->whereHas('atendimento', fn ($query) => $query->visivelParaUsuario($usuario))
             ->when(! empty($filtros['escola_id']), fn ($query) => $query->where('escola_id', $filtros['escola_id']))
             ->when(! empty($filtros['tipo_relatorio']), fn ($query) => $query->where('tipo_relatorio', $filtros['tipo_relatorio']))
             ->orderByDesc('data_emissao')
@@ -242,7 +245,7 @@ class PsicossocialService
 
     public function criarPlano(Usuario $usuario, AtendimentoPsicossocial $atendimento, array $dados): PlanoIntervencaoPsicossocial
     {
-        $this->garantirEscolaPermitida($usuario, $atendimento->escola_id);
+        $this->garantirAcessoAoAtendimento($usuario, $atendimento);
 
         return $atendimento->planosIntervencao()->create([
             ...$dados,
@@ -252,7 +255,7 @@ class PsicossocialService
 
     public function criarEncaminhamento(Usuario $usuario, AtendimentoPsicossocial $atendimento, array $dados): EncaminhamentoPsicossocial
     {
-        $this->garantirEscolaPermitida($usuario, $atendimento->escola_id);
+        $this->garantirAcessoAoAtendimento($usuario, $atendimento);
 
         return $atendimento->encaminhamentos()->create([
             ...$dados,
@@ -262,7 +265,7 @@ class PsicossocialService
 
     public function criarCasoDisciplinar(Usuario $usuario, AtendimentoPsicossocial $atendimento, array $dados): CasoDisciplinarSigiloso
     {
-        $this->garantirEscolaPermitida($usuario, $atendimento->escola_id);
+        $this->garantirAcessoAoAtendimento($usuario, $atendimento);
 
         return $atendimento->casosDisciplinares()->create([
             ...$dados,
@@ -273,7 +276,7 @@ class PsicossocialService
 
     public function criarRelatorio(Usuario $usuario, AtendimentoPsicossocial $atendimento, array $dados): RelatorioTecnicoPsicossocial
     {
-        $this->garantirEscolaPermitida($usuario, $atendimento->escola_id);
+        $this->garantirAcessoAoAtendimento($usuario, $atendimento);
 
         return $atendimento->relatoriosTecnicos()->create([
             ...$dados,
@@ -284,7 +287,7 @@ class PsicossocialService
 
     public function carregarAtendimento(Usuario $usuario, AtendimentoPsicossocial $atendimento): AtendimentoPsicossocial
     {
-        $this->garantirEscolaPermitida($usuario, $atendimento->escola_id);
+        $this->garantirAcessoAoAtendimento($usuario, $atendimento);
 
         $this->auditoriaService->registrarVisualizacaoSensivel(
             'psicossocial',
@@ -321,11 +324,9 @@ class PsicossocialService
 
     private function baseAtendimentos(Usuario $usuario, array $filtros)
     {
-        $escolaIds = $this->escolaIdsPermitidas($usuario);
-
         $query = AtendimentoPsicossocial::query()
             ->with(['escola', 'atendivel', 'profissionalResponsavel'])
-            ->whereIn('escola_id', $escolaIds);
+            ->visivelParaUsuario($usuario);
 
         if (! empty($filtros['escola_id'])) {
             $query->where('escola_id', $filtros['escola_id']);
@@ -421,6 +422,8 @@ class PsicossocialService
 
     public function listarDemandasa(Usuario $usuario, array $filtros = []): LengthAwarePaginator
     {
+        $this->sincronizarDemandasPorStatusDoAtendimento();
+
         return DemandaPsicossocial::query()
             ->with(['escola', 'aluno', 'funcionario', 'profissionalResponsavel'])
             ->whereIn('escola_id', $this->escolaIdsPermitidas($usuario))
@@ -462,6 +465,7 @@ class PsicossocialService
     public function carregarDemanda(Usuario $usuario, DemandaPsicossocial $demanda): DemandaPsicossocial
     {
         $this->garantirEscolaPermitida($usuario, $demanda->escola_id);
+        $this->sincronizarDemandaComAtendimento($demanda);
 
         return $demanda->load(['escola', 'aluno', 'funcionario', 'usuarioRegistro', 'profissionalResponsavel', 'atendimento']);
     }
@@ -492,7 +496,11 @@ class PsicossocialService
             return null;
         }
 
-        $atendimento = $this->criarAtendimentoAPartirDeDemanda($usuario, $demanda);
+        $atendimento = $this->criarAtendimentoAPartirDeDemanda(
+            $usuario,
+            $demanda,
+            $dados['profissional_responsavel_id'] ?? null
+        );
         $demanda->update([
             'status' => 'em_atendimento',
             'profissional_responsavel_id' => $dados['profissional_responsavel_id'] ?? null,
@@ -503,12 +511,16 @@ class PsicossocialService
         return $atendimento;
     }
 
-    private function criarAtendimentoAPartirDeDemanda(Usuario $usuario, DemandaPsicossocial $demanda): AtendimentoPsicossocial
+    private function criarAtendimentoAPartirDeDemanda(
+        Usuario $usuario,
+        DemandaPsicossocial $demanda,
+        ?int $profissionalResponsavelId = null
+    ): AtendimentoPsicossocial
     {
         $dados = [
             'escola_id' => $demanda->escola_id,
             'usuario_registro_id' => $usuario->id,
-            'profissional_responsavel_id' => $demanda->profissional_responsavel_id,
+            'profissional_responsavel_id' => $profissionalResponsavelId ?? $demanda->profissional_responsavel_id,
             'tipo_publico' => $demanda->tipo_publico,
             'tipo_atendimento' => $demanda->tipo_atendimento,
             'natureza' => 'agendado',
@@ -534,7 +546,7 @@ class PsicossocialService
 
     public function criarSessao(Usuario $usuario, AtendimentoPsicossocial $atendimento, array $dados): SessaoAtendimento
     {
-        $this->garantirEscolaPermitida($usuario, $atendimento->escola_id);
+        $this->garantirAcessoAoAtendimento($usuario, $atendimento);
 
         return DB::transaction(function () use ($usuario, $atendimento, $dados) {
             $sessao = $atendimento->sessoes()->create([
@@ -556,7 +568,7 @@ class PsicossocialService
 
     public function criarDevolutiva(Usuario $usuario, AtendimentoPsicossocial $atendimento, array $dados): DevolutivaPsicossocial
     {
-        $this->garantirEscolaPermitida($usuario, $atendimento->escola_id);
+        $this->garantirAcessoAoAtendimento($usuario, $atendimento);
 
         return $atendimento->devolutivas()->create([
             ...$dados,
@@ -566,7 +578,7 @@ class PsicossocialService
 
     public function criarReavaliacao(Usuario $usuario, AtendimentoPsicossocial $atendimento, array $dados): ReavaliacaoPsicossocial
     {
-        $this->garantirEscolaPermitida($usuario, $atendimento->escola_id);
+        $this->garantirAcessoAoAtendimento($usuario, $atendimento);
 
         return DB::transaction(function () use ($usuario, $atendimento, $dados) {
             $reavaliacao = $atendimento->reavaliacoes()->create([
@@ -576,6 +588,7 @@ class PsicossocialService
 
             if ($dados['decisao'] === 'encerrar') {
                 $atendimento->update(['status' => 'encerrado']);
+                $this->sincronizarDemandaComAtendimento($atendimento->demanda);
             }
 
             return $reavaliacao;
@@ -584,16 +597,49 @@ class PsicossocialService
 
     public function encerrarAtendimento(Usuario $usuario, AtendimentoPsicossocial $atendimento, array $dados): AtendimentoPsicossocial
     {
-        $this->garantirEscolaPermitida($usuario, $atendimento->escola_id);
+        $this->garantirAcessoAoAtendimento($usuario, $atendimento);
 
-        $atendimento->update([
-            'status' => 'encerrado',
-            'data_encerramento' => $dados['data_encerramento'] ?? now()->toDateString(),
-            'motivo_encerramento' => $dados['motivo_encerramento'] ?? null,
-            'resumo_encerramento' => $dados['resumo_encerramento'] ?? null,
-            'orientacoes_finais' => $dados['orientacoes_finais'] ?? null,
-        ]);
+        return DB::transaction(function () use ($atendimento, $dados) {
+            $atendimento->update([
+                'status' => 'encerrado',
+                'data_encerramento' => $dados['data_encerramento'] ?? now()->toDateString(),
+                'motivo_encerramento' => $dados['motivo_encerramento'] ?? null,
+                'resumo_encerramento' => $dados['resumo_encerramento'] ?? null,
+                'orientacoes_finais' => $dados['orientacoes_finais'] ?? null,
+            ]);
 
-        return $atendimento;
+            $this->sincronizarDemandaComAtendimento($atendimento->demanda);
+
+            return $atendimento;
+        });
+    }
+
+    private function sincronizarDemandasPorStatusDoAtendimento(): void
+    {
+        DemandaPsicossocial::query()
+            ->where('status', 'em_atendimento')
+            ->whereNotNull('atendimento_id')
+            ->whereHas('atendimento', fn ($query) => $query->where('status', 'encerrado'))
+            ->update(['status' => 'encerrada']);
+    }
+
+    private function sincronizarDemandaComAtendimento(?DemandaPsicossocial $demanda): void
+    {
+        if (! $demanda || ! $demanda->atendimento_id) {
+            return;
+        }
+
+        $demanda->loadMissing('atendimento');
+
+        if ($demanda->atendimento?->status === 'encerrado' && $demanda->status !== 'encerrada') {
+            $demanda->update(['status' => 'encerrada']);
+        }
+    }
+
+    private function garantirAcessoAoAtendimento(Usuario $usuario, AtendimentoPsicossocial $atendimento): void
+    {
+        if (! $atendimento->visivelParaUsuario($usuario)) {
+            abort(403, 'Acesso negado a atendimento sigiloso de outro profissional.');
+        }
     }
 }

@@ -8,7 +8,16 @@
             ],
         ])
         ->toArray();
+    $perfisData = $perfis
+        ->mapWithKeys(fn ($perfil) => [
+            (string) $perfil->id => [
+                'name' => $perfil->name,
+            ],
+        ])
+        ->toArray();
     $semFuncionariosDisponiveis = $funcionarios->isEmpty();
+    $cargosPsicossociais = \App\Support\CargosPsicossociais::labels();
+    $perfilPsicossocial = 'Psicologia/Psicopedagogia';
 @endphp
 
 <x-secretaria-layout>
@@ -95,13 +104,19 @@
 
             <div>
                 <x-input-label for="escolas" :value="__('Vinculo com Escolas (Segure CTRL para multipla selecao)')" />
-                <select id="escolas" name="escolas[]" multiple class="block mt-1 w-full border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm min-h-[100px]">
-                    @foreach ($escolas as $escola)
-                        <option value="{{ $escola->id }}" {{ (is_array(old('escolas')) && in_array($escola->id, old('escolas'))) ? 'selected' : '' }}>
-                            {{ $escola->nome }}
-                        </option>
-                    @endforeach
-                </select>
+                <p id="escolas-help" class="mt-1 text-xs text-gray-500">Selecione manualmente as escolas apenas para usuarios que nao pertencem ao portal da psicologia.</p>
+                <div id="escolas-auto" class="mt-2 hidden rounded-lg border border-amber-200 bg-amber-50 px-3 py-2 text-xs text-amber-800">
+                    Para psicologo, psicopedagogo ou perfil Psicologia/Psicopedagogia, o acesso sera vinculado automaticamente a todas as escolas ativas da rede.
+                </div>
+                <div id="escolas-wrapper">
+                    <select id="escolas" name="escolas[]" multiple class="block mt-1 w-full border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm min-h-[100px]">
+                        @foreach ($escolas as $escola)
+                            <option value="{{ $escola->id }}" {{ (is_array(old('escolas')) && in_array($escola->id, old('escolas'))) ? 'selected' : '' }}>
+                                {{ $escola->nome }}
+                            </option>
+                        @endforeach
+                    </select>
+                </div>
             </div>
 
             <div>
@@ -125,14 +140,40 @@
             document.addEventListener('DOMContentLoaded', function () {
                 const funcionarios = @json($funcionariosData, JSON_UNESCAPED_UNICODE);
                 const funcionarioSelect = document.getElementById('funcionario_id');
+                const roleSelect = document.getElementById('role');
                 const nomeInput = document.getElementById('name');
                 const emailInput = document.getElementById('email');
                 const emailAlert = document.getElementById('funcionario-email-alert');
                 const saveButton = document.getElementById('save-usuario-button');
+                const escolasSelect = document.getElementById('escolas');
+                const escolasWrapper = document.getElementById('escolas-wrapper');
+                const escolasHelp = document.getElementById('escolas-help');
+                const escolasAuto = document.getElementById('escolas-auto');
+                const perfis = @json($perfisData, JSON_UNESCAPED_UNICODE);
+                const cargosPsicossociais = @json($cargosPsicossociais, JSON_UNESCAPED_UNICODE);
+                const perfilPsicossocial = @json($perfilPsicossocial);
 
-                if (!funcionarioSelect || !nomeInput || !emailInput || !saveButton) {
+                if (!funcionarioSelect || !roleSelect || !nomeInput || !emailInput || !saveButton || !escolasSelect) {
                     return;
                 }
+
+                const normalizarTexto = (valor) => (valor || '')
+                    .normalize('NFD')
+                    .replace(/[\u0300-\u036f]/g, '')
+                    .toLowerCase();
+
+                const atualizarVisibilidadeEscolas = () => {
+                    const funcionario = funcionarios[funcionarioSelect.value] || null;
+                    const perfil = perfis[roleSelect.value] || null;
+                    const acessoAutomatico =
+                        cargosPsicossociais.map(normalizarTexto).includes(normalizarTexto(funcionario ? funcionario.cargo : ''))
+                        || normalizarTexto(perfil ? perfil.name : '') === normalizarTexto(perfilPsicossocial);
+
+                    escolasWrapper.classList.toggle('hidden', acessoAutomatico);
+                    escolasHelp.classList.toggle('hidden', acessoAutomatico);
+                    escolasAuto.classList.toggle('hidden', !acessoAutomatico);
+                    escolasSelect.disabled = acessoAutomatico;
+                };
 
                 const updateFormFromFuncionario = () => {
                     const funcionario = funcionarios[funcionarioSelect.value] || null;
@@ -145,9 +186,11 @@
                     saveButton.disabled = !funcionario || !hasEmail;
                     saveButton.classList.toggle('opacity-60', saveButton.disabled);
                     saveButton.classList.toggle('cursor-not-allowed', saveButton.disabled);
+                    atualizarVisibilidadeEscolas();
                 };
 
                 funcionarioSelect.addEventListener('change', updateFormFromFuncionario);
+                roleSelect.addEventListener('change', atualizarVisibilidadeEscolas);
                 updateFormFromFuncionario();
             });
         </script>

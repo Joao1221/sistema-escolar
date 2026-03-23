@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 
 class AtendimentoPsicossocial extends Model
@@ -121,5 +122,41 @@ class AtendimentoPsicossocial extends Model
         }
 
         return $this->atendivel?->nome ?? 'Nao identificado';
+    }
+
+    public function scopeVisivelParaUsuario(Builder $query, Usuario $usuario): Builder
+    {
+        if (! $usuario->acessaPortalPsicossocial()) {
+            return $query->whereIn('escola_id', $usuario->escolas()->pluck('escolas.id'));
+        }
+
+        $funcionarioId = $usuario->resolverFuncionario()?->id;
+
+        return $query->where(function (Builder $subquery) use ($usuario, $funcionarioId) {
+            if ($funcionarioId !== null) {
+                $subquery->where('profissional_responsavel_id', $funcionarioId)
+                    ->orWhere(function (Builder $legacyQuery) use ($usuario) {
+                        $legacyQuery->whereNull('profissional_responsavel_id')
+                            ->where('usuario_registro_id', $usuario->id);
+                    });
+
+                return;
+            }
+
+            $subquery->whereNull('profissional_responsavel_id')
+                ->where('usuario_registro_id', $usuario->id);
+        });
+    }
+
+    public function visivelParaUsuario(Usuario $usuario): bool
+    {
+        if (! $usuario->acessaPortalPsicossocial()) {
+            return $usuario->escolas()->where('escolas.id', $this->escola_id)->exists();
+        }
+
+        $funcionarioId = $usuario->resolverFuncionario()?->id;
+
+        return ($funcionarioId !== null && (int) $this->profissional_responsavel_id === (int) $funcionarioId)
+            || ($this->profissional_responsavel_id === null && (int) $this->usuario_registro_id === (int) $usuario->id);
     }
 }

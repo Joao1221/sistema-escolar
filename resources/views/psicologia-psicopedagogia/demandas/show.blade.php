@@ -15,10 +15,12 @@
                     <span class="rounded-xl bg-blue-100 px-4 py-2 text-sm font-semibold text-blue-700">Aguardando triagem</span>
                 @elseif ($demanda->status === 'em_triagem')
                     <span class="rounded-xl bg-purple-100 px-4 py-2 text-sm font-semibold text-purple-700">Em triagem</span>
-                @elseif ($demanda->status === 'em_atendimento')
+                @elseif ($demanda->status === 'em_atendimento' && $demanda->atendimento && auth()->user()?->can('view', $demanda->atendimento))
                     <a href="{{ route('psicologia.show', $demanda->atendimento) }}" class="rounded-xl border border-emerald-600 bg-emerald-600 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-emerald-700">
                         Ver atendimento
                     </a>
+                @elseif ($demanda->status === 'em_atendimento')
+                    <span class="rounded-xl bg-emerald-50 px-4 py-2 text-sm font-semibold text-emerald-700">Atendimento atribuido a outro profissional</span>
                 @elseif ($demanda->status === 'encerrada')
                     <span class="rounded-xl bg-slate-100 px-4 py-2 text-sm font-semibold text-slate-600">Encerrada</span>
                 @endif
@@ -74,7 +76,7 @@
                                 <label class="block text-xs font-semibold uppercase tracking-wider text-slate-500">Nivel de sigilo</label>
                                 <select name="nivel_sigilo" class="mt-1 w-full rounded-xl border-slate-300 shadow-sm">
                                     <option value="normal">Normal</option>
-                                    <option value="reforcado">Reforado</option>
+                                    <option value="reforcado">Reforçado</option>
                                 </select>
                             </div>
                         </div>

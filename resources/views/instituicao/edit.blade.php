@@ -94,12 +94,12 @@
                 <div class="border-b border-gray-100 pb-6">
                     <h3 class="text-base font-bold mb-4">Logomarcas e Brasões <span class="text-sm font-normal text-gray-500">(JPG ou PNG)</span></h3>
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                        @foreach ([['brasao', 'Brasão', $instituicao->brasao_path], ['logo_prefeitura', 'Logo Prefeitura', $instituicao->logo_prefeitura_path], ['logo_secretaria', 'Logo Secretaria', $instituicao->logo_secretaria_path]] as [$field, $label, $path])
+                        @foreach ([['brasao', 'Brasão', $instituicao->brasao_url], ['logo_prefeitura', 'Logo Prefeitura', $instituicao->logo_prefeitura_url], ['logo_secretaria', 'Logo Secretaria', $instituicao->logo_secretaria_url]] as [$field, $label, $path])
                         <div class="border border-gray-200 rounded-xl p-4 bg-gray-50">
                             <x-input-label :for="$field" :value="$label" class="mb-2"/>
                             @if ($path)
                                 <div class="mb-2 h-20 bg-white border flex items-center justify-center p-1 rounded">
-                                    <img src="{{ asset('storage/' . $path) }}" class="max-h-16 object-contain" alt="{{ $label }}">
+                                    <img src="{{ $path }}" class="max-h-16 object-contain" alt="{{ $label }}">
                                 </div>
                             @endif
                             <input type="file" :id="$field" name="{{ $field }}" class="w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100" accept=".jpg,.jpeg,.png">

@@ -2,7 +2,9 @@
 
 namespace App\Http\Requests;
 
+use App\Support\CargosPsicossociais;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class UpdateFuncionarioRequest extends FormRequest
 {
@@ -13,13 +15,15 @@ class UpdateFuncionarioRequest extends FormRequest
 
     public function rules(): array
     {
+        $exigeEscolas = ! CargosPsicossociais::contains($this->input('cargo'));
+
         return [
             'nome' => ['required', 'string', 'max:255'],
             'cpf' => ['required', 'string', 'max:14', 'unique:funcionarios,cpf,' . $this->route('funcionario')->id],
             'email' => ['nullable', 'email', 'max:255'],
             'telefone' => ['nullable', 'string', 'max:20'],
             'cargo' => ['required', 'string', 'max:100'],
-            'escolas' => ['required', 'array', 'min:1'],
+            'escolas' => [Rule::requiredIf($exigeEscolas), 'nullable', 'array', 'min:1'],
             'escolas.*' => ['exists:escolas,id'],
             'ativo' => ['boolean'],
         ];
