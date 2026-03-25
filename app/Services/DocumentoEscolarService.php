@@ -17,6 +17,7 @@ use App\Models\Usuario;
 use App\Support\ArquivoPublicoUrl;
 use App\Support\DocumentosPortal;
 use Illuminate\Auth\Access\AuthorizationException;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Str;
@@ -599,6 +600,7 @@ class DocumentoEscolarService
             $relatorio->atendimento->tipo_atendimento
         );
         $nomeProfissional = $relatorio->usuarioEmissor?->resolverFuncionario()?->nome ?: $relatorio->usuarioEmissor?->name;
+        $emitidoEm = $this->resolverDataHoraDocumento($relatorio->created_at);
 
         return $this->montarDocumentoBase(
             'Relatorio Tecnico',
@@ -621,6 +623,7 @@ class DocumentoEscolarService
             ],
             [
                 'layout' => 'relatorio-tecnico',
+                'emitido_em' => $emitidoEm,
                 'assinaturas_personalizadas' => array_values(array_filter([
                     $nomeProfissional
                         ? trim($nomeProfissional . ' - ' . ($tipoProfissional ?: 'Nao informado'))
@@ -674,11 +677,15 @@ class DocumentoEscolarService
             ->filter()
             ->values()
             ->all();
+        $emitidoEm = $this->resolverDataHoraDocumento($meta['emitido_em'] ?? null);
+        $codigo = $meta['codigo'] ?? $emitidoEm->format('YmdHis');
+
+        unset($meta['emitido_em'], $meta['codigo']);
 
         return [
             'titulo' => $titulo,
-            'codigo' => now()->format('YmdHis'),
-            'emitido_em' => now(),
+            'codigo' => $codigo,
+            'emitido_em' => $emitidoEm,
             'instituicao' => [
                 'nome_prefeitura' => $instituicao?->nome_prefeitura,
                 'nome_secretaria' => $instituicao?->nome_secretaria,
@@ -707,6 +714,26 @@ class DocumentoEscolarService
             'secoes' => $secoes,
             ...$meta,
         ];
+    }
+
+    private function resolverDataHoraDocumento(mixed $instante = null): Carbon
+    {
+        $timezone = $this->timezoneDocumentos();
+
+        if ($instante instanceof \DateTimeInterface) {
+            return Carbon::instance($instante)->setTimezone($timezone);
+        }
+
+        if (is_string($instante) && trim($instante) !== '') {
+            return Carbon::parse($instante)->setTimezone($timezone);
+        }
+
+        return now($timezone);
+    }
+
+    private function timezoneDocumentos(): string
+    {
+        return config('app.document_timezone', 'America/Sao_Paulo');
     }
 
     private function carregarAluno(Usuario $usuario, int $alunoId): Aluno

@@ -5,6 +5,21 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <title>{{ $documento['titulo'] }}</title>
         @vite(['resources/css/app.css'])
+        <style>
+            @media print {
+                .print\:border-0,
+                .print\:border-0 * {
+                    border: none !important;
+                    border-radius: 0 !important;
+                    background: transparent !important;
+                    box-shadow: none !important;
+                }
+                .print\:rounded-none,
+                .print\:rounded-none * {
+                    border-radius: 0 !important;
+                }
+            }
+        </style>
     </head>
     <body class="bg-white p-8 text-slate-900">
         @include('documentos.partials.conteudo', ['documento' => $documento])

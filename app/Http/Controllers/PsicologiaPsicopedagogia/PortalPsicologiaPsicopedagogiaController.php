@@ -42,9 +42,9 @@ class PortalPsicologiaPsicopedagogiaController extends Controller implements Has
             new Middleware('can:registrar planos de intervencao psicossociais', only: ['storePlano']),
             new Middleware('can:registrar encaminhamentos psicossociais', only: ['storeEncaminhamento']),
             new Middleware('can:registrar casos disciplinares sigilosos', only: ['storeCaso']),
-            new Middleware('can:emitir relatorios tecnicos psicossociais', only: ['storeRelatorio']),
+            new Middleware('can:emitir relatorios tecnicos psicossociais', only: ['storeRelatorio', 'editRelatorioTecnico', 'updateRelatorioTecnico', 'destroyRelatorioTecnico']),
             new Middleware('can:consultar documentos psicossociais', only: ['documentos', 'previewDocumento', 'imprimirDocumento']),
-            new Middleware('can:consultar relatorios tecnicos do psicossocial', only: ['relatoriosTecnicos', 'previewRelatorioTecnico', 'imprimirRelatorioTecnico', 'showRelatorioTecnicoEmitido', 'imprimirRelatorioTecnicoEmitido']),
+            new Middleware('can:consultar relatorios tecnicos do psicossocial', only: ['relatoriosTecnicos', 'previewRelatorioTecnico', 'imprimirRelatorioTecnico', 'showRelatorioTecnicoEmitido', 'imprimirRelatorioTecnicoEmitido', 'editRelatorioTecnico', 'updateRelatorioTecnico', 'destroyRelatorioTecnico']),
             new Middleware('can:consultar auditoria psicossocial sigilosa', only: ['auditoria']),
         ];
     }
@@ -193,6 +193,7 @@ class PortalPsicologiaPsicopedagogiaController extends Controller implements Has
 
     public function showRelatorioTecnicoEmitido(Request $request, RelatorioTecnicoPsicossocial $relatorio)
     {
+        $relatorio = $this->psicossocialService->carregarRelatorioTecnico($request->user(), $relatorio);
         $documento = $this->documentoEscolarService->emitir('psicossocial', 'relatorio-tecnico', $request->user(), [
             'relatorio_id' => $relatorio->id,
         ]);
@@ -202,6 +203,22 @@ class PortalPsicologiaPsicopedagogiaController extends Controller implements Has
             'tipoDocumento' => 'relatorio-tecnico',
             'payload' => ['relatorio_id' => $relatorio->id],
             'urlImpressaoDireta' => route('psicologia.relatorios_tecnicos.emitidos.print', $relatorio),
+            'acoesDocumento' => [
+                [
+                    'tipo' => 'link',
+                    'label' => 'Editar relatorio',
+                    'url' => route('psicologia.relatorios_tecnicos.edit', $relatorio),
+                    'estilo' => 'secundario',
+                ],
+                [
+                    'tipo' => 'form',
+                    'label' => 'Excluir relatorio',
+                    'url' => route('psicologia.relatorios_tecnicos.destroy', $relatorio),
+                    'metodo' => 'DELETE',
+                    'confirmacao' => 'Excluir este relatorio tecnico? Esta acao nao pode ser desfeita.',
+                    'estilo' => 'perigo',
+                ],
+            ],
             'tituloPagina' => 'Relatorio tecnico emitido',
             'subtituloPagina' => 'Visualizacao do documento tecnico salvo no atendimento.',
             'breadcrumbs' => $this->psicossocialService->construirBreadcrumbs([
@@ -213,6 +230,8 @@ class PortalPsicologiaPsicopedagogiaController extends Controller implements Has
 
     public function imprimirRelatorioTecnicoEmitido(Request $request, RelatorioTecnicoPsicossocial $relatorio)
     {
+        $relatorio = $this->psicossocialService->carregarRelatorioTecnico($request->user(), $relatorio);
+
         return view('documentos.impressao', [
             'documento' => $this->documentoEscolarService->emitir('psicossocial', 'relatorio-tecnico', $request->user(), [
                 'relatorio_id' => $relatorio->id,
@@ -328,6 +347,45 @@ class PortalPsicologiaPsicopedagogiaController extends Controller implements Has
 
         return redirect()->route('psicologia.show', $atendimento)
             ->with('success', 'Relatorio tecnico emitido com sucesso.');
+    }
+
+    public function editRelatorioTecnico(Request $request, RelatorioTecnicoPsicossocial $relatorio)
+    {
+        $relatorio = $this->psicossocialService->carregarRelatorioTecnico($request->user(), $relatorio);
+        $this->authorize('emitirRelatorio', $relatorio->atendimento);
+
+        return view('psicologia-psicopedagogia.relatorios-tecnicos.edit', [
+            'relatorio' => $relatorio,
+            'atendimento' => $relatorio->atendimento,
+            'tituloPagina' => 'Editar relatorio tecnico',
+            'subtituloPagina' => 'Ajuste o conteudo do relatorio salvo sem alterar o codigo original de emissao.',
+            'breadcrumbs' => $this->psicossocialService->construirBreadcrumbs([
+                ['label' => 'Relatorios tecnicos', 'url' => route('psicologia.relatorios_tecnicos.index')],
+                ['label' => 'Editar'],
+            ]),
+        ]);
+    }
+
+    public function updateRelatorioTecnico(StoreRelatorioTecnicoPsicossocialRequest $request, RelatorioTecnicoPsicossocial $relatorio)
+    {
+        $relatorio = $this->psicossocialService->carregarRelatorioTecnico($request->user(), $relatorio);
+        $this->authorize('emitirRelatorio', $relatorio->atendimento);
+
+        $relatorio = $this->psicossocialService->atualizarRelatorio($request->user(), $relatorio, $request->validated());
+
+        return redirect()->route('psicologia.relatorios_tecnicos.show', $relatorio)
+            ->with('success', 'Relatorio tecnico atualizado com sucesso.');
+    }
+
+    public function destroyRelatorioTecnico(Request $request, RelatorioTecnicoPsicossocial $relatorio)
+    {
+        $relatorio = $this->psicossocialService->carregarRelatorioTecnico($request->user(), $relatorio);
+        $this->authorize('emitirRelatorio', $relatorio->atendimento);
+
+        $this->psicossocialService->excluirRelatorio($request->user(), $relatorio);
+
+        return redirect()->route('psicologia.relatorios_tecnicos.index')
+            ->with('success', 'Relatorio tecnico excluido com sucesso.');
     }
 
     public function auditoria(Request $request)

@@ -118,8 +118,8 @@ class PsicossocialService
         $query = $this->baseAtendimentos($usuario, $filtros);
 
         if (empty($filtros['status'])) {
-            // Historico deve trazer todos os atendimentos finalizados
-            $query->whereIn('status', ['realizado', 'cancelado', 'faltou', 'encerrado']);
+            // Historico deve trazer casos ja convertidos em atendimento, incluindo os agendados.
+            $query->whereIn('status', ['agendado', 'em_acompanhamento', 'realizado', 'cancelado', 'faltou', 'encerrado']);
         }
 
         return $query->orderByDesc('data_agendada')->paginate(15)->withQueryString();
@@ -185,7 +185,7 @@ class PsicossocialService
     public function listarRelatoriosTecnicos(Usuario $usuario, array $filtros = []): LengthAwarePaginator
     {
         return RelatorioTecnicoPsicossocial::query()
-            ->with(['atendimento.atendivel', 'atendimento.escola'])
+            ->with(['atendimento.atendivel', 'atendimento.escola', 'escola'])
             ->whereHas('atendimento', fn ($query) => $query->visivelParaUsuario($usuario))
             ->when(! empty($filtros['escola_id']), fn ($query) => $query->where('escola_id', $filtros['escola_id']))
             ->when(! empty($filtros['tipo_relatorio']), fn ($query) => $query->where('tipo_relatorio', $filtros['tipo_relatorio']))
@@ -283,6 +283,35 @@ class PsicossocialService
             'escola_id' => $atendimento->escola_id,
             'usuario_emissor_id' => $usuario->id,
         ]);
+    }
+
+    public function carregarRelatorioTecnico(Usuario $usuario, RelatorioTecnicoPsicossocial $relatorio): RelatorioTecnicoPsicossocial
+    {
+        $relatorio->loadMissing(['atendimento.escola', 'atendimento.atendivel', 'usuarioEmissor']);
+
+        if (! $relatorio->atendimento) {
+            abort(404, 'Relatorio tecnico sem atendimento vinculado.');
+        }
+
+        $this->garantirAcessoAoAtendimento($usuario, $relatorio->atendimento);
+
+        return $relatorio;
+    }
+
+    public function atualizarRelatorio(Usuario $usuario, RelatorioTecnicoPsicossocial $relatorio, array $dados): RelatorioTecnicoPsicossocial
+    {
+        $relatorio = $this->carregarRelatorioTecnico($usuario, $relatorio);
+
+        $relatorio->update($dados);
+
+        return $relatorio->fresh(['atendimento.escola', 'atendimento.atendivel', 'usuarioEmissor']);
+    }
+
+    public function excluirRelatorio(Usuario $usuario, RelatorioTecnicoPsicossocial $relatorio): void
+    {
+        $relatorio = $this->carregarRelatorioTecnico($usuario, $relatorio);
+
+        $relatorio->delete();
     }
 
     public function carregarAtendimento(Usuario $usuario, AtendimentoPsicossocial $atendimento): AtendimentoPsicossocial
@@ -427,6 +456,7 @@ class PsicossocialService
         return DemandaPsicossocial::query()
             ->with(['escola', 'aluno', 'funcionario', 'profissionalResponsavel'])
             ->whereIn('escola_id', $this->escolaIdsPermitidas($usuario))
+            ->whereNull('atendimento_id')
             ->when(! empty($filtros['escola_id']), fn ($query) => $query->where('escola_id', $filtros['escola_id']))
             ->when(! empty($filtros['status']), fn ($query) => $query->where('status', $filtros['status']))
             ->when(! empty($filtros['tipo_publico']), fn ($query) => $query->where('tipo_publico', $filtros['tipo_publico']))
@@ -466,6 +496,11 @@ class PsicossocialService
     {
         $this->garantirEscolaPermitida($usuario, $demanda->escola_id);
         $this->sincronizarDemandaComAtendimento($demanda);
+        $demanda->loadMissing('atendimento');
+
+        if ($demanda->atendimento) {
+            $this->garantirAcessoAoAtendimento($usuario, $demanda->atendimento);
+        }
 
         return $demanda->load(['escola', 'aluno', 'funcionario', 'usuarioRegistro', 'profissionalResponsavel', 'atendimento']);
     }

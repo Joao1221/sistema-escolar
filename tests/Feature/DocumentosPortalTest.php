@@ -15,6 +15,7 @@ use App\Models\RelatorioTecnicoPsicossocial;
 use App\Models\Turma;
 use App\Models\Usuario;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\URL;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
@@ -251,6 +252,10 @@ class DocumentosPortalTest extends TestCase
             'data_emissao' => '2026-03-18',
             'observacoes_restritas' => 'Observacao final.',
         ]);
+        $relatorio->forceFill([
+            'created_at' => Carbon::parse('2026-03-25 20:55:38', 'UTC'),
+            'updated_at' => Carbon::parse('2026-03-25 20:55:38', 'UTC'),
+        ])->saveQuietly();
 
         $response = $this->actingAs($usuarioPsico)
             ->get(route('psicologia.relatorios_tecnicos.show', $relatorio));
@@ -260,6 +265,8 @@ class DocumentosPortalTest extends TestCase
         $response->assertSee('Relatorio emitido no portal');
         $response->assertSee('Conteudo tecnico visualizavel pelo responsavel.');
         $response->assertSee('Psicologa Portal');
+        $response->assertSee('20260325175538');
+        $response->assertSee('Emitido em 25/03/2026 17:55');
         $response->assertSee('Psicológico');
         $response->assertSee('Psicologa Portal - Psicólogo(a)');
         $response->assertSee('(85) 3000-0000');

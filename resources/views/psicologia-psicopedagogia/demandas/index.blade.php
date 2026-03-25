@@ -23,10 +23,9 @@
                     @endforeach
                 </select>
                 <select name="status" class="rounded-xl border-slate-300 shadow-sm">
-                    <option value="">Todos status</option>
+                    <option value="">Status de demanda</option>
                     <option value="aberta" {{ ($filtros['status'] ?? '') == 'aberta' ? 'selected' : '' }}>Aberta</option>
                     <option value="em_triagem" {{ ($filtros['status'] ?? '') == 'em_triagem' ? 'selected' : '' }}>Em triagem</option>
-                    <option value="em_atendimento" {{ ($filtros['status'] ?? '') == 'em_atendimento' ? 'selected' : '' }}>Em atendimento</option>
                     <option value="observacao" {{ ($filtros['status'] ?? '') == 'observacao' ? 'selected' : '' }}>Observacao</option>
                     <option value="encerrada" {{ ($filtros['status'] ?? '') == 'encerrada' ? 'selected' : '' }}>Encerrada</option>
                 </select>

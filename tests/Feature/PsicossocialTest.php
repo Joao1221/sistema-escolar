@@ -7,6 +7,7 @@ use App\Models\AtendimentoPsicossocial;
 use App\Models\DemandaPsicossocial;
 use App\Models\Escola;
 use App\Models\Funcionario;
+use App\Models\RelatorioTecnicoPsicossocial;
 use App\Models\Usuario;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\URL;
@@ -36,6 +37,7 @@ class PsicossocialTest extends TestCase
             'registrar encaminhamentos psicossociais',
             'registrar casos disciplinares sigilosos',
             'emitir relatorios tecnicos psicossociais',
+            'consultar relatorios tecnicos do psicossocial',
             'acessar dados sigilosos psicossociais',
         ] as $permissao) {
             Permission::findOrCreate($permissao, 'web');
@@ -50,6 +52,7 @@ class PsicossocialTest extends TestCase
             'registrar encaminhamentos psicossociais',
             'registrar casos disciplinares sigilosos',
             'emitir relatorios tecnicos psicossociais',
+            'consultar relatorios tecnicos do psicossocial',
             'acessar dados sigilosos psicossociais',
         ]);
 
@@ -156,6 +159,69 @@ class PsicossocialTest extends TestCase
         ]);
     }
 
+    public function test_profissional_pode_editar_e_excluir_relatorio_tecnico_emitido(): void
+    {
+        [$escola, $aluno] = $this->criarContextoBase();
+        [$usuario, $funcionario] = $this->criarUsuarioPsicossocial($escola, 'Psicologa Editora', 'psico.editora@example.com');
+
+        $atendimento = AtendimentoPsicossocial::create([
+            'escola_id' => $escola->id,
+            'usuario_registro_id' => $usuario->id,
+            'profissional_responsavel_id' => $funcionario->id,
+            'atendivel_type' => Aluno::class,
+            'atendivel_id' => $aluno->id,
+            'tipo_publico' => 'aluno',
+            'tipo_atendimento' => 'psicologia',
+            'natureza' => 'agendado',
+            'status' => 'realizado',
+            'data_agendada' => '2026-03-17 09:00:00',
+            'data_realizacao' => '2026-03-17 09:45:00',
+            'motivo_demanda' => 'Acompanhamento individual.',
+            'nivel_sigilo' => 'alto',
+        ]);
+
+        $relatorio = RelatorioTecnicoPsicossocial::create([
+            'atendimento_psicossocial_id' => $atendimento->id,
+            'escola_id' => $escola->id,
+            'usuario_emissor_id' => $usuario->id,
+            'tipo_relatorio' => 'parecer_inicial',
+            'titulo' => 'Relatorio original',
+            'conteudo_sigiloso' => 'Conteudo original.',
+            'data_emissao' => '2026-03-18',
+        ]);
+
+        $this->actingAs($usuario)
+            ->get(route('psicologia.relatorios_tecnicos.edit', $relatorio))
+            ->assertOk()
+            ->assertSee('Editar relatorio tecnico')
+            ->assertSee('Relatorio original');
+
+        $this->actingAs($usuario)
+            ->patch(route('psicologia.relatorios_tecnicos.update', $relatorio), [
+                'tipo_relatorio' => 'acompanhamento',
+                'titulo' => 'Relatorio atualizado',
+                'conteudo_sigiloso' => 'Conteudo tecnico revisado.',
+                'data_emissao' => '2026-03-19',
+                'observacoes_restritas' => 'Ajuste interno.',
+            ])
+            ->assertRedirect(route('psicologia.relatorios_tecnicos.show', $relatorio));
+
+        $this->assertDatabaseHas('relatorios_tecnicos_psicossociais', [
+            'id' => $relatorio->id,
+            'tipo_relatorio' => 'acompanhamento',
+            'titulo' => 'Relatorio atualizado',
+            'data_emissao' => '2026-03-19',
+        ]);
+
+        $this->actingAs($usuario)
+            ->delete(route('psicologia.relatorios_tecnicos.destroy', $relatorio))
+            ->assertRedirect(route('psicologia.relatorios_tecnicos.index'));
+
+        $this->assertDatabaseMissing('relatorios_tecnicos_psicossociais', [
+            'id' => $relatorio->id,
+        ]);
+    }
+
     public function test_profissional_nao_acessa_atendimento_de_outro_profissional_mesmo_na_mesma_escola(): void
     {
         [$escola, $aluno] = $this->criarContextoBase();
@@ -186,6 +252,69 @@ class PsicossocialTest extends TestCase
             ->get('/psicologia-psicopedagogia/agenda')
             ->assertOk()
             ->assertDontSee('Aluno Sigiloso');
+    }
+
+    public function test_apenas_profissional_atribuido_visualiza_atendimento_originado_da_demanda(): void
+    {
+        [$escola, $aluno] = $this->criarContextoBase();
+
+        [$usuarioCriador] = $this->criarUsuarioPsicossocial($escola, 'Glauber dos Santos Tavares', 'glauber@example.com');
+        [$usuarioAtribuido, $funcionarioAtribuido] = $this->criarUsuarioPsicossocial($escola, 'Naine Ferreira dos Santos', 'naine@example.com');
+        [$usuarioTerceiro] = $this->criarUsuarioPsicossocial($escola, 'Terceiro Psicologo', 'terceiro.psico@example.com');
+
+        $atendimento = AtendimentoPsicossocial::create([
+            'escola_id' => $escola->id,
+            'usuario_registro_id' => $usuarioCriador->id,
+            'profissional_responsavel_id' => $funcionarioAtribuido->id,
+            'atendivel_type' => Aluno::class,
+            'atendivel_id' => $aluno->id,
+            'tipo_publico' => 'aluno',
+            'tipo_atendimento' => 'psicologia',
+            'natureza' => 'agendado',
+            'status' => 'agendado',
+            'data_agendada' => '2026-04-01 09:00:00',
+            'motivo_demanda' => 'Demanda encaminhada para outro profissional.',
+            'nivel_sigilo' => 'muito_restrito',
+        ]);
+
+        $demanda = DemandaPsicossocial::create([
+            'escola_id' => $escola->id,
+            'usuario_registro_id' => $usuarioCriador->id,
+            'profissional_responsavel_id' => $funcionarioAtribuido->id,
+            'tipo_atendimento' => 'psicologia',
+            'origem_demanda' => 'familia',
+            'tipo_publico' => 'aluno',
+            'aluno_id' => $aluno->id,
+            'motivo_inicial' => 'Demanda inicial criada por Glauber.',
+            'prioridade' => 'media',
+            'status' => 'em_atendimento',
+            'data_solicitacao' => '2026-03-25',
+            'encaminhado_para_atendimento' => true,
+            'atendimento_id' => $atendimento->id,
+        ]);
+
+        $this->actingAs($usuarioCriador)
+            ->get('/psicologia-psicopedagogia/historico')
+            ->assertOk()
+            ->assertDontSee('Aluno Sigiloso');
+
+        $this->actingAs($usuarioAtribuido)
+            ->get('/psicologia-psicopedagogia/historico')
+            ->assertOk()
+            ->assertSee('Aluno Sigiloso')
+            ->assertSee('Agendado');
+
+        $this->actingAs($usuarioCriador)
+            ->get("/psicologia-psicopedagogia/atendimentos/{$atendimento->id}")
+            ->assertForbidden();
+
+        $this->actingAs($usuarioCriador)
+            ->get("/psicologia-psicopedagogia/demandas/{$demanda->id}")
+            ->assertForbidden();
+
+        $this->actingAs($usuarioTerceiro)
+            ->get("/psicologia-psicopedagogia/atendimentos/{$atendimento->id}")
+            ->assertForbidden();
     }
 
     public function test_secretaria_escolar_sem_permissao_nao_acessa_modulo_sigiloso(): void
@@ -282,14 +411,66 @@ class PsicossocialTest extends TestCase
         $this->actingAs($usuario)
             ->get('/psicologia-psicopedagogia/demandas')
             ->assertOk()
-            ->assertSee('Aluno Sigiloso')
-            ->assertSee('Encerrada');
+            ->assertDontSee('Aluno Sigiloso')
+            ->assertDontSee('Encerrada');
 
         $this->actingAs($usuario)
             ->get("/psicologia-psicopedagogia/demandas/{$demanda->id}")
             ->assertOk()
             ->assertSee('Encerrada')
             ->assertDontSee('Ver atendimento');
+    }
+
+    public function test_demanda_vinculada_a_atendimento_em_acompanhamento_sai_da_lista_de_demandas_e_aparece_no_historico(): void
+    {
+        [$escola, $aluno] = $this->criarContextoBase();
+        [$usuario, $funcionario] = $this->criarUsuarioPsicossocial($escola, 'Psicologo Fluxo', 'psico.fluxo@example.com');
+
+        $atendimento = AtendimentoPsicossocial::create([
+            'escola_id' => $escola->id,
+            'usuario_registro_id' => $usuario->id,
+            'profissional_responsavel_id' => $funcionario->id,
+            'atendivel_type' => Aluno::class,
+            'atendivel_id' => $aluno->id,
+            'tipo_publico' => 'aluno',
+            'tipo_atendimento' => 'psicologia',
+            'natureza' => 'agendado',
+            'status' => 'em_acompanhamento',
+            'data_agendada' => '2026-03-18 09:00:00',
+            'data_realizacao' => '2026-03-18 09:30:00',
+            'local_atendimento' => 'Sala tecnica',
+            'motivo_demanda' => 'Fluxo apos triagem.',
+            'resumo_sigiloso' => 'Atendimento em curso.',
+            'nivel_sigilo' => 'muito_restrito',
+            'requer_acompanhamento' => true,
+        ]);
+
+        DemandaPsicossocial::create([
+            'escola_id' => $escola->id,
+            'usuario_registro_id' => $usuario->id,
+            'profissional_responsavel_id' => $funcionario->id,
+            'tipo_atendimento' => 'psicologia',
+            'origem_demanda' => 'familia',
+            'tipo_publico' => 'aluno',
+            'aluno_id' => $aluno->id,
+            'motivo_inicial' => 'Demanda inicial.',
+            'prioridade' => 'media',
+            'status' => 'em_atendimento',
+            'data_solicitacao' => '2026-03-17',
+            'encaminhado_para_atendimento' => true,
+            'atendimento_id' => $atendimento->id,
+        ]);
+
+        $this->actingAs($usuario)
+            ->get('/psicologia-psicopedagogia/historico')
+            ->assertOk()
+            ->assertSee('Aluno Sigiloso')
+            ->assertSee('Em acompanhamento');
+
+        $this->actingAs($usuario)
+            ->get('/psicologia-psicopedagogia/demandas')
+            ->assertOk()
+            ->assertDontSee('Aluno Sigiloso');
     }
 
     private function criarContextoBase(): array

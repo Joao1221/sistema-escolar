@@ -378,6 +378,9 @@ Route::middleware(['auth', 'can:acessar modulo psicossocial', 'can:acessar dados
     Route::get('/casos-disciplinares', [PortalPsicologiaPsicopedagogiaController::class, 'casos'])->name('casos.index');
     Route::get('/relatorios-tecnicos', [PortalPsicologiaPsicopedagogiaController::class, 'relatoriosTecnicos'])->name('relatorios_tecnicos.index');
     Route::get('/relatorios-tecnicos/emitidos/{relatorio}', [PortalPsicologiaPsicopedagogiaController::class, 'showRelatorioTecnicoEmitido'])->name('relatorios_tecnicos.show');
+    Route::get('/relatorios-tecnicos/emitidos/{relatorio}/editar', [PortalPsicologiaPsicopedagogiaController::class, 'editRelatorioTecnico'])->name('relatorios_tecnicos.edit');
+    Route::patch('/relatorios-tecnicos/emitidos/{relatorio}', [PortalPsicologiaPsicopedagogiaController::class, 'updateRelatorioTecnico'])->name('relatorios_tecnicos.update');
+    Route::delete('/relatorios-tecnicos/emitidos/{relatorio}', [PortalPsicologiaPsicopedagogiaController::class, 'destroyRelatorioTecnico'])->name('relatorios_tecnicos.destroy');
     Route::get('/relatorios-tecnicos/emitidos/{relatorio}/imprimir', [PortalPsicologiaPsicopedagogiaController::class, 'imprimirRelatorioTecnicoEmitido'])->name('relatorios_tecnicos.emitidos.print');
     Route::post('/documentos/{tipo}/visualizar', [PortalPsicologiaPsicopedagogiaController::class, 'previewDocumento'])->name('documentos.preview');
     Route::post('/documentos/{tipo}/imprimir', [PortalPsicologiaPsicopedagogiaController::class, 'imprimirDocumento'])->name('documentos.print');
