@@ -1,4 +1,7 @@
 <x-psicologia-layout :titulo="$tituloPagina" :subtitulo="$subtituloPagina" :breadcrumbs="$breadcrumbs">
+    @php
+        $encerrado = $atendimento->status === 'encerrado';
+    @endphp
     <div class="space-y-6">
         <div class="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
             <div>
@@ -11,14 +14,14 @@
                 </p>
             </div>
             <div class="flex gap-3 flex-wrap">
-                @if ($atendimento->status === 'agendado')
+                @if ($atendimento->status === 'agendado' && !$encerrado)
                     <form method="POST" action="{{ route('psicologia.atendimento.finalizar', $atendimento) }}">
                         @csrf
                         @method('PATCH')
                         <button type="submit" class="rounded-xl border border-emerald-600 bg-emerald-600 px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-emerald-700">Iniciar Atendimento</button>
                     </form>
                 @endif
-                @if (in_array($atendimento->status, ['em_atendimento', 'realizado', 'em_acompanhamento']))
+                @if (in_array($atendimento->status, ['em_atendimento', 'realizado', 'em_acompanhamento']) && !$encerrado)
                     <button type="button" onclick="showModal('modal-sessao')" class="rounded-xl border border-blue-600 bg-blue-600 px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-blue-700">
                         Registrar Sessao
                     </button>
@@ -43,10 +46,18 @@
                         Reavaliacao
                     </button>
                 @endif
+                @if ($encerrado)
+                    <form method="POST" action="{{ route('psicologia.atendimento.reabrir', $atendimento) }}">
+                        @csrf
+                        <button type="submit" class="rounded-xl border border-emerald-600 bg-emerald-600 px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-emerald-700">
+                            Reabrir atendimento
+                        </button>
+                    </form>
+                @endif
                 <a href="{{ route('psicologia.atendimentos.relatorio_sessoes', $atendimento) }}" target="_blank" class="rounded-xl px-4 py-2 text-sm font-semibold shadow-sm transition" style="background-color:#fbbf24;border:1px solid #d97706;color:#000;" onmouseover="this.style.backgroundColor='#f59e0b'" onmouseout="this.style.backgroundColor='#fbbf24'">
                     Imprimir relatorio do atendimento
                 </a>
-                @if (in_array($atendimento->status, ['em_atendimento', 'em_acompanhamento', 'agendado']))
+                @if (in_array($atendimento->status, ['em_atendimento', 'em_acompanhamento', 'agendado']) && !$encerrado)
                     <button type="button" onclick="showModal('modal-encerrar')" class="rounded-xl border border-red-600 bg-red-600 px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-red-700">
                         Encerrar
                     </button>
@@ -85,9 +96,10 @@
             <section class="rounded-[1.75rem] border border-slate-200 bg-white p-6 shadow-sm">
                 <h2 class="text-lg font-bold text-[#14363a]">Acoes sigilosas</h2>
                 <div class="mt-5 space-y-6 text-sm">
+                    @if (!$encerrado)
                     <form method="POST" action="{{ route('psicologia.planos.store', $atendimento) }}" class="space-y-3 rounded-2xl border border-slate-200 p-4">
                         @csrf
-                        <h3 class="font-semibold text-[#14363a]">Plano de intervencao</h3>
+                        <h3 class="font-bold text-white uppercase text-sm tracking-widest bg-emerald-600 px-3 py-2 rounded-lg">Plano de intervencao</h3>
                         <input type="text" name="objetivo_geral" placeholder="Objetivo geral" class="w-full rounded-xl border-slate-300 shadow-sm">
                         <textarea name="estrategias" rows="3" placeholder="Estrategias" class="w-full rounded-xl border-slate-300 shadow-sm"></textarea>
                         <div class="grid gap-3 md:grid-cols-2">
@@ -103,7 +115,7 @@
 
                     <form method="POST" action="{{ route('psicologia.encaminhamentos.store', $atendimento) }}" class="space-y-3 rounded-2xl border border-slate-200 p-4">
                         @csrf
-                        <h3 class="font-semibold text-[#14363a]">Encaminhamento</h3>
+                        <h3 class="font-bold text-white uppercase text-sm tracking-widest bg-amber-600 px-3 py-2 rounded-lg">Encaminhamento</h3>
                         <div class="grid gap-3 md:grid-cols-2">
                             <select name="tipo" class="rounded-xl border-slate-300 shadow-sm">
                                 <option value="interno">Interno</option>
@@ -129,7 +141,7 @@
 
                     <form method="POST" action="{{ route('psicologia.relatorios_tecnicos.store', $atendimento) }}" class="space-y-3 rounded-2xl border border-slate-200 p-4">
                         @csrf
-                        <h3 class="font-semibold text-[#14363a]">Relatorio tecnico</h3>
+                        <h3 class="font-bold text-white uppercase text-sm tracking-widest bg-indigo-600 px-3 py-2 rounded-lg">Relatorio tecnico</h3>
                         <div class="grid gap-3 md:grid-cols-2">
                             <select name="tipo_relatorio" class="rounded-xl border-slate-300 shadow-sm">
                                 <option value="parecer_inicial">Parecer inicial</option>
@@ -143,6 +155,7 @@
                         <textarea name="conteudo_sigiloso" rows="4" placeholder="Conteudo tecnico" class="w-full rounded-xl border-slate-300 shadow-sm"></textarea>
                         <button type="submit" class="rounded-xl border border-black bg-black px-4 py-2 text-xs font-semibold uppercase tracking-widest text-white shadow-sm transition hover:bg-slate-900">Emitir relatorio</button>
                     </form>
+                    @endif
                 </div>
             </section>
         </div>
@@ -152,10 +165,53 @@
                 <h2 class="text-lg font-bold text-[#14363a]">Planos de intervencao</h2>
                 <div class="mt-4 space-y-3">
                     @forelse ($atendimento->planosIntervencao as $plano)
-                        <div class="rounded-2xl border border-slate-100 p-4">
-                            <p class="font-semibold text-[#14363a]">{{ $plano->objetivo_geral }}</p>
-                            <p class="mt-1 text-xs text-slate-500">{{ $plano->data_inicio->format('d/m/Y') }} | {{ ucfirst(str_replace('_', ' ', $plano->status)) }}</p>
-                        </div>
+                        <details class="group rounded-2xl border border-slate-100 p-4 shadow-[0_4px_12px_rgba(15,23,42,0.04)]" @if($loop->first) open @endif>
+                            <summary class="flex items-center justify-between cursor-pointer">
+                                <div>
+                                    <p class="font-semibold text-[#14363a]">{{ $plano->objetivo_geral }}</p>
+                                    <p class="mt-1 text-xs text-slate-500">{{ $plano->data_inicio->format('d/m/Y') }} | {{ ucfirst(str_replace('_', ' ', $plano->status)) }}</p>
+                                </div>
+                                @if (!$encerrado)
+                                <div class="flex items-center gap-2">
+                                    <a href="{{ route('psicologia.plano.edit', $plano) }}" class="inline-flex items-center rounded-xl border border-cyan-200 bg-cyan-50 px-3 py-2 text-[11px] font-semibold uppercase tracking-widest text-cyan-800 transition hover:bg-cyan-100">
+                                        Editar
+                                    </a>
+                                    <form method="POST" action="{{ route('psicologia.plano.destroy', $plano) }}" onsubmit="return confirm('Excluir este plano? Esta acao nao pode ser desfeita.');">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" title="Excluir plano" class="inline-flex items-center rounded-xl border border-rose-200 bg-rose-50 px-3 py-2 text-rose-700 transition hover:bg-rose-100">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M8.5 2a1 1 0 0 0-.894.553L7.382 3H5a1 1 0 1 0 0 2h.293l.842 10.112A2 2 0 0 0 8.128 17h3.744a2 2 0 0 0 1.993-1.888L14.707 5H15a1 1 0 1 0 0-2h-2.382l-.224-.447A1 1 0 0 0 11.5 2h-3Zm1 5a1 1 0 0 1 1 1v5a1 1 0 1 1-2 0V8a1 1 0 0 1 1-1Zm3 1a1 1 0 1 0-2 0v5a1 1 0 1 0 2 0V8Z" clip-rule="evenodd"/></svg>
+                                        </button>
+                                    </form>
+                                    @endif
+                                    <span class="text-xs font-semibold text-cyan-700 group-open:rotate-180 transition">▼</span>
+                                </div>
+                            </summary>
+                            <div class="mt-3 grid gap-3 md:grid-cols-2 text-sm text-slate-700">
+                                <div class="md:col-span-2">
+                                    <p class="text-xs uppercase tracking-widest text-slate-500">Objetivos especificos</p>
+                                    <p class="mt-1 whitespace-pre-line">{{ $plano->objetivos_especificos ?: 'Nao informado' }}</p>
+                                </div>
+                                <div class="md:col-span-2">
+                                    <p class="text-xs uppercase tracking-widest text-slate-500">Estrategias</p>
+                                    <p class="mt-1 whitespace-pre-line">{{ $plano->estrategias ?: 'Nao informado' }}</p>
+                                </div>
+                                <div class="md:col-span-2">
+                                    <p class="text-xs uppercase tracking-widest text-slate-500">Responsaveis pela execucao</p>
+                                    <p class="mt-1 whitespace-pre-line">{{ $plano->responsaveis_execucao ?: 'Nao informado' }}</p>
+                                </div>
+                                @if($plano->data_fim)
+                                <div>
+                                    <p class="text-xs uppercase tracking-widest text-slate-500">Data fim</p>
+                                    <p class="mt-1 whitespace-pre-line">{{ $plano->data_fim->format('d/m/Y') }}</p>
+                                </div>
+                                @endif
+                                <div class="md:col-span-2">
+                                    <p class="text-xs uppercase tracking-widest text-slate-500">Observacoes sigilosas</p>
+                                    <p class="mt-1 whitespace-pre-line">{{ $plano->observacoes_sigilosas ?: 'Nao informado' }}</p>
+                                </div>
+                            </div>
+                        </details>
                     @empty
                         <p class="text-sm text-slate-500">Nenhum plano cadastrado.</p>
                     @endforelse
@@ -163,25 +219,56 @@
             </section>
 
             <section class="rounded-[1.75rem] border border-slate-200 bg-white p-6 shadow-sm">
-                <div class="flex items-center justify-between">
-                    <h2 class="text-lg font-bold text-[#14363a]">Encaminhamentos</h2>
-                    <form method="POST" action="{{ route('psicologia.casos.store', $atendimento) }}" class="flex items-center gap-2">
-                        @csrf
-                        <input type="hidden" name="aluno_id" value="{{ $atendimento->atendivel instanceof \App\Models\Aluno ? $atendimento->atendivel->id : '' }}">
-                        <input type="hidden" name="funcionario_id" value="{{ $atendimento->atendivel instanceof \App\Models\Funcionario ? $atendimento->atendivel->id : '' }}">
-                        <input type="hidden" name="data_ocorrencia" value="{{ now()->toDateString() }}">
-                        <input type="hidden" name="titulo" value="Caso disciplinar vinculado ao atendimento">
-                        <input type="hidden" name="descricao_sigilosa" value="Registro disciplinar criado a partir do atendimento sigiloso.">
-                        <input type="hidden" name="status" value="aberto">
-                        <button type="submit" class="rounded-xl border border-black bg-black px-3 py-2 text-xs font-semibold uppercase tracking-widest text-white shadow-sm transition hover:bg-slate-900">Abrir caso</button>
-                    </form>
-                </div>
+                <h2 class="text-lg font-bold text-[#14363a]">Encaminhamentos</h2>
                 <div class="mt-4 space-y-3">
                     @forelse ($atendimento->encaminhamentos as $encaminhamento)
-                        <div class="rounded-2xl border border-slate-100 p-4">
-                            <p class="font-semibold text-[#14363a]">{{ ucfirst(str_replace('_', ' ', $encaminhamento->tipo)) }} - {{ $encaminhamento->destino }}</p>
-                            <p class="mt-1 text-xs text-slate-500">{{ $encaminhamento->data_encaminhamento->format('d/m/Y') }} | {{ ucfirst(str_replace('_', ' ', $encaminhamento->status)) }}</p>
-                        </div>
+                        <details class="group rounded-2xl border border-slate-100 p-4 shadow-[0_4px_12px_rgba(15,23,42,0.04)]" @if($loop->first) open @endif>
+                            <summary class="flex items-center justify-between cursor-pointer">
+                                <div>
+                                    <p class="font-semibold text-[#14363a]">{{ ucfirst(str_replace('_', ' ', $encaminhamento->tipo)) }} - {{ $encaminhamento->destino }}</p>
+                                    <p class="mt-1 text-xs text-slate-500">{{ $encaminhamento->data_encaminhamento->format('d/m/Y') }} | {{ ucfirst(str_replace('_', ' ', $encaminhamento->status)) }}</p>
+                                </div>
+                                <div class="flex items-center gap-2">
+                                    @if (!$encerrado)
+                                    <a href="{{ route('psicologia.encaminhamento.edit', $encaminhamento) }}" class="inline-flex items-center rounded-xl border border-cyan-200 bg-cyan-50 px-3 py-2 text-[11px] font-semibold uppercase tracking-widest text-cyan-800 transition hover:bg-cyan-100">
+                                        Editar
+                                    </a>
+                                    <form method="POST" action="{{ route('psicologia.encaminhamento.destroy', $encaminhamento) }}" onsubmit="return confirm('Excluir este encaminhamento? Esta acao nao pode ser desfeita.');">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" title="Excluir encaminhamento" class="inline-flex items-center rounded-xl border border-rose-200 bg-rose-50 px-3 py-2 text-rose-700 transition hover:bg-rose-100">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M8.5 2a1 1 0 0 0-.894.553L7.382 3H5a1 1 0 1 0 0 2h.293l.842 10.112A2 2 0 0 0 8.128 17h3.744a2 2 0 0 0 1.993-1.888L14.707 5H15a1 1 0 1 0 0-2h-2.382l-.224-.447A1 1 0 0 0 11.5 2h-3Zm1 5a1 1 0 0 1 1 1v5a1 1 0 1 1-2 0V8a1 1 0 0 1 1-1Zm3 1a1 1 0 1 0-2 0v5a1 1 0 1 0 2 0V8Z" clip-rule="evenodd"/></svg>
+                                        </button>
+                                    </form>
+                                    @endif
+                                    <span class="text-xs font-semibold text-cyan-700 group-open:rotate-180 transition">▼</span>
+                                </div>
+                            </summary>
+                            <div class="mt-3 grid gap-3 md:grid-cols-2 text-sm text-slate-700">
+                                <div class="md:col-span-2">
+                                    <p class="text-xs uppercase tracking-widest text-slate-500">Motivo</p>
+                                    <p class="mt-1 whitespace-pre-line">{{ $encaminhamento->motivo ?: 'Nao informado' }}</p>
+                                </div>
+                                <div>
+                                    <p class="text-xs uppercase tracking-widest text-slate-500">Profissional de destino</p>
+                                    <p class="mt-1 whitespace-pre-line">{{ $encaminhamento->profissional_destino ?: 'Nao informado' }}</p>
+                                </div>
+                                <div>
+                                    <p class="text-xs uppercase tracking-widest text-slate-500">Instituicao de destino</p>
+                                    <p class="mt-1 whitespace-pre-line">{{ $encaminhamento->instituicao_destino ?: 'Nao informado' }}</p>
+                                </div>
+                                <div class="md:col-span-2">
+                                    <p class="text-xs uppercase tracking-widest text-slate-500">Orientacoes sigilosas</p>
+                                    <p class="mt-1 whitespace-pre-line">{{ $encaminhamento->orientacoes_sigilosas ?: 'Nao informado' }}</p>
+                                </div>
+                                @if($encaminhamento->retorno_previsto_em)
+                                <div>
+                                    <p class="text-xs uppercase tracking-widest text-slate-500">Retorno previsto em</p>
+                                    <p class="mt-1 whitespace-pre-line">{{ $encaminhamento->retorno_previsto_em->format('d/m/Y') }}</p>
+                                </div>
+                                @endif
+                            </div>
+                        </details>
                     @empty
                         <p class="text-sm text-slate-500">Nenhum encaminhamento registrado.</p>
                     @endforelse
@@ -202,6 +289,7 @@
                                     <a href="{{ route('psicologia.relatorios_tecnicos.show', $relatorio) }}" class="inline-flex items-center rounded-xl border border-slate-300 px-3 py-2 text-[11px] font-semibold uppercase tracking-widest text-slate-700 transition hover:bg-slate-100">
                                         Abrir
                                     </a>
+                                    @if (!$encerrado)
                                     <a href="{{ route('psicologia.relatorios_tecnicos.edit', $relatorio) }}" class="inline-flex items-center rounded-xl border border-cyan-200 bg-cyan-50 px-3 py-2 text-[11px] font-semibold uppercase tracking-widest text-cyan-800 transition hover:bg-cyan-100">
                                         Editar
                                     </a>
@@ -215,6 +303,7 @@
                                             <span class="sr-only">Excluir</span>
                                         </button>
                                     </form>
+                                    @endif
                                 </div>
                             </div>
                         </div>
@@ -279,10 +368,43 @@
                 <h2 class="text-lg font-bold text-[#14363a]">Devolutivas</h2>
                 <div class="mt-4 space-y-3">
                     @forelse ($atendimento->devolutivas as $devolutiva)
-                        <div class="rounded-2xl border border-slate-100 p-4">
-                            <p class="font-semibold text-[#14363a]">{{ ucfirst($devolutiva->destinatario) }}</p>
-                            <p class="mt-1 text-xs text-slate-500">{{ $devolutiva->data_devolutiva->format('d/m/Y') }}</p>
-                        </div>
+                        <details class="group rounded-2xl border border-slate-100 p-4 shadow-[0_4px_12px_rgba(15,23,42,0.04)]" @if($loop->first) open @endif>
+                            <summary class="flex items-center justify-between cursor-pointer">
+                                <div>
+                                    <p class="font-semibold text-[#14363a]">{{ ucfirst($devolutiva->destinatario) }}</p>
+                                    <p class="mt-1 text-xs text-slate-500">{{ $devolutiva->data_devolutiva->format('d/m/Y') }}</p>
+                                </div>
+                                <div class="flex items-center gap-2">
+                                    @if (!$encerrado)
+                                    <a href="{{ route('psicologia.devolutiva.edit', $devolutiva) }}" class="inline-flex items-center rounded-xl border border-cyan-200 bg-cyan-50 px-3 py-2 text-[11px] font-semibold uppercase tracking-widest text-cyan-800 transition hover:bg-cyan-100">
+                                        Editar
+                                    </a>
+                                    <form method="POST" action="{{ route('psicologia.devolutiva.destroy', $devolutiva) }}" onsubmit="return confirm('Excluir esta devolutiva? Esta acao nao pode ser desfeita.');">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" title="Excluir devolutiva" class="inline-flex items-center rounded-xl border border-rose-200 bg-rose-50 px-3 py-2 text-rose-700 transition hover:bg-rose-100">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M8.5 2a1 1 0 0 0-.894.553L7.382 3H5a1 1 0 1 0 0 2h.293l.842 10.112A2 2 0 0 0 8.128 17h3.744a2 2 0 0 0 1.993-1.888L14.707 5H15a1 1 0 1 0 0-2h-2.382l-.224-.447A1 1 0 0 0 11.5 2h-3Zm1 5a1 1 0 0 1 1 1v5a1 1 0 1 1-2 0V8a1 1 0 0 1 1-1Zm3 1a1 1 0 1 0-2 0v5a1 1 0 1 0 2 0V8Z" clip-rule="evenodd"/></svg>
+                                        </button>
+                                    </form>
+                                    @endif
+                                    <span class="text-xs font-semibold text-cyan-700 group-open:rotate-180 transition">▼</span>
+                                </div>
+                            </summary>
+                            <div class="mt-3 grid gap-3 md:grid-cols-2 text-sm text-slate-700">
+                                <div class="md:col-span-2">
+                                    <p class="text-xs uppercase tracking-widest text-slate-500">Resumo da devolutiva</p>
+                                    <p class="mt-1 whitespace-pre-line">{{ $devolutiva->resumo_devolutiva ?: 'Nao informado' }}</p>
+                                </div>
+                                <div class="md:col-span-2">
+                                    <p class="text-xs uppercase tracking-widest text-slate-500">Orientacoes</p>
+                                    <p class="mt-1 whitespace-pre-line">{{ $devolutiva->orientacoes ?: 'Nao informado' }}</p>
+                                </div>
+                                <div class="md:col-span-2">
+                                    <p class="text-xs uppercase tracking-widest text-slate-500">Encaminhamentos combinados</p>
+                                    <p class="mt-1 whitespace-pre-line">{{ $devolutiva->encaminhamentos_combinados ?: 'Nao informado' }}</p>
+                                </div>
+                            </div>
+                        </details>
                     @empty
                         <p class="text-sm text-slate-500">Nenhuma devolutiva registrada.</p>
                     @endforelse
@@ -293,10 +415,53 @@
                 <h2 class="text-lg font-bold text-[#14363a]">Reavaliacoes</h2>
                 <div class="mt-4 space-y-3">
                     @forelse ($atendimento->reavaliacoes as $reavaliacao)
-                        <div class="rounded-2xl border border-slate-100 p-4">
-                            <p class="font-semibold text-[#14363a]">{{ $reavaliacao->data_reavaliacao->format('d/m/Y') }}</p>
-                            <p class="mt-1 text-xs text-slate-500">{{ ucfirst(str_replace('_', ' ', $reavaliacao->decisao)) }}</p>
-                        </div>
+                        <details class="group rounded-2xl border border-slate-100 p-4 shadow-[0_4px_12px_rgba(15,23,42,0.04)]" @if($loop->first) open @endif>
+                            <summary class="flex items-center justify-between cursor-pointer">
+                                <div>
+                                    <p class="font-semibold text-[#14363a]">{{ $reavaliacao->data_reavaliacao->format('d/m/Y') }}</p>
+                                    <p class="mt-1 text-xs text-slate-500">{{ ucfirst(str_replace('_', ' ', $reavaliacao->decisao)) }}</p>
+                                </div>
+                                <div class="flex items-center gap-2">
+                                    @if (!$encerrado)
+                                    <a href="{{ route('psicologia.reavaliacao.edit', $reavaliacao) }}" class="inline-flex items-center rounded-xl border border-cyan-200 bg-cyan-50 px-3 py-2 text-[11px] font-semibold uppercase tracking-widest text-cyan-800 transition hover:bg-cyan-100">
+                                        Editar
+                                    </a>
+                                    <form method="POST" action="{{ route('psicologia.reavaliacao.destroy', $reavaliacao) }}" onsubmit="return confirm('Excluir esta reavaliacao? Esta acao nao pode ser desfeita.');">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" title="Excluir reavaliacao" class="inline-flex items-center rounded-xl border border-rose-200 bg-rose-50 px-3 py-2 text-rose-700 transition hover:bg-rose-100">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M8.5 2a1 1 0 0 0-.894.553L7.382 3H5a1 1 0 1 0 0 2h.293l.842 10.112A2 2 0 0 0 8.128 17h3.744a2 2 0 0 0 1.993-1.888L14.707 5H15a1 1 0 1 0 0-2h-2.382l-.224-.447A1 1 0 0 0 11.5 2h-3Zm1 5a1 1 0 0 1 1 1v5a1 1 0 1 1-2 0V8a1 1 0 0 1 1-1Zm3 1a1 1 0 1 0-2 0v5a1 1 0 1 0 2 0V8Z" clip-rule="evenodd"/></svg>
+                                        </button>
+                                    </form>
+                                    @endif
+                                    <span class="text-xs font-semibold text-cyan-700 group-open:rotate-180 transition">▼</span>
+                                </div>
+                            </summary>
+                            <div class="mt-3 grid gap-3 md:grid-cols-2 text-sm text-slate-700">
+                                <div class="md:col-span-2">
+                                    <p class="text-xs uppercase tracking-widest text-slate-500">Progresso observado</p>
+                                    <p class="mt-1 whitespace-pre-line">{{ $reavaliacao->progresso_observado ?: 'Nao informado' }}</p>
+                                </div>
+                                <div class="md:col-span-2">
+                                    <p class="text-xs uppercase tracking-widest text-slate-500">Dificuldades persistentes</p>
+                                    <p class="mt-1 whitespace-pre-line">{{ $reavaliacao->dificuldades_persistentes ?: 'Nao informado' }}</p>
+                                </div>
+                                <div class="md:col-span-2">
+                                    <p class="text-xs uppercase tracking-widest text-slate-500">Ajuste do plano</p>
+                                    <p class="mt-1 whitespace-pre-line">{{ $reavaliacao->ajuste_plano ?: 'Nao informado' }}</p>
+                                </div>
+                                <div class="md:col-span-2">
+                                    <p class="text-xs uppercase tracking-widest text-slate-500">Justificativa</p>
+                                    <p class="mt-1 whitespace-pre-line">{{ $reavaliacao->justificativa ?: 'Nao informado' }}</p>
+                                </div>
+                                @if($reavaliacao->proxima_reavaliacao)
+                                <div>
+                                    <p class="text-xs uppercase tracking-widest text-slate-500">Proxima reavaliacao</p>
+                                    <p class="mt-1 whitespace-pre-line">{{ $reavaliacao->proxima_reavaliacao->format('d/m/Y') }}</p>
+                                </div>
+                                @endif
+                            </div>
+                        </details>
                     @empty
                         <p class="text-sm text-slate-500">Nenhuma reavaliacao registrada.</p>
                     @endforelse

@@ -12,6 +12,10 @@ use App\Http\Requests\StorePlanoIntervencaoPsicossocialRequest;
 use App\Http\Requests\StoreRelatorioTecnicoPsicossocialRequest;
 use App\Models\AtendimentoPsicossocial;
 use App\Models\DemandaPsicossocial;
+use App\Models\DevolutivaPsicossocial;
+use App\Models\EncaminhamentoPsicossocial;
+use App\Models\PlanoIntervencaoPsicossocial;
+use App\Models\ReavaliacaoPsicossocial;
 use App\Models\RelatorioTecnicoPsicossocial;
 use App\Services\AuditoriaService;
 use App\Services\DocumentoEscolarService;
@@ -322,6 +326,46 @@ class PortalPsicologiaPsicopedagogiaController extends Controller implements Has
             ->with('success', 'Plano de intervencao registrado com sucesso.');
     }
 
+    public function editPlano(PlanoIntervencaoPsicossocial $plano)
+    {
+        $this->authorize('view', $plano->atendimento);
+
+        $atendimento = $plano->atendimento;
+
+        return view('psicologia-psicopedagogia.planos.editar', [
+            'plano' => $plano,
+            'atendimento' => $atendimento,
+            'tituloPagina' => 'Editar Plano de Intervencao',
+            'subtituloPagina' => 'Atualize os dados do plano de intervencao.',
+            'breadcrumbs' => $this->psicossocialService->construirBreadcrumbs([
+                ['label' => 'Atendimentos', 'url' => route('psicologia.atendimentos.index')],
+                ['label' => $atendimento->nome_atendido, 'url' => route('psicologia.show', $atendimento)],
+                ['label' => 'Editar Plano'],
+            ]),
+        ]);
+    }
+
+    public function updatePlano(StorePlanoIntervencaoPsicossocialRequest $request, PlanoIntervencaoPsicossocial $plano)
+    {
+        $this->authorize('view', $plano->atendimento);
+
+        $plano->update($request->validated());
+
+        return redirect()->route('psicologia.show', $plano->atendimento)
+            ->with('success', 'Plano de intervencao atualizado com sucesso.');
+    }
+
+    public function destroyPlano(PlanoIntervencaoPsicossocial $plano)
+    {
+        $this->authorize('view', $plano->atendimento);
+
+        $atendimento = $plano->atendimento;
+        $plano->delete();
+
+        return redirect()->route('psicologia.show', $atendimento)
+            ->with('success', 'Plano de intervencao excluido com sucesso.');
+    }
+
     public function storeEncaminhamento(StoreEncaminhamentoPsicossocialRequest $request, AtendimentoPsicossocial $atendimento)
     {
         $this->authorize('createEncaminhamento', $atendimento);
@@ -329,6 +373,46 @@ class PortalPsicologiaPsicopedagogiaController extends Controller implements Has
 
         return redirect()->route('psicologia.show', $atendimento)
             ->with('success', 'Encaminhamento registrado com sucesso.');
+    }
+
+    public function editEncaminhamento(EncaminhamentoPsicossocial $encaminhamento)
+    {
+        $this->authorize('view', $encaminhamento->atendimento);
+
+        $atendimento = $encaminhamento->atendimento;
+
+        return view('psicologia-psicopedagogia.encaminhamentos.editar', [
+            'encaminhamento' => $encaminhamento,
+            'atendimento' => $atendimento,
+            'tituloPagina' => 'Editar Encaminhamento',
+            'subtituloPagina' => 'Atualize os dados do encaminhamento.',
+            'breadcrumbs' => $this->psicossocialService->construirBreadcrumbs([
+                ['label' => 'Atendimentos', 'url' => route('psicologia.atendimentos.index')],
+                ['label' => $atendimento->nome_atendido, 'url' => route('psicologia.show', $atendimento)],
+                ['label' => 'Editar Encaminhamento'],
+            ]),
+        ]);
+    }
+
+    public function updateEncaminhamento(StoreEncaminhamentoPsicossocialRequest $request, EncaminhamentoPsicossocial $encaminhamento)
+    {
+        $this->authorize('view', $encaminhamento->atendimento);
+
+        $encaminhamento->update($request->validated());
+
+        return redirect()->route('psicologia.show', $encaminhamento->atendimento)
+            ->with('success', 'Encaminhamento atualizado com sucesso.');
+    }
+
+    public function destroyEncaminhamento(EncaminhamentoPsicossocial $encaminhamento)
+    {
+        $this->authorize('view', $encaminhamento->atendimento);
+
+        $atendimento = $encaminhamento->atendimento;
+        $encaminhamento->delete();
+
+        return redirect()->route('psicologia.show', $atendimento)
+            ->with('success', 'Encaminhamento excluido com sucesso.');
     }
 
     public function storeCaso(StoreCasoDisciplinarSigilosoRequest $request, AtendimentoPsicossocial $atendimento)
@@ -563,7 +647,7 @@ class PortalPsicologiaPsicopedagogiaController extends Controller implements Has
 
         $atendimento->load(['escola', 'profissionalResponsavel', 'atendivel', 'sessoes' => function ($q) {
             $q->orderByDesc('data_sessao');
-        }]);
+        }, 'devolutivas', 'reavaliacoes', 'encaminhamentos', 'planosIntervencao']);
 
         $instituicao = \App\Models\Instituicao::query()->first();
 
@@ -596,6 +680,57 @@ class PortalPsicologiaPsicopedagogiaController extends Controller implements Has
             ->with('success', 'Devolutiva registrada com sucesso.');
     }
 
+    public function editDevolutiva(DevolutivaPsicossocial $devolutiva)
+    {
+        $this->authorize('view', $devolutiva->atendimento);
+
+        $atendimento = $devolutiva->atendimento;
+
+        return view('psicologia-psicopedagogia.devolutivas.editar', [
+            'devolutiva' => $devolutiva,
+            'atendimento' => $atendimento,
+            'tituloPagina' => 'Editar Devolutiva',
+            'subtituloPagina' => 'Atualize os dados da devolutiva.',
+            'breadcrumbs' => $this->psicossocialService->construirBreadcrumbs([
+                ['label' => 'Atendimentos', 'url' => route('psicologia.atendimentos.index')],
+                ['label' => $atendimento->nome_atendido, 'url' => route('psicologia.show', $atendimento)],
+                ['label' => 'Editar Devolutiva'],
+            ]),
+        ]);
+    }
+
+    public function updateDevolutiva(Request $request, DevolutivaPsicossocial $devolutiva)
+    {
+        $this->authorize('view', $devolutiva->atendimento);
+
+        $validated = $request->validate([
+            'destinatario' => 'required|in:familia,professor,coordenacao,direcao,funcionario,outro',
+            'nome_destinatario' => 'nullable|string|max:255',
+            'data_devolutiva' => 'required|date',
+            'resumo_devolutiva' => 'nullable|string',
+            'orientacoes' => 'nullable|string',
+            'encaminhamentos_combinados' => 'nullable|string',
+            'necessita_acompanhamento' => 'nullable|boolean',
+            'observacoes' => 'nullable|string',
+        ]);
+
+        $devolutiva->update($validated);
+
+        return redirect()->route('psicologia.show', $devolutiva->atendimento)
+            ->with('success', 'Devolutiva atualizada com sucesso.');
+    }
+
+    public function destroyDevolutiva(DevolutivaPsicossocial $devolutiva)
+    {
+        $this->authorize('view', $devolutiva->atendimento);
+
+        $atendimento = $devolutiva->atendimento;
+        $devolutiva->delete();
+
+        return redirect()->route('psicologia.show', $atendimento)
+            ->with('success', 'Devolutiva excluida com sucesso.');
+    }
+
     public function salvarReavaliacao(Request $request, AtendimentoPsicossocial $atendimento)
     {
         $this->authorize('view', $atendimento);
@@ -617,6 +752,57 @@ class PortalPsicologiaPsicopedagogiaController extends Controller implements Has
             ->with('success', 'Reavaliacao registrada com sucesso.');
     }
 
+    public function editReavaliacao(ReavaliacaoPsicossocial $reavaliacao)
+    {
+        $this->authorize('view', $reavaliacao->atendimento);
+
+        $atendimento = $reavaliacao->atendimento;
+
+        return view('psicologia-psicopedagogia.reavaliacoes.editar', [
+            'reavaliacao' => $reavaliacao,
+            'atendimento' => $atendimento,
+            'tituloPagina' => 'Editar Reavaliacao',
+            'subtituloPagina' => 'Atualize os dados da reavaliacao.',
+            'breadcrumbs' => $this->psicossocialService->construirBreadcrumbs([
+                ['label' => 'Atendimentos', 'url' => route('psicologia.atendimentos.index')],
+                ['label' => $atendimento->nome_atendido, 'url' => route('psicologia.show', $atendimento)],
+                ['label' => 'Editar Reavaliacao'],
+            ]),
+        ]);
+    }
+
+    public function updateReavaliacao(Request $request, ReavaliacaoPsicossocial $reavaliacao)
+    {
+        $this->authorize('view', $reavaliacao->atendimento);
+
+        $validated = $request->validate([
+            'data_reavaliacao' => 'required|date',
+            'progresso_observado' => 'nullable|string',
+            'dificuldades_persistentes' => 'nullable|string',
+            'ajuste_plano' => 'nullable|string',
+            'frequencia_nova' => 'nullable|in:semanal,quinzenal,mensal,outra',
+            'decisao' => 'required|in:manter_plano,ajustar_plano,suspender,encaminhar,encerrar',
+            'justificativa' => 'nullable|string',
+            'proxima_reavaliacao' => 'nullable|date',
+        ]);
+
+        $reavaliacao->update($validated);
+
+        return redirect()->route('psicologia.show', $reavaliacao->atendimento)
+            ->with('success', 'Reavaliacao atualizada com sucesso.');
+    }
+
+    public function destroyReavaliacao(ReavaliacaoPsicossocial $reavaliacao)
+    {
+        $this->authorize('view', $reavaliacao->atendimento);
+
+        $atendimento = $reavaliacao->atendimento;
+        $reavaliacao->delete();
+
+        return redirect()->route('psicologia.show', $atendimento)
+            ->with('success', 'Reavaliacao excluida com sucesso.');
+    }
+
     public function encerrarAtendimento(Request $request, AtendimentoPsicossocial $atendimento)
     {
         $this->authorize('view', $atendimento);
@@ -632,5 +818,21 @@ class PortalPsicologiaPsicopedagogiaController extends Controller implements Has
 
         return redirect()->route('psicologia.show', $atendimento)
             ->with('success', 'Atendimento encerrado com sucesso.');
+    }
+
+    public function reabrirAtendimento(Request $request, AtendimentoPsicossocial $atendimento)
+    {
+        $this->authorize('view', $atendimento);
+
+        $atendimento->update([
+            'status' => 'em_acompanhamento',
+            'data_encerramento' => null,
+            'motivo_encerramento' => null,
+            'resumo_encerramento' => null,
+            'orientacoes_finais' => null,
+        ]);
+
+        return redirect()->route('psicologia.show', $atendimento)
+            ->with('success', 'Atendimento reaberto com sucesso.');
     }
 }

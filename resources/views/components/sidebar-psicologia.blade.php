@@ -42,12 +42,8 @@
                     <nav class="space-y-1">
                         @php
                             $linksTecnicos = [
-                                ['rota' => 'psicologia.planos.index', 'label' => 'Planos de intervencao'],
                                 ['rota' => 'psicologia.encaminhamentos.index', 'label' => 'Encaminhamentos'],
-                                ['rota' => 'psicologia.casos.index', 'label' => 'Casos disciplinares'],
                                 ['rota' => 'psicologia.relatorios_tecnicos.index', 'label' => 'Relatorios tecnicos'],
-                                ['rota' => 'psicologia.documentos.index', 'label' => 'Documentos restritos'],
-                                ['rota' => 'psicologia.auditoria.index', 'label' => 'Auditoria restrita'],
                             ];
                         @endphp
 

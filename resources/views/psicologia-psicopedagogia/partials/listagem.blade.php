@@ -66,9 +66,11 @@
                     @forelse ($atendimentos as $atendimento)
                         <tr class="hover:bg-slate-50">
                             <td class="px-6 py-4">
-                                <a href="{{ route($rotaShow, $atendimento) }}" class="font-semibold text-[#14363a] hover:text-cyan-700">{{ $atendimento->data_agendada->format('d/m/Y H:i') }}</a>
+                                <span class="text-slate-700">{{ $atendimento->data_agendada->format('d/m/Y H:i') }}</span>
                             </td>
-                            <td class="px-6 py-4 text-slate-700">{{ $atendimento->nome_atendido }}</td>
+                            <td class="px-6 py-4">
+                                <a href="{{ route($rotaShow, $atendimento) }}" class="font-semibold text-[#14363a] hover:text-cyan-700">{{ $atendimento->nome_atendido }}</a>
+                            </td>
                             <td class="px-6 py-4 text-slate-700">{{ $atendimento->escola?->nome }}</td>
                             <td class="px-6 py-4 text-slate-700">{{ ucfirst($atendimento->tipo_publico) }} / {{ ucfirst($atendimento->tipo_atendimento) }}</td>
                             <td class="px-6 py-4 text-slate-700">{{ ucfirst(str_replace('_', ' ', $atendimento->status)) }}</td>

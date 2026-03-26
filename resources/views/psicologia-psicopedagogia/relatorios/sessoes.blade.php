@@ -19,38 +19,108 @@
         .pill { display: inline-block; padding: 4px 10px; border-radius: 999px; font-size: 12px; font-weight: 700; }
         .pill.blue { background: #e0f2fe; color: #0369a1; }
         .pill.green { background: #dcfce7; color: #166534; }
+        
         @page { size: A4; margin: 15mm; }
+        
         @media print {
-            body { background: #fff; padding: 0; font-size: 12px; line-height: 1.4; }
-            h1 { font-size: 18px; }
-            h2 { font-size: 16px; }
-            h3 { font-size: 14px; }
-            .header, .section { box-shadow: none; border-radius: 8px; border: 1px solid #cbd5e1; margin-bottom: 12px; padding: 16px; }
-            .grid { gap: 8px; }
-            .label { font-size: 9px; letter-spacing: .06em; }
-            .value { font-size: 12px; }
-            .session { padding: 10px; border-radius: 10px; page-break-inside: avoid; break-inside: avoid; }
-            .muted { font-size: 11px; }
+            body { background: #fff; padding: 0; font-size: 10pt; line-height: 1.3; color: #1e293b; }
+            
+            .header { display: flex; flex-direction: column; border: 2px solid #334155; border-radius: 0; padding: 12px; margin-bottom: 12px; }
+            .header .header-top { display: flex; align-items: center; gap: 12px; }
+            .header .header-top .brasao { width: 45px; height: 45px; border-radius: 0; }
+            .header .header-top .header-info { flex: 1; text-align: left; }
+            .header .header-top .header-info .prefeitura { font-size: 14pt; font-weight: 700; color: #0f172a; white-space: nowrap; }
+            .header .header-top .header-info .secretaria { font-size: 12pt; color: #334155; margin-top: 2px; }
+            .header .header-top .header-info .titulo { font-size: 11pt; font-weight: 600; color: #475569; margin-top: 8px; }
+            .header .grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-top: 10px; padding-top: 10px; border-top: 1px solid #cbd5e1; }
+            .header .grid .label { font-size: 7pt; }
+            .header .grid .value { font-size: 9pt; }
+            .header .header-titulo { text-align: center; margin-top: 10px; padding-top: 10px; border-top: 1px solid #cbd5e1; }
+            .header .header-titulo .value { font-size: 11pt; font-weight: 700; }
+            
+            h1 { font-size: 16pt; font-weight: 700; color: #0f172a; margin: 0; }
+            h2 { font-size: 12pt; font-weight: 700; color: #334155; border-bottom: 1px solid #cbd5e1; padding-bottom: 5px; margin-bottom: 10px; }
+            h3 { font-size: 11pt; font-weight: 600; color: #475569; }
+            
+            .section { 
+                box-shadow: none; 
+                border: 1px solid #cbd5e1; 
+                border-radius: 0; 
+                margin-bottom: 15px; 
+                padding: 12px; 
+                page-break-inside: avoid;
+            }
+            
+            .label { font-size: 7pt; letter-spacing: .05em; color: #64748b; }
+            .value { font-size: 9pt; font-weight: 500; }
+            
+            .session { 
+                border: 1px solid #e2e8f0; 
+                border-radius: 0; 
+                padding: 10px; 
+                margin-bottom: 10px;
+                page-break-inside: avoid;
+                background: #f8fafc;
+            }
+            
+            .session .grid { 
+                display: grid; 
+                grid-template-columns: repeat(4, 1fr); 
+                gap: 8px; 
+                margin-bottom: 8px;
+            }
+            
+            .session .row { 
+                margin-top: 4px; 
+                display: block;
+            }
+            
+            .row .label { 
+                display: inline; 
+                font-size: 7pt; 
+            }
+            
+            .row .value { 
+                display: inline; 
+                font-size: 9pt;
+            }
+            
+            .muted { font-size: 8pt; color: #94a3b8; }
+            .pill { font-size: 8pt; padding: 2px 6px; }
+            
+            .brasao { width: 50px; height: 50px; }
+            
+            .header { display: flex; flex-direction: column; border: 2px solid #334155; border-radius: 0; padding: 12px; margin-bottom: 12px; }
+            .header .header-top { display: flex; align-items: center; gap: 12px; }
+            .header .header-top .brasao { width: 45px; height: 45px; border-radius: 0; }
+            .header .header-top .header-info { flex: 1; text-align: left; }
+            .header .header-top .header-info .prefeitura { font-size: 14pt; font-weight: 700; color: #0f172a; white-space: nowrap; }
+            .header .header-top .header-info .secretaria { font-size: 12pt; color: #334155; margin-top: 2px; }
+            .header .header-top .header-info .titulo { font-size: 11pt; font-weight: 600; color: #475569; margin-top: 8px; }
+            .header .grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-top: 10px; padding-top: 10px; border-top: 1px solid #cbd5e1; }
+            .header .grid .label { font-size: 7pt; }
+            .header .grid .value { font-size: 9pt; }
+            .header .header-titulo { text-align: center; margin-top: 10px; padding-top: 10px; border-top: 1px solid #cbd5e1; }
+            .header .header-titulo .value { font-size: 11pt; font-weight: 700; }
         }
     </style>
 </head>
 <body>
     <div class="header">
-        <div class="flex" style="gap:14px; align-items:center;">
+        <div class="header-top" style="display:flex; gap:14px; align-items:center;">
             @php
                 $brasao = $instituicao?->brasao_url;
             @endphp
-            <div style="width:70px;height:70px; border-radius:14px; overflow:hidden; background:#f1f5f9; display:flex; align-items:center; justify-content:center;">
+            <div class="brasao" style="width:70px;height:70px; border-radius:14px; overflow:hidden; background:#f1f5f9; display:flex; align-items:center; justify-content:center; flex-shrink:0;">
                 @if($brasao)
                     <img src="{{ $brasao }}" alt="Brasao" style="max-width:100%; max-height:100%; object-fit:contain;">
                 @else
                     <span class="muted" style="font-size:11px; text-align:center;">Brasao</span>
                 @endif
             </div>
-            <div style="flex:1;">
-                <p class="label" style="margin:0;">{{ $instituicao->nome_prefeitura ?? 'PREFEITURA MUNICIPAL' }}</p>
-                <p class="value" style="margin-top:6px; font-size:18px;">{{ $instituicao->nome_secretaria ?? 'Secretaria de Educacao' }}</p>
-                <p class="value" style="margin-top:2px; font-size:16px; font-weight:700;">Relatorio de atendimento</p>
+            <div class="header-info" style="flex:1; text-align:left;">
+                <p class="prefeitura" style="margin:0; font-size:18px; font-weight:700;">{{ $instituicao->nome_prefeitura ?? 'PREFEITURA MUNICIPAL' }}</p>
+                <p class="secretaria" style="margin-top:4px; font-size:16px;">{{ $instituicao->nome_secretaria ?? 'Secretaria de Educacao' }}</p>
             </div>
         </div>
         <div class="grid" style="margin-top:18px;">
@@ -70,6 +140,9 @@
                 <span class="label">Status</span>
                 <div class="value">{{ ucfirst(str_replace('_',' ',$atendimento->status)) }}</div>
             </div>
+        </div>
+        <div class="header-titulo" style="text-align:center; margin-top:15px;">
+            <p class="value" style="font-size:16px; font-weight:700;">Relatorio de atendimento</p>
         </div>
     </div>
 
@@ -150,5 +223,175 @@
             <div class="value">{{ $atendimento->orientacoes_finais ?: 'Nao informado' }}</div>
         </div>
     </div>
+
+    @if($atendimento->devolutivas->count() > 0)
+    <div class="section">
+        <h2>Devolutivas</h2>
+        @foreach($atendimento->devolutivas as $devolutiva)
+            <div class="session">
+                <div class="grid">
+                    <div>
+                        <span class="label">Destinatario</span>
+                        <div class="value">{{ ucfirst($devolutiva->destinatario) }}</div>
+                    </div>
+                    <div>
+                        <span class="label">Data</span>
+                        <div class="value">{{ $devolutiva->data_devolutiva->format('d/m/Y') }}</div>
+                    </div>
+                </div>
+                <div class="row">
+                    <span class="label">Resumo da devolutiva</span>
+                    <div class="value">{{ $devolutiva->resumo_devolutiva ?: 'Nao informado' }}</div>
+                </div>
+                <div class="row">
+                    <span class="label">Orientacoes</span>
+                    <div class="value">{{ $devolutiva->orientacoes ?: 'Nao informado' }}</div>
+                </div>
+                <div class="row">
+                    <span class="label">Encaminhamentos combinados</span>
+                    <div class="value">{{ $devolutiva->encaminhamentos_combinados ?: 'Nao informado' }}</div>
+                </div>
+            </div>
+        @endforeach
+    </div>
+    @endif
+
+    @if($atendimento->reavaliacoes->count() > 0)
+    <div class="section">
+        <h2>Reavaliacoes</h2>
+        @foreach($atendimento->reavaliacoes as $reavaliacao)
+            <div class="session">
+                <div class="grid">
+                    <div>
+                        <span class="label">Data</span>
+                        <div class="value">{{ $reavaliacao->data_reavaliacao->format('d/m/Y') }}</div>
+                    </div>
+                    <div>
+                        <span class="label">Decisao</span>
+                        <div class="value">{{ ucfirst(str_replace('_', ' ', $reavaliacao->decisao)) }}</div>
+                    </div>
+                </div>
+                <div class="row">
+                    <span class="label">Progresso observado</span>
+                    <div class="value">{{ $reavaliacao->progresso_observado ?: 'Nao informado' }}</div>
+                </div>
+                <div class="row">
+                    <span class="label">Dificuldades persistentes</span>
+                    <div class="value">{{ $reavaliacao->dificuldades_persistentes ?: 'Nao informado' }}</div>
+                </div>
+                <div class="row">
+                    <span class="label">Ajuste do plano</span>
+                    <div class="value">{{ $reavaliacao->ajuste_plano ?: 'Nao informado' }}</div>
+                </div>
+                <div class="row">
+                    <span class="label">Justificativa</span>
+                    <div class="value">{{ $reavaliacao->justificativa ?: 'Nao informado' }}</div>
+                </div>
+                @if($reavaliacao->proxima_reavaliacao)
+                <div class="row">
+                    <span class="label">Proxima reavaliacao</span>
+                    <div class="value">{{ $reavaliacao->proxima_reavaliacao->format('d/m/Y') }}</div>
+                </div>
+                @endif
+            </div>
+        @endforeach
+    </div>
+    @endif
+
+    @if($atendimento->encaminhamentos->count() > 0)
+    <div class="section">
+        <h2>Encaminhamentos</h2>
+        @foreach($atendimento->encaminhamentos as $encaminhamento)
+            <div class="session">
+                <div class="grid">
+                    <div>
+                        <span class="label">Tipo</span>
+                        <div class="value">{{ ucfirst($encaminhamento->tipo) }}</div>
+                    </div>
+                    <div>
+                        <span class="label">Destino</span>
+                        <div class="value">{{ $encaminhamento->destino }}</div>
+                    </div>
+                    <div>
+                        <span class="label">Data</span>
+                        <div class="value">{{ $encaminhamento->data_encaminhamento->format('d/m/Y') }}</div>
+                    </div>
+                    <div>
+                        <span class="label">Status</span>
+                        <div class="value">{{ ucfirst(str_replace('_', ' ', $encaminhamento->status)) }}</div>
+                    </div>
+                </div>
+                <div class="row">
+                    <span class="label">Motivo</span>
+                    <div class="value">{{ $encaminhamento->motivo ?: 'Nao informado' }}</div>
+                </div>
+                <div class="row">
+                    <span class="label">Profissional de destino</span>
+                    <div class="value">{{ $encaminhamento->profissional_destino ?: 'Nao informado' }}</div>
+                </div>
+                <div class="row">
+                    <span class="label">Instituicao de destino</span>
+                    <div class="value">{{ $encaminhamento->instituicao_destino ?: 'Nao informado' }}</div>
+                </div>
+                <div class="row">
+                    <span class="label">Orientacoes sigilosas</span>
+                    <div class="value">{{ $encaminhamento->orientacoes_sigilosas ?: 'Nao informado' }}</div>
+                </div>
+                @if($encaminhamento->retorno_previsto_em)
+                <div class="row">
+                    <span class="label">Retorno previsto em</span>
+                    <div class="value">{{ $encaminhamento->retorno_previsto_em->format('d/m/Y') }}</div>
+                </div>
+                @endif
+            </div>
+        @endforeach
+    </div>
+    @endif
+
+    @if($atendimento->planosIntervencao->count() > 0)
+    <div class="section">
+        <h2>Planos de Intervencao</h2>
+        @foreach($atendimento->planosIntervencao as $plano)
+            <div class="session">
+                <div class="grid">
+                    <div>
+                        <span class="label">Objetivo geral</span>
+                        <div class="value">{{ $plano->objetivo_geral }}</div>
+                    </div>
+                    <div>
+                        <span class="label">Status</span>
+                        <div class="value">{{ ucfirst(str_replace('_', ' ', $plano->status)) }}</div>
+                    </div>
+                    <div>
+                        <span class="label">Data inicio</span>
+                        <div class="value">{{ $plano->data_inicio->format('d/m/Y') }}</div>
+                    </div>
+                    @if($plano->data_fim)
+                    <div>
+                        <span class="label">Data fim</span>
+                        <div class="value">{{ $plano->data_fim->format('d/m/Y') }}</div>
+                    </div>
+                    @endif
+                </div>
+                <div class="row">
+                    <span class="label">Objetivos especificos</span>
+                    <div class="value">{{ $plano->objetivos_especificos ?: 'Nao informado' }}</div>
+                </div>
+                <div class="row">
+                    <span class="label">Estrategias</span>
+                    <div class="value">{{ $plano->estrategias ?: 'Nao informado' }}</div>
+                </div>
+                <div class="row">
+                    <span class="label">Responsaveis pela execucao</span>
+                    <div class="value">{{ $plano->responsaveis_execucao ?: 'Nao informado' }}</div>
+                </div>
+                <div class="row">
+                    <span class="label">Observacoes sigilosas</span>
+                    <div class="value">{{ $plano->observacoes_sigilosas ?: 'Nao informado' }}</div>
+                </div>
+            </div>
+        @endforeach
+    </div>
+    @endif
 </body>
 </html>
