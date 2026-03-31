@@ -18,6 +18,7 @@ use App\Models\SessaoAtendimento;
 use App\Models\TriagemPsicossocial;
 use App\Models\Usuario;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
@@ -214,6 +215,77 @@ class PsicossocialService
         ];
     }
 
+    public function opcoesRelatorioAtendimentos(Usuario $usuario): array
+    {
+        $profissionalIds = AtendimentoPsicossocial::query()
+            ->visivelParaUsuario($usuario)
+            ->whereNotNull('profissional_responsavel_id')
+            ->distinct()
+            ->pluck('profissional_responsavel_id');
+
+        return [
+            'escolas' => $this->escolasDoUsuario($usuario),
+            'profissionais' => Funcionario::query()
+                ->whereIn('id', $profissionalIds)
+                ->orderBy('nome')
+                ->get(),
+            'tipos_relatorio' => [
+                'por_periodo' => 'Atendimentos por periodo',
+                'por_profissional' => 'Atendimentos por profissional',
+                'geral_mes' => 'Relatorio geral do mes',
+            ],
+            'tipos_atendimento' => [
+                'psicologia' => 'Psicologia',
+                'psicopedagogia' => 'Psicopedagogia',
+                'psicossocial' => 'Psicossocial',
+            ],
+            'status' => [
+                'agendado' => 'Agendado',
+                'em_acompanhamento' => 'Em acompanhamento',
+                'realizado' => 'Realizado',
+                'faltou' => 'Faltou',
+                'cancelado' => 'Cancelado',
+                'encerrado' => 'Encerrado',
+            ],
+            'campos' => $this->camposRelatorioAtendimentos(),
+        ];
+    }
+
+    public function camposRelatorioAtendimentos(): array
+    {
+        return [
+            'data_agendada' => 'Data agendada',
+            'data_realizacao' => 'Data de realizacao',
+            'nome_atendido' => 'Atendido',
+            'escola' => 'Escola',
+            'tipo_publico' => 'Publico',
+            'tipo_atendimento' => 'Area tecnica',
+            'status' => 'Status',
+            'profissional_responsavel' => 'Profissional',
+            'local_atendimento' => 'Local',
+            'motivo_demanda' => 'Motivo da demanda',
+            'nivel_sigilo' => 'Nivel de sigilo',
+            'requer_acompanhamento' => 'Requer acompanhamento',
+        ];
+    }
+
+    public function gerarRelatorioAtendimentos(Usuario $usuario, array $filtros)
+    {
+        return AtendimentoPsicossocial::query()
+            ->with(['escola', 'atendivel', 'profissionalResponsavel'])
+            ->visivelParaUsuario($usuario)
+            ->when(! empty($filtros['escola_id']), fn (Builder $query) => $query->where('escola_id', $filtros['escola_id']))
+            ->when(! empty($filtros['tipo_atendimento']), fn (Builder $query) => $query->where('tipo_atendimento', $filtros['tipo_atendimento']))
+            ->when(! empty($filtros['status']), fn (Builder $query) => $query->where('status', $filtros['status']))
+            ->when(($filtros['tipo_relatorio'] ?? null) === 'por_profissional' && ! empty($filtros['profissional_id']), fn (Builder $query) => $query->where('profissional_responsavel_id', $filtros['profissional_id']))
+            ->when(($filtros['tipo_relatorio'] ?? null) === 'por_periodo' && ! empty($filtros['data_inicio']), fn (Builder $query) => $query->whereDate('data_agendada', '>=', $filtros['data_inicio']))
+            ->when(($filtros['tipo_relatorio'] ?? null) === 'por_periodo' && ! empty($filtros['data_fim']), fn (Builder $query) => $query->whereDate('data_agendada', '<=', $filtros['data_fim']))
+            ->when(($filtros['tipo_relatorio'] ?? null) === 'geral_mes' && ! empty($filtros['mes']), fn (Builder $query) => $query->whereMonth('data_agendada', $filtros['mes']))
+            ->when(($filtros['tipo_relatorio'] ?? null) === 'geral_mes' && ! empty($filtros['ano']), fn (Builder $query) => $query->whereYear('data_agendada', $filtros['ano']))
+            ->orderBy('data_agendada')
+            ->get();
+    }
+
     public function criarAtendimento(Usuario $usuario, array $dados): AtendimentoPsicossocial
     {
         $this->garantirEscolaPermitida($usuario, (int) $dados['escola_id']);
@@ -351,7 +423,7 @@ class PsicossocialService
         }
     }
 
-    private function baseAtendimentos(Usuario $usuario, array $filtros)
+    private function baseAtendimentos(Usuario $usuario, array $filtros): Builder
     {
         $query = AtendimentoPsicossocial::query()
             ->with(['escola', 'atendivel', 'profissionalResponsavel'])

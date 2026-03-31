@@ -240,6 +240,7 @@ class PortalPsicologiaPsicopedagogiaController extends Controller implements Has
             'documento' => $this->documentoEscolarService->emitir('psicossocial', 'relatorio-tecnico', $request->user(), [
                 'relatorio_id' => $relatorio->id,
             ]),
+            'orientacaoPagina' => 'portrait',
         ]);
     }
 

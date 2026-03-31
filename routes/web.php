@@ -76,6 +76,7 @@ use App\Http\Controllers\Nutricionista\GestaoAlimentacaoController as Nutricioni
 use App\Http\Controllers\Nutricionista\PortalNutricionistaController;
 use App\Http\Controllers\Nutricionista\AuditoriaNutricionistaController;
 use App\Http\Controllers\Nutricionista\RelatorioNutricionistaController;
+use App\Http\Controllers\PsicologiaPsicopedagogia\RelatorioAtendimentoPsicologiaController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -389,6 +390,7 @@ Route::middleware(['auth', 'can:acessar modulo psicossocial', 'can:acessar dados
     Route::get('/planos', [PortalPsicologiaPsicopedagogiaController::class, 'planos'])->name('planos.index');
     Route::get('/encaminhamentos', [PortalPsicologiaPsicopedagogiaController::class, 'encaminhamentos'])->name('encaminhamentos.index');
     Route::get('/casos-disciplinares', [PortalPsicologiaPsicopedagogiaController::class, 'casos'])->name('casos.index');
+    Route::get('/relatorios-atendimentos', [RelatorioAtendimentoPsicologiaController::class, 'index'])->name('relatorios_atendimentos.index');
     Route::get('/relatorios-tecnicos', [PortalPsicologiaPsicopedagogiaController::class, 'relatoriosTecnicos'])->name('relatorios_tecnicos.index');
     Route::get('/relatorios-tecnicos/emitidos/{relatorio}', [PortalPsicologiaPsicopedagogiaController::class, 'showRelatorioTecnicoEmitido'])->name('relatorios_tecnicos.show');
     Route::get('/relatorios-tecnicos/emitidos/{relatorio}/editar', [PortalPsicologiaPsicopedagogiaController::class, 'editRelatorioTecnico'])->name('relatorios_tecnicos.edit');

@@ -6,6 +6,12 @@
         <title>{{ $documento['titulo'] }}</title>
         @vite(['resources/css/app.css'])
         <style>
+            @if (! empty($orientacaoPagina ?? null))
+                @page {
+                    size: A4 {{ $orientacaoPagina }};
+                }
+            @endif
+
             @media print {
                 .print\:border-0,
                 .print\:border-0 * {

@@ -16,6 +16,9 @@
         .row { margin-top: 6px; }
         .row .label { display: block; }
         .row .value { white-space: pre-line; }
+        .toolbar { display: flex; justify-content: flex-end; margin-bottom: 18px; }
+        .print-button { display: inline-flex; align-items: center; border: 1px solid #0f172a; background: #0f172a; color: #fff; border-radius: 14px; padding: 10px 18px; font-size: 14px; font-weight: 700; cursor: pointer; }
+        .print-button:hover { background: #020617; }
         .pill { display: inline-block; padding: 4px 10px; border-radius: 999px; font-size: 12px; font-weight: 700; }
         .pill.blue { background: #e0f2fe; color: #0369a1; }
         .pill.green { background: #dcfce7; color: #166534; }
@@ -24,6 +27,7 @@
         
         @media print {
             body { background: #fff; padding: 0; font-size: 10pt; line-height: 1.3; color: #1e293b; }
+            .toolbar { display: none !important; }
             
             .header { display: flex; flex-direction: column; border: 2px solid #334155; border-radius: 0; padding: 12px; margin-bottom: 12px; }
             .header .header-top { display: flex; align-items: center; gap: 12px; }
@@ -106,6 +110,10 @@
     </style>
 </head>
 <body>
+    <div class="toolbar">
+        <button type="button" class="print-button" onclick="window.print()">Imprimir</button>
+    </div>
+
     <div class="header">
         <div class="header-top" style="display:flex; gap:14px; align-items:center;">
             @php

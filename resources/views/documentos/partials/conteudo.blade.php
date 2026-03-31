@@ -30,10 +30,10 @@
 
         @unless ($ehRelatorioTecnico)
             <div class="w-full max-w-md">
-                <p class="text-xs font-semibold uppercase tracking-[0.24em] text-slate-500">C&oacute;digo</p>
+                <p class="text-[10px] font-semibold uppercase tracking-[0.2em] text-slate-500">C&oacute;digo</p>
                 <div class="mt-1 flex flex-col items-end justify-between gap-1">
-                    <p class="text-lg font-bold text-slate-900">{{ $documento['codigo'] }}</p>
-                    <p class="text-sm text-right text-slate-500">Emitido em {{ $documento['emitido_em']->format('d/m/Y H:i') }}</p>
+                    <p class="text-base font-bold text-slate-900">{{ $documento['codigo'] }}</p>
+                    <p class="text-xs text-right text-slate-500">Emitido em {{ $documento['emitido_em']->format('d/m/Y H:i') }}</p>
                 </div>
             </div>
         @endunless
@@ -47,9 +47,9 @@
                 <p class="text-xs leading-4 text-slate-700">{{ $instituicao['email'] ?: 'Email nao informado' }}</p>
             </div>
             <div class="min-w-[220px] text-right">
-                <p class="text-xs font-semibold uppercase tracking-[0.24em] text-slate-500">C&oacute;digo</p>
-                <p class="mt-1 text-lg font-bold text-slate-900">{{ $documento['codigo'] }}</p>
-                <p class="mt-1 text-sm text-slate-500">Emitido em {{ $documento['emitido_em']->format('d/m/Y H:i') }}</p>
+                <p class="text-[10px] font-semibold uppercase tracking-[0.2em] text-slate-500">C&oacute;digo</p>
+                <p class="mt-1 text-base font-bold text-slate-900">{{ $documento['codigo'] }}</p>
+                <p class="mt-1 text-xs text-slate-500">Emitido em {{ $documento['emitido_em']->format('d/m/Y H:i') }}</p>
             </div>
         </div>
     @endif

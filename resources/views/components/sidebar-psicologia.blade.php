@@ -43,6 +43,7 @@
                         @php
                             $linksTecnicos = [
                                 ['rota' => 'psicologia.encaminhamentos.index', 'label' => 'Encaminhamentos'],
+                                ['rota' => 'psicologia.relatorios_atendimentos.index', 'label' => 'Gerador de relatorios'],
                                 ['rota' => 'psicologia.relatorios_tecnicos.index', 'label' => 'Relatorios tecnicos'],
                             ];
                         @endphp
