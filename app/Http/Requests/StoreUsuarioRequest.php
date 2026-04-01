@@ -5,6 +5,7 @@ namespace App\Http\Requests;
 use App\Models\Funcionario;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
+use Spatie\Permission\Models\Role;
 
 class StoreUsuarioRequest extends FormRequest
 {
@@ -36,6 +37,7 @@ class StoreUsuarioRequest extends FormRequest
                 'exists:funcionarios,id',
                 Rule::unique('usuarios', 'funcionario_id'),
             ],
+            'chefe_nucleo_psicossocial' => ['nullable', 'boolean'],
             'ativo' => ['nullable', 'boolean'],
         ];
     }
@@ -66,6 +68,10 @@ class StoreUsuarioRequest extends FormRequest
             if (blank($funcionario->email)) {
                 $validator->errors()->add('funcionario_id', 'O funcionario selecionado precisa ter um e-mail cadastrado antes da criacao do usuario.');
             }
+
+            if ($this->boolean('chefe_nucleo_psicossocial') && ! $this->perfilPsicossocialSelecionado()) {
+                $validator->errors()->add('chefe_nucleo_psicossocial', 'A chefia do nucleo psicossocial so pode ser atribuida a usuarios com perfil Psicologia/Psicopedagogia.');
+            }
         });
     }
 
@@ -86,5 +92,19 @@ class StoreUsuarioRequest extends FormRequest
         }
 
         return Funcionario::query()->find($funcionarioId);
+    }
+
+    private function perfilPsicossocialSelecionado(): bool
+    {
+        $roleId = $this->input('role');
+
+        if (! $roleId) {
+            return false;
+        }
+
+        return Role::query()
+            ->whereKey($roleId)
+            ->where('name', 'Psicologia/Psicopedagogia')
+            ->exists();
     }
 }

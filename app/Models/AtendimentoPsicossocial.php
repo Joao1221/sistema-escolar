@@ -113,6 +113,10 @@ class AtendimentoPsicossocial extends Model
 
     public function getNomeAtendidoAttribute(): string
     {
+        if ($this->tipo_publico === 'coletivo') {
+            return $this->atendivel?->nome ?? 'Atendimento coletivo';
+        }
+
         if ($this->atendivel instanceof Aluno) {
             return $this->atendivel->nome_completo;
         }
@@ -128,6 +132,10 @@ class AtendimentoPsicossocial extends Model
     {
         if (! $usuario->acessaPortalPsicossocial()) {
             return $query->whereIn('escola_id', $usuario->escolas()->pluck('escolas.id'));
+        }
+
+        if ($usuario->possuiAcessoIrrestritoPsicossocial()) {
+            return $query;
         }
 
         $funcionarioId = $usuario->resolverFuncionario()?->id;
@@ -152,6 +160,10 @@ class AtendimentoPsicossocial extends Model
     {
         if (! $usuario->acessaPortalPsicossocial()) {
             return $usuario->escolas()->where('escolas.id', $this->escola_id)->exists();
+        }
+
+        if ($usuario->possuiAcessoIrrestritoPsicossocial()) {
+            return true;
         }
 
         $funcionarioId = $usuario->resolverFuncionario()?->id;

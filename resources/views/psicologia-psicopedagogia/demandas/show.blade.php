@@ -124,7 +124,7 @@
                             <label class="block text-xs font-semibold uppercase tracking-wider text-slate-500">Profissional responsavel (se atendimento)</label>
                             <select name="profissional_responsavel_id" class="mt-1 w-full rounded-xl border-slate-300 shadow-sm">
                                 <option value="">Selecione</option>
-                                @foreach ($funcionarios as $funcionario)
+                                @foreach ($profissionaisPsicossociais as $funcionario)
                                     <option value="{{ $funcionario->id }}">{{ $funcionario->nome }}</option>
                                 @endforeach
                             </select>

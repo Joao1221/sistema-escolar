@@ -19,7 +19,7 @@ class StoreAtendimentoPsicossocialRequest extends FormRequest
         return [
             'escola_id' => ['required', 'exists:escolas,id'],
             'profissional_responsavel_id' => ['nullable', 'exists:funcionarios,id'],
-            'tipo_publico' => ['required', Rule::in(['aluno', 'professor', 'funcionario', 'responsavel'])],
+            'tipo_publico' => ['required', Rule::in(['aluno', 'professor', 'funcionario', 'responsavel', 'coletivo'])],
             'aluno_id' => [Rule::requiredIf(in_array($tipoPublico, ['aluno', 'responsavel'], true)), 'nullable', 'exists:alunos,id'],
             'funcionario_id' => [Rule::requiredIf(in_array($tipoPublico, ['professor', 'funcionario'], true)), 'nullable', 'exists:funcionarios,id'],
             'responsavel_existente_id' => ['nullable', 'exists:atendidos_externos,id'],

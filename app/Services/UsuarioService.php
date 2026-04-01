@@ -8,10 +8,13 @@ use App\Models\Usuario;
 use App\Support\CargosPsicossociais;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
 
 class UsuarioService
 {
+    private const PERMISSAO_ACESSO_IRRESTRITO_PSICOSSOCIAL = 'acesso irrestrito psicossocial';
+
     /**
      * Obter lista paginada de usuários com seus relacionamentos.
      */
@@ -44,6 +47,7 @@ class UsuarioService
 
             // Sincronizar Escolas
             $usuario->escolas()->sync($this->resolverEscolaIds($dados));
+            $this->sincronizarChefiaNucleoPsicossocial($usuario, $dados);
 
             return $usuario;
         });
@@ -82,6 +86,7 @@ class UsuarioService
 
             // Sincronizar Escolas
             $usuario->escolas()->sync($this->resolverEscolaIds($dados));
+            $this->sincronizarChefiaNucleoPsicossocial($usuario, $dados);
 
             return $usuario;
         });
@@ -132,5 +137,35 @@ class UsuarioService
             ->whereKey($roleId)
             ->where('name', 'Psicologia/Psicopedagogia')
             ->exists();
+    }
+
+    private function sincronizarChefiaNucleoPsicossocial(Usuario $usuario, array $dados): void
+    {
+        $deveSerChefe = (bool) ($dados['chefe_nucleo_psicossocial'] ?? false);
+        $possuiPerfilPsicossocial = $this->possuiPerfilPsicossocial($dados['role'] ?? null);
+
+        if (! $deveSerChefe || ! $possuiPerfilPsicossocial) {
+            if ($usuario->hasDirectPermission(self::PERMISSAO_ACESSO_IRRESTRITO_PSICOSSOCIAL)) {
+                $usuario->revokePermissionTo(self::PERMISSAO_ACESSO_IRRESTRITO_PSICOSSOCIAL);
+            }
+
+            return;
+        }
+
+        $permissao = Permission::findOrCreate(self::PERMISSAO_ACESSO_IRRESTRITO_PSICOSSOCIAL, 'web');
+
+        Usuario::query()
+            ->whereKeyNot($usuario->id)
+            ->permission($permissao->name)
+            ->get()
+            ->each(function (Usuario $outroUsuario) use ($permissao): void {
+                if ($outroUsuario->hasDirectPermission($permissao->name)) {
+                    $outroUsuario->revokePermissionTo($permissao->name);
+                }
+            });
+
+        if (! $usuario->hasDirectPermission($permissao->name)) {
+            $usuario->givePermissionTo($permissao);
+        }
     }
 }

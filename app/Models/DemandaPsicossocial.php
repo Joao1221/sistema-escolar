@@ -32,11 +32,13 @@ class DemandaPsicossocial extends Model
         'observacoes',
         'encaminhado_para_atendimento',
         'atendimento_id',
+        'aberta_pela_escola',
     ];
 
     protected $casts = [
         'data_solicitacao' => 'date',
         'encaminhado_para_atendimento' => 'boolean',
+        'aberta_pela_escola' => 'boolean',
     ];
 
     protected $hidden = [
@@ -85,9 +87,10 @@ class DemandaPsicossocial extends Model
 
     public function getNomeAtendidoAttribute(): ?string
     {
-        return $this->aluno?->nome
+        return $this->aluno?->nome_completo
             ?? $this->funcionario?->nome
-            ?? $this->responsavel_nome;
+            ?? $this->responsavel_nome
+            ?? ($this->tipo_publico === 'coletivo' ? 'Atendimento coletivo' : null);
     }
 
     public function scopeAbertas($query)

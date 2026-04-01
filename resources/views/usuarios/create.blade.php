@@ -102,6 +102,17 @@
                 <x-input-error :messages="$errors->get('role')" class="mt-2" />
             </div>
 
+            <div id="chefe-psicossocial-wrapper" class="{{ old('role') && (($perfis->firstWhere('id', old('role'))?->name) === $perfilPsicossocial) ? '' : 'hidden' }}">
+                <label for="chefe_nucleo_psicossocial" class="inline-flex items-start gap-3">
+                    <input id="chefe_nucleo_psicossocial" type="checkbox" value="1" class="mt-1 rounded border-gray-300 text-indigo-600 shadow-sm focus:ring-indigo-500" name="chefe_nucleo_psicossocial" {{ old('chefe_nucleo_psicossocial') ? 'checked' : '' }}>
+                    <span class="text-sm text-gray-700">
+                        <span class="block font-semibold text-gray-900">Definir como chefe do nucleo psicossocial</span>
+                        <span class="mt-1 block text-xs text-gray-500">Concede acesso total e irrestrito a todos os atendimentos e sigilos do portal psicossocial. Se marcado, substitui o chefe atual.</span>
+                    </span>
+                </label>
+                <x-input-error :messages="$errors->get('chefe_nucleo_psicossocial')" class="mt-2" />
+            </div>
+
             <div>
                 <x-input-label for="escolas" :value="__('Vinculo com Escolas (Segure CTRL para multipla selecao)')" />
                 <p id="escolas-help" class="mt-1 text-xs text-gray-500">Selecione manualmente as escolas apenas para usuarios que nao pertencem ao portal da psicologia.</p>
@@ -149,11 +160,13 @@
                 const escolasWrapper = document.getElementById('escolas-wrapper');
                 const escolasHelp = document.getElementById('escolas-help');
                 const escolasAuto = document.getElementById('escolas-auto');
+                const chefeWrapper = document.getElementById('chefe-psicossocial-wrapper');
+                const chefeCheckbox = document.getElementById('chefe_nucleo_psicossocial');
                 const perfis = @json($perfisData, JSON_UNESCAPED_UNICODE);
                 const cargosPsicossociais = @json($cargosPsicossociais, JSON_UNESCAPED_UNICODE);
                 const perfilPsicossocial = @json($perfilPsicossocial);
 
-                if (!funcionarioSelect || !roleSelect || !nomeInput || !emailInput || !saveButton || !escolasSelect) {
+                if (!funcionarioSelect || !roleSelect || !nomeInput || !emailInput || !saveButton || !escolasSelect || !chefeWrapper || !chefeCheckbox) {
                     return;
                 }
 
@@ -165,14 +178,20 @@
                 const atualizarVisibilidadeEscolas = () => {
                     const funcionario = funcionarios[funcionarioSelect.value] || null;
                     const perfil = perfis[roleSelect.value] || null;
+                    const perfilPsicossocialSelecionado = normalizarTexto(perfil ? perfil.name : '') === normalizarTexto(perfilPsicossocial);
                     const acessoAutomatico =
                         cargosPsicossociais.map(normalizarTexto).includes(normalizarTexto(funcionario ? funcionario.cargo : ''))
-                        || normalizarTexto(perfil ? perfil.name : '') === normalizarTexto(perfilPsicossocial);
+                        || perfilPsicossocialSelecionado;
 
                     escolasWrapper.classList.toggle('hidden', acessoAutomatico);
                     escolasHelp.classList.toggle('hidden', acessoAutomatico);
                     escolasAuto.classList.toggle('hidden', !acessoAutomatico);
                     escolasSelect.disabled = acessoAutomatico;
+                    chefeWrapper.classList.toggle('hidden', !perfilPsicossocialSelecionado);
+
+                    if (!perfilPsicossocialSelecionado) {
+                        chefeCheckbox.checked = false;
+                    }
                 };
 
                 const updateFormFromFuncionario = () => {

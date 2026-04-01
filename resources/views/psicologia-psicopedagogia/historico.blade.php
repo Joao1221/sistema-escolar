@@ -11,8 +11,10 @@
             'rotaShow' => 'psicologia.show',
             'atendimentos' => $atendimentos,
             'escolas' => $escolas,
+            'profissionais' => $profissionaisPsicossociais,
             'filtros' => $filtros,
             'statusOptions' => ['agendado', 'em_acompanhamento', 'realizado', 'cancelado', 'faltou', 'encerrado'],
+            'mostrarFiltroProfissional' => auth()->user()?->possuiAcessoIrrestritoPsicossocial(),
         ])
     </div>
 </x-psicologia-layout>

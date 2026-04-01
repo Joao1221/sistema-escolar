@@ -64,6 +64,7 @@ use App\Http\Controllers\SecretariaEscolar\DirecaoEscolarController;
 use App\Http\Controllers\SecretariaEscolar\FornecedorAlimentoController;
 use App\Http\Controllers\SecretariaEscolar\MovimentacaoAlimentoController;
 use App\Http\Controllers\SecretariaEscolar\PsicossocialDocumentoController;
+use App\Http\Controllers\SecretariaEscolar\DemandaPsicossocialEscolarController;
 use App\Http\Controllers\SecretariaEscolar\PsicossocialController;
 use App\Http\Controllers\Professor\DocumentoProfessorController;
 use App\Http\Controllers\Professor\AuditoriaProfessorController;
@@ -253,6 +254,14 @@ Route::middleware(['auth', 'role:Administrador da Rede|Secretário Escolar|Admin
         Route::get('/cardapios/{cardapio}', [CardapioDiarioController::class, 'show'])->name('cardapios.show');
         Route::get('/cardapios/{cardapio}/editar', [CardapioDiarioController::class, 'edit'])->name('cardapios.edit');
         Route::put('/cardapios/{cardapio}', [CardapioDiarioController::class, 'update'])->name('cardapios.update');
+    });
+
+    Route::prefix('psicologia-psicopedagogia/demandas')->name('demandas-psicossociais.')->group(function () {
+        Route::get('/', [DemandaPsicossocialEscolarController::class, 'index'])->name('index');
+        Route::get('/criar', [DemandaPsicossocialEscolarController::class, 'create'])->name('create');
+        Route::get('/dados-escola/{escolaId}', [DemandaPsicossocialEscolarController::class, 'dadosEscola'])->name('dados-escola');
+        Route::post('/', [DemandaPsicossocialEscolarController::class, 'store'])->name('store');
+        Route::get('/{demanda}', [DemandaPsicossocialEscolarController::class, 'show'])->name('show');
     });
 
     Route::prefix('psicologia-psicopedagogia')->name('psicossocial.')->group(function () {

@@ -1,12 +1,12 @@
 <x-psicologia-layout :titulo="$tituloPagina" :subtitulo="$subtituloPagina" :breadcrumbs="$breadcrumbs">
     <div class="mx-auto max-w-6xl rounded-[1.75rem] border border-slate-200 bg-white p-8 shadow-sm">
-        <div class="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
-            <div>
-                <h1 class="text-3xl font-bold text-[#14363a]">Novo atendimento sigiloso</h1>
-                <p class="mt-2 text-sm text-slate-500">Cadastre um atendimento para aluno, professor, funcionario ou responsavel com nivel de sigilo reforcado.</p>
+            <div class="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
+                <div>
+                    <h1 class="text-3xl font-bold text-[#14363a]">Novo atendimento sigiloso</h1>
+                    <p class="mt-2 text-sm text-slate-500">Cadastre um atendimento para aluno, professor, funcionario, responsavel ou publico coletivo com nivel de sigilo reforcado.</p>
+                </div>
+                <a href="{{ route('psicologia.dashboard') }}" class="text-sm font-semibold text-cyan-700 hover:text-cyan-800">Voltar ao painel</a>
             </div>
-            <a href="{{ route('psicologia.dashboard') }}" class="text-sm font-semibold text-cyan-700 hover:text-cyan-800">Voltar ao painel</a>
-        </div>
 
         <form method="POST" action="{{ route('psicologia.store') }}" class="mt-8 space-y-6 pb-2">
             @csrf
@@ -23,7 +23,7 @@
                     <label class="text-xs font-semibold uppercase tracking-widest text-slate-500">Profissional responsavel</label>
                     <select name="profissional_responsavel_id" class="mt-2 w-full rounded-xl border-slate-300 shadow-sm">
                         <option value="">Usar profissional vinculado</option>
-                        @foreach ($funcionarios as $funcionario)
+                        @foreach ($profissionaisPsicossociais as $funcionario)
                             <option value="{{ $funcionario->id }}" @selected(old('profissional_responsavel_id') == $funcionario->id)>{{ $funcionario->nome }}</option>
                         @endforeach
                     </select>
@@ -31,7 +31,7 @@
                 <div>
                     <label class="text-xs font-semibold uppercase tracking-widest text-slate-500">Publico atendido</label>
                     <select name="tipo_publico" class="mt-2 w-full rounded-xl border-slate-300 shadow-sm">
-                        @foreach (['aluno', 'professor', 'funcionario', 'responsavel'] as $tipo)
+                        @foreach (['aluno', 'professor', 'funcionario', 'responsavel', 'coletivo'] as $tipo)
                             <option value="{{ $tipo }}" @selected(old('tipo_publico') === $tipo)>{{ ucfirst($tipo) }}</option>
                         @endforeach
                     </select>

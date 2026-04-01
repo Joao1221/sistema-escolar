@@ -1,11 +1,13 @@
 @php
     $statusOptions = $statusOptions ?? ['agendado', 'realizado', 'cancelado', 'faltou', 'encerrado'];
-    $tipoPublicoOptions = $tipoPublicoOptions ?? ['aluno', 'professor', 'funcionario', 'responsavel'];
+    $tipoPublicoOptions = $tipoPublicoOptions ?? ['aluno', 'professor', 'funcionario', 'responsavel', 'coletivo'];
+    $mostrarFiltroProfissional = $mostrarFiltroProfissional ?? false;
+    $profissionais = $profissionais ?? collect();
 @endphp
 
 <div class="space-y-6">
     <div class="rounded-[1.75rem] border border-slate-200 bg-white p-6 shadow-sm">
-        <form id="filtros-atendimentos" method="GET" action="{{ $rota }}" class="grid gap-4 md:grid-cols-5">
+        <form id="filtros-atendimentos" method="GET" action="{{ $rota }}" class="grid gap-4 {{ $mostrarFiltroProfissional ? 'md:grid-cols-6' : 'md:grid-cols-5' }}">
             <div>
                 <label class="text-xs font-semibold uppercase tracking-widest text-slate-500">Escola</label>
                 <select name="escola_id" class="mt-2 w-full rounded-xl border-slate-300 shadow-sm">
@@ -43,6 +45,17 @@
                     class="mt-2 w-full rounded-xl border-slate-300 shadow-sm"
                 >
             </div>
+            @if ($mostrarFiltroProfissional)
+                <div>
+                    <label class="text-xs font-semibold uppercase tracking-widest text-slate-500">Profissional</label>
+                    <select name="profissional_id" class="mt-2 w-full rounded-xl border-slate-300 shadow-sm">
+                        <option value="">Todos</option>
+                        @foreach ($profissionais as $profissional)
+                            <option value="{{ $profissional->id }}" @selected(($filtros['profissional_id'] ?? null) == $profissional->id)>{{ $profissional->nome }}</option>
+                        @endforeach
+                    </select>
+                </div>
+            @endif
             <div class="flex items-end gap-3">
                 <button type="submit" class="w-full rounded-xl border border-black bg-black px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-slate-900">Filtrar</button>
                 <a href="{{ $rota }}" class="rounded-xl border border-black bg-black px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-slate-900">Limpar</a>

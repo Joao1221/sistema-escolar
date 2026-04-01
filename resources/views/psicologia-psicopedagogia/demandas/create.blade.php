@@ -66,7 +66,7 @@
             </div>
 
             <div class="rounded-[1.75rem] border border-slate-200 bg-white p-6 shadow-sm">
-                <h2 class="text-lg font-bold text-[#14363a]">Pessoa a ser atendida</h2>
+                <h2 class="text-lg font-bold text-[#14363a]">Publico a ser atendido</h2>
                 
                 <div class="mt-5 grid gap-4 md:grid-cols-2">
                     <div>
@@ -77,7 +77,9 @@
                             <option value="professor" {{ old('tipo_publico') == 'professor' ? 'selected' : '' }}>Professor</option>
                             <option value="funcionario" {{ old('tipo_publico') == 'funcionario' ? 'selected' : '' }}>Funcionario</option>
                             <option value="responsavel" {{ old('tipo_publico') == 'responsavel' ? 'selected' : '' }}>Responsavel</option>
+                            <option value="coletivo" {{ old('tipo_publico') == 'coletivo' ? 'selected' : '' }}>Coletivo</option>
                         </select>
+                        <p class="mt-1 text-xs text-slate-500">Use coletivo para turma, serie ou escola inteira, sem vincular uma pessoa especifica.</p>
                         @error('tipo_publico')
                             <p class="mt-1 text-xs text-red-600">{{ $message }}</p>
                         @enderror
@@ -145,6 +147,22 @@
     </div>
 
     <script>
+        function limparCamposPessoa(tipoAtivo) {
+            if (tipoAtivo !== 'aluno') {
+                document.getElementById('aluno_id').value = '';
+            }
+
+            if (tipoAtivo !== 'professor' && tipoAtivo !== 'funcionario') {
+                document.getElementById('funcionario_id').value = '';
+            }
+
+            if (tipoAtivo !== 'responsavel') {
+                document.querySelector('input[name=\"responsavel_nome\"]').value = '';
+                document.querySelector('input[name=\"responsavel_vinculo\"]').value = '';
+                document.querySelector('input[name=\"responsavel_telefone\"]').value = '';
+            }
+        }
+
         function filtrarPessoas() {
             var tipo = document.getElementById('tipo_publico').value;
             var escolaId = document.getElementById('escola_id').value;
@@ -154,6 +172,7 @@
             document.getElementById('campo_responsavel').style.display = 'none';
             document.getElementById('campo_vinculo').style.display = 'none';
             document.getElementById('campo_telefone').style.display = 'none';
+            limparCamposPessoa(tipo);
             
             if (tipo === 'aluno') {
                 document.getElementById('campo_aluno').style.display = 'block';

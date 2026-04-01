@@ -67,7 +67,7 @@ class PsicossocialService
                     ->whereHas('atendimento', fn ($query) => $query->visivelParaUsuario($usuario))
                     ->count(),
             ],
-            'porPublico' => collect(['aluno', 'professor', 'funcionario', 'responsavel'])
+            'porPublico' => collect(['aluno', 'professor', 'funcionario', 'responsavel', 'coletivo'])
                 ->mapWithKeys(fn (string $tipo) => [
                     $tipo => (clone $atendimentos)->where('tipo_publico', $tipo)->count(),
                 ])
@@ -207,11 +207,29 @@ class PsicossocialService
                 ->whereHas('escolas', fn ($query) => $query->whereIn('escolas.id', $escolaIds))
                 ->orderBy('nome')
                 ->get(),
+            'profissionaisPsicossociais' => $this->profissionaisPsicossociaisPorEscolas($escolaIds),
             'responsaveis' => AtendidoExterno::query()
                 ->whereIn('escola_id', $escolaIds)
                 ->where('ativo', true)
                 ->orderBy('nome')
                 ->get(),
+        ];
+    }
+
+    public function dadosEscola(Usuario $usuario, int $escolaId): array
+    {
+        $this->garantirEscolaPermitida($usuario, $escolaId);
+
+        return [
+            'alunos' => Aluno::query()
+                ->whereHas('matriculas', fn ($query) => $query->where('escola_id', $escolaId)->where('status', 'ativa'))
+                ->where('ativo', true)
+                ->orderBy('nome_completo')
+                ->get(['id', 'nome_completo']),
+            'funcionarios' => Funcionario::query()
+                ->whereHas('escolas', fn ($query) => $query->where('escolas.id', $escolaId))
+                ->orderBy('nome')
+                ->get(['id', 'nome']),
         ];
     }
 
@@ -441,6 +459,10 @@ class PsicossocialService
             $query->where('tipo_publico', $filtros['tipo_publico']);
         }
 
+        if ($usuario->possuiAcessoIrrestritoPsicossocial() && ! empty($filtros['profissional_id'])) {
+            $query->where('profissional_responsavel_id', $filtros['profissional_id']);
+        }
+
         if (! empty($filtros['nome'])) {
             $nome = $filtros['nome'];
             $query->where(function ($sub) use ($nome) {
@@ -500,6 +522,7 @@ class PsicossocialService
             'aluno' => [Aluno::class, (int) $dados['aluno_id']],
             'professor', 'funcionario' => [Funcionario::class, (int) $dados['funcionario_id']],
             'responsavel' => [AtendidoExterno::class, $this->resolverResponsavelExterno($dados)->id],
+            'coletivo' => [AtendidoExterno::class, $this->criarAtendidoColetivo($dados)->id],
         };
     }
 
@@ -521,6 +544,21 @@ class PsicossocialService
         ]);
     }
 
+    private function criarAtendidoColetivo(array $dados): AtendidoExterno
+    {
+        // Mantem o relacionamento polimorfico sem exigir uma pessoa especifica no fluxo coletivo.
+        return AtendidoExterno::create([
+            'escola_id' => $dados['escola_id'],
+            'aluno_id' => null,
+            'nome' => 'Atendimento coletivo',
+            'tipo_vinculo' => 'coletivo',
+            'cpf' => null,
+            'telefone' => null,
+            'email' => null,
+            'ativo' => false,
+        ]);
+    }
+
     public function listarDemandasa(Usuario $usuario, array $filtros = []): LengthAwarePaginator
     {
         $this->sincronizarDemandasPorStatusDoAtendimento();
@@ -538,9 +576,43 @@ class PsicossocialService
             ->withQueryString();
     }
 
+    public function listarDemandasEscolares(Usuario $usuario, array $filtros = []): LengthAwarePaginator
+    {
+        $this->sincronizarDemandasPorStatusDoAtendimento();
+
+        $destinatarios = $this->destinatariosEscolaParaUsuario($usuario);
+
+        return DemandaPsicossocial::query()
+            ->select('demandas_psicossociais.*')
+            ->selectSub(
+                DevolutivaPsicossocial::query()
+                    ->selectRaw('count(*)')
+                    ->whereColumn('devolutivas_psicossociais.atendimento_id', 'demandas_psicossociais.atendimento_id')
+                    ->whereIn('destinatario', $destinatarios),
+                'devolutivas_escolares_count'
+            )
+            ->with([
+                'escola',
+                'aluno',
+                'funcionario',
+                'usuarioRegistro',
+                'atendimento' => $this->dadosBasicosAtendimentoParaEscola(),
+            ])
+            ->whereIn('escola_id', $this->escolaIdsPermitidas($usuario))
+            ->where('aberta_pela_escola', true)
+            ->when(! empty($filtros['escola_id']), fn ($query) => $query->where('escola_id', $filtros['escola_id']))
+            ->when(! empty($filtros['status']), fn ($query) => $query->where('status', $filtros['status']))
+            ->when(! empty($filtros['tipo_publico']), fn ($query) => $query->where('tipo_publico', $filtros['tipo_publico']))
+            ->when(! empty($filtros['tipo_atendimento']), fn ($query) => $query->where('tipo_atendimento', $filtros['tipo_atendimento']))
+            ->orderByDesc('data_solicitacao')
+            ->paginate(15)
+            ->withQueryString();
+    }
+
     public function criarDemanda(Usuario $usuario, array $dados): DemandaPsicossocial
     {
         $this->garantirEscolaPermitida($usuario, (int) $dados['escola_id']);
+        $dados = $this->normalizarDadosDemanda($dados);
 
         return DB::transaction(function () use ($usuario, $dados) {
             return DemandaPsicossocial::create([
@@ -560,8 +632,18 @@ class PsicossocialService
                 'status' => 'aberta',
                 'data_solicitacao' => $dados['data_solicitacao'] ?? now()->toDateString(),
                 'observacoes' => $dados['observacoes'] ?? null,
+                'aberta_pela_escola' => (bool) ($dados['aberta_pela_escola'] ?? false),
             ]);
         });
+    }
+
+    public function criarDemandaEscolar(Usuario $usuario, array $dados): DemandaPsicossocial
+    {
+        return $this->criarDemanda($usuario, [
+            ...$dados,
+            'origem_demanda' => $this->resolverOrigemDemandaEscolar($usuario),
+            'aberta_pela_escola' => true,
+        ]);
     }
 
     public function carregarDemanda(Usuario $usuario, DemandaPsicossocial $demanda): DemandaPsicossocial
@@ -575,6 +657,38 @@ class PsicossocialService
         }
 
         return $demanda->load(['escola', 'aluno', 'funcionario', 'usuarioRegistro', 'profissionalResponsavel', 'atendimento']);
+    }
+
+    public function carregarDemandaEscolar(Usuario $usuario, DemandaPsicossocial $demanda): array
+    {
+        $this->garantirEscolaPermitida($usuario, $demanda->escola_id);
+        abort_unless($demanda->aberta_pela_escola, 404);
+
+        $this->sincronizarDemandaComAtendimento($demanda);
+
+        $demanda->load([
+            'escola',
+            'aluno',
+            'funcionario',
+            'usuarioRegistro',
+            'atendimento' => $this->dadosBasicosAtendimentoParaEscola(),
+        ]);
+
+        $devolutivas = collect();
+
+        if ($demanda->atendimento_id) {
+            $devolutivas = DevolutivaPsicossocial::query()
+                ->with('usuarioResponsavel')
+                ->where('atendimento_id', $demanda->atendimento_id)
+                ->whereIn('destinatario', $this->destinatariosEscolaParaUsuario($usuario))
+                ->latest('data_devolutiva')
+                ->get();
+        }
+
+        return [
+            'demanda' => $demanda,
+            'devolutivas' => $devolutivas,
+        ];
     }
 
     public function criarTriagem(Usuario $usuario, DemandaPsicossocial $demanda, array $dados): TriagemPsicossocial
@@ -632,7 +746,7 @@ class PsicossocialService
             'tipo_atendimento' => $demanda->tipo_atendimento,
             'natureza' => 'agendado',
             'status' => 'agendado',
-            'data_agendada' => now()->addDays(7)->toDateString(),
+            'data_agendada' => now(),
             'motivo_demanda' => $demanda->motivo_inicial,
             'nivel_sigilo' => $demanda->origem_demanda === 'familia' ? 'restrito' : 'normal',
             'requer_acompanhamento' => false,
@@ -642,7 +756,7 @@ class PsicossocialService
             $dados['aluno_id'] = $demanda->aluno_id;
         } elseif (in_array($demanda->tipo_publico, ['professor', 'funcionario']) && $demanda->funcionario_id) {
             $dados['funcionario_id'] = $demanda->funcionario_id;
-        } else {
+        } elseif ($demanda->tipo_publico === 'responsavel') {
             $dados['responsavel_nome'] = $demanda->responsavel_nome;
             $dados['responsavel_tipo_vinculo'] = $demanda->responsavel_vinculo;
             $dados['responsavel_telefone'] = $demanda->responsavel_telefone;
@@ -748,5 +862,113 @@ class PsicossocialService
         if (! $atendimento->visivelParaUsuario($usuario)) {
             abort(403, 'Acesso negado a atendimento sigiloso de outro profissional.');
         }
+    }
+
+    private function normalizarDadosDemanda(array $dados): array
+    {
+        $tipoPublico = $dados['tipo_publico'];
+
+        $dados['aluno_id'] = $tipoPublico === 'aluno'
+            ? ($dados['aluno_id'] ?? null)
+            : null;
+
+        $dados['funcionario_id'] = in_array($tipoPublico, ['professor', 'funcionario'], true)
+            ? ($dados['funcionario_id'] ?? null)
+            : null;
+
+        if ($tipoPublico !== 'responsavel') {
+            $dados['responsavel_nome'] = null;
+            $dados['responsavel_telefone'] = null;
+            $dados['responsavel_vinculo'] = null;
+        }
+
+        return $dados;
+    }
+
+    private function profissionaisPsicossociaisPorEscolas(\Illuminate\Support\Collection $escolaIds): Collection
+    {
+        $usuariosPsicossociais = Usuario::query()
+            ->role('Psicologia/Psicopedagogia')
+            ->where(function (Builder $query) use ($escolaIds) {
+                $query->whereHas('escolas', fn ($subquery) => $subquery->whereIn('escolas.id', $escolaIds))
+                    ->orWhereHas('funcionario.escolas', fn ($subquery) => $subquery->whereIn('escolas.id', $escolaIds));
+            })
+            ->get(['funcionario_id', 'email']);
+
+        $funcionarioIds = $usuariosPsicossociais
+            ->pluck('funcionario_id')
+            ->filter()
+            ->unique()
+            ->values();
+
+        $emails = $usuariosPsicossociais
+            ->pluck('email')
+            ->filter()
+            ->unique()
+            ->values();
+
+        if ($funcionarioIds->isEmpty() && $emails->isEmpty()) {
+            return new Collection();
+        }
+
+        return Funcionario::query()
+            ->whereHas('escolas', fn ($query) => $query->whereIn('escolas.id', $escolaIds))
+            ->where(function (Builder $query) use ($funcionarioIds, $emails) {
+                if ($funcionarioIds->isNotEmpty()) {
+                    $query->whereIn('id', $funcionarioIds);
+                }
+
+                if ($emails->isNotEmpty()) {
+                    $metodo = $funcionarioIds->isNotEmpty() ? 'orWhereIn' : 'whereIn';
+                    $query->{$metodo}('email', $emails);
+                }
+            })
+            ->orderBy('nome')
+            ->get();
+    }
+
+    private function dadosBasicosAtendimentoParaEscola(): \Closure
+    {
+        return function ($query): void {
+            $query->select([
+                'id',
+                'escola_id',
+                'profissional_responsavel_id',
+                'status',
+                'data_agendada',
+                'data_realizacao',
+                'data_encerramento',
+            ])->with('profissionalResponsavel:id,nome');
+        };
+    }
+
+    private function destinatariosEscolaParaUsuario(Usuario $usuario): array
+    {
+        $destinatarios = [];
+
+        if ($usuario->hasRole("Coordenador Pedag\u{00F3}gico")) {
+            $destinatarios[] = 'coordenacao';
+        }
+
+        if ($usuario->hasRole('Diretor Escolar')) {
+            $destinatarios[] = 'direcao';
+        }
+
+        return $destinatarios !== []
+            ? $destinatarios
+            : ['coordenacao', 'direcao'];
+    }
+
+    private function resolverOrigemDemandaEscolar(Usuario $usuario): string
+    {
+        if ($usuario->hasRole('Diretor Escolar')) {
+            return 'direcao';
+        }
+
+        if ($usuario->hasRole("Coordenador Pedag\u{00F3}gico")) {
+            return 'coordenacao';
+        }
+
+        abort(403, 'Perfil sem permissao para registrar demanda escolar.');
     }
 }

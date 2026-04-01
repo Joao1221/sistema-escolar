@@ -32,7 +32,7 @@
                     <label class="text-xs font-semibold uppercase tracking-widest text-slate-500">Publico</label>
                     <select name="tipo_publico" class="mt-2 w-full rounded-xl border-slate-300 shadow-sm">
                         <option value="">Todos</option>
-                        @foreach (['aluno', 'professor', 'funcionario', 'responsavel'] as $tipo)
+                        @foreach (['aluno', 'professor', 'funcionario', 'responsavel', 'coletivo'] as $tipo)
                             <option value="{{ $tipo }}" @selected(($filtros['tipo_publico'] ?? null) === $tipo)>{{ ucfirst($tipo) }}</option>
                         @endforeach
                     </select>

@@ -24,6 +24,7 @@ class UsuarioTest extends TestCase
         Permission::findOrCreate('criar usuario', 'web');
         Permission::findOrCreate('editar usuario', 'web');
         Permission::findOrCreate('ativar inativar usuario', 'web');
+        Permission::findOrCreate('acesso irrestrito psicossocial', 'web');
 
         Role::findOrCreate('Administrador da Rede', 'web')
             ->givePermissionTo(Permission::all());
@@ -200,5 +201,60 @@ class UsuarioTest extends TestCase
             [$escolaA->id, $escolaB->id],
             $usuario->escolas()->pluck('escolas.id')->all()
         );
+    }
+
+    public function test_administrador_pode_definir_chefe_do_nucleo_psicossocial_com_exclusividade(): void
+    {
+        $admin = Usuario::factory()->create();
+        $admin->assignRole('Administrador da Rede');
+
+        $funcionarioA = Funcionario::create([
+            'nome' => 'Psicologo Chefe A',
+            'cpf' => '123.456.789-02',
+            'email' => 'psicologo.chefe.a@escola.com',
+            'cargo' => 'Psicólogo',
+            'ativo' => true,
+        ]);
+
+        $funcionarioB = Funcionario::create([
+            'nome' => 'Psicopedagoga Chefe B',
+            'cpf' => '123.456.789-03',
+            'email' => 'psicopedagoga.chefe.b@escola.com',
+            'cargo' => 'Psicopedagogo',
+            'ativo' => true,
+        ]);
+
+        $papelPsicossocial = Role::findByName('Psicologia/Psicopedagogia', 'web');
+
+        $this->actingAs($admin)
+            ->post(route('secretaria.usuarios.store'), [
+                'funcionario_id' => $funcionarioA->id,
+                'role' => $papelPsicossocial->id,
+                'password' => 'senha1234',
+                'password_confirmation' => 'senha1234',
+                'chefe_nucleo_psicossocial' => 1,
+                'ativo' => 1,
+            ])
+            ->assertRedirect(route('secretaria.usuarios.index'));
+
+        $usuarioA = Usuario::query()->where('funcionario_id', $funcionarioA->id)->firstOrFail();
+        $this->assertTrue($usuarioA->hasDirectPermission('acesso irrestrito psicossocial'));
+
+        $this->actingAs($admin)
+            ->post(route('secretaria.usuarios.store'), [
+                'funcionario_id' => $funcionarioB->id,
+                'role' => $papelPsicossocial->id,
+                'password' => 'senha1234',
+                'password_confirmation' => 'senha1234',
+                'chefe_nucleo_psicossocial' => 1,
+                'ativo' => 1,
+            ])
+            ->assertRedirect(route('secretaria.usuarios.index'));
+
+        $usuarioA->refresh();
+        $usuarioB = Usuario::query()->where('funcionario_id', $funcionarioB->id)->firstOrFail();
+
+        $this->assertFalse($usuarioA->hasDirectPermission('acesso irrestrito psicossocial'));
+        $this->assertTrue($usuarioB->hasDirectPermission('acesso irrestrito psicossocial'));
     }
 }

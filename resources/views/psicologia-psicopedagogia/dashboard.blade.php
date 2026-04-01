@@ -5,6 +5,7 @@
             'professor' => 'Professores',
             'funcionario' => 'Funcionarios',
             'responsavel' => 'Pais/Responsaveis',
+            'coletivo' => 'Coletivos',
         ];
     @endphp
 
@@ -47,6 +48,7 @@
                     'border-emerald-100 bg-gradient-to-r from-emerald-50 via-emerald-25 to-emerald-100' => $tipo === 'professor',
                     'border-amber-100 bg-gradient-to-r from-amber-50 via-amber-25 to-amber-100' => $tipo === 'funcionario',
                     'border-rose-100 bg-gradient-to-r from-rose-50 via-rose-25 to-rose-100' => $tipo === 'responsavel',
+                    'border-violet-100 bg-gradient-to-r from-violet-50 via-violet-25 to-violet-100' => $tipo === 'coletivo',
                 ])>
                     <div @class([
                         'h-1.5 w-16 rounded-full',
@@ -54,6 +56,7 @@
                         'bg-emerald-300' => $tipo === 'professor',
                         'bg-amber-300' => $tipo === 'funcionario',
                         'bg-rose-300' => $tipo === 'responsavel',
+                        'bg-violet-300' => $tipo === 'coletivo',
                     ])></div>
                     <p @class([
                         'mt-4 text-xs font-semibold uppercase tracking-[0.24em] break-words leading-tight',
@@ -61,6 +64,7 @@
                         'text-emerald-700' => $tipo === 'professor',
                         'text-amber-700' => $tipo === 'funcionario',
                         'text-rose-700' => $tipo === 'responsavel',
+                        'text-violet-700' => $tipo === 'coletivo',
                     ])>{{ $rotulo }}</p>
                     <p class="mt-4 text-3xl font-bold text-[#14363a]">{{ $porPublico[$tipo] ?? 0 }}</p>
                 </div>

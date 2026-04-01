@@ -3,6 +3,7 @@
 namespace Tests\Feature;
 
 use App\Models\Aluno;
+use App\Models\AtendidoExterno;
 use App\Models\AtendimentoPsicossocial;
 use App\Models\DemandaPsicossocial;
 use App\Models\Escola;
@@ -10,6 +11,7 @@ use App\Models\Funcionario;
 use App\Models\RelatorioTecnicoPsicossocial;
 use App\Models\Usuario;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\URL;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
@@ -39,6 +41,7 @@ class PsicossocialTest extends TestCase
             'emitir relatorios tecnicos psicossociais',
             'consultar relatorios tecnicos do psicossocial',
             'acessar dados sigilosos psicossociais',
+            'acesso irrestrito psicossocial',
         ] as $permissao) {
             Permission::findOrCreate($permissao, 'web');
         }
@@ -343,6 +346,215 @@ class PsicossocialTest extends TestCase
         $response->assertOk();
         $response->assertSee('Escola Norte');
         $response->assertSee('Escola Sul');
+    }
+
+    public function test_profissional_pode_criar_demanda_coletiva_sem_pessoa_especifica_e_iniciar_atendimento(): void
+    {
+        Carbon::setTestNow('2026-03-29 12:02:00');
+
+        [$escola, $aluno] = $this->criarContextoBase();
+        [$usuario, $funcionario] = $this->criarUsuarioPsicossocial($escola, 'Psicologa Coletiva', 'psico.coletiva@example.com');
+
+        $this->actingAs($usuario)->post('/psicologia-psicopedagogia/demandas', [
+            'escola_id' => $escola->id,
+            'origem_demanda' => 'coordenacao',
+            'tipo_publico' => 'coletivo',
+            'aluno_id' => $aluno->id,
+            'funcionario_id' => $funcionario->id,
+            'responsavel_nome' => 'Nao deve salvar',
+            'responsavel_vinculo' => 'Outro',
+            'responsavel_telefone' => '(85) 90000-0000',
+            'tipo_atendimento' => 'psicopedagogia',
+            'motivo_inicial' => 'Atendimento voltado para uma turma inteira.',
+            'prioridade' => 'alta',
+            'data_solicitacao' => '2026-03-28',
+            'observacoes' => 'Necessario alinhamento coletivo.',
+        ])->assertRedirect();
+
+        $demanda = DemandaPsicossocial::query()->latest('id')->firstOrFail();
+
+        $this->assertDatabaseHas('demandas_psicossociais', [
+            'id' => $demanda->id,
+            'tipo_publico' => 'coletivo',
+            'aluno_id' => null,
+            'funcionario_id' => null,
+            'responsavel_nome' => null,
+            'responsavel_vinculo' => null,
+            'responsavel_telefone' => null,
+        ]);
+
+        $this->actingAs($usuario)->post("/psicologia-psicopedagogia/demandas/{$demanda->id}/triagem", [
+            'urgencia' => 'media',
+            'nivel_sigilo' => 'normal',
+            'decisao' => 'iniciar_atendimento',
+            'profissional_responsavel_id' => $funcionario->id,
+            'data_triagem' => '2026-03-29',
+        ])->assertRedirect();
+
+        $atendimento = AtendimentoPsicossocial::query()->latest('id')->firstOrFail();
+
+        $this->assertSame('coletivo', $atendimento->tipo_publico);
+        $this->assertSame('Atendimento coletivo', $atendimento->nome_atendido);
+        $this->assertSame(AtendidoExterno::class, $atendimento->atendivel_type);
+        $this->assertSame('2026-03-29 12:02:00', $atendimento->data_agendada?->format('Y-m-d H:i:s'));
+
+        $this->assertDatabaseHas('atendidos_externos', [
+            'id' => $atendimento->atendivel_id,
+            'nome' => 'Atendimento coletivo',
+            'tipo_vinculo' => 'coletivo',
+            'ativo' => false,
+        ]);
+
+        $this->actingAs($usuario)
+            ->get("/psicologia-psicopedagogia/demandas/{$demanda->id}")
+            ->assertOk()
+            ->assertSee('Atendimento coletivo')
+            ->assertSee('Coletivo');
+
+        Carbon::setTestNow();
+    }
+
+    public function test_triagem_lista_apenas_profissionais_habilitados_no_portal_psicossocial(): void
+    {
+        [$escola] = $this->criarContextoBase();
+        [$usuario, $funcionarioPsicossocial] = $this->criarUsuarioPsicossocial($escola, 'Psicologa Elegivel', 'psico.elegivel@example.com');
+
+        $funcionarioNaoElegivel = Funcionario::create([
+            'nome' => 'Professor Nao Elegivel',
+            'cpf' => '98765432100',
+            'email' => 'professor.nao.elegivel@example.com',
+            'telefone' => '(85) 98888-7777',
+            'cargo' => 'Professor',
+            'ativo' => true,
+        ]);
+        $funcionarioNaoElegivel->escolas()->attach($escola->id);
+
+        $demanda = DemandaPsicossocial::create([
+            'escola_id' => $escola->id,
+            'usuario_registro_id' => $usuario->id,
+            'tipo_atendimento' => 'psicologia',
+            'origem_demanda' => 'coordenacao',
+            'tipo_publico' => 'coletivo',
+            'motivo_inicial' => 'Demanda aberta aguardando triagem.',
+            'prioridade' => 'media',
+            'status' => 'aberta',
+            'data_solicitacao' => '2026-03-29',
+        ]);
+
+        $this->actingAs($usuario)
+            ->get("/psicologia-psicopedagogia/demandas/{$demanda->id}")
+            ->assertOk()
+            ->assertSee($funcionarioPsicossocial->nome)
+            ->assertDontSee($funcionarioNaoElegivel->nome);
+    }
+
+    public function test_chefe_do_nucleo_psicossocial_visualiza_atendimento_de_outro_profissional(): void
+    {
+        [$escola, $aluno] = $this->criarContextoBase();
+
+        [$usuarioResponsavel, $funcionarioResponsavel] = $this->criarUsuarioPsicossocial($escola, 'Psicologo Responsavel', 'psico.responsavel@example.com');
+        [$usuarioChefe] = $this->criarUsuarioPsicossocial($escola, 'Psicopedagoga Chefe', 'psico.chefe@example.com');
+        $usuarioChefe->givePermissionTo('acesso irrestrito psicossocial');
+
+        $this->actingAs($usuarioResponsavel)->post('/psicologia-psicopedagogia/atendimentos', [
+            'escola_id' => $escola->id,
+            'profissional_responsavel_id' => $funcionarioResponsavel->id,
+            'tipo_publico' => 'aluno',
+            'aluno_id' => $aluno->id,
+            'tipo_atendimento' => 'psicologia',
+            'natureza' => 'agendado',
+            'status' => 'agendado',
+            'data_agendada' => '2026-03-18 10:00:00',
+            'motivo_demanda' => 'Atendimento sigiloso de outro profissional.',
+            'nivel_sigilo' => 'muito_restrito',
+        ])->assertRedirect();
+
+        $atendimento = AtendimentoPsicossocial::query()->firstOrFail();
+
+        $this->actingAs($usuarioChefe)
+            ->get("/psicologia-psicopedagogia/atendimentos/{$atendimento->id}")
+            ->assertOk()
+            ->assertSee('Aluno Sigiloso');
+
+        $this->actingAs($usuarioChefe)
+            ->get('/psicologia-psicopedagogia/agenda')
+            ->assertOk()
+            ->assertSee('Aluno Sigiloso');
+    }
+
+    public function test_chefe_do_nucleo_psicossocial_pode_filtrar_historico_por_profissional(): void
+    {
+        [$escola, $aluno] = $this->criarContextoBase();
+
+        [$usuarioProfissionalA, $funcionarioProfissionalA] = $this->criarUsuarioPsicossocial($escola, 'Psicologo Alfa', 'psico.alfa@example.com');
+        [$usuarioProfissionalB, $funcionarioProfissionalB] = $this->criarUsuarioPsicossocial($escola, 'Psicopedagoga Beta', 'psico.beta@example.com');
+        [$usuarioChefe] = $this->criarUsuarioPsicossocial($escola, 'Chefe do Nucleo', 'psico.chefe.historico@example.com');
+        $usuarioChefe->givePermissionTo('acesso irrestrito psicossocial');
+
+        AtendimentoPsicossocial::create([
+            'escola_id' => $escola->id,
+            'usuario_registro_id' => $usuarioProfissionalA->id,
+            'profissional_responsavel_id' => $funcionarioProfissionalA->id,
+            'atendivel_type' => Aluno::class,
+            'atendivel_id' => $aluno->id,
+            'tipo_publico' => 'aluno',
+            'tipo_atendimento' => 'psicologia',
+            'natureza' => 'agendado',
+            'status' => 'realizado',
+            'data_agendada' => '2026-03-18 09:00:00',
+            'data_realizacao' => '2026-03-18 09:45:00',
+            'motivo_demanda' => 'Atendimento do profissional alfa.',
+            'nivel_sigilo' => 'alto',
+        ]);
+
+        $atendimentoColetivo = AtendidoExterno::create([
+            'escola_id' => $escola->id,
+            'nome' => 'Turma Horizonte',
+            'tipo_vinculo' => 'coletivo',
+            'ativo' => false,
+        ]);
+
+        AtendimentoPsicossocial::create([
+            'escola_id' => $escola->id,
+            'usuario_registro_id' => $usuarioProfissionalB->id,
+            'profissional_responsavel_id' => $funcionarioProfissionalB->id,
+            'atendivel_type' => AtendidoExterno::class,
+            'atendivel_id' => $atendimentoColetivo->id,
+            'tipo_publico' => 'coletivo',
+            'tipo_atendimento' => 'psicopedagogia',
+            'natureza' => 'agendado',
+            'status' => 'encerrado',
+            'data_agendada' => '2026-03-19 14:00:00',
+            'data_realizacao' => '2026-03-19 15:00:00',
+            'motivo_demanda' => 'Atendimento do profissional beta.',
+            'nivel_sigilo' => 'muito_restrito',
+        ]);
+
+        $this->actingAs($usuarioChefe)
+            ->get('/psicologia-psicopedagogia/historico')
+            ->assertOk()
+            ->assertSee('name="profissional_id"', false)
+            ->assertSee($funcionarioProfissionalA->nome)
+            ->assertSee($funcionarioProfissionalB->nome)
+            ->assertSee('Aluno Sigiloso')
+            ->assertSee('Turma Horizonte');
+
+        $this->actingAs($usuarioChefe)
+            ->get('/psicologia-psicopedagogia/historico?profissional_id=' . $funcionarioProfissionalA->id)
+            ->assertOk()
+            ->assertSee('Aluno Sigiloso')
+            ->assertDontSee('Turma Horizonte');
+    }
+
+    public function test_historico_nao_exibe_filtro_profissional_para_usuario_sem_acesso_irrestrito(): void
+    {
+        [$escola] = $this->criarContextoBase();
+        [$usuario] = $this->criarUsuarioPsicossocial($escola, 'Psicologo Sem Chefia', 'psico.sem.chefia@example.com');
+
+        $this->actingAs($usuario)
+            ->get('/psicologia-psicopedagogia/historico')
+            ->assertOk()
+            ->assertDontSee('name="profissional_id"', false);
     }
 
     public function test_encerrar_atendimento_sincroniza_status_da_demanda_vinculada(): void

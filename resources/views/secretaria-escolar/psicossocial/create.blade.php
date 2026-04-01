@@ -4,7 +4,7 @@
             <div class="flex items-center justify-between">
                 <div>
                     <h1 class="text-3xl font-bold text-slate-900">Novo atendimento sigiloso</h1>
-                    <p class="mt-2 text-sm text-slate-500">Cadastre agenda ou atendimento realizado para aluno, professor, funcionario ou responsavel.</p>
+                    <p class="mt-2 text-sm text-slate-500">Cadastre agenda ou atendimento realizado para aluno, professor, funcionario, responsavel ou publico coletivo.</p>
                 </div>
                 <a href="{{ route('secretaria-escolar.psicossocial.index') }}" class="text-sm font-semibold text-emerald-700 hover:text-emerald-800">Voltar</a>
             </div>
@@ -24,7 +24,7 @@
                         <label class="text-xs font-semibold uppercase tracking-widest text-slate-500">Profissional responsavel</label>
                         <select name="profissional_responsavel_id" class="mt-2 w-full rounded-xl border-slate-300 shadow-sm">
                             <option value="">Usar profissional vinculado</option>
-                            @foreach ($funcionarios as $funcionario)
+                            @foreach ($profissionaisPsicossociais as $funcionario)
                                 <option value="{{ $funcionario->id }}" @selected(old('profissional_responsavel_id') == $funcionario->id)>{{ $funcionario->nome }}</option>
                             @endforeach
                         </select>
@@ -32,7 +32,7 @@
                     <div>
                         <label class="text-xs font-semibold uppercase tracking-widest text-slate-500">Publico atendido</label>
                         <select name="tipo_publico" class="mt-2 w-full rounded-xl border-slate-300 shadow-sm">
-                            @foreach (['aluno', 'professor', 'funcionario', 'responsavel'] as $tipo)
+                            @foreach (['aluno', 'professor', 'funcionario', 'responsavel', 'coletivo'] as $tipo)
                                 <option value="{{ $tipo }}" @selected(old('tipo_publico') === $tipo)>{{ ucfirst($tipo) }}</option>
                             @endforeach
                         </select>

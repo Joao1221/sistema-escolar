@@ -271,7 +271,7 @@ class PortalPsicologiaPsicopedagogiaController extends Controller implements Has
         return view('psicologia-psicopedagogia.create', [
             ...$this->psicossocialService->opcoesFormulario($request->user()),
             'tituloPagina' => 'Novo atendimento',
-            'subtituloPagina' => 'Cadastro de atendimento para aluno, professor, funcionario ou responsavel.',
+            'subtituloPagina' => 'Cadastro de atendimento para aluno, professor, funcionario, responsavel ou publico coletivo.',
             'breadcrumbs' => $this->psicossocialService->construirBreadcrumbs([
                 ['label' => 'Novo atendimento'],
             ]),
@@ -519,27 +519,16 @@ class PortalPsicologiaPsicopedagogiaController extends Controller implements Has
     public function dadosEscola(Request $request, int $escolaId)
     {
         try {
-            $escola = \App\Models\Escola::findOrFail($escolaId);
-            
-            $alunos = \App\Models\Aluno::query()
-                ->whereHas('matriculas', fn ($query) => $query->where('escola_id', $escolaId)->where('status', 'ativa'))
-                ->where('ativo', true)
-                ->orderBy('nome_completo')
-                ->get(['id', 'nome_completo']);
-            
-            $funcionarios = \App\Models\Funcionario::query()
-                ->whereHas('escolas', fn ($query) => $query->where('escolas.id', $escolaId))
-                ->orderBy('nome')
-                ->get(['id', 'nome']);
-            
+            return response()->json(
+                $this->psicossocialService->dadosEscola($request->user(), $escolaId)
+            );
+        } catch (\Symfony\Component\HttpKernel\Exception\HttpExceptionInterface $e) {
             return response()->json([
-                'alunos' => $alunos,
-                'funcionarios' => $funcionarios,
-            ]);
+                'error' => $e->getMessage() ?: 'Nao foi possivel acessar os dados da escola.',
+            ], $e->getStatusCode());
         } catch (\Exception $e) {
             return response()->json([
                 'error' => $e->getMessage(),
-                'trace' => $e->getTraceAsString(),
             ], 500);
         }
     }
@@ -549,7 +538,7 @@ class PortalPsicologiaPsicopedagogiaController extends Controller implements Has
         $validated = $request->validate([
             'escola_id' => 'required|exists:escolas,id',
             'origem_demanda' => 'required|in:coordenacao,direcao,professor,familia,triagem_interna,demanda_espontanea,outro',
-            'tipo_publico' => 'required|in:aluno,professor,funcionario,responsavel',
+            'tipo_publico' => 'required|in:aluno,professor,funcionario,responsavel,coletivo',
             'aluno_id' => 'nullable|exists:alunos,id',
             'funcionario_id' => 'nullable|exists:funcionarios,id',
             'responsavel_nome' => 'nullable|string|max:255',
