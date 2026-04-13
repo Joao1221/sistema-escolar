@@ -13,8 +13,43 @@
 
         <!-- Scripts -->
         @vite(['resources/css/app.css', 'resources/js/app.js'])
+        <style>
+            .secretaria-desktop-sidebar {
+                display: block;
+                width: 16rem;
+                flex: 0 0 16rem;
+            }
+
+            .secretaria-desktop-toggle {
+                display: inline-flex;
+            }
+
+            .secretaria-mobile-header,
+            .secretaria-mobile-sidebar {
+                display: none;
+            }
+
+            @media (max-width: 479px) {
+                .secretaria-desktop-sidebar,
+                .secretaria-desktop-toggle {
+                    display: none !important;
+                }
+
+                .secretaria-mobile-header,
+                .secretaria-mobile-sidebar {
+                    display: flex !important;
+                }
+            }
+
+            @media (min-width: 480px) {
+                .secretaria-mobile-header,
+                .secretaria-mobile-sidebar {
+                    display: none !important;
+                }
+            }
+        </style>
     </head>
-    <body class="font-sans antialiased bg-gray-50 overflow-x-hidden" x-data="{ sidebarOpen: false }">
+    <body class="font-sans antialiased bg-gray-50 overflow-x-hidden" x-data="{ sidebarOpen: false, sidebarCollapsed: false, toggleSidebar() { this.sidebarCollapsed = !this.sidebarCollapsed; } }" x-init="sidebarOpen = false; sidebarCollapsed = false">
         <!-- Mobile overlay -->
         <div x-show="sidebarOpen" 
              x-transition:enter="transition-opacity ease-linear duration-300" 
@@ -28,16 +63,26 @@
              style="display: none;"></div>
 
         <div class="min-h-screen flex">
-            <!-- Sidebar -->
-            <div :class="sidebarOpen ? 'translate-x-0' : '-translate-x-full'" 
-                 class="fixed inset-y-0 left-0 z-50 w-64 -translate-x-full transition-transform duration-300 ease-in-out lg:static lg:translate-x-0 flex-shrink-0 lg:block">
+            <!-- Desktop Sidebar -->
+            <aside class="secretaria-desktop-sidebar flex-shrink-0 overflow-hidden transition-[width,opacity] duration-300 ease-in-out"
+                   :style="sidebarCollapsed
+                        ? 'width: 0; flex-basis: 0; opacity: 0; pointer-events: none;'
+                        : 'width: 16rem; flex-basis: 16rem; opacity: 1; pointer-events: auto;'">
+                <div class="sticky top-0 h-screen w-64">
+                    @include('components.sidebar-secretaria')
+                </div>
+            </aside>
+
+            <!-- Mobile Sidebar -->
+            <div class="secretaria-mobile-sidebar fixed inset-y-0 left-0 z-50 w-64 -translate-x-full transition-transform duration-300 ease-in-out"
+                 :class="sidebarOpen ? 'translate-x-0' : '-translate-x-full'">
                 @include('components.sidebar-secretaria')
             </div>
 
             <!-- Page Content -->
             <div class="flex-1 flex flex-col min-w-0 min-h-screen">
                 <!-- Mobile Header -->
-                <div class="flex items-center justify-between px-6 py-4 bg-white border-b border-gray-100 lg:hidden">
+                <div class="secretaria-mobile-header flex items-center justify-between px-6 py-4 bg-white border-b border-gray-100">
                     <div class="font-bold text-gray-800 text-lg">Portal da Secretaria</div>
                     <button @click="sidebarOpen = true" class="p-2 -mr-2 text-gray-600 hover:text-gray-900 rounded-lg focus:outline-none">
                         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
@@ -54,12 +99,19 @@
                     </div>
                     
                     <div class="flex items-center space-x-4 flex-shrink-0" style="margin-right: 24px;">
+                        <button type="button" @click="toggleSidebar()" class="secretaria-desktop-toggle inline-flex items-center gap-2 rounded-full border border-indigo-200 bg-indigo-50 px-4 py-2 text-xs font-bold uppercase tracking-widest text-indigo-700 hover:bg-indigo-100 transition shadow-sm">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                            </svg>
+                            <span x-text="sidebarCollapsed ? 'Mostrar menu' : 'Ocultar menu'"></span>
+                        </button>
+
                         <div class="flex flex-col items-end leading-tight">
                             <span class="text-sm font-bold text-gray-800">{{ Auth::user()->name }}</span>
                             <span class="text-[10px] text-gray-400 capitalize">{{ Auth::user()->roles->first()?->name ?? 'Usuário' }}</span>
                         </div>
                         
-                        <div class="h-8 w-px bg-gray-100 mx-2"></div>
+                        <div class="h-8 w-px bg-gray-100 mx-2 hidden lg:block"></div>
 
                         <form method="POST" action="{{ route('logout') }}" class="mr-4">
                             @csrf

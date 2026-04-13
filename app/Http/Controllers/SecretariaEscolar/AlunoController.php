@@ -8,6 +8,7 @@ use App\Http\Requests\UpdateAlunoRequest;
 use App\Models\Aluno;
 use App\Services\AlunoService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
 class AlunoController extends Controller
@@ -27,9 +28,10 @@ class AlunoController extends Controller
     public function index(Request $request)
     {
         $this->authorize('visualizar alunos');
-        
+
         $filtros = $request->only(['nome', 'rgm', 'status']);
-        $alunos = $this->alunoService->listarAlunos($filtros);
+        $escolaId = (int) Auth::user()->escola_id;
+        $alunos = $this->alunoService->listarAlunos($filtros + ['escola_id' => $escolaId]);
 
         return view('secretaria-escolar.alunos.index', compact('alunos'));
     }
@@ -40,6 +42,7 @@ class AlunoController extends Controller
     public function create()
     {
         $this->authorize('criar aluno');
+
         return view('secretaria-escolar.alunos.create');
     }
 
@@ -48,7 +51,10 @@ class AlunoController extends Controller
      */
     public function store(StoreAlunoRequest $request)
     {
-        $this->alunoService->criarAluno($request->validated());
+        $dados = $request->validated();
+        $dados['escola_id'] = Auth::user()->escola_id;
+
+        $this->alunoService->criarAluno($dados);
 
         return redirect()->route('secretaria-escolar.alunos.index')
             ->with('success', 'Aluno cadastrado com sucesso!');
@@ -60,6 +66,7 @@ class AlunoController extends Controller
     public function show(Aluno $aluno)
     {
         $this->authorize('detalhar aluno');
+        $this->garantirAlunoDaEscola($aluno);
         return view('secretaria-escolar.alunos.show', compact('aluno'));
     }
 
@@ -69,6 +76,7 @@ class AlunoController extends Controller
     public function edit(Aluno $aluno)
     {
         $this->authorize('editar aluno');
+        $this->garantirAlunoDaEscola($aluno);
         return view('secretaria-escolar.alunos.edit', compact('aluno'));
     }
 
@@ -77,6 +85,7 @@ class AlunoController extends Controller
      */
     public function update(UpdateAlunoRequest $request, Aluno $aluno)
     {
+        $this->garantirAlunoDaEscola($aluno);
         $this->alunoService->atualizarAluno($aluno, $request->validated());
 
         return redirect()->route('secretaria-escolar.alunos.index')
@@ -89,8 +98,21 @@ class AlunoController extends Controller
     public function toggleStatus(Aluno $aluno)
     {
         $this->authorize('ativar inativar aluno');
+        $this->garantirAlunoDaEscola($aluno);
         $this->alunoService->alternarStatus($aluno);
 
         return redirect()->back()->with('success', 'Status do aluno alterado com sucesso!');
+    }
+
+    /**
+     * Garante que o aluno pertence à escola logada.
+     */
+    private function garantirAlunoDaEscola(Aluno $aluno): void
+    {
+        $escolaId = Auth::user()->escola_id;
+
+        if ((int) $aluno->escola_id !== (int) $escolaId) {
+            abort(404);
+        }
     }
 }

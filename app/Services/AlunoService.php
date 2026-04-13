@@ -4,7 +4,6 @@ namespace App\Services;
 
 use App\Models\Aluno;
 use Illuminate\Support\Facades\DB;
-use Carbon\Carbon;
 
 class AlunoService
 {
@@ -15,11 +14,15 @@ class AlunoService
     {
         $query = Aluno::query();
 
-        if (!empty($filtros['nome'])) {
+        if (! empty($filtros['escola_id'])) {
+            $query->where('escola_id', $filtros['escola_id']);
+        }
+
+        if (! empty($filtros['nome'])) {
             $query->where('nome_completo', 'like', '%' . $filtros['nome'] . '%');
         }
 
-        if (!empty($filtros['rgm'])) {
+        if (! empty($filtros['rgm'])) {
             $query->where('rgm', $filtros['rgm']);
         }
 
@@ -54,7 +57,8 @@ class AlunoService
      */
     public function alternarStatus(Aluno $aluno)
     {
-        $aluno->ativo = !$aluno->ativo;
+        $aluno->ativo = ! $aluno->ativo;
+
         return $aluno->save();
     }
 

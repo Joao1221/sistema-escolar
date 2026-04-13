@@ -1,4 +1,63 @@
 <x-secretaria-escolar-layout>
+    <style>
+        .div-row {
+            display: flex;
+            flex-wrap: wrap;
+            margin-left: -0.75rem;
+            margin-right: -0.75rem;
+        }
+
+        .div-col {
+            box-sizing: border-box;
+            min-width: 0;
+            padding-left: 0.75rem;
+            padding-right: 0.75rem;
+            width: 100%;
+        }
+
+        .no-spinner::-webkit-outer-spin-button,
+        .no-spinner::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+
+        .no-spinner {
+            -moz-appearance: textfield;
+        }
+
+        @media (min-width: 1024px) {
+            .div-row {
+                flex-wrap: nowrap;
+            }
+
+            .col-1 {
+                flex: 0 0 8.333333%;
+                max-width: 8.333333%;
+            }
+
+            .col-2,
+            .col-2-alt {
+                flex: 0 0 16.666667%;
+                max-width: 16.666667%;
+            }
+
+            .col-4 {
+                flex: 0 0 33.333333%;
+                max-width: 33.333333%;
+            }
+
+            .col-5 {
+                flex: 0 0 41.666667%;
+                max-width: 41.666667%;
+            }
+
+            .col-3 {
+                flex: 0 0 25%;
+                max-width: 25%;
+            }
+        }
+    </style>
+
     <div class="mb-8 px-4 lg:px-0 flex justify-between items-end">
         <div>
             <h1 class="text-2xl md:text-3xl lg:text-4xl font-bold text-slate-900 font-outfit tracking-tight">Dados da Escola</h1>
@@ -56,6 +115,7 @@
                         </ul>
                     </div>
                 </div>
+            </div>
         </div>
     @endif
 
@@ -86,20 +146,20 @@
                 <!-- Informações da Escola -->
                 <div>
                     <h3 class="text-lg font-bold text-slate-900 border-b border-slate-100 pb-2 mb-4">Informações da Escola</h3>
-                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-6">
-                        <div class="lg:col-span-2">
+                    <div class="div-row">
+                        <div class="div-col col-2">
                             <label for="inep" class="block text-sm font-semibold text-slate-700 mb-1">Código INEP</label>
                             <input type="text" name="inep" id="inep" value="{{ old('inep', $escola->inep) }}" maxlength="8" class="w-full rounded-xl border-slate-200 bg-slate-50 text-slate-500 focus:ring-0 cursor-not-allowed shadow-none" readonly>
                         </div>
-                        <div class="md:col-span-2 lg:col-span-5">
+                        <div class="div-col col-5">
                             <label for="nome" class="block text-sm font-semibold text-slate-700 mb-1">Nome da Escola</label>
                             <input type="text" name="nome" id="nome" value="{{ old('nome', $escola->nome) }}" required class="uppercase w-full rounded-xl border-slate-300 focus:border-blue-500 focus:ring-blue-500 shadow-sm transition">
                         </div>
-                        <div class="lg:col-span-2">
+                        <div class="div-col col-1">
                             <label for="qtd_salas" class="block text-sm font-semibold text-red-600 mb-1">* Salas</label>
-                            <input type="number" name="qtd_salas" id="qtd_salas" min="0" step="1" value="{{ old('qtd_salas', $escola->qtd_salas) }}" required class="w-full rounded-xl border-slate-300 focus:border-blue-500 focus:ring-blue-500 shadow-sm transition">
+                            <input type="number" name="qtd_salas" id="qtd_salas" min="0" step="1" value="{{ old('qtd_salas', $escola->qtd_salas) }}" required class="no-spinner w-full text-left rounded-xl border-slate-300 focus:border-blue-500 focus:ring-blue-500 shadow-sm transition">
                         </div>
-                        <div class="md:col-span-2 lg:col-span-3">
+                        <div class="div-col col-4">
                             <label for="email" class="block text-sm font-semibold text-slate-700 mb-1">E-mail de Contato</label>
                             <input type="email" name="email" id="email" value="{{ old('email', $escola->email) }}" maxlength="70" class="lowercase w-full rounded-xl border-slate-300 focus:border-blue-500 focus:ring-blue-500 shadow-sm transition">
                         </div>
@@ -110,26 +170,26 @@
                 <div>
                     <h3 class="text-lg font-bold text-slate-900 border-b border-slate-100 pb-2 mb-4">Endereço e Contato</h3>
                     <div class="space-y-6">
-                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-6">
-                            <div class="lg:col-span-7">
+                        <div class="div-row">
+                            <div class="div-col lg:col-span-7">
                                 <label for="endereco" class="block text-sm font-semibold text-slate-700 mb-1">Logradouro / Endereço</label>
                                 <input type="text" name="endereco" id="endereco" value="{{ old('endereco', $escola->endereco) }}" maxlength="70" class="uppercase w-full rounded-xl border-slate-300 focus:border-blue-500 focus:ring-blue-500 shadow-sm transition">
                             </div>
-                            <div class="md:col-span-2 lg:col-span-5">
+                            <div class="div-col lg:col-span-5">
                                 <label for="cidade" class="block text-sm font-semibold text-slate-700 mb-1">Cidade</label>
                                 <input type="text" name="cidade" id="cidade" value="{{ old('cidade', $escola->cidade) }}" required maxlength="50" class="uppercase w-full rounded-xl border-slate-300 focus:border-blue-500 focus:ring-blue-500 shadow-sm transition">
                             </div>
                         </div>
-                        <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-12 gap-6">
-                            <div class="lg:col-span-2">
+                        <div class="div-row">
+                            <div class="div-col lg:col-span-3">
                                 <label for="uf" class="block text-sm font-semibold text-slate-700 mb-1">UF</label>
                                 <input type="text" name="uf" id="uf" value="{{ old('uf', $escola->uf) }}" required maxlength="2" class="uppercase w-full rounded-xl border-slate-300 focus:border-blue-500 focus:ring-blue-500 shadow-sm transition text-center">
                             </div>
-                            <div class="lg:col-span-5">
+                            <div class="div-col lg:col-span-4">
                                 <label for="cep" class="block text-sm font-semibold text-slate-700 mb-1">CEP</label>
                                 <input type="text" name="cep" id="cep" value="{{ old('cep', $escola->cep) }}" required class="w-full rounded-xl border-slate-300 focus:border-blue-500 focus:ring-blue-500 shadow-sm transition" placeholder="00000-000">
                             </div>
-                            <div class="lg:col-span-5">
+                            <div class="div-col lg:col-span-5">
                                 <label for="telefone" class="block text-sm font-semibold text-slate-700 mb-1">Telefone</label>
                                 <input type="text" name="telefone" id="telefone" value="{{ old('telefone', $escola->telefone) }}" class="w-full rounded-xl border-slate-300 focus:border-blue-500 focus:ring-blue-500 shadow-sm transition" placeholder="(00) 00000-0000">
                             </div>
@@ -172,14 +232,11 @@
     @push('scripts')
         <script>
             document.addEventListener('DOMContentLoaded', function () {
-                // Formatting functions could go here
-                
-                // Exemplo de Formatação simples via EventListener
                 const mascarasCep = document.getElementById('cep');
                 if (mascarasCep) {
                     mascarasCep.addEventListener('input', function(e) {
                         let obj = e.target;
-                        let value = obj.value.replace(/\D/g, ''); 
+                        let value = obj.value.replace(/\D/g, '');
                         if (value.length > 5) {
                             obj.value = value.replace(/^(\d{5})(\d)/, "$1-$2");
                         } else {
@@ -210,16 +267,3 @@
         </script>
     @endpush
 </x-secretaria-escolar-layout>
-
-
-
-
-
-
-
-
-
-
-
-
-

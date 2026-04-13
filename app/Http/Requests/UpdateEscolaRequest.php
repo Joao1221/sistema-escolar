@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class UpdateEscolaRequest extends FormRequest
 {
@@ -15,6 +16,11 @@ class UpdateEscolaRequest extends FormRequest
     {
         return [
             'nome' => ['required', 'string', 'max:255'],
+            'inep' => [
+                'required',
+                'digits:8',
+                Rule::unique('escolas', 'inep')->ignore($this->route('escola')->id),
+            ],
             'cnpj' => ['nullable', 'string', 'max:18', 'unique:escolas,cnpj,' . $this->route('escola')->id],
             'email' => ['nullable', 'email', 'max:255'],
             'telefone' => ['nullable', 'string', 'max:20'],

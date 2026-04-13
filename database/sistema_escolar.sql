@@ -29,6 +29,7 @@ SET time_zone = "+00:00";
 
 CREATE TABLE `acompanhamentos_pedagogicos_aluno` (
   `id` bigint(20) UNSIGNED NOT NULL,
+  `escola_id` bigint(20) UNSIGNED DEFAULT NULL,
   `diario_professor_id` bigint(20) UNSIGNED NOT NULL,
   `matricula_id` bigint(20) UNSIGNED NOT NULL,
   `usuario_coordenador_id` bigint(20) UNSIGNED DEFAULT NULL,
@@ -79,6 +80,7 @@ INSERT INTO `alimentos` (`id`, `categoria_alimento_id`, `nome`, `unidade_medida`
 
 CREATE TABLE `alunos` (
   `id` bigint(20) UNSIGNED NOT NULL,
+  `escola_id` bigint(20) UNSIGNED DEFAULT NULL,
   `rgm` varchar(255) NOT NULL COMMENT 'Registro Geral de Matrícula',
   `nome_completo` varchar(255) NOT NULL,
   `data_nascimento` date NOT NULL,
@@ -113,9 +115,9 @@ CREATE TABLE `alunos` (
 -- Despejando dados para a tabela `alunos`
 --
 
-INSERT INTO `alunos` (`id`, `rgm`, `nome_completo`, `data_nascimento`, `sexo`, `cpf`, `nis`, `nome_mae`, `nome_pai`, `responsavel_nome`, `responsavel_cpf`, `responsavel_telefone`, `cep`, `logradouro`, `numero`, `complemento`, `bairro`, `cidade`, `uf`, `certidao_nascimento`, `rg_numero`, `rg_orgao`, `alergias`, `medicamentos`, `restricoes_alimentares`, `obs_saude`, `ativo`, `created_at`, `updated_at`) VALUES
-(3, '20260001', 'João Rezende', '1974-08-11', 'M', '712.775.605-87', '4588723123', 'mae', 'pai', 'mae', '22222222222', '79 77777-7777', '49040-700', 'Rua Quirino', '1100', 'apto 002', 'Inácio Barbosa', 'Aracaju', 'SE', '25632541254521452125452214', '256.562-85', 'SSP/se', 'nenhuma', 'não', 'não', 'Saúde perfeita', 1, '2026-03-18 01:51:28', '2026-03-18 01:51:28'),
-(4, '20260002', 'antonio carlos gonzaga', '2015-06-11', 'M', '66666666666', '24500125420', 'ana júlia', 'josé simeão', 'ana júlia', '44444444444', '(79) 99999-9999', '49700-000', 'Rua Nova', '451', 'Casa', 'Centro', 'Capela', 'SE', '65412398785002450022014005', '632.001-45', 'ssp/se', 'Não possui', 'Não faz uso', 'Não possui', 'Saúde plena', 1, '2026-03-20 00:14:25', '2026-03-20 00:14:25');
+INSERT INTO `alunos` (`id`, `escola_id`, `rgm`, `nome_completo`, `data_nascimento`, `sexo`, `cpf`, `nis`, `nome_mae`, `nome_pai`, `responsavel_nome`, `responsavel_cpf`, `responsavel_telefone`, `cep`, `logradouro`, `numero`, `complemento`, `bairro`, `cidade`, `uf`, `certidao_nascimento`, `rg_numero`, `rg_orgao`, `alergias`, `medicamentos`, `restricoes_alimentares`, `obs_saude`, `ativo`, `created_at`, `updated_at`) VALUES
+(3, 5, '20260001', 'João Rezende', '1974-08-11', 'M', '712.775.605-87', '4588723123', 'mae', 'pai', 'mae', '22222222222', '79 77777-7777', '49040-700', 'Rua Quirino', '1100', 'apto 002', 'Inácio Barbosa', 'Aracaju', 'SE', '25632541254521452125452214', '256.562-85', 'SSP/se', 'nenhuma', 'não', 'não', 'Saúde perfeita', 1, '2026-03-18 01:51:28', '2026-03-18 01:51:28'),
+(4, 5, '20260002', 'antonio carlos gonzaga', '2015-06-11', 'M', '66666666666', '24500125420', 'ana júlia', 'josé simeão', 'ana júlia', '44444444444', '(79) 99999-9999', '49700-000', 'Rua Nova', '451', 'Casa', 'Centro', 'Capela', 'SE', '65412398785002450022014005', '632.001-45', 'ssp/se', 'Não possui', 'Não faz uso', 'Não possui', 'Saúde plena', 1, '2026-03-20 00:14:25', '2026-03-20 00:14:25');
 
 -- --------------------------------------------------------
 
@@ -455,15 +457,22 @@ CREATE TABLE `escolas` (
   `id` bigint(20) UNSIGNED NOT NULL,
   `nome` varchar(255) NOT NULL,
   `cnpj` varchar(255) DEFAULT NULL,
+  `inep` varchar(8) DEFAULT NULL,
+  `qtd_salas` int(11) DEFAULT NULL,
+  `ato_posse_diretor` varchar(30) DEFAULT NULL,
   `email` varchar(255) DEFAULT NULL,
   `telefone` varchar(255) DEFAULT NULL,
   `cep` varchar(255) DEFAULT NULL,
   `endereco` varchar(255) DEFAULT NULL,
   `bairro` varchar(255) DEFAULT NULL,
+  `localidade` varchar(70) DEFAULT NULL,
   `cidade` varchar(255) DEFAULT NULL,
   `uf` varchar(255) DEFAULT NULL,
   `nome_gestor` varchar(255) DEFAULT NULL,
   `cpf_gestor` varchar(255) DEFAULT NULL,
+  `ato_criacao` varchar(30) DEFAULT NULL,
+  `ato_autoriza` varchar(30) DEFAULT NULL,
+  `ato_recon` varchar(30) DEFAULT NULL,
   `ativo` tinyint(1) NOT NULL DEFAULT 1,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
@@ -473,9 +482,9 @@ CREATE TABLE `escolas` (
 -- Despejando dados para a tabela `escolas`
 --
 
-INSERT INTO `escolas` (`id`, `nome`, `cnpj`, `email`, `telefone`, `cep`, `endereco`, `bairro`, `cidade`, `uf`, `nome_gestor`, `cpf_gestor`, `ativo`, `created_at`, `updated_at`) VALUES
-(5, 'Escola Municipal Zózimo Lima', '00.000.000/0001-00', 'zozimo@gmail.com', '(79) 0000-0000', '49700-000', 'Rua Principal, 100', 'Centro', 'Capela', 'SE', 'Gestora da Zózimo Lima', '44444444444', 1, '2026-03-18 01:23:19', '2026-03-19 22:07:49'),
-(6, 'Escola Municipal Major Honorino Leal', '36.564.071/0001-64', 'major@gmail.com', '(79) 55555-5555', '49700-000', 'Rua Coelho e Campos, 1201', 'Centro', 'Capela', 'SE', 'Nome da Gestora da Major', '66666666666', 1, '2026-03-19 22:09:12', '2026-03-19 22:09:12');
+INSERT INTO `escolas` (`id`, `nome`, `cnpj`, `inep`, `qtd_salas`, `ato_posse_diretor`, `email`, `telefone`, `cep`, `endereco`, `bairro`, `localidade`, `cidade`, `uf`, `nome_gestor`, `cpf_gestor`, `ato_criacao`, `ato_autoriza`, `ato_recon`, `ativo`, `created_at`, `updated_at`) VALUES
+(5, 'Escola Municipal Zózimo Lima', '00.000.000/0001-00', NULL, NULL, NULL, 'zozimo@gmail.com', '(79) 0000-0000', '49700-000', 'Rua Principal, 100', 'Centro', NULL, 'Capela', 'SE', 'Gestora da Zózimo Lima', '44444444444', NULL, NULL, NULL, 1, '2026-03-18 01:23:19', '2026-03-19 22:07:49'),
+(6, 'Escola Municipal Major Honorino Leal', '36.564.071/0001-64', NULL, NULL, NULL, 'major@gmail.com', '(79) 55555-5555', '49700-000', 'Rua Coelho e Campos, 1201', 'Centro', NULL, 'Capela', 'SE', 'Nome da Gestora da Major', '66666666666', NULL, NULL, NULL, 1, '2026-03-19 22:09:12', '2026-03-19 22:09:12');
 
 -- --------------------------------------------------------
 

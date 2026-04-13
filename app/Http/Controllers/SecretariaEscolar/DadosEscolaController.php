@@ -49,6 +49,7 @@ class DadosEscolaController extends Controller
             'email' => 'nullable|email|max:70',
             'telefone' => 'nullable|string|max:20',
             'endereco' => 'nullable|string|max:70',
+            'localidade' => 'nullable|string|max:70',
             'cidade' => 'required|string|max:50',
             'uf' => 'required|string|size:2',
             'cep' => 'required|string|max:10', // Exatamente como 00000-000

@@ -19,6 +19,7 @@ class Escola extends Model
         'cep',
         'endereco',
         'bairro',
+        'localidade',
         'cidade',
         'uf',
         'nome_gestor',

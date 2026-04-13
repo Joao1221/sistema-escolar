@@ -23,6 +23,11 @@
                             <x-input-error class="mt-2" :messages="$errors->get('nome')" />
                         </div>
                         <div>
+                            <x-input-label for="inep" :value="__('Código INEP')" />
+                            <x-text-input id="inep" name="inep" type="text" class="mt-1 block w-full" :value="old('inep')" required maxlength="8" inputmode="numeric" pattern="[0-9]{8}" placeholder="28014294" />
+                            <x-input-error class="mt-2" :messages="$errors->get('inep')" />
+                        </div>
+                        <div>
                             <x-input-label for="cnpj" :value="__('CNPJ (opcional)')" />
                             <x-text-input id="cnpj" name="cnpj" type="text" class="mt-1 block w-full" :value="old('cnpj')" placeholder="00.000.000/0000-00" />
                             <x-input-error class="mt-2" :messages="$errors->get('cnpj')" />

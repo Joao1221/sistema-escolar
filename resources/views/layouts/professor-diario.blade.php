@@ -16,9 +16,44 @@
         <style>
             body { font-family: 'Source Sans 3', sans-serif; }
             .font-outfit { font-family: 'Outfit', sans-serif; }
+            .professor-diario-desktop-sidebar {
+                display: block;
+                width: 18rem;
+                flex: 0 0 18rem;
+            }
+
+            .professor-diario-desktop-toggle {
+                display: inline-flex;
+            }
+
+            .professor-diario-mobile-header,
+            .professor-diario-mobile-sidebar,
+            .professor-diario-mobile-overlay {
+                display: none;
+            }
+
+            @media (max-width: 479px) {
+                .professor-diario-desktop-sidebar,
+                .professor-diario-desktop-toggle {
+                    display: none !important;
+                }
+
+                .professor-diario-mobile-header,
+                .professor-diario-mobile-sidebar {
+                    display: flex !important;
+                }
+            }
+
+            @media (min-width: 480px) {
+                .professor-diario-mobile-header,
+                .professor-diario-mobile-sidebar,
+                .professor-diario-mobile-overlay {
+                    display: none !important;
+                }
+            }
         </style>
     </head>
-    <body class="h-full bg-amber-950 antialiased" x-data="{ sidebarOpen: false }">
+    <body class="h-full bg-amber-950 antialiased" x-data="{ sidebarOpen: false, sidebarCollapsed: false, toggleSidebar() { this.sidebarCollapsed = !this.sidebarCollapsed; } }">
         <!-- Mobile overlay -->
         <div x-show="sidebarOpen" 
              x-transition:enter="transition-opacity ease-linear duration-300" 
@@ -27,20 +62,28 @@
              x-transition:leave="transition-opacity ease-linear duration-300" 
              x-transition:leave-start="opacity-100" 
              x-transition:leave-end="opacity-0" 
-             class="fixed inset-0 z-40 bg-stone-900/80 backdrop-blur-sm lg:hidden" 
+             class="professor-diario-mobile-overlay fixed inset-0 z-40 bg-stone-900/80 backdrop-blur-sm" 
              @click="sidebarOpen = false" 
              style="display: none;"></div>
 
-        <div class="min-h-screen flex flex-col lg:flex-row">
+        <div class="min-h-screen flex">
             <!-- Sidebar -->
-            <div :class="sidebarOpen ? 'translate-x-0' : '-translate-x-full'" 
-                 class="fixed inset-y-0 left-0 z-50 w-72 max-w-[80vw] -translate-x-full transition-transform duration-300 ease-in-out lg:static lg:translate-x-0 flex-shrink-0 lg:block">
+            <aside class="professor-diario-desktop-sidebar flex-shrink-0 overflow-hidden transition-[width,opacity] duration-300 ease-in-out"
+                   :style="sidebarCollapsed
+                        ? 'width: 0; flex-basis: 0; opacity: 0; pointer-events: none;'
+                        : 'width: 18rem; flex-basis: 18rem; opacity: 1; pointer-events: auto;'">
+                <x-sidebar-professor-diario />
+            </aside>
+
+            <!-- Mobile Sidebar -->
+            <div class="professor-diario-mobile-sidebar fixed inset-y-0 left-0 z-50 w-72 max-w-[80vw] -translate-x-full transition-transform duration-300 ease-in-out"
+                 :class="sidebarOpen ? 'translate-x-0' : '-translate-x-full'">
                 <x-sidebar-professor-diario />
             </div>
 
             <div class="flex-1 flex flex-col min-w-0 p-4 lg:p-6 lg:ml-0">
                 <!-- Mobile Header -->
-                <div class="flex items-center justify-between p-4 mb-4 rounded-2xl lg:hidden border border-white/10 bg-gradient-to-b from-amber-900 via-amber-950 to-stone-950 text-white">
+                <div class="professor-diario-mobile-header flex items-center justify-between p-4 mb-4 rounded-2xl border border-white/10 bg-gradient-to-b from-amber-900 via-amber-950 to-stone-950 text-white">
                     <div class="font-outfit font-bold text-xl">Diário Eletrônico</div>
                     <button @click="sidebarOpen = true" class="p-2 -mr-2 text-amber-200 hover:text-white rounded-lg focus:outline-none">
                         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
@@ -54,6 +97,13 @@
                         </div>
 
                         <div class="flex items-center gap-4">
+                            <button type="button" @click="toggleSidebar()" class="professor-diario-desktop-toggle inline-flex items-center gap-2 rounded-xl border border-stone-300 bg-white px-4 py-2 text-xs font-bold uppercase tracking-widest text-stone-600 hover:bg-stone-100 transition">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                                </svg>
+                                <span x-text="sidebarCollapsed ? 'Mostrar menu' : 'Ocultar menu'"></span>
+                            </button>
+
                             <a href="{{ route('hub') }}" class="text-sm font-semibold text-stone-600 hover:text-amber-700 transition">
                                 Trocar de acesso
                             </a>

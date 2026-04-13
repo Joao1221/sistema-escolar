@@ -6,7 +6,6 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreMatriculaRequest;
 use App\Models\Matricula;
 use App\Models\Aluno;
-use App\Models\Escola;
 use App\Models\Turma;
 use App\Services\MatriculaService;
 use Illuminate\Http\Request;
@@ -31,13 +30,31 @@ class MatriculaController extends Controller
     {
         $this->authorize('consultar matrículas');
         
-        $filtros = $request->only(['aluno_nome', 'status', 'tipo', 'ano_letivo']);
-        // Forçamos a escola do usuário logado através do novo acessor
-        $filtros['escola_id'] = Auth::user()->escola_id; 
+        $escolaId = Auth::user()->escola_id;
+        $filtros = $request->only(['aluno_nome', 'status', 'tipo', 'ano_letivo', 'turma_id']);
+        $filtros['escola_id'] = $escolaId;
 
         $matriculas = $this->matriculaService->listarMatriculas($filtros);
+        $turmas = Turma::where('escola_id', $escolaId)
+            ->orderBy('nome')
+            ->get();
 
-        return view('secretaria-escolar.matriculas.index', compact('matriculas'));
+        $baseQuery = Matricula::where('escola_id', $escolaId);
+        $stats = [
+            'ativas' => (clone $baseQuery)->where('status', 'ativa')->count(),
+            'sem_turma' => (clone $baseQuery)->where('status', 'ativa')->whereNull('turma_id')->count(),
+            'regular' => (clone $baseQuery)->where('tipo', 'regular')->count(),
+            'aee' => (clone $baseQuery)->where('tipo', 'aee')->count(),
+            'concluidas' => (clone $baseQuery)->where('status', 'concluida')->count(),
+        ];
+
+        $anosDisponiveis = (clone $baseQuery)
+            ->select('ano_letivo')
+            ->distinct()
+            ->orderByDesc('ano_letivo')
+            ->pluck('ano_letivo');
+
+        return view('secretaria-escolar.matriculas.index', compact('matriculas', 'turmas', 'stats', 'anosDisponiveis'));
     }
 
     /**
@@ -47,9 +64,11 @@ class MatriculaController extends Controller
     {
         $this->authorize('cadastrar matrícula');
         
-        $alunos = Aluno::where('ativo', true)->orderBy('nome_completo')->get();
-        // Apenas turmas da escola do usuário logado
         $escolaId = Auth::user()->escola_id; 
+        $alunos = Aluno::where('escola_id', $escolaId)
+            ->where('ativo', true)
+            ->orderBy('nome_completo')
+            ->get();
         $turmas = Turma::where('escola_id', $escolaId)->where('ativa', true)->get();
 
         return view('secretaria-escolar.matriculas.create', compact('alunos', 'turmas'));

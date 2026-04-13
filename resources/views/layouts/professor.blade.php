@@ -16,9 +16,44 @@
         <style>
             body { font-family: 'IBM Plex Sans', sans-serif; }
             .font-outfit { font-family: 'Outfit', sans-serif; }
+            .professor-desktop-sidebar {
+                display: block;
+                width: 20rem;
+                flex: 0 0 20rem;
+            }
+
+            .professor-desktop-toggle {
+                display: inline-flex;
+            }
+
+            .professor-mobile-header,
+            .professor-mobile-sidebar,
+            .professor-mobile-overlay {
+                display: none;
+            }
+
+            @media (max-width: 479px) {
+                .professor-desktop-sidebar,
+                .professor-desktop-toggle {
+                    display: none !important;
+                }
+
+                .professor-mobile-header,
+                .professor-mobile-sidebar {
+                    display: flex !important;
+                }
+            }
+
+            @media (min-width: 480px) {
+                .professor-mobile-header,
+                .professor-mobile-sidebar,
+                .professor-mobile-overlay {
+                    display: none !important;
+                }
+            }
         </style>
     </head>
-    <body class="min-h-full text-stone-100 antialiased" x-data="{ sidebarOpen: false }" style="background: radial-gradient(circle at top, #2b1f3a 0%, #1e142d 45%, #120b1f 100%);">
+    <body class="min-h-full text-stone-100 antialiased" x-data="{ sidebarOpen: false, sidebarCollapsed: false, toggleSidebar() { this.sidebarCollapsed = !this.sidebarCollapsed; } }" style="background: radial-gradient(circle at top, #2b1f3a 0%, #1e142d 45%, #120b1f 100%);">
         @php
             $theme = auth()->user()?->theme ?? 'lilas';
             $pal = match ($theme) {
@@ -87,20 +122,28 @@
              x-transition:leave="transition-opacity ease-linear duration-300" 
              x-transition:leave-start="opacity-100" 
              x-transition:leave-end="opacity-0" 
-             class="fixed inset-0 z-40 bg-gray-900/80 backdrop-blur-sm lg:hidden" 
+             class="professor-mobile-overlay fixed inset-0 z-40 bg-gray-900/80 backdrop-blur-sm" 
              @click="sidebarOpen = false" 
              style="display: none;"></div>
 
-        <div class="min-h-screen flex flex-col lg:flex-row" style="background: {{ $pal['bodyBg'] }};">
+        <div class="min-h-screen flex" style="background: {{ $pal['bodyBg'] }};">
             <!-- Sidebar -->
-            <div :class="sidebarOpen ? 'translate-x-0' : '-translate-x-full'" 
-                 class="fixed inset-y-0 left-0 z-50 w-80 max-w-[80vw] -translate-x-full transition-transform duration-300 ease-in-out lg:static lg:translate-x-0 flex-shrink-0 lg:block">
+            <aside class="professor-desktop-sidebar flex-shrink-0 overflow-hidden transition-[width,opacity] duration-300 ease-in-out"
+                   :style="sidebarCollapsed
+                        ? 'width: 0; flex-basis: 0; opacity: 0; pointer-events: none;'
+                        : 'width: 20rem; flex-basis: 20rem; opacity: 1; pointer-events: auto;'">
+                <x-sidebar-professor :theme="$theme" />
+            </aside>
+
+            <!-- Mobile Sidebar -->
+            <div class="professor-mobile-sidebar fixed inset-y-0 left-0 z-50 w-80 max-w-[80vw] -translate-x-full transition-transform duration-300 ease-in-out"
+                 :class="sidebarOpen ? 'translate-x-0' : '-translate-x-full'">
                 <x-sidebar-professor :theme="$theme" />
             </div>
 
             <div class="flex-1 flex flex-col min-w-0 p-3 lg:p-5 lg:ml-0">
                 <!-- Mobile Header -->
-                <div class="flex items-center justify-between p-4 mb-3 rounded-2xl lg:hidden border border-white/10" style="background: {{ $pal['cardBg'] }};">
+                <div class="professor-mobile-header flex items-center justify-between p-4 mb-3 rounded-2xl border border-white/10" style="background: {{ $pal['cardBg'] }};">
                     <div class="font-outfit font-bold text-xl" style="color: {{ $pal['heading'] }};">Portal do Professor</div>
                     <button @click="sidebarOpen = true" class="p-2 -mr-2 rounded-lg focus:outline-none" style="color: {{ $pal['muted'] }};">
                         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
@@ -119,6 +162,14 @@
                             </div>
 
                             <div class="flex items-start gap-4 self-start lg:self-auto">
+                                <button type="button" @click="toggleSidebar()" class="professor-desktop-toggle inline-flex items-center gap-2 rounded-xl border px-4 py-2 text-xs font-bold uppercase tracking-widest transition"
+                                        style="border-color: {{ $pal['chipBorder'] }}; background: {{ $pal['chipBg'] }}; color: {{ $pal['chipText'] }};">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                                    </svg>
+                                    <span x-text="sidebarCollapsed ? 'Mostrar menu' : 'Ocultar menu'"></span>
+                                </button>
+
                                 <div class="rounded-2xl border px-4 py-3" style="border-color: {{ $pal['chipBorder'] }}; background: {{ $pal['chipBg'] }};">
                                     <p class="text-xs font-semibold uppercase tracking-[0.22em]" style="color: {{ $pal['chipText'] }};">Professor autenticado</p>
                                     <p class="mt-1 text-sm font-bold" style="color: {{ $pal['heading'] }};">{{ auth()->user()?->name }}</p>

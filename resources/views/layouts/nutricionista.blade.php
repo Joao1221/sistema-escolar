@@ -16,9 +16,44 @@
         <style>
             body { font-family: 'Manrope', sans-serif; }
             .font-fraunces { font-family: 'Fraunces', serif; }
+            .nutricionista-desktop-sidebar {
+                display: block;
+                width: 16rem;
+                flex: 0 0 16rem;
+            }
+
+            .nutricionista-desktop-toggle {
+                display: inline-flex;
+            }
+
+            .nutricionista-mobile-header,
+            .nutricionista-mobile-sidebar,
+            .nutricionista-mobile-overlay {
+                display: none;
+            }
+
+            @media (max-width: 479px) {
+                .nutricionista-desktop-sidebar,
+                .nutricionista-desktop-toggle {
+                    display: none !important;
+                }
+
+                .nutricionista-mobile-header,
+                .nutricionista-mobile-sidebar {
+                    display: flex !important;
+                }
+            }
+
+            @media (min-width: 480px) {
+                .nutricionista-mobile-header,
+                .nutricionista-mobile-sidebar,
+                .nutricionista-mobile-overlay {
+                    display: none !important;
+                }
+            }
         </style>
     </head>
-    <body class="min-h-full bg-[radial-gradient(circle_at_top,_#fff5dd_0%,_#f4efe8_40%,_#e7f1ec_100%)] text-slate-900 antialiased" x-data="{ sidebarOpen: false }">
+    <body class="min-h-full bg-[radial-gradient(circle_at_top,_#fff5dd_0%,_#f4efe8_40%,_#e7f1ec_100%)] text-slate-900 antialiased" x-data="{ sidebarOpen: false, sidebarCollapsed: false, toggleSidebar() { this.sidebarCollapsed = !this.sidebarCollapsed; } }">
         <!-- Mobile overlay -->
         <div x-show="sidebarOpen" 
              x-transition:enter="transition-opacity ease-linear duration-300" 
@@ -27,20 +62,28 @@
              x-transition:leave="transition-opacity ease-linear duration-300" 
              x-transition:leave-start="opacity-100" 
              x-transition:leave-end="opacity-0" 
-             class="fixed inset-0 z-40 bg-slate-900/80 backdrop-blur-sm lg:hidden" 
+             class="nutricionista-mobile-overlay fixed inset-0 z-40 bg-slate-900/80 backdrop-blur-sm" 
              @click="sidebarOpen = false" 
              style="display: none;"></div>
 
         <div class="flex min-h-screen">
             <!-- Sidebar -->
-            <div :class="sidebarOpen ? 'translate-x-0' : '-translate-x-full'" 
-                 class="fixed inset-y-0 left-0 z-50 w-64 -translate-x-full transition-transform duration-300 ease-in-out lg:static lg:translate-x-0 flex-shrink-0 lg:block">
+            <aside class="nutricionista-desktop-sidebar flex-shrink-0 overflow-hidden transition-[width,opacity] duration-300 ease-in-out"
+                   :style="sidebarCollapsed
+                        ? 'width: 0; flex-basis: 0; opacity: 0; pointer-events: none;'
+                        : 'width: 16rem; flex-basis: 16rem; opacity: 1; pointer-events: auto;'">
+                <x-sidebar-nutricionista />
+            </aside>
+
+            <!-- Mobile Sidebar -->
+            <div class="nutricionista-mobile-sidebar fixed inset-y-0 left-0 z-50 w-64 -translate-x-full transition-transform duration-300 ease-in-out"
+                 :class="sidebarOpen ? 'translate-x-0' : '-translate-x-full'">
                 <x-sidebar-nutricionista />
             </div>
 
             <div class="flex-1 flex flex-col min-w-0">
                 <!-- Mobile Header -->
-                <div class="flex items-center justify-between p-4 lg:hidden border-b border-white/40 bg-[#f4efe8]">
+                <div class="nutricionista-mobile-header flex items-center justify-between p-4 border-b border-white/40 bg-[#f4efe8]">
                     <div class="font-fraunces font-bold text-xl text-[#17332a]">Portal da Nutricionista</div>
                     <button @click="sidebarOpen = true" class="p-2 -mr-2 text-[#17332a] hover:opacity-75 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#17332a]/50">
                         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
@@ -60,6 +103,13 @@
                             </div>
 
                             <div class="flex items-center gap-3 self-start lg:self-auto">
+                                <button type="button" @click="toggleSidebar()" class="nutricionista-desktop-toggle inline-flex items-center gap-2 rounded-xl border border-[#cfd9cf] bg-white/80 px-4 py-2 text-xs font-bold uppercase tracking-widest text-[#3d5b4e] transition hover:bg-white">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                                    </svg>
+                                    <span x-text="sidebarCollapsed ? 'Mostrar menu' : 'Ocultar menu'"></span>
+                                </button>
+
                                 <div class="rounded-2xl border border-emerald-100 bg-white/80 px-4 py-3 text-right shadow-sm">
                                     <p class="text-[11px] font-semibold uppercase tracking-[0.28em] text-emerald-700">Usuaria logada</p>
                                     <p class="mt-1 text-sm font-bold text-[#17332a]">{{ auth()->user()?->name }}</p>

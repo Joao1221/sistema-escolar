@@ -1,14 +1,13 @@
 <x-secretaria-escolar-layout>
     <div class="mb-8 px-4 lg:px-0">
         <h1 class="text-2xl md:text-3xl lg:text-4xl font-bold text-slate-900 font-outfit tracking-tight">Painel Operacional</h1>
-        <p class="text-slate-500 mt-1 text-sm lg:text-lg">Visão consolidada da unidade escolar e fluxo de matrículas.</p>
+        <p class="text-slate-500 mt-1 text-sm lg:text-lg">
+            Visão consolidada da escola <span class="font-semibold text-slate-700">{{ $escola->nome }}</span> e fluxo de matrículas.
+        </p>
     </div>
 
-    {{-- Grid de Estatísticas --}}
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-8 mb-8 px-4 lg:px-0">
-        
-        {{-- Total de Alunos --}}
-        <div class="bg-white p-6 rounded-3xl shadow-sm border border-slate-100 hover:shadow-md transition-shadow group relative overflow-hidden">
+        <a href="{{ route('secretaria-escolar.alunos.index') }}" class="block bg-white p-6 rounded-3xl shadow-sm border border-slate-100 hover:shadow-md transition-shadow group relative overflow-hidden focus:outline-none focus:ring-2 focus:ring-emerald-500">
             <div class="absolute -right-4 -top-4 w-24 h-24 bg-blue-50 rounded-full opacity-50 group-hover:scale-110 transition-transform duration-500"></div>
             <div class="flex items-center space-x-4 mb-6">
                 <div class="p-3 bg-blue-600 rounded-2xl text-white shadow-lg shadow-blue-200">
@@ -19,11 +18,10 @@
                 <h3 class="text-slate-400 text-xs font-bold uppercase tracking-widest">Base de Alunos</h3>
             </div>
             <p class="text-4xl font-bold text-slate-900 font-outfit">{{ $stats['total_alunos'] }}</p>
-            <p class="text-xs text-slate-500 mt-2 font-medium">Cadastrados no sistema</p>
-        </div>
+            <p class="text-xs text-slate-500 mt-2 font-medium">Cadastrados nesta escola</p>
+        </a>
 
-        {{-- Matrículas Ativas --}}
-        <div class="bg-white p-6 rounded-3xl shadow-sm border border-slate-100 hover:shadow-md transition-shadow group relative overflow-hidden">
+        <a href="{{ route('secretaria-escolar.matriculas.index') }}" class="block bg-white p-6 rounded-3xl shadow-sm border border-slate-100 hover:shadow-md transition-shadow group relative overflow-hidden focus:outline-none focus:ring-2 focus:ring-emerald-500">
             <div class="absolute -right-4 -top-4 w-24 h-24 bg-emerald-50 rounded-full opacity-50 group-hover:scale-110 transition-transform duration-500"></div>
             <div class="flex items-center space-x-4 mb-6">
                 <div class="p-3 bg-emerald-600 rounded-2xl text-white shadow-lg shadow-emerald-200">
@@ -38,10 +36,9 @@
                 <span class="text-[10px] font-bold text-emerald-600 uppercase bg-emerald-50 px-1.5 py-0.5 rounded">{{ $stats['matriculas_regular'] }} Regular</span>
                 <span class="text-[10px] font-bold text-purple-600 uppercase bg-purple-50 px-1.5 py-0.5 rounded">{{ $stats['matriculas_aee'] }} AEE</span>
             </div>
-        </div>
+        </a>
 
-        {{-- Turmas Ativas --}}
-        <div class="bg-white p-6 rounded-3xl shadow-sm border border-slate-100 hover:shadow-md transition-shadow group relative overflow-hidden">
+        <a href="{{ route('secretaria-escolar.turmas.index') }}" class="block bg-white p-6 rounded-3xl shadow-sm border border-slate-100 hover:shadow-md transition-shadow group relative overflow-hidden focus:outline-none focus:ring-2 focus:ring-emerald-500">
             <div class="absolute -right-4 -top-4 w-24 h-24 bg-indigo-50 rounded-full opacity-50 group-hover:scale-110 transition-transform duration-500"></div>
             <div class="flex items-center space-x-4 mb-6">
                 <div class="p-3 bg-indigo-600 rounded-2xl text-white shadow-lg shadow-indigo-200">
@@ -52,11 +49,10 @@
                 <h3 class="text-slate-400 text-xs font-bold uppercase tracking-widest">Turmas em Funcionamento</h3>
             </div>
             <p class="text-4xl font-bold text-slate-900 font-outfit">{{ $stats['turmas_ativas'] }}</p>
-            <p class="text-xs text-slate-500 mt-2 font-medium">Unidades didáticas ativas</p>
-        </div>
+            <p class="text-xs text-slate-500 mt-2 font-medium">Turmas desta unidade</p>
+        </a>
 
-        {{-- Ocupação --}}
-        <div class="bg-white p-6 rounded-3xl shadow-sm border border-slate-100 hover:shadow-md transition-shadow group relative overflow-hidden">
+        <a href="{{ route('secretaria-escolar.turmas.index') }}" class="block bg-white p-6 rounded-3xl shadow-sm border border-slate-100 hover:shadow-md transition-shadow group relative overflow-hidden focus:outline-none focus:ring-2 focus:ring-emerald-500">
             <div class="absolute -right-4 -top-4 w-24 h-24 bg-orange-50 rounded-full opacity-50 group-hover:scale-110 transition-transform duration-500"></div>
             <div class="flex items-center space-x-4 mb-6">
                 <div class="p-3 bg-orange-600 rounded-2xl text-white shadow-lg shadow-orange-200">
@@ -76,11 +72,10 @@
             <div class="w-full bg-slate-100 h-1.5 rounded-full mt-3 overflow-hidden">
                 <div class="bg-orange-500 h-full transition-all duration-1000" style="width: {{ $porcentagem }}%"></div>
             </div>
-        </div>
+        </a>
     </div>
 
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 lg:gap-8 px-4 lg:px-0 pb-10">
-        <!-- Recent Activities Feed -->
         <div class="lg:col-span-2 space-y-8">
             <div class="bg-white rounded-3xl shadow-sm border border-slate-100 overflow-hidden">
                 <div class="p-8 border-b border-slate-50 flex justify-between items-center">
@@ -90,35 +85,34 @@
                 <div class="p-8">
                     <div class="space-y-8">
                         @forelse ($recent_activities as $activity)
-                        <div class="flex items-start space-x-5 group">
-                            <div class="mt-1">
-                                <span class="flex w-3 h-3 rounded-full {{ $activity->acao == 'criacao' ? 'bg-green-500 ring-4 ring-green-100' : 'bg-emerald-400 ring-4 ring-emerald-50' }}"></span>
-                            </div>
-                            <div class="flex-grow">
-                                <div class="flex justify-between items-start">
-                                    <p class="text-sm font-bold text-slate-800 uppercase tracking-tight group-hover:text-emerald-700 transition">
-                                        {{ $activity->matricula->aluno->nome_completo ?? 'Aluno não identificado' }}
-                                    </p>
-                                    <span class="text-[10px] text-slate-400 font-bold uppercase tracking-tighter">{{ $activity->created_at->diffForHumans() }}</span>
+                            <div class="flex items-start space-x-5 group">
+                                <div class="mt-1">
+                                    <span class="flex w-3 h-3 rounded-full {{ $activity->acao == 'criacao' ? 'bg-green-500 ring-4 ring-green-100' : 'bg-emerald-400 ring-4 ring-emerald-50' }}"></span>
                                 </div>
-                                <p class="text-xs text-slate-500 mt-1 leading-relaxed">{{ $activity->descricao }}</p>
-                                <div class="mt-2 flex items-center space-x-2">
-                                    <span class="text-[9px] text-emerald-600 font-bold uppercase bg-emerald-50 px-2 py-0.5 rounded tracking-widest">{{ str_replace('_', ' ', $activity->acao) }}</span>
-                                    <span class="text-[9px] text-slate-300">por {{ $activity->usuario->name ?? 'Sistema' }}</span>
+                                <div class="flex-grow">
+                                    <div class="flex justify-between items-start">
+                                        <p class="text-sm font-bold text-slate-800 uppercase tracking-tight group-hover:text-emerald-700 transition">
+                                            {{ $activity->matricula->aluno->nome_completo ?? 'Aluno não identificado' }}
+                                        </p>
+                                        <span class="text-[10px] text-slate-400 font-bold uppercase tracking-tighter">{{ $activity->created_at->diffForHumans() }}</span>
+                                    </div>
+                                    <p class="text-xs text-slate-500 mt-1 leading-relaxed">{{ $activity->descricao }}</p>
+                                    <div class="mt-2 flex items-center space-x-2">
+                                        <span class="text-[9px] text-emerald-600 font-bold uppercase bg-emerald-50 px-2 py-0.5 rounded tracking-widest">{{ str_replace('_', ' ', $activity->acao) }}</span>
+                                        <span class="text-[9px] text-slate-300">por {{ $activity->usuario->name ?? 'Sistema' }}</span>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
                         @empty
-                        <div class="py-10 text-center">
-                            <p class="text-slate-400 italic text-sm">Nenhuma atividade registrada hoje.</p>
-                        </div>
+                            <div class="py-10 text-center">
+                                <p class="text-slate-400 italic text-sm">Nenhuma atividade registrada hoje.</p>
+                            </div>
                         @endforelse
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- Quick Actions & Widgets -->
         <div class="space-y-8">
             <div class="bg-slate-900 rounded-3xl p-8 text-white relative overflow-hidden shadow-2xl shadow-emerald-900/20">
                 <div class="absolute -right-10 -bottom-10 w-40 h-40 bg-emerald-500 rounded-full opacity-10"></div>
@@ -131,6 +125,17 @@
                             </svg>
                         </div>
                         <span class="text-xs font-bold uppercase tracking-widest text-emerald-100">Dados da Escola</span>
+                    </a>
+                    <a href="{{ route('secretaria-escolar.matriculas.index') }}" class="flex items-center p-4 bg-emerald-500/10 border border-emerald-500/20 rounded-2xl hover:bg-emerald-500/20 transition group">
+                        <div class="bg-emerald-500 p-2 rounded-xl mr-4 group-hover:scale-110 transition-transform">
+                            <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                            </svg>
+                        </div>
+                        <div class="min-w-0">
+                            <span class="text-xs font-bold uppercase tracking-widest text-emerald-100 block">Matrículas da Escola</span>
+                            <span class="mt-1 block text-[11px] text-emerald-50/80">Filtrar por turma, status ou tipo</span>
+                        </div>
                     </a>
                     <a href="{{ route('secretaria-escolar.matriculas.create') }}" class="flex items-center p-4 bg-white/5 border border-white/10 rounded-2xl hover:bg-white/10 transition group">
                         <div class="bg-white/10 p-2 rounded-xl mr-4 group-hover:scale-110 transition-transform text-white">

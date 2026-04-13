@@ -15,6 +15,7 @@ class StoreEscolaRequest extends FormRequest
     {
         return [
             'nome' => ['required', 'string', 'max:255'],
+            'inep' => ['required', 'digits:8', 'unique:escolas,inep'],
             'cnpj' => ['nullable', 'string', 'max:18', 'unique:escolas,cnpj'],
             'email' => ['nullable', 'email', 'max:255'],
             'telefone' => ['nullable', 'string', 'max:20'],

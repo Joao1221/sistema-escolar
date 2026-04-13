@@ -150,6 +150,14 @@ class MatriculaService
             $query->where('ano_letivo', $filtros['ano_letivo']);
         }
 
+        if (!empty($filtros['turma_id'])) {
+            if ($filtros['turma_id'] === '__sem_turma') {
+                $query->whereNull('turma_id');
+            } else {
+                $query->where('turma_id', $filtros['turma_id']);
+            }
+        }
+
         if (!empty($filtros['status'])) {
             $query->where('status', $filtros['status']);
         }

@@ -12,6 +12,7 @@ class Aluno extends Model
     protected $table = 'alunos';
 
     protected $fillable = [
+        'escola_id',
         'rgm',
         'nome_completo',
         'data_nascimento',
