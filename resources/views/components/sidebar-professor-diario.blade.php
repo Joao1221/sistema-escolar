@@ -1,4 +1,4 @@
-<aside class="w-72 bg-transparent text-white p-4 lg:p-6">
+<aside class="flex h-full w-full flex-col bg-transparent text-white p-4 lg:p-6">
     <div class="h-full rounded-[2rem] border border-amber-800/40 bg-gradient-to-b from-amber-900 via-amber-950 to-stone-950 shadow-2xl overflow-hidden">
         <div class="px-6 pt-8 pb-6 border-b border-amber-800/40">
             <div class="flex items-center gap-4">

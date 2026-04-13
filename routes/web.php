@@ -189,6 +189,10 @@ Route::middleware(['auth', 'role:Administrador da Rede|Secretário Escolar|Admin
     // Dashboard
     Route::get('/dashboard', [EscolarDashboardController::class, 'index'])->name('dashboard');
 
+    // Dados da Escola
+    Route::get('/dados-escola', [App\Http\Controllers\SecretariaEscolar\DadosEscolaController::class, 'edit'])->name('dados-escola.edit');
+    Route::put('/dados-escola', [App\Http\Controllers\SecretariaEscolar\DadosEscolaController::class, 'update'])->name('dados-escola.update');
+
     // Gestão de Turmas
     Route::resource('turmas', EscolarTurmaController::class);
     Route::patch('/turmas/{turma}/toggle', [EscolarTurmaController::class, 'toggleStatus'])->name('turmas.toggle');

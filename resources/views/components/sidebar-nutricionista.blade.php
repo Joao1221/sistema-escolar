@@ -1,5 +1,5 @@
-<aside class="fixed inset-y-0 left-0 w-64 bg-[#163229] text-white flex flex-col flex-shrink-0 overflow-y-auto shadow-xl z-30">
-    <div class="absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(241,185,94,0.22),_transparent_40%),linear-gradient(180deg,_rgba(18,50,41,1)_0%,_rgba(8,25,21,1)_100%)]"></div>
+<aside class="flex h-full w-full flex-col overflow-y-auto bg-[#163229] shadow-xl text-white">
+    <div class="absolute inset-0 pointer-events-none bg-[radial-gradient(circle_at_top,_rgba(241,185,94,0.22),_transparent_40%),linear-gradient(180deg,_rgba(18,50,41,1)_0%,_rgba(8,25,21,1)_100%)]"></div>
     <div class="relative flex min-h-full flex-col">
         <div class="border-b border-white/10 px-6 py-7">
             <p class="text-xs font-semibold uppercase tracking-[0.35em] text-amber-200">Rede Municipal</p>

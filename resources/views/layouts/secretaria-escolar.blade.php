@@ -21,20 +21,42 @@
             [x-cloak] { display: none !important; }
         </style>
     </head>
-    <body class="h-full bg-emerald-900 antialiased overflow-hidden">
-        <div class="flex h-full min-h-0 overflow-hidden" x-data="{ mobileMenu: false }" @keydown.window.escape="mobileMenu = false">
-            
-            <!-- Sidebar -->
-            <x-sidebar-secretaria-escolar />
+    <body class="bg-emerald-900 text-slate-900 antialiased" x-data="{ sidebarOpen: false }">
+        <!-- Mobile overlay -->
+        <div x-show="sidebarOpen" 
+             x-transition:enter="transition-opacity ease-linear duration-300" 
+             x-transition:enter-start="opacity-0" 
+             x-transition:enter-end="opacity-100" 
+             x-transition:leave="transition-opacity ease-linear duration-300" 
+             x-transition:leave-start="opacity-100" 
+             x-transition:leave-end="opacity-0" 
+             class="fixed inset-0 z-40 bg-slate-900/80 backdrop-blur-sm lg:hidden" 
+             @click="sidebarOpen = false" 
+             style="display: none;"></div>
 
-            <!-- Main Content Area -->
-            <div class="flex-1 flex flex-col min-w-0 min-h-0 bg-slate-50 my-3 mr-[30px] ml-[30px] rounded-none overflow-hidden shadow-2xl relative border border-white/20">
-                
-                <!-- Navbar / Header -->
-                <header class="bg-white/80 backdrop-blur-md border-b border-emerald-100 h-20 flex-none flex items-center justify-between px-12 z-10 shadow-sm text-gray-800">
-                    <div class="flex items-center overflow-hidden">
-                       <x-breadcrumbs />
-                    </div>
+        <div class="flex min-h-screen">
+            <!-- Sidebar -->
+            <div :class="sidebarOpen ? 'translate-x-0' : '-translate-x-full'" 
+                 class="fixed inset-y-0 left-0 z-50 w-64 -translate-x-full transition-transform duration-300 ease-in-out lg:static lg:translate-x-0 flex-shrink-0 lg:block">
+                <x-sidebar-secretaria-escolar />
+            </div>
+
+            <div class="flex-1 flex flex-col min-w-0">
+                <!-- Mobile Header -->
+                <div class="flex items-center justify-between p-4 lg:hidden border-b border-white/20 bg-emerald-900 text-white">
+                    <div class="font-outfit font-bold text-xl">Secretaria Escolar</div>
+                    <button @click="sidebarOpen = true" class="p-2 -mr-2 hover:opacity-80 rounded-lg focus:outline-none">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+                    </button>
+                </div>
+
+                <div class="flex-1 p-4 lg:p-5 flex flex-col min-h-[100vh]">
+                    <div class="flex-1 flex flex-col rounded-2xl sm:rounded-[2rem] bg-slate-50 overflow-hidden shadow-2xl relative border border-white/20">
+                        <!-- Navbar / Header -->
+                        <header class="bg-white/80 backdrop-blur-md border-b border-emerald-100 h-20 flex-none flex items-center justify-between px-6 lg:px-12 z-10 shadow-sm text-gray-800">
+                            <div class="flex items-center overflow-hidden">
+                               <x-breadcrumbs />
+                            </div>
                     
                     <div class="flex items-center space-x-6">
                         {{-- Notifications Placeholder --}}
@@ -109,6 +131,7 @@
                     {{ $slot }}
                     </div>
                 </main>
+            </div>
             </div>
         </div>
 

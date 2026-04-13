@@ -124,13 +124,21 @@
                 <div class="absolute -right-10 -bottom-10 w-40 h-40 bg-emerald-500 rounded-full opacity-10"></div>
                 <h3 class="text-lg font-bold font-outfit mb-6">Ações Rápidas</h3>
                 <div class="grid grid-cols-1 gap-3">
-                    <a href="{{ route('secretaria-escolar.matriculas.create') }}" class="flex items-center p-4 bg-emerald-500/10 border border-emerald-500/20 rounded-2xl hover:bg-emerald-500/20 transition group">
+                    <a href="{{ route('secretaria-escolar.dados-escola.edit') }}" class="flex items-center p-4 bg-emerald-500/10 border border-emerald-500/20 rounded-2xl hover:bg-emerald-500/20 transition group">
                         <div class="bg-emerald-500 p-2 rounded-xl mr-4 group-hover:scale-110 transition-transform">
+                            <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+                            </svg>
+                        </div>
+                        <span class="text-xs font-bold uppercase tracking-widest text-emerald-100">Dados da Escola</span>
+                    </a>
+                    <a href="{{ route('secretaria-escolar.matriculas.create') }}" class="flex items-center p-4 bg-white/5 border border-white/10 rounded-2xl hover:bg-white/10 transition group">
+                        <div class="bg-white/10 p-2 rounded-xl mr-4 group-hover:scale-110 transition-transform text-white">
                             <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
                             </svg>
                         </div>
-                        <span class="text-xs font-bold uppercase tracking-widest">Nova Matrícula</span>
+                        <span class="text-xs font-bold uppercase tracking-widest text-white">Nova Matrícula</span>
                     </a>
                     <a href="{{ route('secretaria-escolar.alunos.create') }}" class="flex items-center p-4 bg-white/5 border border-white/10 rounded-2xl hover:bg-white/10 transition group">
                         <div class="bg-white/10 p-2 rounded-xl mr-4 group-hover:scale-110 transition-transform text-white">

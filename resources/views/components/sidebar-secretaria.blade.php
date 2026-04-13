@@ -1,4 +1,4 @@
-<nav class="fixed inset-y-0 left-0 w-64 bg-slate-900 text-white flex flex-col flex-shrink-0 shadow-xl" style="background-color: #0f172a;">
+<nav class="flex h-full w-full flex-col bg-slate-900 text-white shadow-xl" style="background-color: #0f172a;">
     {{-- Logo / Branding --}}
     <div class="p-6">
         <div class="flex items-center space-x-3">

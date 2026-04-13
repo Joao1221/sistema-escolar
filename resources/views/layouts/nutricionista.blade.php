@@ -18,14 +18,38 @@
             .font-fraunces { font-family: 'Fraunces', serif; }
         </style>
     </head>
-    <body class="min-h-full bg-[radial-gradient(circle_at_top,_#fff5dd_0%,_#f4efe8_40%,_#e7f1ec_100%)] text-slate-900 antialiased lg:h-full lg:overflow-hidden">
-        <div class="min-h-screen flex">
-            <x-sidebar-nutricionista />
-            <div class="hidden lg:block w-64 flex-shrink-0"></div>
+    <body class="min-h-full bg-[radial-gradient(circle_at_top,_#fff5dd_0%,_#f4efe8_40%,_#e7f1ec_100%)] text-slate-900 antialiased" x-data="{ sidebarOpen: false }">
+        <!-- Mobile overlay -->
+        <div x-show="sidebarOpen" 
+             x-transition:enter="transition-opacity ease-linear duration-300" 
+             x-transition:enter-start="opacity-0" 
+             x-transition:enter-end="opacity-100" 
+             x-transition:leave="transition-opacity ease-linear duration-300" 
+             x-transition:leave-start="opacity-100" 
+             x-transition:leave-end="opacity-0" 
+             class="fixed inset-0 z-40 bg-slate-900/80 backdrop-blur-sm lg:hidden" 
+             @click="sidebarOpen = false" 
+             style="display: none;"></div>
 
-            <div class="flex-1 min-w-0 p-3 lg:flex lg:h-full lg:min-h-0 lg:flex-col lg:overflow-hidden lg:p-5">
-                <div class="min-h-[calc(100vh-1.5rem)] overflow-hidden rounded-[2rem] border border-white/60 bg-white/85 shadow-[0_25px_80px_rgba(29,53,40,0.18)] backdrop-blur lg:flex lg:h-full lg:min-h-0 lg:flex-col">
-                    <header class="border-b border-emerald-100 bg-[linear-gradient(135deg,#fffef9_0%,#f5f4eb_48%,#edf8f2_100%)] px-6 py-5 lg:px-10">
+        <div class="flex min-h-screen">
+            <!-- Sidebar -->
+            <div :class="sidebarOpen ? 'translate-x-0' : '-translate-x-full'" 
+                 class="fixed inset-y-0 left-0 z-50 w-64 -translate-x-full transition-transform duration-300 ease-in-out lg:static lg:translate-x-0 flex-shrink-0 lg:block">
+                <x-sidebar-nutricionista />
+            </div>
+
+            <div class="flex-1 flex flex-col min-w-0">
+                <!-- Mobile Header -->
+                <div class="flex items-center justify-between p-4 lg:hidden border-b border-white/40 bg-[#f4efe8]">
+                    <div class="font-fraunces font-bold text-xl text-[#17332a]">Portal da Nutricionista</div>
+                    <button @click="sidebarOpen = true" class="p-2 -mr-2 text-[#17332a] hover:opacity-75 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#17332a]/50">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+                    </button>
+                </div>
+
+                <div class="flex-1 p-4 lg:p-5">
+                    <div class="h-full overflow-hidden rounded-[2rem] border border-white/60 bg-white/85 shadow-[0_25px_80px_rgba(29,53,40,0.18)] backdrop-blur lg:flex lg:flex-col">
+                        <header class="border-b border-emerald-100 bg-[linear-gradient(135deg,#fffef9_0%,#f5f4eb_48%,#edf8f2_100%)] px-5 py-5 lg:px-10">
                         <div class="flex flex-col gap-5 lg:flex-row lg:items-end lg:justify-between">
                             <div class="min-w-0">
                                 <x-nutricionista-breadcrumbs :items="$breadcrumbs" />

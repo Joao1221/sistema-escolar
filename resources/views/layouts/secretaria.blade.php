@@ -14,15 +14,37 @@
         <!-- Scripts -->
         @vite(['resources/css/app.css', 'resources/js/app.js'])
     </head>
-    <body class="font-sans antialiased bg-gray-50 overflow-x-hidden">
+    <body class="font-sans antialiased bg-gray-50 overflow-x-hidden" x-data="{ sidebarOpen: false }">
+        <!-- Mobile overlay -->
+        <div x-show="sidebarOpen" 
+             x-transition:enter="transition-opacity ease-linear duration-300" 
+             x-transition:enter-start="opacity-0" 
+             x-transition:enter-end="opacity-100" 
+             x-transition:leave="transition-opacity ease-linear duration-300" 
+             x-transition:leave-start="opacity-100" 
+             x-transition:leave-end="opacity-0" 
+             class="fixed inset-0 z-40 bg-gray-900/80 backdrop-blur-sm lg:hidden" 
+             @click="sidebarOpen = false" 
+             style="display: none;"></div>
+
         <div class="min-h-screen flex">
             <!-- Sidebar -->
-            @include('components.sidebar-secretaria')
-            <div class="w-64 flex-shrink-0"></div>
+            <div :class="sidebarOpen ? 'translate-x-0' : '-translate-x-full'" 
+                 class="fixed inset-y-0 left-0 z-50 w-64 -translate-x-full transition-transform duration-300 ease-in-out lg:static lg:translate-x-0 flex-shrink-0 lg:block">
+                @include('components.sidebar-secretaria')
+            </div>
 
             <!-- Page Content -->
-            <div class="flex-1 flex flex-col min-h-screen">
-                <!-- Top Navigation -->
+            <div class="flex-1 flex flex-col min-w-0 min-h-screen">
+                <!-- Mobile Header -->
+                <div class="flex items-center justify-between px-6 py-4 bg-white border-b border-gray-100 lg:hidden">
+                    <div class="font-bold text-gray-800 text-lg">Portal da Secretaria</div>
+                    <button @click="sidebarOpen = true" class="p-2 -mr-2 text-gray-600 hover:text-gray-900 rounded-lg focus:outline-none">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+                    </button>
+                </div>
+
+                <!-- Top Navigation (Desktop) -->
                 <nav class="bg-white border-b border-gray-100 flex items-center justify-between h-16" style="padding-left: 32px; padding-right: 48px;">
                     <div class="flex items-center min-w-0 flex-1 mr-4">
                         <span class="text-gray-500 font-medium mr-4 flex-shrink-0">Portal da Secretaria</span>

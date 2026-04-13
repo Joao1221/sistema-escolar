@@ -18,7 +18,7 @@
             .font-outfit { font-family: 'Outfit', sans-serif; }
         </style>
     </head>
-    <body class="min-h-full text-stone-100 antialiased" style="background: radial-gradient(circle at top, #2b1f3a 0%, #1e142d 45%, #120b1f 100%);">
+    <body class="min-h-full text-stone-100 antialiased" x-data="{ sidebarOpen: false }" style="background: radial-gradient(circle at top, #2b1f3a 0%, #1e142d 45%, #120b1f 100%);">
         @php
             $theme = auth()->user()?->theme ?? 'lilas';
             $pal = match ($theme) {
@@ -79,11 +79,33 @@
             };
         @endphp
 
-        <div class="min-h-screen lg:flex" style="background: {{ $pal['bodyBg'] }};">
-            <x-sidebar-professor :theme="$theme" />
-            <div class="hidden lg:block flex-shrink-0" style="width:20rem;max-width:20rem;"></div>
+        <!-- Mobile overlay -->
+        <div x-show="sidebarOpen" 
+             x-transition:enter="transition-opacity ease-linear duration-300" 
+             x-transition:enter-start="opacity-0" 
+             x-transition:enter-end="opacity-100" 
+             x-transition:leave="transition-opacity ease-linear duration-300" 
+             x-transition:leave-start="opacity-100" 
+             x-transition:leave-end="opacity-0" 
+             class="fixed inset-0 z-40 bg-gray-900/80 backdrop-blur-sm lg:hidden" 
+             @click="sidebarOpen = false" 
+             style="display: none;"></div>
 
-            <div class="flex-1 min-w-0 p-3 lg:p-5 lg:ml-0">
+        <div class="min-h-screen flex flex-col lg:flex-row" style="background: {{ $pal['bodyBg'] }};">
+            <!-- Sidebar -->
+            <div :class="sidebarOpen ? 'translate-x-0' : '-translate-x-full'" 
+                 class="fixed inset-y-0 left-0 z-50 w-80 max-w-[80vw] -translate-x-full transition-transform duration-300 ease-in-out lg:static lg:translate-x-0 flex-shrink-0 lg:block">
+                <x-sidebar-professor :theme="$theme" />
+            </div>
+
+            <div class="flex-1 flex flex-col min-w-0 p-3 lg:p-5 lg:ml-0">
+                <!-- Mobile Header -->
+                <div class="flex items-center justify-between p-4 mb-3 rounded-2xl lg:hidden border border-white/10" style="background: {{ $pal['cardBg'] }};">
+                    <div class="font-outfit font-bold text-xl" style="color: {{ $pal['heading'] }};">Portal do Professor</div>
+                    <button @click="sidebarOpen = true" class="p-2 -mr-2 rounded-lg focus:outline-none" style="color: {{ $pal['muted'] }};">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+                    </button>
+                </div>
                 <div class="min-h-[calc(100vh-1.5rem)] overflow-hidden rounded-[2rem] border shadow-[0_25px_80px_rgba(18,12,35,0.35)]"
                      style="background: {{ $pal['cardBg'] }}; border-color: {{ $pal['cardBorder'] }}; box-shadow: {{ $pal['cardShadow'] }};">
                     <header class="px-6 py-5 lg:px-10" style="border-bottom:1px solid {{ $pal['headerBorder'] }}; background: {{ $pal['headerBg'] }};">

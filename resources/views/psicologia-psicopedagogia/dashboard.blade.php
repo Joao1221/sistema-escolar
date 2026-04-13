@@ -10,7 +10,7 @@
     @endphp
 
     <div class="space-y-6">
-        <div class="grid gap-4 grid-cols-2 md:grid-cols-5">
+        <div class="grid gap-4 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
             <a href="{{ route('psicologia.demandas.index', ['escola_id' => '', 'status' => 'aberta', 'prioridade' => '']) }}" class="rounded-[1.75rem] border border-cyan-100 bg-gradient-to-r from-cyan-50 via-cyan-25 to-cyan-100 p-4 shadow-sm block transition hover:-translate-y-0.5 hover:shadow-md">
                 <div class="h-1.5 w-16 rounded-full bg-cyan-400"></div>
                 <p class="mt-4 text-xs font-semibold uppercase tracking-[0.24em] text-cyan-700 break-words leading-tight">Demandas abertas</p>

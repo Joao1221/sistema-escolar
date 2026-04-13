@@ -49,7 +49,7 @@
     };
 @endphp
 
-<aside class="fixed inset-y-0 left-0 z-30 p-3 lg:p-5 text-white" style="width:20rem;max-width:20rem;">
+<aside class="flex h-full w-full flex-col p-3 lg:p-5 text-white">
     <div class="h-full overflow-hidden rounded-3xl border shadow-lg overflow-y-auto"
          style="border-radius:32px;border:1px solid {{ $pal['border'] }};background:{{ $pal['bgGradient'] }};box-shadow:0 18px 50px rgba(17,12,34,0.45);">
         <div class="px-6 pb-6 pt-8" style="border-bottom:1px solid {{ $pal['divider'] }};">

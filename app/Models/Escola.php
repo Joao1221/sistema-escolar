@@ -24,6 +24,12 @@ class Escola extends Model
         'nome_gestor',
         'cpf_gestor',
         'ativo',
+        'inep',
+        'ato_posse_diretor',
+        'qtd_salas',
+        'ato_criacao',
+        'ato_autoriza',
+        'ato_recon',
     ];
 
     public function scopeActive($query)

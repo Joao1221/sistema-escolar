@@ -1,5 +1,5 @@
-<aside class="fixed inset-y-0 left-0 w-64 bg-slate-950 flex flex-col flex-shrink-0 overflow-y-auto shadow-xl" style="color: #ffffff;">
-    <div class="absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(34,211,238,0.16),_transparent_42%),linear-gradient(180deg,_rgba(2,6,23,1)_0%,_rgba(15,23,42,1)_100%)]"></div>
+<aside class="flex h-full w-full flex-col overflow-y-auto bg-slate-950 shadow-xl" style="color: #ffffff;">
+    <div class="absolute inset-0 pointer-events-none bg-[radial-gradient(circle_at_top,_rgba(34,211,238,0.16),_transparent_42%),linear-gradient(180deg,_rgba(2,6,23,1)_0%,_rgba(15,23,42,1)_100%)]"></div>
 
     <div class="relative flex min-h-full flex-col">
         <div class="border-b border-white/10 px-5 py-5">

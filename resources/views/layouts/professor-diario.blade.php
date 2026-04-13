@@ -18,11 +18,34 @@
             .font-outfit { font-family: 'Outfit', sans-serif; }
         </style>
     </head>
-    <body class="h-full bg-amber-950 antialiased">
-        <div class="min-h-screen flex">
-            <x-sidebar-professor-diario />
+    <body class="h-full bg-amber-950 antialiased" x-data="{ sidebarOpen: false }">
+        <!-- Mobile overlay -->
+        <div x-show="sidebarOpen" 
+             x-transition:enter="transition-opacity ease-linear duration-300" 
+             x-transition:enter-start="opacity-0" 
+             x-transition:enter-end="opacity-100" 
+             x-transition:leave="transition-opacity ease-linear duration-300" 
+             x-transition:leave-start="opacity-100" 
+             x-transition:leave-end="opacity-0" 
+             class="fixed inset-0 z-40 bg-stone-900/80 backdrop-blur-sm lg:hidden" 
+             @click="sidebarOpen = false" 
+             style="display: none;"></div>
 
-            <div class="flex-1 min-w-0 p-4 lg:p-6">
+        <div class="min-h-screen flex flex-col lg:flex-row">
+            <!-- Sidebar -->
+            <div :class="sidebarOpen ? 'translate-x-0' : '-translate-x-full'" 
+                 class="fixed inset-y-0 left-0 z-50 w-72 max-w-[80vw] -translate-x-full transition-transform duration-300 ease-in-out lg:static lg:translate-x-0 flex-shrink-0 lg:block">
+                <x-sidebar-professor-diario />
+            </div>
+
+            <div class="flex-1 flex flex-col min-w-0 p-4 lg:p-6 lg:ml-0">
+                <!-- Mobile Header -->
+                <div class="flex items-center justify-between p-4 mb-4 rounded-2xl lg:hidden border border-white/10 bg-gradient-to-b from-amber-900 via-amber-950 to-stone-950 text-white">
+                    <div class="font-outfit font-bold text-xl">Diário Eletrônico</div>
+                    <button @click="sidebarOpen = true" class="p-2 -mr-2 text-amber-200 hover:text-white rounded-lg focus:outline-none">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+                    </button>
+                </div>
                 <div class="min-h-[calc(100vh-2rem)] rounded-[2.5rem] bg-stone-50 shadow-2xl border border-white/60 overflow-hidden">
                     <header class="px-6 lg:px-10 py-5 bg-white/90 backdrop-blur border-b border-stone-200 flex items-center justify-between gap-4">
                         <div>
