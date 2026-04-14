@@ -4,15 +4,16 @@ namespace App\Services;
 
 use App\Models\Matricula;
 use App\Models\MatriculaHistorico;
-use Illuminate\Support\Facades\DB;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class MatriculaService
 {
     /**
      * Realiza uma nova matrícula (Regular ou AEE).
      */
-    public function realizarMatricula(array $data)
+    public function realizarMatricula(array $data): Matricula
     {
         return DB::transaction(function () use ($data) {
             $matricula = Matricula::create([
@@ -28,8 +29,8 @@ class MatriculaService
             ]);
 
             $this->registrarHistorico(
-                $matricula, 
-                'criacao', 
+                $matricula,
+                'criacao',
                 "Matrícula {$matricula->tipo} realizada para o ano letivo {$matricula->ano_letivo}."
             );
 
@@ -40,14 +41,14 @@ class MatriculaService
     /**
      * Enturmar um aluno.
      */
-    public function enturmar(Matricula $matricula, int $turmaId)
+    public function enturmar(Matricula $matricula, int $turmaId): Matricula
     {
         return DB::transaction(function () use ($matricula, $turmaId) {
             $matricula->update(['turma_id' => $turmaId]);
 
             $this->registrarHistorico(
-                $matricula, 
-                'enturmacao', 
+                $matricula,
+                'enturmacao',
                 "Aluno alocado na turma ID: {$turmaId}."
             );
 
@@ -58,7 +59,7 @@ class MatriculaService
     /**
      * Realizar transferência de aluno.
      */
-    public function transferir(Matricula $matricula, string $motivo)
+    public function transferir(Matricula $matricula, string $motivo): Matricula
     {
         return DB::transaction(function () use ($matricula, $motivo) {
             $matricula->update([
@@ -67,8 +68,8 @@ class MatriculaService
             ]);
 
             $this->registrarHistorico(
-                $matricula, 
-                'transferencia', 
+                $matricula,
+                'transferencia',
                 "Transferência realizada. Motivo: {$motivo}."
             );
 
@@ -79,7 +80,7 @@ class MatriculaService
     /**
      * Realizar rematrícula para novo ano letivo.
      */
-    public function rematricular(Matricula $matriculaAnterior, int $novoAnoLetivo)
+    public function rematricular(Matricula $matriculaAnterior, int $novoAnoLetivo): Matricula
     {
         return DB::transaction(function () use ($matriculaAnterior, $novoAnoLetivo) {
             // Marca a anterior como rematriculada (encerrada neste ciclo)
@@ -100,14 +101,14 @@ class MatriculaService
             ]);
 
             $this->registrarHistorico(
-                $matriculaAnterior, 
-                'rematricula', 
+                $matriculaAnterior,
+                'rematricula',
                 "Aluno rematriculado para o ano {$novoAnoLetivo}. Nova matrícula ID: {$novaMatricula->id}."
             );
 
             $this->registrarHistorico(
-                $novaMatricula, 
-                'criacao', 
+                $novaMatricula,
+                'criacao',
                 "Nova matrícula gerada via processo de rematrícula do ano {$matriculaAnterior->ano_letivo}."
             );
 
@@ -118,7 +119,7 @@ class MatriculaService
     /**
      * Registra uma entrada no histórico da matrícula.
      */
-    public function registrarHistorico(Matricula $matricula, string $acao, string $descricao)
+    public function registrarHistorico(Matricula $matricula, string $acao, string $descricao): MatriculaHistorico
     {
         return MatriculaHistorico::create([
             'matricula_id' => $matricula->id,
@@ -132,25 +133,25 @@ class MatriculaService
     /**
      * Listar matrículas com filtros.
      */
-    public function listarMatriculas(array $filtros = [])
+    public function listarMatriculas(array $filtros = []): LengthAwarePaginator
     {
         $query = Matricula::with(['aluno', 'escola', 'turma']);
 
-        if (!empty($filtros['aluno_nome'])) {
+        if (! empty($filtros['aluno_nome'])) {
             $query->whereHas('aluno', function ($q) use ($filtros) {
                 $q->where('nome_completo', 'like', "%{$filtros['aluno_nome']}%");
             });
         }
 
-        if (!empty($filtros['escola_id'])) {
+        if (! empty($filtros['escola_id'])) {
             $query->where('escola_id', $filtros['escola_id']);
         }
 
-        if (!empty($filtros['ano_letivo'])) {
+        if (! empty($filtros['ano_letivo'])) {
             $query->where('ano_letivo', $filtros['ano_letivo']);
         }
 
-        if (!empty($filtros['turma_id'])) {
+        if (! empty($filtros['turma_id'])) {
             if ($filtros['turma_id'] === '__sem_turma') {
                 $query->whereNull('turma_id');
             } else {
@@ -158,11 +159,11 @@ class MatriculaService
             }
         }
 
-        if (!empty($filtros['status'])) {
+        if (! empty($filtros['status'])) {
             $query->where('status', $filtros['status']);
         }
 
-        if (!empty($filtros['tipo'])) {
+        if (! empty($filtros['tipo'])) {
             $query->where('tipo', $filtros['tipo']);
         }
 

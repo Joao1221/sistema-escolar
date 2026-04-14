@@ -7,11 +7,15 @@ use App\Models\Funcionario;
 use App\Models\HorarioAula;
 use App\Models\LancamentoAvaliativo;
 use App\Models\Matricula;
+use App\Models\ObservacaoAluno;
+use App\Models\OcorrenciaDiario;
+use App\Models\PendenciaProfessor;
 use App\Models\PlanejamentoAnual;
 use App\Models\PlanejamentoPeriodo;
 use App\Models\PlanejamentoSemanal;
 use App\Models\RegistroAula;
 use App\Models\Usuario;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
@@ -19,7 +23,7 @@ use Illuminate\Validation\ValidationException;
 
 class DiarioProfessorService
 {
-    public function listarDiariosParaUsuario(Usuario $usuario, array $filtros = [], int $paginacao = 12)
+    public function listarDiariosParaUsuario(Usuario $usuario, array $filtros = [], int $paginacao = 12): LengthAwarePaginator
     {
         $query = DiarioProfessor::query()
             ->with(['escola', 'turma', 'disciplina', 'professor'])
@@ -246,7 +250,7 @@ class DiarioProfessorService
         });
     }
 
-    public function registrarObservacao(DiarioProfessor $diario, array $dados, int $usuarioId)
+    public function registrarObservacao(DiarioProfessor $diario, array $dados, int $usuarioId): ObservacaoAluno
     {
         $this->validarMatriculaPertenceAoDiario($diario, $dados['matricula_id']);
 
@@ -257,7 +261,7 @@ class DiarioProfessorService
         });
     }
 
-    public function registrarOcorrencia(DiarioProfessor $diario, array $dados, int $usuarioId)
+    public function registrarOcorrencia(DiarioProfessor $diario, array $dados, int $usuarioId): OcorrenciaDiario
     {
         if (! empty($dados['matricula_id'])) {
             $this->validarMatriculaPertenceAoDiario($diario, $dados['matricula_id']);
@@ -270,7 +274,7 @@ class DiarioProfessorService
         });
     }
 
-    public function registrarPendencia(DiarioProfessor $diario, array $dados, int $usuarioId)
+    public function registrarPendencia(DiarioProfessor $diario, array $dados, int $usuarioId): PendenciaProfessor
     {
         return DB::transaction(function () use ($diario, $dados, $usuarioId) {
             return $diario->pendencias()->create($dados + [
@@ -338,6 +342,7 @@ class DiarioProfessorService
 
             if (count($escolaIds) === 0 && ! $usuario->hasRole('Administrador da Rede')) {
                 $query->whereRaw('1 = 0');
+
                 return;
             }
 
@@ -350,6 +355,7 @@ class DiarioProfessorService
 
         if ($funcionario) {
             $query->where('professor_id', $funcionario->id);
+
             return;
         }
 

@@ -2,17 +2,18 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\UpdateParametrosRequest;
 use App\Http\Requests\StoreModalidadeRequest;
+use App\Http\Requests\UpdateParametrosRequest;
 use App\Services\ConfiguracoesService;
-use Illuminate\Http\Request;
+use Illuminate\Contracts\View\View;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
+use Illuminate\Http\RedirectResponse;
 
 class ConfiguracoesController extends Controller
 {
     use AuthorizesRequests;
 
-    protected $configuracoesService;
+    protected ConfiguracoesService $configuracoesService;
 
     public function __construct(ConfiguracoesService $configuracoesService)
     {
@@ -22,7 +23,7 @@ class ConfiguracoesController extends Controller
     /**
      * Exibe a tela de configurações globais.
      */
-    public function index()
+    public function index(): View
     {
         $this->authorize('visualizar configuracoes');
 
@@ -35,7 +36,7 @@ class ConfiguracoesController extends Controller
     /**
      * Atualiza os parâmetros globais da rede.
      */
-    public function updateParametros(UpdateParametrosRequest $request)
+    public function updateParametros(UpdateParametrosRequest $request): RedirectResponse
     {
         $this->configuracoesService->atualizarParametros($request->validated());
 
@@ -45,7 +46,7 @@ class ConfiguracoesController extends Controller
     /**
      * Salva ou atualiza uma modalidade de ensino.
      */
-    public function storeModalidade(StoreModalidadeRequest $request)
+    public function storeModalidade(StoreModalidadeRequest $request): RedirectResponse
     {
         $this->configuracoesService->salvarModalidade($request->validated());
 
@@ -55,7 +56,7 @@ class ConfiguracoesController extends Controller
     /**
      * Atualiza uma modalidade de ensino existente.
      */
-    public function updateModalidade(StoreModalidadeRequest $request, $id)
+    public function updateModalidade(StoreModalidadeRequest $request, int $id): RedirectResponse
     {
         $this->configuracoesService->salvarModalidade($request->validated(), $id);
 
@@ -65,7 +66,7 @@ class ConfiguracoesController extends Controller
     /**
      * Alterna o status da modalidade.
      */
-    public function toggleModalidade($id)
+    public function toggleModalidade(int $id): RedirectResponse
     {
         $this->authorize('editar configuracoes');
         $this->configuracoesService->alternarStatusModalidade($id);

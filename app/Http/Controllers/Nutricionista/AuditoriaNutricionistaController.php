@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Nutricionista;
 use App\Http\Controllers\Controller;
 use App\Services\AuditoriaService;
 use App\Services\PortalNutricionistaService;
+use Illuminate\Contracts\View\View;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controllers\HasMiddleware;
 use Illuminate\Routing\Controllers\Middleware;
@@ -14,8 +15,7 @@ class AuditoriaNutricionistaController extends Controller implements HasMiddlewa
     public function __construct(
         private readonly AuditoriaService $auditoriaService,
         private readonly PortalNutricionistaService $portalNutricionistaService
-    ) {
-    }
+    ) {}
 
     public static function middleware(): array
     {
@@ -24,7 +24,7 @@ class AuditoriaNutricionistaController extends Controller implements HasMiddlewa
         ];
     }
 
-    public function index(Request $request)
+    public function index(Request $request): View
     {
         return view('nutricionista.auditoria.index', [
             'configuracaoPortal' => $this->auditoriaService->configuracaoPortal('nutricionista'),

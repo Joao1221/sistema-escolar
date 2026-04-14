@@ -3,20 +3,25 @@
 namespace App\Http\Controllers\SecretariaEscolar;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\EnturmarMatriculaRequest;
+use App\Http\Requests\RematricularMatriculaRequest;
 use App\Http\Requests\StoreMatriculaRequest;
-use App\Models\Matricula;
+use App\Http\Requests\TransferirMatriculaRequest;
 use App\Models\Aluno;
+use App\Models\Matricula;
 use App\Models\Turma;
 use App\Services\MatriculaService;
+use Illuminate\Contracts\View\View;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
 class MatriculaController extends Controller
 {
     use AuthorizesRequests;
 
-    protected $matriculaService;
+    protected MatriculaService $matriculaService;
 
     public function __construct(MatriculaService $matriculaService)
     {
@@ -26,10 +31,10 @@ class MatriculaController extends Controller
     /**
      * Listagem de matrículas da unidade.
      */
-    public function index(Request $request)
+    public function index(Request $request): View
     {
         $this->authorize('consultar matrículas');
-        
+
         $escolaId = Auth::user()->escola_id;
         $filtros = $request->only(['aluno_nome', 'status', 'tipo', 'ano_letivo', 'turma_id']);
         $filtros['escola_id'] = $escolaId;
@@ -60,11 +65,11 @@ class MatriculaController extends Controller
     /**
      * Tela de nova matrícula.
      */
-    public function create()
+    public function create(): View
     {
         $this->authorize('cadastrar matrícula');
-        
-        $escolaId = Auth::user()->escola_id; 
+
+        $escolaId = Auth::user()->escola_id;
         $alunos = Aluno::where('escola_id', $escolaId)
             ->where('ativo', true)
             ->orderBy('nome_completo')
@@ -77,7 +82,7 @@ class MatriculaController extends Controller
     /**
      * Salvar matrícula.
      */
-    public function store(StoreMatriculaRequest $request)
+    public function store(StoreMatriculaRequest $request): RedirectResponse
     {
         $data = $request->validated();
         $data['escola_id'] = Auth::user()->escola_id;
@@ -91,7 +96,7 @@ class MatriculaController extends Controller
     /**
      * Detalhes e Histórico.
      */
-    public function show(Matricula $matricula)
+    public function show(Matricula $matricula): View
     {
         $this->authorize('visualizar detalhes da matrícula');
         $matricula->load(['aluno', 'escola', 'turma', 'historico.usuario']);
@@ -102,7 +107,7 @@ class MatriculaController extends Controller
     /**
      * Tela de enturmação.
      */
-    public function enturmarForm(Matricula $matricula)
+    public function enturmarForm(Matricula $matricula): View
     {
         $this->authorize('enturmar');
         $turmas = Turma::where('escola_id', $matricula->escola_id)->where('ativa', true)->get();
@@ -113,12 +118,11 @@ class MatriculaController extends Controller
     /**
      * Processar enturmação.
      */
-    public function enturmarStore(Request $request, Matricula $matricula)
+    public function enturmarStore(EnturmarMatriculaRequest $request, Matricula $matricula): RedirectResponse
     {
         $this->authorize('enturmar');
-        $request->validate(['turma_id' => 'required|exists:turmas,id']);
 
-        $this->matriculaService->enturmar($matricula, $request->turma_id);
+        $this->matriculaService->enturmar($matricula, (int) $request->validated('turma_id'));
 
         return redirect()->route('secretaria-escolar.matriculas.show', $matricula)
             ->with('success', 'Aluno enturmado com sucesso!');
@@ -127,21 +131,21 @@ class MatriculaController extends Controller
     /**
      * Tela de transferência.
      */
-    public function transferirForm(Matricula $matricula)
+    public function transferirForm(Matricula $matricula): View
     {
         $this->authorize('transferir');
+
         return view('secretaria-escolar.matriculas.transferir', compact('matricula'));
     }
 
     /**
      * Processar transferência.
      */
-    public function transferirStore(Request $request, Matricula $matricula)
+    public function transferirStore(TransferirMatriculaRequest $request, Matricula $matricula): RedirectResponse
     {
         $this->authorize('transferir');
-        $request->validate(['motivo' => 'required|string|max:255']);
 
-        $this->matriculaService->transferir($matricula, $request->motivo);
+        $this->matriculaService->transferir($matricula, (string) $request->validated('motivo'));
 
         return redirect()->route('secretaria-escolar.matriculas.index')
             ->with('success', 'Transferência registrada com sucesso!');
@@ -150,21 +154,21 @@ class MatriculaController extends Controller
     /**
      * Tela de rematrícula.
      */
-    public function rematricularForm(Matricula $matricula)
+    public function rematricularForm(Matricula $matricula): View
     {
         $this->authorize('rematricular');
+
         return view('secretaria-escolar.matriculas.rematricular', compact('matricula'));
     }
 
     /**
      * Processar rematrícula.
      */
-    public function rematricularStore(Request $request, Matricula $matricula)
+    public function rematricularStore(RematricularMatriculaRequest $request, Matricula $matricula): RedirectResponse
     {
         $this->authorize('rematricular');
-        $request->validate(['ano_letivo' => 'required|integer|min:2024']);
 
-        $this->matriculaService->rematricular($matricula, $request->ano_letivo);
+        $this->matriculaService->rematricular($matricula, (int) $request->validated('ano_letivo'));
 
         return redirect()->route('secretaria-escolar.matriculas.index')
             ->with('success', 'Rematrícula realizada com sucesso!');

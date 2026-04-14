@@ -18,6 +18,7 @@ use App\Models\RegistroAula;
 use App\Models\Turma;
 use App\Models\Usuario;
 use App\Models\ValidacaoPedagogica;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
@@ -27,10 +28,9 @@ class CoordenacaoPedagogicaService
 {
     public function __construct(
         private readonly AuditoriaService $auditoriaService
-    ) {
-    }
+    ) {}
 
-    public function listarDiarios(Usuario $usuario, array $filtros = [], int $paginacao = 12)
+    public function listarDiarios(Usuario $usuario, array $filtros = [], int $paginacao = 12): LengthAwarePaginator
     {
         $query = DiarioProfessor::query()
             ->with([
@@ -333,7 +333,7 @@ class CoordenacaoPedagogicaService
         });
     }
 
-    public function listarHorarios(Usuario $usuario, array $filtros = [], int $paginacao = 20)
+    public function listarHorarios(Usuario $usuario, array $filtros = [], int $paginacao = 20): LengthAwarePaginator
     {
         $query = HorarioAula::query()->with(['escola', 'turma.modalidade', 'disciplina', 'professor']);
 
@@ -535,6 +535,7 @@ class CoordenacaoPedagogicaService
         if (! $usuario->hasRole('Administrador da Rede')) {
             if (count($escolaIds) === 0) {
                 $query->whereRaw('1 = 0');
+
                 return;
             }
 

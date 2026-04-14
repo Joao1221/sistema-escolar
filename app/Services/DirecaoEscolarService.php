@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Models\DiarioProfessor;
 use App\Models\Disciplina;
+use App\Models\Escola;
 use App\Models\FaltaFuncionario;
 use App\Models\FechamentoLetivo;
 use App\Models\FrequenciaAula;
@@ -20,6 +21,7 @@ use App\Models\RegistroAula;
 use App\Models\Turma;
 use App\Models\Usuario;
 use App\Models\ValidacaoDirecao;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\ValidationException;
@@ -28,10 +30,9 @@ class DirecaoEscolarService
 {
     public function __construct(
         private readonly AuditoriaService $auditoriaService
-    ) {
-    }
+    ) {}
 
-    public function listarDiarios(Usuario $usuario, array $filtros = [], int $paginacao = 10)
+    public function listarDiarios(Usuario $usuario, array $filtros = [], int $paginacao = 10): LengthAwarePaginator
     {
         $query = DiarioProfessor::query()
             ->with([
@@ -158,8 +159,7 @@ class DirecaoEscolarService
             'frequenciasPassiveisJustificativa' => $frequenciasPassiveisJustificativa,
             'horariosTurma' => $horariosTurma,
             'metricas' => [
-                'planejamentos_validados' =>
-                    ($diario->planejamentoAnual?->validacaoDirecao?->status === 'validado' ? 1 : 0)
+                'planejamentos_validados' => ($diario->planejamentoAnual?->validacaoDirecao?->status === 'validado' ? 1 : 0)
                     + $diario->planejamentosPeriodo->filter(fn ($planejamento) => $planejamento->validacaoDirecao?->status === 'validado')->count()
                     + $diario->planejamentosSemanais->filter(fn (PlanejamentoSemanal $planejamento) => $planejamento->validacaoDirecao?->status === 'validado')->count(),
                 'aulas_validadas' => $diario->registrosAula->filter(fn (RegistroAula $registro) => $registro->validacaoDirecao?->status === 'validado')->count(),
@@ -431,7 +431,7 @@ class DirecaoEscolarService
         ];
     }
 
-    public function listarHorarios(Usuario $usuario, array $filtros = [], int $paginacao = 20)
+    public function listarHorarios(Usuario $usuario, array $filtros = [], int $paginacao = 20): LengthAwarePaginator
     {
         $query = HorarioAula::query()->with(['escola', 'turma.modalidade', 'disciplina', 'professor']);
 
@@ -460,7 +460,7 @@ class DirecaoEscolarService
         $escolaIds = $this->resolverEscolaIds($usuario);
 
         return [
-            'escolas' => \App\Models\Escola::query()
+            'escolas' => Escola::query()
                 ->when(! $usuario->hasRole('Administrador da Rede'), fn (Builder $query) => $query->whereIn('id', $escolaIds))
                 ->orderBy('nome')
                 ->get(),
@@ -584,6 +584,7 @@ class DirecaoEscolarService
 
         if (count($escolaIds) === 0) {
             $query->whereRaw('1 = 0');
+
             return;
         }
 

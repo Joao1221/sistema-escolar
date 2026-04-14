@@ -11,9 +11,9 @@ use App\Models\DevolutivaPsicossocial;
 use App\Models\EncaminhamentoPsicossocial;
 use App\Models\Escola;
 use App\Models\Funcionario;
+use App\Models\PlanoIntervencaoPsicossocial;
 use App\Models\ReavaliacaoPsicossocial;
 use App\Models\RelatorioTecnicoPsicossocial;
-use App\Models\PlanoIntervencaoPsicossocial;
 use App\Models\SessaoAtendimento;
 use App\Models\TriagemPsicossocial;
 use App\Models\Usuario;
@@ -27,8 +27,7 @@ class PsicossocialService
 {
     public function __construct(
         private readonly AuditoriaService $auditoriaService
-    ) {
-    }
+    ) {}
 
     public function obterPainel(Usuario $usuario): array
     {
@@ -287,7 +286,7 @@ class PsicossocialService
         ];
     }
 
-    public function gerarRelatorioAtendimentos(Usuario $usuario, array $filtros)
+    public function gerarRelatorioAtendimentos(Usuario $usuario, array $filtros): Collection
     {
         return AtendimentoPsicossocial::query()
             ->with(['escola', 'atendivel', 'profissionalResponsavel'])
@@ -714,6 +713,7 @@ class PsicossocialService
 
         if ($dados['decisao'] !== 'iniciar_atendimento') {
             $demanda->update(['status' => $dados['decisao'] === 'encerrar_sem_atendimento' ? 'encerrada' : 'observacao']);
+
             return null;
         }
 
@@ -736,8 +736,7 @@ class PsicossocialService
         Usuario $usuario,
         DemandaPsicossocial $demanda,
         ?int $profissionalResponsavelId = null
-    ): AtendimentoPsicossocial
-    {
+    ): AtendimentoPsicossocial {
         $dados = [
             'escola_id' => $demanda->escola_id,
             'usuario_registro_id' => $usuario->id,
@@ -908,7 +907,7 @@ class PsicossocialService
             ->values();
 
         if ($funcionarioIds->isEmpty() && $emails->isEmpty()) {
-            return new Collection();
+            return new Collection;
         }
 
         return Funcionario::query()

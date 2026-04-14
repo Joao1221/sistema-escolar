@@ -3,19 +3,17 @@
 namespace App\Http\Controllers\PsicologiaPsicopedagogia;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\GerarRelatorioAtendimentoPsicologiaRequest;
 use App\Models\Instituicao;
 use App\Services\PsicossocialService;
-use Illuminate\Http\Request;
 use Illuminate\Routing\Controllers\HasMiddleware;
 use Illuminate\Routing\Controllers\Middleware;
-use Illuminate\Validation\Rule;
 
 class RelatorioAtendimentoPsicologiaController extends Controller implements HasMiddleware
 {
     public function __construct(
         private readonly PsicossocialService $psicossocialService
-    ) {
-    }
+    ) {}
 
     public static function middleware(): array
     {
@@ -24,25 +22,13 @@ class RelatorioAtendimentoPsicologiaController extends Controller implements Has
         ];
     }
 
-    public function index(Request $request)
+    public function index(GerarRelatorioAtendimentoPsicologiaRequest $request)
     {
         $opcoesRelatorio = $this->psicossocialService->opcoesRelatorioAtendimentos($request->user());
         $camposDisponiveis = $opcoesRelatorio['campos'];
         $camposPadrao = ['data_agendada', 'nome_atendido', 'profissional_responsavel', 'tipo_atendimento', 'status'];
 
-        $filtros = $request->validate([
-            'tipo_relatorio' => ['nullable', Rule::in(array_keys($opcoesRelatorio['tipos_relatorio']))],
-            'escola_id' => ['nullable', 'integer', Rule::exists('escolas', 'id')],
-            'profissional_id' => ['nullable', 'integer', Rule::exists('funcionarios', 'id'), 'required_if:tipo_relatorio,por_profissional'],
-            'data_inicio' => ['nullable', 'date', 'required_if:tipo_relatorio,por_periodo'],
-            'data_fim' => ['nullable', 'date', 'required_if:tipo_relatorio,por_periodo', 'after_or_equal:data_inicio'],
-            'mes' => ['nullable', 'integer', 'between:1,12', 'required_if:tipo_relatorio,geral_mes'],
-            'ano' => ['nullable', 'integer', 'min:2000', 'max:2100'],
-            'tipo_atendimento' => ['nullable', Rule::in(array_keys($opcoesRelatorio['tipos_atendimento']))],
-            'status' => ['nullable', Rule::in(array_keys($opcoesRelatorio['status']))],
-            'campos' => ['nullable', 'array'],
-            'campos.*' => ['string', Rule::in(array_keys($camposDisponiveis))],
-        ]);
+        $filtros = $request->validated();
 
         $gerouRelatorio = filled($filtros['tipo_relatorio'] ?? null);
 

@@ -2,15 +2,16 @@
 
 namespace App\Services;
 
-use App\Models\ParametroRede;
 use App\Models\ModalidadeEnsino;
+use App\Models\ParametroRede;
+use Illuminate\Database\Eloquent\Collection as EloquentCollection;
 
 class ConfiguracoesService
 {
     /**
      * Obtém os parâmetros globais da rede (registro único).
      */
-    public function obterParametros()
+    public function obterParametros(): ParametroRede
     {
         return ParametroRede::firstOrCreate([], [
             'ano_letivo_vigente' => date('Y'),
@@ -23,17 +24,18 @@ class ConfiguracoesService
     /**
      * Atualiza os parâmetros globais da rede.
      */
-    public function atualizarParametros(array $dados)
+    public function atualizarParametros(array $dados): ParametroRede
     {
         $parametros = $this->obterParametros();
         $parametros->update($dados);
+
         return $parametros;
     }
 
     /**
      * Lista todas as modalidades de ensino.
      */
-    public function listarModalidades()
+    public function listarModalidades(): EloquentCollection
     {
         return ModalidadeEnsino::all();
     }
@@ -41,11 +43,12 @@ class ConfiguracoesService
     /**
      * Cria ou atualiza uma modalidade de ensino.
      */
-    public function salvarModalidade(array $dados, $id = null)
+    public function salvarModalidade(array $dados, ?int $id = null): ModalidadeEnsino
     {
         if ($id) {
             $modalidade = ModalidadeEnsino::findOrFail($id);
             $modalidade->update($dados);
+
             return $modalidade;
         }
 
@@ -55,11 +58,12 @@ class ConfiguracoesService
     /**
      * Alterna o status ativo/inativo de uma modalidade.
      */
-    public function alternarStatusModalidade($id)
+    public function alternarStatusModalidade(int $id): ModalidadeEnsino
     {
         $modalidade = ModalidadeEnsino::findOrFail($id);
-        $modalidade->ativo = !$modalidade->ativo;
+        $modalidade->ativo = ! $modalidade->ativo;
         $modalidade->save();
+
         return $modalidade;
     }
 }

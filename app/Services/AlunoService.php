@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Models\Aluno;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\DB;
 
 class AlunoService
@@ -10,7 +11,7 @@ class AlunoService
     /**
      * Lista alunos com filtros e paginação.
      */
-    public function listarAlunos(array $filtros = [], int $paginacao = 10)
+    public function listarAlunos(array $filtros = [], int $paginacao = 10): LengthAwarePaginator
     {
         $query = Aluno::query();
 
@@ -19,7 +20,7 @@ class AlunoService
         }
 
         if (! empty($filtros['nome'])) {
-            $query->where('nome_completo', 'like', '%' . $filtros['nome'] . '%');
+            $query->where('nome_completo', 'like', '%'.$filtros['nome'].'%');
         }
 
         if (! empty($filtros['rgm'])) {
@@ -36,10 +37,11 @@ class AlunoService
     /**
      * Cria um novo aluno com RGM gerado automaticamente.
      */
-    public function criarAluno(array $dados)
+    public function criarAluno(array $dados): Aluno
     {
         return DB::transaction(function () use ($dados) {
             $dados['rgm'] = $this->gerarRGM();
+
             return Aluno::create($dados);
         });
     }
@@ -47,7 +49,7 @@ class AlunoService
     /**
      * Atualiza dados de um aluno.
      */
-    public function atualizarAluno(Aluno $aluno, array $dados)
+    public function atualizarAluno(Aluno $aluno, array $dados): bool
     {
         return $aluno->update($dados);
     }
@@ -55,7 +57,7 @@ class AlunoService
     /**
      * Alterna o status do aluno.
      */
-    public function alternarStatus(Aluno $aluno)
+    public function alternarStatus(Aluno $aluno): bool
     {
         $aluno->ativo = ! $aluno->ativo;
 
@@ -66,10 +68,10 @@ class AlunoService
      * Gera um RGM único baseado no ano e sequência.
      * Formato: YYYYXXXX (Ano + 4 dígitos sequenciais)
      */
-    private function gerarRGM()
+    private function gerarRGM(): string
     {
         $ano = date('Y');
-        $ultimoAluno = Aluno::where('rgm', 'like', $ano . '%')
+        $ultimoAluno = Aluno::where('rgm', 'like', $ano.'%')
             ->orderBy('rgm', 'desc')
             ->first();
 
@@ -79,6 +81,6 @@ class AlunoService
             $sequencia = 1;
         }
 
-        return $ano . str_pad($sequencia, 4, '0', STR_PAD_LEFT);
+        return $ano.str_pad($sequencia, 4, '0', STR_PAD_LEFT);
     }
 }

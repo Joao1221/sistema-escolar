@@ -3,24 +3,22 @@
 namespace App\Http\Controllers\Professor;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\UpdateThemeRequest;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Schema;
 
 class ThemeController extends Controller
 {
-    public function update(Request $request): RedirectResponse
+    public function update(UpdateThemeRequest $request): RedirectResponse
     {
-        $request->validate([
-            'theme' => ['required', 'in:lilas,grafite,verde'],
-        ]);
+        $dados = $request->validated();
 
-        if (!Schema::hasColumn('usuarios', 'theme')) {
+        if (! Schema::hasColumn('usuarios', 'theme')) {
             return back()->with('error', 'Não foi possível salvar o tema: coluna ausente. Execute as migrações.');
         }
 
         $user = $request->user();
-        $user->theme = $request->input('theme');
+        $user->theme = $dados['theme'];
         $user->save();
 
         return back()->with('success', 'Tema atualizado com sucesso.');

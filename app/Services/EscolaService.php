@@ -3,19 +3,19 @@
 namespace App\Services;
 
 use App\Models\Escola;
-use Illuminate\Support\Facades\DB;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 
 class EscolaService
 {
     /**
      * Lista escolas com filtros.
      */
-    public function listarEscolas(array $filtros = [])
+    public function listarEscolas(array $filtros = []): LengthAwarePaginator
     {
         $query = Escola::query();
 
-        if (!empty($filtros['nome'])) {
-            $query->where('nome', 'like', '%' . $filtros['nome'] . '%');
+        if (! empty($filtros['nome'])) {
+            $query->where('nome', 'like', '%'.$filtros['nome'].'%');
         }
 
         if (isset($filtros['status']) && $filtros['status'] !== '') {
@@ -28,7 +28,7 @@ class EscolaService
     /**
      * Cria uma nova escola.
      */
-    public function criarEscola(array $dados)
+    public function criarEscola(array $dados): Escola
     {
         return Escola::create($dados);
     }
@@ -36,19 +36,21 @@ class EscolaService
     /**
      * Atualiza uma escola existente.
      */
-    public function atualizarEscola(Escola $escola, array $dados)
+    public function atualizarEscola(Escola $escola, array $dados): Escola
     {
         $escola->update($dados);
+
         return $escola;
     }
 
     /**
      * Alterna o status da escola.
      */
-    public function alternarStatus(Escola $escola)
+    public function alternarStatus(Escola $escola): Escola
     {
-        $escola->ativo = !$escola->ativo;
+        $escola->ativo = ! $escola->ativo;
         $escola->save();
+
         return $escola;
     }
 }

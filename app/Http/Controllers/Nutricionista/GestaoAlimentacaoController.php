@@ -18,6 +18,8 @@ use App\Models\CategoriaAlimento;
 use App\Models\FornecedorAlimento;
 use App\Services\AlimentacaoEscolarService;
 use App\Services\PortalNutricionistaService;
+use Illuminate\Contracts\View\View;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controllers\HasMiddleware;
 use Illuminate\Routing\Controllers\Middleware;
@@ -27,8 +29,7 @@ class GestaoAlimentacaoController extends Controller implements HasMiddleware
     public function __construct(
         private readonly PortalNutricionistaService $portalNutricionistaService,
         private readonly AlimentacaoEscolarService $alimentacaoEscolarService,
-    ) {
-    }
+    ) {}
 
     public static function middleware(): array
     {
@@ -51,7 +52,7 @@ class GestaoAlimentacaoController extends Controller implements HasMiddleware
         ];
     }
 
-    public function alimentos(Request $request)
+    public function alimentos(Request $request): View
     {
         return view('nutricionista.alimentos.index', [
             'alimentos' => $this->portalNutricionistaService->listarAlimentos(),
@@ -64,7 +65,7 @@ class GestaoAlimentacaoController extends Controller implements HasMiddleware
         ]);
     }
 
-    public function createAlimento()
+    public function createAlimento(): View
     {
         return view('nutricionista.alimentos.create', [
             'categorias' => $this->alimentacaoEscolarService->listarCategorias(),
@@ -77,7 +78,7 @@ class GestaoAlimentacaoController extends Controller implements HasMiddleware
         ]);
     }
 
-    public function storeAlimento(StoreAlimentoRequest $request)
+    public function storeAlimento(StoreAlimentoRequest $request): RedirectResponse
     {
         $this->alimentacaoEscolarService->salvarAlimento($request->validated());
 
@@ -85,7 +86,7 @@ class GestaoAlimentacaoController extends Controller implements HasMiddleware
             ->with('success', 'Alimento cadastrado com sucesso.');
     }
 
-    public function editAlimento(Alimento $alimento)
+    public function editAlimento(Alimento $alimento): View
     {
         return view('nutricionista.alimentos.edit', [
             'alimento' => $alimento,
@@ -99,7 +100,7 @@ class GestaoAlimentacaoController extends Controller implements HasMiddleware
         ]);
     }
 
-    public function updateAlimento(UpdateAlimentoRequest $request, Alimento $alimento)
+    public function updateAlimento(UpdateAlimentoRequest $request, Alimento $alimento): RedirectResponse
     {
         $this->alimentacaoEscolarService->atualizarAlimento($alimento, $request->validated());
 
@@ -107,7 +108,7 @@ class GestaoAlimentacaoController extends Controller implements HasMiddleware
             ->with('success', 'Alimento atualizado com sucesso.');
     }
 
-    public function categorias(Request $request)
+    public function categorias(Request $request): View
     {
         $categoriaEmEdicao = null;
 
@@ -126,7 +127,7 @@ class GestaoAlimentacaoController extends Controller implements HasMiddleware
         ]);
     }
 
-    public function storeCategoria(StoreCategoriaAlimentoRequest $request)
+    public function storeCategoria(StoreCategoriaAlimentoRequest $request): RedirectResponse
     {
         $this->alimentacaoEscolarService->salvarCategoria($request->validated());
 
@@ -134,7 +135,7 @@ class GestaoAlimentacaoController extends Controller implements HasMiddleware
             ->with('success', 'Categoria cadastrada com sucesso.');
     }
 
-    public function updateCategoria(UpdateCategoriaAlimentoRequest $request, CategoriaAlimento $categoria)
+    public function updateCategoria(UpdateCategoriaAlimentoRequest $request, CategoriaAlimento $categoria): RedirectResponse
     {
         $this->alimentacaoEscolarService->atualizarCategoria($categoria, $request->validated());
 
@@ -142,7 +143,7 @@ class GestaoAlimentacaoController extends Controller implements HasMiddleware
             ->with('success', 'Categoria atualizada com sucesso.');
     }
 
-    public function fornecedores(Request $request)
+    public function fornecedores(Request $request): View
     {
         $fornecedorEmEdicao = null;
 
@@ -161,7 +162,7 @@ class GestaoAlimentacaoController extends Controller implements HasMiddleware
         ]);
     }
 
-    public function storeFornecedor(StoreFornecedorAlimentoRequest $request)
+    public function storeFornecedor(StoreFornecedorAlimentoRequest $request): RedirectResponse
     {
         $this->alimentacaoEscolarService->salvarFornecedor($request->validated());
 
@@ -169,7 +170,7 @@ class GestaoAlimentacaoController extends Controller implements HasMiddleware
             ->with('success', 'Fornecedor cadastrado com sucesso.');
     }
 
-    public function updateFornecedor(UpdateFornecedorAlimentoRequest $request, FornecedorAlimento $fornecedor)
+    public function updateFornecedor(UpdateFornecedorAlimentoRequest $request, FornecedorAlimento $fornecedor): RedirectResponse
     {
         $this->alimentacaoEscolarService->atualizarFornecedor($fornecedor, $request->validated());
 
@@ -177,7 +178,7 @@ class GestaoAlimentacaoController extends Controller implements HasMiddleware
             ->with('success', 'Fornecedor atualizado com sucesso.');
     }
 
-    public function cardapios(Request $request)
+    public function cardapios(Request $request): View
     {
         return view('nutricionista.cardapios.index', [
             'cardapios' => $this->portalNutricionistaService->listarCardapios($request->all()),
@@ -191,7 +192,7 @@ class GestaoAlimentacaoController extends Controller implements HasMiddleware
         ]);
     }
 
-    public function createCardapio(Request $request)
+    public function createCardapio(Request $request): View
     {
         return view('nutricionista.cardapios.create', [
             ...$this->alimentacaoEscolarService->opcoesFormulario($request->user()),
@@ -204,7 +205,7 @@ class GestaoAlimentacaoController extends Controller implements HasMiddleware
         ]);
     }
 
-    public function storeCardapio(StoreCardapioDiarioRequest $request)
+    public function storeCardapio(StoreCardapioDiarioRequest $request): RedirectResponse
     {
         $cardapio = $this->alimentacaoEscolarService->criarCardapio($request->user(), $request->validated());
 
@@ -212,7 +213,7 @@ class GestaoAlimentacaoController extends Controller implements HasMiddleware
             ->with('success', 'Cardapio lancado com sucesso.');
     }
 
-    public function showCardapio(Request $request, CardapioDiario $cardapio)
+    public function showCardapio(Request $request, CardapioDiario $cardapio): View
     {
         $this->alimentacaoEscolarService->garantirEscolaPermitida($request->user(), $cardapio->escola_id);
 
@@ -227,7 +228,7 @@ class GestaoAlimentacaoController extends Controller implements HasMiddleware
         ]);
     }
 
-    public function editCardapio(Request $request, CardapioDiario $cardapio)
+    public function editCardapio(Request $request, CardapioDiario $cardapio): View
     {
         $this->alimentacaoEscolarService->garantirEscolaPermitida($request->user(), $cardapio->escola_id);
 
@@ -243,7 +244,7 @@ class GestaoAlimentacaoController extends Controller implements HasMiddleware
         ]);
     }
 
-    public function updateCardapio(UpdateCardapioDiarioRequest $request, CardapioDiario $cardapio)
+    public function updateCardapio(UpdateCardapioDiarioRequest $request, CardapioDiario $cardapio): RedirectResponse
     {
         $this->alimentacaoEscolarService->atualizarCardapio($request->user(), $cardapio, $request->validated());
 
@@ -251,7 +252,7 @@ class GestaoAlimentacaoController extends Controller implements HasMiddleware
             ->with('success', 'Cardapio atualizado com sucesso.');
     }
 
-    public function estoque(Request $request)
+    public function estoque(Request $request): View
     {
         return view('nutricionista.estoque.index', [
             'estoque' => $this->portalNutricionistaService->listarEstoqueComparativo($request->all()),
@@ -266,7 +267,7 @@ class GestaoAlimentacaoController extends Controller implements HasMiddleware
         ]);
     }
 
-    public function movimentacoes(Request $request)
+    public function movimentacoes(Request $request): View
     {
         return view('nutricionista.movimentacoes.index', [
             'movimentacoes' => $this->portalNutricionistaService->listarMovimentacoes($request->all()),
@@ -280,7 +281,7 @@ class GestaoAlimentacaoController extends Controller implements HasMiddleware
         ]);
     }
 
-    public function createMovimentacao(Request $request)
+    public function createMovimentacao(Request $request): View
     {
         if (
             ! $request->user()->can('registrar entrada de alimentos') &&
@@ -301,7 +302,7 @@ class GestaoAlimentacaoController extends Controller implements HasMiddleware
         ]);
     }
 
-    public function storeMovimentacao(StoreMovimentacaoAlimentoRequest $request)
+    public function storeMovimentacao(StoreMovimentacaoAlimentoRequest $request): RedirectResponse
     {
         $this->alimentacaoEscolarService->registrarMovimentacao($request->user(), $request->validated());
 
@@ -309,7 +310,7 @@ class GestaoAlimentacaoController extends Controller implements HasMiddleware
             ->with('success', 'Movimentacao registrada com sucesso.');
     }
 
-    public function relatorios()
+    public function relatorios(): View
     {
         return view('nutricionista.relatorios.index', [
             ...$this->portalNutricionistaService->obterRelatoriosGerenciais(),

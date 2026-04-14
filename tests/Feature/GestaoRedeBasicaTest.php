@@ -76,6 +76,7 @@ class GestaoRedeBasicaTest extends TestCase
         $this->actingAs($admin)
             ->post(route('secretaria.escolas.store'), [
                 'nome' => 'Escola Rede Teste',
+                'inep' => '12345678',
                 'cnpj' => '22.222.222/0001-22',
                 'email' => 'escola.rede@example.com',
                 'telefone' => '(85) 3333-2222',

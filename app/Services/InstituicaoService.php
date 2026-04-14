@@ -3,23 +3,23 @@
 namespace App\Services;
 
 use App\Models\Instituicao;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Storage;
 
 class InstituicaoService
 {
     /**
      * Retorna a instituição única ou cria uma vazia em memória.
      */
-    public function obterInstituicao()
+    public function obterInstituicao(): Instituicao
     {
-        return Instituicao::first() ?? new Instituicao();
+        return Instituicao::first() ?? new Instituicao;
     }
 
     /**
      * Atualiza os dados da instituição e lida com uploads.
      */
-    public function atualizarInstituicao(array $dados)
+    public function atualizarInstituicao(array $dados): Instituicao
     {
         $instituicao = $this->obterInstituicao();
 
@@ -42,7 +42,7 @@ class InstituicaoService
     /**
      * Processa o upload de arquivo e deleta o antigo se existir
      */
-    private function processarUpload(array &$dados, Instituicao $instituicao, string $campoArquivo, string $campoPathBase)
+    private function processarUpload(array &$dados, Instituicao $instituicao, string $campoArquivo, string $campoPathBase): void
     {
         if (isset($dados[$campoArquivo]) && $dados[$campoArquivo] instanceof UploadedFile) {
             // Deletar o antigo

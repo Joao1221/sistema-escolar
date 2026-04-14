@@ -55,6 +55,11 @@
                 flex: 0 0 25%;
                 max-width: 25%;
             }
+
+            .col-6 {
+                flex: 0 0 50%;
+                max-width: 50%;
+            }
         }
     </style>
 
@@ -147,15 +152,11 @@
                 <div>
                     <h3 class="text-lg font-bold text-slate-900 border-b border-slate-100 pb-2 mb-4">Informações da Escola</h3>
                     <div class="div-row">
-                        <div class="div-col col-2">
-                            <label for="inep" class="block text-sm font-semibold text-slate-700 mb-1">Código INEP</label>
-                            <input type="text" name="inep" id="inep" value="{{ old('inep', $escola->inep) }}" maxlength="8" class="w-full rounded-xl border-slate-200 bg-slate-50 text-slate-500 focus:ring-0 cursor-not-allowed shadow-none" readonly>
-                        </div>
-                        <div class="div-col col-5">
+                        <div class="div-col col-6">
                             <label for="nome" class="block text-sm font-semibold text-slate-700 mb-1">Nome da Escola</label>
                             <input type="text" name="nome" id="nome" value="{{ old('nome', $escola->nome) }}" required class="uppercase w-full rounded-xl border-slate-300 focus:border-blue-500 focus:ring-blue-500 shadow-sm transition">
                         </div>
-                        <div class="div-col col-1">
+                        <div class="div-col col-2">
                             <label for="qtd_salas" class="block text-sm font-semibold text-red-600 mb-1">* Salas</label>
                             <input type="number" name="qtd_salas" id="qtd_salas" min="0" step="1" value="{{ old('qtd_salas', $escola->qtd_salas) }}" required class="no-spinner w-full text-left rounded-xl border-slate-300 focus:border-blue-500 focus:ring-blue-500 shadow-sm transition">
                         </div>
@@ -200,16 +201,20 @@
                 <!-- Documentos da Escola -->
                 <div>
                     <h3 class="text-lg font-bold text-slate-900 border-b border-slate-100 pb-2 mb-4">Documentos da Escola</h3>
-                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                        <div>
+                    <div class="div-row">
+                        <div class="div-col col-3">
+                            <label for="inep" class="block text-sm font-semibold text-slate-700 mb-1">Código INEP</label>
+                            <input type="text" name="inep" id="inep" value="{{ old('inep', $escola->inep) }}" maxlength="8" class="w-full rounded-xl border-slate-200 bg-slate-50 text-slate-500 focus:ring-0 cursor-not-allowed shadow-none" readonly>
+                        </div>
+                        <div class="div-col col-3">
                             <label for="ato_criacao" class="block text-sm font-semibold text-slate-700 mb-1">Ato de Criação</label>
                             <input type="text" name="ato_criacao" id="ato_criacao" value="{{ old('ato_criacao', $escola->ato_criacao) }}" maxlength="30" class="uppercase w-full rounded-xl border-slate-300 focus:border-blue-500 focus:ring-blue-500 shadow-sm transition">
                         </div>
-                        <div>
+                        <div class="div-col col-3">
                             <label for="ato_autoriza" class="block text-sm font-semibold text-slate-700 mb-1">Ato de Autorização</label>
                             <input type="text" name="ato_autoriza" id="ato_autoriza" value="{{ old('ato_autoriza', $escola->ato_autoriza) }}" maxlength="30" class="uppercase w-full rounded-xl border-slate-300 focus:border-blue-500 focus:ring-blue-500 shadow-sm transition">
                         </div>
-                        <div>
+                        <div class="div-col col-3">
                             <label for="ato_recon" class="block text-sm font-semibold text-slate-700 mb-1">Ato de Reconhecimento</label>
                             <input type="text" name="ato_recon" id="ato_recon" value="{{ old('ato_recon', $escola->ato_recon) }}" maxlength="30" class="uppercase w-full rounded-xl border-slate-300 focus:border-blue-500 focus:ring-blue-500 shadow-sm transition">
                         </div>
@@ -219,7 +224,7 @@
 
             <!-- Formulário / Botões -->
             <div class="px-8 py-5 bg-slate-50 border-t border-slate-100 flex items-center justify-end space-x-3">
-                <button type="reset" class="px-5 py-2 text-sm font-semibold text-slate-600 hover:text-slate-900 border border-transparent hover:bg-slate-200 rounded-xl transition">
+                <button type="reset" class="px-6 py-2.5 text-sm font-semibold text-slate-700 bg-white border border-slate-300 shadow-sm hover:bg-slate-50 hover:text-slate-900 rounded-xl transition">
                     Desfazer Limpeza
                 </button>
                 <button type="submit" class="px-6 py-2.5 text-sm font-bold text-white bg-blue-600 hover:bg-blue-700 border border-transparent rounded-xl shadow-[0_4px_14px_0_rgba(37,99,235,0.39)] transition-all transform hover:-translate-y-0.5">

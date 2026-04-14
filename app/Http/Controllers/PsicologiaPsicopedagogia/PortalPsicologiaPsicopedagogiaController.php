@@ -4,16 +4,23 @@ namespace App\Http\Controllers\PsicologiaPsicopedagogia;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\EmitirDocumentoRequest;
+use App\Http\Requests\EncerrarAtendimentoPsicossocialRequest;
 use App\Http\Requests\GerarRelatorioRequest;
 use App\Http\Requests\StoreAtendimentoPsicossocialRequest;
 use App\Http\Requests\StoreCasoDisciplinarSigilosoRequest;
+use App\Http\Requests\StoreDemandaPsicossocialRequest;
+use App\Http\Requests\StoreDevolutivaPsicossocialRequest;
 use App\Http\Requests\StoreEncaminhamentoPsicossocialRequest;
 use App\Http\Requests\StorePlanoIntervencaoPsicossocialRequest;
+use App\Http\Requests\StoreReavaliacaoPsicossocialRequest;
 use App\Http\Requests\StoreRelatorioTecnicoPsicossocialRequest;
+use App\Http\Requests\StoreSessaoAtendimentoPsicossocialRequest;
+use App\Http\Requests\StoreTriagemPsicossocialRequest;
 use App\Models\AtendimentoPsicossocial;
 use App\Models\DemandaPsicossocial;
 use App\Models\DevolutivaPsicossocial;
 use App\Models\EncaminhamentoPsicossocial;
+use App\Models\Instituicao;
 use App\Models\PlanoIntervencaoPsicossocial;
 use App\Models\ReavaliacaoPsicossocial;
 use App\Models\RelatorioTecnicoPsicossocial;
@@ -24,6 +31,7 @@ use App\Services\RelatorioPortalService;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controllers\HasMiddleware;
 use Illuminate\Routing\Controllers\Middleware;
+use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
 
 class PortalPsicologiaPsicopedagogiaController extends Controller implements HasMiddleware
 {
@@ -32,8 +40,7 @@ class PortalPsicologiaPsicopedagogiaController extends Controller implements Has
         private readonly DocumentoEscolarService $documentoEscolarService,
         private readonly RelatorioPortalService $relatorioPortalService,
         private readonly AuditoriaService $auditoriaService
-    ) {
-    }
+    ) {}
 
     public static function middleware(): array
     {
@@ -522,34 +529,22 @@ class PortalPsicologiaPsicopedagogiaController extends Controller implements Has
             return response()->json(
                 $this->psicossocialService->dadosEscola($request->user(), $escolaId)
             );
-        } catch (\Symfony\Component\HttpKernel\Exception\HttpExceptionInterface $e) {
+        } catch (HttpExceptionInterface $e) {
             return response()->json([
                 'error' => $e->getMessage() ?: 'Nao foi possivel acessar os dados da escola.',
             ], $e->getStatusCode());
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
+            report($e);
+
             return response()->json([
-                'error' => $e->getMessage(),
+                'error' => 'Erro interno ao carregar dados da escola.',
             ], 500);
         }
     }
 
-    public function salvarDemanda(Request $request)
+    public function salvarDemanda(StoreDemandaPsicossocialRequest $request)
     {
-        $validated = $request->validate([
-            'escola_id' => 'required|exists:escolas,id',
-            'origem_demanda' => 'required|in:coordenacao,direcao,professor,familia,triagem_interna,demanda_espontanea,outro',
-            'tipo_publico' => 'required|in:aluno,professor,funcionario,responsavel,coletivo',
-            'aluno_id' => 'nullable|exists:alunos,id',
-            'funcionario_id' => 'nullable|exists:funcionarios,id',
-            'responsavel_nome' => 'nullable|string|max:255',
-            'responsavel_telefone' => 'nullable|string|max:20',
-            'responsavel_vinculo' => 'nullable|string|max:100',
-            'tipo_atendimento' => 'nullable|in:psicologia,psicopedagogia,psicossocial',
-            'motivo_inicial' => 'required|string',
-            'prioridade' => 'nullable|in:baixa,media,alta,urgente',
-            'data_solicitacao' => 'nullable|date',
-            'observacoes' => 'nullable|string',
-        ]);
+        $validated = $request->validated();
 
         $demanda = $this->psicossocialService->criarDemanda($request->user(), $validated);
 
@@ -562,7 +557,7 @@ class PortalPsicologiaPsicopedagogiaController extends Controller implements Has
         return view('psicologia-psicopedagogia.demandas.show', [
             'demanda' => $this->psicossocialService->carregarDemanda($request->user(), $demanda),
             ...$this->psicossocialService->opcoesFormulario($request->user()),
-            'tituloPagina' => 'Demanda: ' . $demanda->nome_atendido,
+            'tituloPagina' => 'Demanda: '.$demanda->nome_atendido,
             'subtituloPagina' => 'Detalhes da demanda e opcoes de triagem.',
             'breadcrumbs' => $this->psicossocialService->construirBreadcrumbs([
                 ['label' => 'Demandas', 'url' => route('psicologia.demandas.index')],
@@ -571,22 +566,9 @@ class PortalPsicologiaPsicopedagogiaController extends Controller implements Has
         ]);
     }
 
-    public function salvarTriagem(Request $request, DemandaPsicossocial $demanda)
+    public function salvarTriagem(StoreTriagemPsicossocialRequest $request, DemandaPsicossocial $demanda)
     {
-        $validated = $request->validate([
-            'resumo_caso' => 'nullable|string',
-            'sinais_observados' => 'nullable|string',
-            'historico_breve' => 'nullable|string',
-            'urgencia' => 'nullable|in:baixa,media,alta,critica',
-            'risco_identificado' => 'nullable|boolean',
-            'descricao_risco' => 'nullable|string',
-            'nivel_sigilo' => 'nullable|in:normal,reforcado',
-            'decisao' => 'required|in:iniciar_atendimento,observar,encaminhar_externo,devolver_pedagogico,encerrar_sem_atendimento',
-            'justificativa_decisao' => 'nullable|string',
-            'profissional_responsavel_id' => 'nullable|exists:funcionarios,id',
-            'data_triagem' => 'nullable|date',
-            'observacoes' => 'nullable|string',
-        ]);
+        $validated = $request->validated();
 
         $this->psicossocialService->criarTriagem($request->user(), $demanda, $validated);
         $atendimento = $this->psicossocialService->finalizarTriagem($request->user(), $demanda, $validated);
@@ -604,26 +586,11 @@ class PortalPsicologiaPsicopedagogiaController extends Controller implements Has
             ->with('success', 'Triagem concluida.');
     }
 
-    public function registrarSessao(Request $request, AtendimentoPsicossocial $atendimento)
+    public function registrarSessao(StoreSessaoAtendimentoPsicossocialRequest $request, AtendimentoPsicossocial $atendimento)
     {
         $this->authorize('view', $atendimento);
 
-        $validated = $request->validate([
-            'data_sessao' => 'required|date',
-            'hora_inicio' => 'nullable',
-            'hora_fim' => 'nullable',
-            'tipo_sessao' => 'required|in:avaliacao,intervencao,retorno,emergencial,acolhimento,devolutiva,reavaliacao',
-            'objetivo_sessao' => 'nullable|string',
-            'relato_sessao' => 'nullable|string',
-            'estrategias_utilizadas' => 'nullable|string',
-            'comportamento_observado' => 'nullable|string',
-            'evolucao_percebida' => 'nullable|string',
-            'encaminhamentos_definidos' => 'nullable|string',
-            'necessita_retorno' => 'nullable|boolean',
-            'proximo_passo' => 'nullable|string',
-            'status' => 'nullable|in:realizado,remarcado,faltou,cancelado',
-            'observacoes' => 'nullable|string',
-        ]);
+        $validated = $request->validated();
 
         $this->psicossocialService->criarSessao($request->user(), $atendimento, $validated);
 
@@ -639,7 +606,7 @@ class PortalPsicologiaPsicopedagogiaController extends Controller implements Has
             $q->orderByDesc('data_sessao');
         }, 'devolutivas', 'reavaliacoes', 'encaminhamentos', 'planosIntervencao']);
 
-        $instituicao = \App\Models\Instituicao::query()->first();
+        $instituicao = Instituicao::query()->first();
 
         return view('psicologia-psicopedagogia.relatorios.sessoes', [
             'atendimento' => $atendimento,
@@ -649,20 +616,11 @@ class PortalPsicologiaPsicopedagogiaController extends Controller implements Has
         ]);
     }
 
-    public function salvarDevolutiva(Request $request, AtendimentoPsicossocial $atendimento)
+    public function salvarDevolutiva(StoreDevolutivaPsicossocialRequest $request, AtendimentoPsicossocial $atendimento)
     {
         $this->authorize('view', $atendimento);
 
-        $validated = $request->validate([
-            'destinatario' => 'required|in:familia,professor,coordenacao,direcao,funcionario,outro',
-            'nome_destinatario' => 'nullable|string|max:255',
-            'data_devolutiva' => 'required|date',
-            'resumo_devolutiva' => 'nullable|string',
-            'orientacoes' => 'nullable|string',
-            'encaminhamentos_combinados' => 'nullable|string',
-            'necessita_acompanhamento' => 'nullable|boolean',
-            'observacoes' => 'nullable|string',
-        ]);
+        $validated = $request->validated();
 
         $this->psicossocialService->criarDevolutiva($request->user(), $atendimento, $validated);
 
@@ -689,20 +647,11 @@ class PortalPsicologiaPsicopedagogiaController extends Controller implements Has
         ]);
     }
 
-    public function updateDevolutiva(Request $request, DevolutivaPsicossocial $devolutiva)
+    public function updateDevolutiva(StoreDevolutivaPsicossocialRequest $request, DevolutivaPsicossocial $devolutiva)
     {
         $this->authorize('view', $devolutiva->atendimento);
 
-        $validated = $request->validate([
-            'destinatario' => 'required|in:familia,professor,coordenacao,direcao,funcionario,outro',
-            'nome_destinatario' => 'nullable|string|max:255',
-            'data_devolutiva' => 'required|date',
-            'resumo_devolutiva' => 'nullable|string',
-            'orientacoes' => 'nullable|string',
-            'encaminhamentos_combinados' => 'nullable|string',
-            'necessita_acompanhamento' => 'nullable|boolean',
-            'observacoes' => 'nullable|string',
-        ]);
+        $validated = $request->validated();
 
         $devolutiva->update($validated);
 
@@ -721,20 +670,11 @@ class PortalPsicologiaPsicopedagogiaController extends Controller implements Has
             ->with('success', 'Devolutiva excluida com sucesso.');
     }
 
-    public function salvarReavaliacao(Request $request, AtendimentoPsicossocial $atendimento)
+    public function salvarReavaliacao(StoreReavaliacaoPsicossocialRequest $request, AtendimentoPsicossocial $atendimento)
     {
         $this->authorize('view', $atendimento);
 
-        $validated = $request->validate([
-            'data_reavaliacao' => 'required|date',
-            'progresso_observado' => 'nullable|string',
-            'dificuldades_persistentes' => 'nullable|string',
-            'ajuste_plano' => 'nullable|string',
-            'frequencia_nova' => 'nullable|in:semanal,quinzenal,mensal,outra',
-            'decisao' => 'required|in:manter_plano,ajustar_plano,suspender,encaminhar,encerrar',
-            'justificativa' => 'nullable|string',
-            'proxima_reavaliacao' => 'nullable|date',
-        ]);
+        $validated = $request->validated();
 
         $this->psicossocialService->criarReavaliacao($request->user(), $atendimento, $validated);
 
@@ -761,20 +701,11 @@ class PortalPsicologiaPsicopedagogiaController extends Controller implements Has
         ]);
     }
 
-    public function updateReavaliacao(Request $request, ReavaliacaoPsicossocial $reavaliacao)
+    public function updateReavaliacao(StoreReavaliacaoPsicossocialRequest $request, ReavaliacaoPsicossocial $reavaliacao)
     {
         $this->authorize('view', $reavaliacao->atendimento);
 
-        $validated = $request->validate([
-            'data_reavaliacao' => 'required|date',
-            'progresso_observado' => 'nullable|string',
-            'dificuldades_persistentes' => 'nullable|string',
-            'ajuste_plano' => 'nullable|string',
-            'frequencia_nova' => 'nullable|in:semanal,quinzenal,mensal,outra',
-            'decisao' => 'required|in:manter_plano,ajustar_plano,suspender,encaminhar,encerrar',
-            'justificativa' => 'nullable|string',
-            'proxima_reavaliacao' => 'nullable|date',
-        ]);
+        $validated = $request->validated();
 
         $reavaliacao->update($validated);
 
@@ -793,16 +724,11 @@ class PortalPsicologiaPsicopedagogiaController extends Controller implements Has
             ->with('success', 'Reavaliacao excluida com sucesso.');
     }
 
-    public function encerrarAtendimento(Request $request, AtendimentoPsicossocial $atendimento)
+    public function encerrarAtendimento(EncerrarAtendimentoPsicossocialRequest $request, AtendimentoPsicossocial $atendimento)
     {
         $this->authorize('view', $atendimento);
 
-        $validated = $request->validate([
-            'data_encerramento' => 'nullable|date',
-            'motivo_encerramento' => 'nullable|string',
-            'resumo_encerramento' => 'nullable|string',
-            'orientacoes_finais' => 'nullable|string',
-        ]);
+        $validated = $request->validated();
 
         $this->psicossocialService->encerrarAtendimento($request->user(), $atendimento, $validated);
 

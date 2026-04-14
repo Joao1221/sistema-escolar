@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Models\Escola;
 use App\Models\Funcionario;
 use App\Support\CargosPsicossociais;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\DB;
 
 class FuncionarioService
@@ -12,23 +13,23 @@ class FuncionarioService
     /**
      * Lista funcionários com filtros.
      */
-    public function listarFuncionarios(array $filtros = [])
+    public function listarFuncionarios(array $filtros = []): LengthAwarePaginator
     {
         $query = Funcionario::with('escolas');
 
-        if (!empty($filtros['nome'])) {
-            $query->where('nome', 'like', '%' . $filtros['nome'] . '%');
+        if (! empty($filtros['nome'])) {
+            $query->where('nome', 'like', '%'.$filtros['nome'].'%');
         }
 
-        if (!empty($filtros['cpf'])) {
-            $query->where('cpf', 'like', '%' . $filtros['cpf'] . '%');
+        if (! empty($filtros['cpf'])) {
+            $query->where('cpf', 'like', '%'.$filtros['cpf'].'%');
         }
 
-        if (!empty($filtros['cargo'])) {
+        if (! empty($filtros['cargo'])) {
             $query->where('cargo', $filtros['cargo']);
         }
 
-        if (!empty($filtros['escola_id'])) {
+        if (! empty($filtros['escola_id'])) {
             $query->whereHas('escolas', function ($q) use ($filtros) {
                 $q->where('escolas.id', $filtros['escola_id']);
             });
@@ -40,7 +41,7 @@ class FuncionarioService
     /**
      * Cria um novo funcionário e vincula às escolas.
      */
-    public function criarFuncionario(array $dados)
+    public function criarFuncionario(array $dados): Funcionario
     {
         return DB::transaction(function () use ($dados) {
             $funcionario = Funcionario::create($dados);
@@ -53,7 +54,7 @@ class FuncionarioService
     /**
      * Atualiza funcionário e seus vínculos.
      */
-    public function atualizarFuncionario(Funcionario $funcionario, array $dados)
+    public function atualizarFuncionario(Funcionario $funcionario, array $dados): Funcionario
     {
         return DB::transaction(function () use ($funcionario, $dados) {
             $funcionario->update($dados);
@@ -66,10 +67,11 @@ class FuncionarioService
     /**
      * Alterna status do funcionário.
      */
-    public function alternarStatus(Funcionario $funcionario)
+    public function alternarStatus(Funcionario $funcionario): Funcionario
     {
-        $funcionario->ativo = !$funcionario->ativo;
+        $funcionario->ativo = ! $funcionario->ativo;
         $funcionario->save();
+
         return $funcionario;
     }
 

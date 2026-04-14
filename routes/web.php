@@ -14,26 +14,6 @@ use App\Http\Controllers\Secretaria\RelatorioRedeController;
 use App\Http\Controllers\Secretaria\TurmaConsultaController;
 use App\Http\Controllers\Secretaria\MatriculaConsultaController;
 use App\Http\Controllers\Secretaria\SecretariaController;
-
-Route::get('/psicologia-api/dados-escola/{escolaId}', function (int $escolaId) {
-    $escola = \App\Models\Escola::findOrFail($escolaId);
-    
-    $alunos = \App\Models\Aluno::query()
-        ->whereHas('matriculas', fn ($query) => $query->where('escola_id', $escolaId)->where('status', 'ativa'))
-        ->where('ativo', true)
-        ->orderBy('nome_completo')
-        ->get(['id', 'nome_completo']);
-    
-    $funcionarios = \App\Models\Funcionario::query()
-        ->whereHas('escolas', fn ($query) => $query->where('escolas.id', $escolaId))
-        ->orderBy('nome')
-        ->get(['id', 'nome']);
-    
-    return response()->json([
-        'alunos' => $alunos,
-        'funcionarios' => $funcionarios,
-    ]);
-})->middleware(['auth']);
 use App\Http\Controllers\Secretaria\DisciplinaController;
 use App\Http\Controllers\Secretaria\MatrizCurricularController;
 use App\Http\Controllers\SecretariaEscolar\DashboardController as EscolarDashboardController;
@@ -367,7 +347,7 @@ Route::middleware(['auth', 'can:acessar modulo psicossocial', 'can:acessar dados
     
     Route::get('/demandas', [PortalPsicologiaPsicopedagogiaController::class, 'demandas'])->name('demandas.index');
     Route::get('/demandas/criar', [PortalPsicologiaPsicopedagogiaController::class, 'criarDemanda'])->name('demandas.create');
-    Route::get('/demandas/dados-escola/{escolaId}', [PortalPsicologiaPsicopedagogiaController::class, 'dadosEscola'])->withoutMiddleware(['can:acessar modulo psicossocial', 'can:acessar dados sigilosos psicossociais']);
+    Route::get('/demandas/dados-escola/{escolaId}', [PortalPsicologiaPsicopedagogiaController::class, 'dadosEscola']);
     Route::post('/demandas', [PortalPsicologiaPsicopedagogiaController::class, 'salvarDemanda'])->name('demandas.store');
     Route::get('/demandas/{demanda}', [PortalPsicologiaPsicopedagogiaController::class, 'verDemanda'])->name('demandas.show');
     Route::post('/demandas/{demanda}/triagem', [PortalPsicologiaPsicopedagogiaController::class, 'salvarTriagem'])->name('demandas.triagem');

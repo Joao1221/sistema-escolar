@@ -4,6 +4,9 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class Matricula extends Model
 {
@@ -33,7 +36,7 @@ class Matricula extends Model
     /**
      * Relacionamento com o Aluno.
      */
-    public function aluno()
+    public function aluno(): BelongsTo
     {
         return $this->belongsTo(Aluno::class);
     }
@@ -41,7 +44,7 @@ class Matricula extends Model
     /**
      * Relacionamento com a Escola.
      */
-    public function escola()
+    public function escola(): BelongsTo
     {
         return $this->belongsTo(Escola::class);
     }
@@ -49,7 +52,7 @@ class Matricula extends Model
     /**
      * Relacionamento com a Turma.
      */
-    public function turma()
+    public function turma(): BelongsTo
     {
         return $this->belongsTo(Turma::class);
     }
@@ -57,7 +60,7 @@ class Matricula extends Model
     /**
      * Relacionamento com o Histórico.
      */
-    public function historico()
+    public function historico(): HasMany
     {
         return $this->hasMany(MatriculaHistorico::class);
     }
@@ -65,7 +68,7 @@ class Matricula extends Model
     /**
      * Se for uma matrícula AEE, pode estar vinculada a uma Regular.
      */
-    public function matriculaRegular()
+    public function matriculaRegular(): BelongsTo
     {
         return $this->belongsTo(Matricula::class, 'matricula_regular_id');
     }
@@ -73,37 +76,37 @@ class Matricula extends Model
     /**
      * Se for uma matrícula Regular, pode ter uma vinculada de AEE.
      */
-    public function matriculaAEE()
+    public function matriculaAEE(): HasOne
     {
         return $this->hasOne(Matricula::class, 'matricula_regular_id');
     }
 
-    public function frequenciasAula()
+    public function frequenciasAula(): HasMany
     {
         return $this->hasMany(FrequenciaAula::class);
     }
 
-    public function observacoesAluno()
+    public function observacoesAluno(): HasMany
     {
         return $this->hasMany(ObservacaoAluno::class);
     }
 
-    public function ocorrenciasDiario()
+    public function ocorrenciasDiario(): HasMany
     {
         return $this->hasMany(OcorrenciaDiario::class);
     }
 
-    public function acompanhamentosPedagogicos()
+    public function acompanhamentosPedagogicos(): HasMany
     {
         return $this->hasMany(AcompanhamentoPedagogicoAluno::class);
     }
 
-    public function justificativasFaltaAluno()
+    public function justificativasFaltaAluno(): HasMany
     {
         return $this->hasMany(JustificativaFaltaAluno::class);
     }
 
-    public function lancamentosAvaliativos()
+    public function lancamentosAvaliativos(): HasMany
     {
         return $this->hasMany(LancamentoAvaliativo::class);
     }

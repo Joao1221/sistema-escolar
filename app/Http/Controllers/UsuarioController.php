@@ -8,14 +8,17 @@ use App\Models\Escola;
 use App\Models\Funcionario;
 use App\Models\Usuario;
 use App\Services\UsuarioService;
+use Illuminate\Contracts\View\View;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
+use Illuminate\Http\RedirectResponse;
 use Spatie\Permission\Models\Role;
 
 class UsuarioController extends Controller
 {
     use AuthorizesRequests;
 
-    protected $usuarioService;
+    protected UsuarioService $usuarioService;
 
     public function __construct(UsuarioService $usuarioService)
     {
@@ -25,7 +28,7 @@ class UsuarioController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(): View
     {
         $this->authorize('visualizar usuarios');
         $usuarios = $this->usuarioService->obterTodos();
@@ -36,7 +39,7 @@ class UsuarioController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
+    public function create(): View
     {
         $this->authorize('criar usuario');
 
@@ -50,7 +53,7 @@ class UsuarioController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreUsuarioRequest $request)
+    public function store(StoreUsuarioRequest $request): RedirectResponse
     {
         $this->usuarioService->criar($request->validated());
 
@@ -60,7 +63,7 @@ class UsuarioController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Usuario $usuario)
+    public function edit(Usuario $usuario): View
     {
         $this->authorize('editar usuario');
 
@@ -74,7 +77,7 @@ class UsuarioController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateUsuarioRequest $request, Usuario $usuario)
+    public function update(UpdateUsuarioRequest $request, Usuario $usuario): RedirectResponse
     {
         $this->usuarioService->atualizar($usuario, $request->validated());
 
@@ -84,7 +87,7 @@ class UsuarioController extends Controller
     /**
      * Alternar status de ativação do usuário (Ativar/Inativar).
      */
-    public function alternarStatus(Usuario $usuario)
+    public function alternarStatus(Usuario $usuario): RedirectResponse
     {
         $this->authorize('ativar inativar usuario');
         $this->usuarioService->alternarStatus($usuario);
@@ -92,7 +95,7 @@ class UsuarioController extends Controller
         return redirect()->route('secretaria.usuarios.index')->with('success', 'Status do usuário alterado com sucesso.');
     }
 
-    private function obterFuncionariosDisponiveis(?Usuario $usuario = null)
+    private function obterFuncionariosDisponiveis(?Usuario $usuario = null): Collection
     {
         $query = Funcionario::query()->orderBy('nome');
 

@@ -16,7 +16,9 @@ use App\Http\Requests\StoreRegistroAulaRequest;
 use App\Models\DiarioProfessor;
 use App\Services\DiarioProfessorService;
 use App\Services\PortalProfessorService;
+use Illuminate\Contracts\View\View;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 
 class DiarioProfessorController extends Controller
@@ -26,10 +28,9 @@ class DiarioProfessorController extends Controller
     public function __construct(
         private readonly DiarioProfessorService $diarioProfessorService,
         private readonly PortalProfessorService $portalProfessorService
-    ) {
-    }
+    ) {}
 
-    public function index(Request $request)
+    public function index(Request $request): View
     {
         $this->authorize('viewAny', DiarioProfessor::class);
 
@@ -49,7 +50,7 @@ class DiarioProfessorController extends Controller
         ]);
     }
 
-    public function create(Request $request)
+    public function create(Request $request): View
     {
         $this->authorize('create', DiarioProfessor::class);
 
@@ -65,7 +66,7 @@ class DiarioProfessorController extends Controller
         ]);
     }
 
-    public function store(StoreDiarioProfessorRequest $request)
+    public function store(StoreDiarioProfessorRequest $request): RedirectResponse
     {
         $this->authorize('create', DiarioProfessor::class);
 
@@ -79,7 +80,7 @@ class DiarioProfessorController extends Controller
             ->with('success', 'Diario criado com sucesso.');
     }
 
-    public function show(DiarioProfessor $diario)
+    public function show(DiarioProfessor $diario): View
     {
         $this->authorize('view', $diario);
 
@@ -90,8 +91,8 @@ class DiarioProfessorController extends Controller
             'matriculasAtivas' => $this->diarioProfessorService->listarMatriculasAtivas($diario),
             'horariosRelacionados' => $this->diarioProfessorService->listarHorariosDoDiario($diario),
             'tipoAvaliacaoDiario' => $this->diarioProfessorService->resolverTipoAvaliacao($diarioDetalhado),
-            'tituloPagina' => 'Diario de ' . $diario->turma->nome,
-            'subtituloPagina' => $diario->disciplina->nome . ' • ' . $diario->escola->nome,
+            'tituloPagina' => 'Diario de '.$diario->turma->nome,
+            'subtituloPagina' => $diario->disciplina->nome.' • '.$diario->escola->nome,
             'breadcrumbs' => $this->portalProfessorService->construirBreadcrumbs([
                 ['label' => 'Diario Eletronico', 'url' => route('professor.diario.index')],
                 ['label' => $diario->turma->nome],
@@ -99,7 +100,7 @@ class DiarioProfessorController extends Controller
         ]);
     }
 
-    public function storePlanejamentoAnual(StorePlanejamentoAnualRequest $request, DiarioProfessor $diario)
+    public function storePlanejamentoAnual(StorePlanejamentoAnualRequest $request, DiarioProfessor $diario): RedirectResponse
     {
         $this->authorize('gerenciarPlanejamento', $diario);
 
@@ -110,7 +111,7 @@ class DiarioProfessorController extends Controller
             ->with('success', 'Planejamento anual salvo com sucesso.');
     }
 
-    public function storePlanejamentoSemanal(StorePlanejamentoSemanalRequest $request, DiarioProfessor $diario)
+    public function storePlanejamentoSemanal(StorePlanejamentoSemanalRequest $request, DiarioProfessor $diario): RedirectResponse
     {
         $this->authorize('gerenciarPlanejamento', $diario);
 
@@ -121,7 +122,7 @@ class DiarioProfessorController extends Controller
             ->with('success', 'Planejamento semanal registrado com sucesso.');
     }
 
-    public function storePlanejamentoPeriodo(StorePlanejamentoPeriodoRequest $request, DiarioProfessor $diario)
+    public function storePlanejamentoPeriodo(StorePlanejamentoPeriodoRequest $request, DiarioProfessor $diario): RedirectResponse
     {
         $this->authorize('gerenciarPlanejamento', $diario);
 
@@ -132,7 +133,7 @@ class DiarioProfessorController extends Controller
             ->with('success', 'Planejamento do periodo registrado com sucesso.');
     }
 
-    public function storeRegistroAula(StoreRegistroAulaRequest $request, DiarioProfessor $diario)
+    public function storeRegistroAula(StoreRegistroAulaRequest $request, DiarioProfessor $diario): RedirectResponse
     {
         $this->authorize('registrarAula', $diario);
 
@@ -146,7 +147,7 @@ class DiarioProfessorController extends Controller
             ->with('success', 'Registro de aula salvo com sucesso.');
     }
 
-    public function storeFrequencia(StoreLancamentoFrequenciaRequest $request, DiarioProfessor $diario)
+    public function storeFrequencia(StoreLancamentoFrequenciaRequest $request, DiarioProfessor $diario): RedirectResponse
     {
         $this->authorize('lancarFrequencia', $diario);
 
@@ -157,7 +158,7 @@ class DiarioProfessorController extends Controller
             ->with('success', 'Frequencia registrada com sucesso.');
     }
 
-    public function storeAvaliacao(StoreLancamentoAvaliativoRequest $request, DiarioProfessor $diario)
+    public function storeAvaliacao(StoreLancamentoAvaliativoRequest $request, DiarioProfessor $diario): RedirectResponse
     {
         $this->authorize('gerenciarPlanejamento', $diario);
 
@@ -168,7 +169,7 @@ class DiarioProfessorController extends Controller
             ->with('success', 'Lancamento avaliativo salvo com sucesso.');
     }
 
-    public function storeObservacao(StoreObservacaoAlunoRequest $request, DiarioProfessor $diario)
+    public function storeObservacao(StoreObservacaoAlunoRequest $request, DiarioProfessor $diario): RedirectResponse
     {
         $this->authorize('registrarObservacao', $diario);
 
@@ -182,7 +183,7 @@ class DiarioProfessorController extends Controller
             ->with('success', 'Observacao registrada com sucesso.');
     }
 
-    public function storeOcorrencia(StoreOcorrenciaDiarioRequest $request, DiarioProfessor $diario)
+    public function storeOcorrencia(StoreOcorrenciaDiarioRequest $request, DiarioProfessor $diario): RedirectResponse
     {
         $this->authorize('registrarOcorrencia', $diario);
 
@@ -193,7 +194,7 @@ class DiarioProfessorController extends Controller
             ->with('success', 'Ocorrencia registrada com sucesso.');
     }
 
-    public function storePendencia(StorePendenciaProfessorRequest $request, DiarioProfessor $diario)
+    public function storePendencia(StorePendenciaProfessorRequest $request, DiarioProfessor $diario): RedirectResponse
     {
         $this->authorize('gerenciarPendencia', $diario);
 

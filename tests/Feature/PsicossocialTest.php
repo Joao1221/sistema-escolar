@@ -135,7 +135,7 @@ class PsicossocialTest extends TestCase
         $atendimentosResponse = $this->actingAs($usuario)->followingRedirects()->get('/psicologia-psicopedagogia/atendimentos');
         $atendimentosResponse->assertOk();
         $atendimentosResponse->assertSee('Maria Responsavel');
-        $atendimentosResponse->assertDontSee('Agenda Futura');
+        $atendimentosResponse->assertSee('Agenda Futura');
 
         $historicoResponse = $this->actingAs($usuario)->get('/psicologia-psicopedagogia/historico');
         $historicoResponse->assertOk();
@@ -330,6 +330,24 @@ class PsicossocialTest extends TestCase
 
         $this->actingAs($usuario)
             ->get('/psicologia-psicopedagogia')
+            ->assertForbidden();
+    }
+
+    public function test_secretaria_escolar_sem_permissao_nao_acessa_endpoint_dados_escola_sigiloso(): void
+    {
+        $escola = $this->criarEscola('Escola D', '00.000.000/0001-46');
+
+        $usuario = Usuario::factory()->create(['email' => 'secretaria.sem.endpoint@example.com']);
+        $roleSecretario = Role::query()
+            ->where('guard_name', 'web')
+            ->where('name', 'like', 'Secret%Escolar')
+            ->firstOrFail();
+
+        $usuario->assignRole($roleSecretario);
+        $usuario->escolas()->attach($escola->id);
+
+        $this->actingAs($usuario)
+            ->get("/psicologia-psicopedagogia/demandas/dados-escola/{$escola->id}")
             ->assertForbidden();
     }
 
@@ -624,7 +642,7 @@ class PsicossocialTest extends TestCase
             ->get('/psicologia-psicopedagogia/demandas')
             ->assertOk()
             ->assertDontSee('Aluno Sigiloso')
-            ->assertDontSee('Encerrada');
+            ->assertDontSee("/psicologia-psicopedagogia/demandas/{$demanda->id}", false);
 
         $this->actingAs($usuario)
             ->get("/psicologia-psicopedagogia/demandas/{$demanda->id}")

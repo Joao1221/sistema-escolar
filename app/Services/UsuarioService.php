@@ -6,6 +6,7 @@ use App\Models\Escola;
 use App\Models\Funcionario;
 use App\Models\Usuario;
 use App\Support\CargosPsicossociais;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Spatie\Permission\Models\Permission;
@@ -18,7 +19,7 @@ class UsuarioService
     /**
      * Obter lista paginada de usuários com seus relacionamentos.
      */
-    public function obterTodos($paginacao = 10)
+    public function obterTodos(int $paginacao = 10): LengthAwarePaginator
     {
         return Usuario::with(['roles', 'escolas', 'funcionario'])->paginate($paginacao);
     }
@@ -26,7 +27,7 @@ class UsuarioService
     /**
      * Criar um novo usuário.
      */
-    public function criar(array $dados)
+    public function criar(array $dados): Usuario
     {
         return DB::transaction(function () use ($dados) {
             $usuario = Usuario::create([
@@ -38,7 +39,7 @@ class UsuarioService
             ]);
 
             // Sincronizar Perfil
-            if (!empty($dados['role'])) {
+            if (! empty($dados['role'])) {
                 $role = Role::find($dados['role']);
                 if ($role) {
                     $usuario->assignRole($role);
@@ -56,19 +57,19 @@ class UsuarioService
     /**
      * Atualizar um usuário existente.
      */
-    public function atualizar(Usuario $usuario, array $dados)
+    public function atualizar(Usuario $usuario, array $dados): Usuario
     {
         return DB::transaction(function () use ($usuario, $dados) {
             // Preparar dados para update do modelo base
             $updateData = [
-                'name'  => $dados['name'],
+                'name' => $dados['name'],
                 'email' => $dados['email'],
                 'ativo' => $dados['ativo'] ?? $usuario->ativo,
                 'funcionario_id' => $dados['funcionario_id'] ?? null,
             ];
 
             // Se senha foi preenchida, hash e adiciona
-            if (!empty($dados['password'])) {
+            if (! empty($dados['password'])) {
                 $updateData['password'] = Hash::make($dados['password']);
             }
 
@@ -95,9 +96,10 @@ class UsuarioService
     /**
      * Alternar status de ativação do usuário.
      */
-    public function alternarStatus(Usuario $usuario)
+    public function alternarStatus(Usuario $usuario): Usuario
     {
-        $usuario->update(['ativo' => !$usuario->ativo]);
+        $usuario->update(['ativo' => ! $usuario->ativo]);
+
         return $usuario;
     }
 
