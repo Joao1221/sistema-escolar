@@ -158,6 +158,7 @@
         <div class="px-6 py-6 space-y-3" style="border-top:1px solid {{ $pal['divider'] }};">
             <form method="POST" action="{{ route('professor.theme.update') }}" class="space-y-2">
                 @csrf
+                <input type="hidden" name="redirect_to" value="{{ url()->current() }}">
                 <p class="text-[11px] font-semibold uppercase tracking-[0.28em]" style="color:{{ $pal['label'] }};">Tema do portal</p>
                 <div class="grid grid-cols-3 gap-2">
                     <button type="submit" name="theme" value="lilas"

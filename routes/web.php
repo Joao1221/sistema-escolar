@@ -1,5 +1,7 @@
 <?php
 
+use Illuminate\Http\Request;
+
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ArquivoPublicoController;
 use App\Http\Controllers\UsuarioController;
@@ -418,6 +420,9 @@ Route::middleware(['auth', 'can:criar diarios'])->prefix('professor')->name('pro
     Route::post('/diario/{diario}/ocorrencias', [DiarioProfessorController::class, 'storeOcorrencia'])->name('diario.ocorrencias.store');
     Route::post('/diario/{diario}/pendencias', [DiarioProfessorController::class, 'storePendencia'])->name('diario.pendencias.store');
     Route::get('/documentos', [DocumentoProfessorController::class, 'index'])->name('documentos.index');
+    Route::get('/documentos/{tipo}/visualizar', function (Request $request, string $tipo) {
+        return redirect()->route('professor.documentos.index');
+    })->name('documentos.preview');
     Route::post('/documentos/{tipo}/visualizar', [DocumentoProfessorController::class, 'preview'])->name('documentos.preview');
     Route::post('/documentos/{tipo}/imprimir', [DocumentoProfessorController::class, 'print'])->name('documentos.print');
     Route::get('/auditoria', [AuditoriaProfessorController::class, 'index'])->name('auditoria.index');

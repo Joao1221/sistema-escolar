@@ -16,11 +16,6 @@
         <style>
             body { font-family: 'IBM Plex Sans', sans-serif; }
             .font-outfit { font-family: 'Outfit', sans-serif; }
-            .professor-desktop-sidebar {
-                display: block;
-                width: 20rem;
-                flex: 0 0 20rem;
-            }
 
             .professor-desktop-toggle {
                 display: inline-flex;
@@ -32,7 +27,31 @@
                 display: none;
             }
 
-            @media (max-width: 479px) {
+            /* Sidebar fixa desktop */
+            .professor-desktop-sidebar {
+                position: fixed;
+                top: 0;
+                left: 0;
+                height: 100vh;
+                width: 20rem;
+                z-index: 30;
+            }
+
+            .professor-desktop-sidebar.collapsed {
+                width: 0;
+                overflow: hidden;
+            }
+
+            .professor-content {
+                margin-left: 20rem;
+                transition: margin-left 0.3s ease-in-out;
+            }
+
+            .professor-content.collapsed {
+                margin-left: 0;
+            }
+
+            @media (max-width: 1023px) {
                 .professor-desktop-sidebar,
                 .professor-desktop-toggle {
                     display: none !important;
@@ -42,9 +61,13 @@
                 .professor-mobile-sidebar {
                     display: flex !important;
                 }
+
+                .professor-content {
+                    margin-left: 0 !important;
+                }
             }
 
-            @media (min-width: 480px) {
+            @media (min-width: 1024px) {
                 .professor-mobile-header,
                 .professor-mobile-sidebar,
                 .professor-mobile-overlay {
@@ -62,7 +85,7 @@
                     'cardBg' => '#101727',
                     'cardBorder' => 'rgba(255,255,255,0.12)',
                     'cardShadow' => '0 25px 80px rgba(8,12,24,0.55)',
-                    'headerBg' => 'linear-gradient(135deg,#111c2e 0%,#0f1a2a 55%,#0d1623 100%)',
+                    'headerBg' => 'linear-gradient(135deg,#111c2e 0%,#0f1a2a 55%,#0d1623_100%)',
                     'headerBorder' => 'rgba(59,130,246,0.35)',
                     'heading' => '#e5edff',
                     'text' => '#d6e2ff',
@@ -126,31 +149,33 @@
              @click="sidebarOpen = false" 
              style="display: none;"></div>
 
-        <div class="min-h-screen flex" style="background: {{ $pal['bodyBg'] }};">
-            <!-- Sidebar -->
-            <aside class="professor-desktop-sidebar flex-shrink-0 overflow-hidden transition-[width,opacity] duration-300 ease-in-out"
-                   :style="sidebarCollapsed
-                        ? 'width: 0; flex-basis: 0; opacity: 0; pointer-events: none;'
-                        : 'width: 20rem; flex-basis: 20rem; opacity: 1; pointer-events: auto;'">
-                <x-sidebar-professor :theme="$theme" />
-            </aside>
+        <!-- Sidebar fixa (desktop) -->
+        <aside class="professor-desktop-sidebar hidden lg:block"
+               :class="sidebarCollapsed ? 'collapsed' : ''">
+            <x-sidebar-professor :theme="$theme" />
+        </aside>
 
-            <!-- Mobile Sidebar -->
-            <div class="professor-mobile-sidebar fixed inset-y-0 left-0 z-50 w-80 max-w-[80vw] -translate-x-full transition-transform duration-300 ease-in-out"
-                 :class="sidebarOpen ? 'translate-x-0' : '-translate-x-full'">
-                <x-sidebar-professor :theme="$theme" />
-            </div>
+        <!-- Mobile Sidebar -->
+        <div class="professor-mobile-sidebar fixed inset-y-0 left-0 z-50 w-80 max-w-[80vw] -translate-x-full transition-transform duration-300 ease-in-out lg:hidden"
+             :class="sidebarOpen ? 'translate-x-0' : '-translate-x-full'">
+            <x-sidebar-professor :theme="$theme" />
+        </div>
 
-            <div class="flex-1 flex flex-col min-w-0 p-3 lg:p-5 lg:ml-0">
+        <!-- Conteúdo principal -->
+        <main class="professor-content flex-1 flex flex-col min-w-0"
+             :class="sidebarCollapsed ? 'collapsed' : ''">
+            <div class="flex-1 flex flex-col min-h-screen" style="background: {{ $pal['bodyBg'] }};">
                 <!-- Mobile Header -->
-                <div class="professor-mobile-header flex items-center justify-between p-4 mb-3 rounded-2xl border border-white/10" style="background: {{ $pal['cardBg'] }};">
+                <div class="professor-mobile-header flex items-center justify-between p-4 mb-3 rounded-2xl border border-white/10 w-full" style="background: {{ $pal['cardBg'] }};">
                     <div class="font-outfit font-bold text-xl" style="color: {{ $pal['heading'] }};">Portal do Professor</div>
                     <button @click="sidebarOpen = true" class="p-2 -mr-2 rounded-lg focus:outline-none" style="color: {{ $pal['muted'] }};">
                         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
                     </button>
                 </div>
-                <div class="min-h-[calc(100vh-1.5rem)] overflow-hidden rounded-[2rem] border shadow-[0_25px_80px_rgba(18,12,35,0.35)]"
-                     style="background: {{ $pal['cardBg'] }}; border-color: {{ $pal['cardBorder'] }}; box-shadow: {{ $pal['cardShadow'] }};">
+
+                <div class="flex-1 p-3 lg:p-5">
+                    <div class="h-full rounded-[2rem] border shadow-[0_25px_80px_rgba(18,12,35,0.35)]"
+                         style="background: {{ $pal['cardBg'] }}; border-color: {{ $pal['cardBorder'] }}; box-shadow: {{ $pal['cardShadow'] }};">
                     <header class="px-6 py-5 lg:px-10" style="border-bottom:1px solid {{ $pal['headerBorder'] }}; background: {{ $pal['headerBg'] }};">
                         <div class="flex flex-col gap-5 lg:flex-row lg:items-end lg:justify-between">
                             <div class="min-w-0">

@@ -16,11 +16,6 @@
         <style>
             body { font-family: 'Manrope', sans-serif; }
             .font-fraunces { font-family: 'Fraunces', serif; }
-            .psicologia-desktop-sidebar {
-                display: block;
-                width: 16rem;
-                flex: 0 0 16rem;
-            }
 
             .psicologia-desktop-toggle {
                 display: inline-flex;
@@ -32,6 +27,33 @@
                 display: none;
             }
 
+            /* Sidebar fixa desktop */
+            .psicologia-desktop-sidebar {
+                position: fixed;
+                top: 0;
+                left: 0;
+                height: 100vh;
+                width: 16rem;
+                z-index: 30;
+                transition: width 0.3s ease-in-out, opacity 0.3s ease-in-out;
+            }
+
+            .psicologia-desktop-sidebar.collapsed {
+                width: 0;
+                opacity: 0;
+                overflow: hidden;
+            }
+
+            /* Padding para o conteúdo não ficar atrás do sidebar */
+            .psicologia-content-wrapper {
+                margin-left: 16rem;
+                transition: margin-left 0.3s ease-in-out;
+            }
+
+            .psicologia-content-wrapper.sidebar-collapsed {
+                margin-left: 0;
+            }
+
             @media (max-width: 479px) {
                 .psicologia-desktop-sidebar,
                 .psicologia-desktop-toggle {
@@ -41,6 +63,10 @@
                 .psicologia-mobile-header,
                 .psicologia-mobile-sidebar {
                     display: flex !important;
+                }
+
+                .psicologia-content-wrapper {
+                    margin-left: 0 !important;
                 }
             }
 
@@ -66,24 +92,24 @@
              @click="sidebarOpen = false" 
              style="display: none;"></div>
 
-        <div class="flex min-h-screen">
-            <!-- Sidebar -->
-            <aside class="psicologia-desktop-sidebar flex-shrink-0 overflow-hidden transition-[width,opacity] duration-300 ease-in-out"
-                   :style="sidebarCollapsed
-                        ? 'width: 0; flex-basis: 0; opacity: 0; pointer-events: none;'
-                        : 'width: 16rem; flex-basis: 16rem; opacity: 1; pointer-events: auto;'">
-                <x-sidebar-psicologia />
-            </aside>
+        <!-- Sidebar fixa (desktop) -->
+        <aside class="psicologia-desktop-sidebar"
+               :class="sidebarCollapsed ? 'collapsed' : ''">
+            <x-sidebar-psicologia />
+        </aside>
 
-            <!-- Mobile Sidebar -->
-            <div class="psicologia-mobile-sidebar fixed inset-y-0 left-0 z-50 w-64 -translate-x-full transition-transform duration-300 ease-in-out"
-                 :class="sidebarOpen ? 'translate-x-0' : '-translate-x-full'">
-                <x-sidebar-psicologia />
-            </div>
+        <!-- Mobile Sidebar -->
+        <div class="psicologia-mobile-sidebar fixed inset-y-0 left-0 z-50 w-64 -translate-x-full transition-transform duration-300 ease-in-out"
+             :class="sidebarOpen ? 'translate-x-0' : '-translate-x-full'">
+            <x-sidebar-psicologia />
+        </div>
 
+        <!-- Conteúdo principal com margem para o sidebar -->
+        <div class="psicologia-content-wrapper"
+             :class="sidebarCollapsed ? 'sidebar-collapsed' : ''">
             <div class="flex-1 flex flex-col min-w-0">
                 <!-- Mobile Header -->
-                <div class="psicologia-mobile-header flex items-center justify-between p-4 border-b border-white/10" style="background: linear-gradient(to right, #0f172a, #1e3a5f);">
+                <div class="psicologia-mobile-header flex items-center justify-between p-4 border-b border-white/10 w-full" style="background: linear-gradient(to right, #0f172a, #1e3a5f);">
                     <div class="font-fraunces font-bold text-xl text-white">Portal da Psicologia</div>
                     <button @click="sidebarOpen = true" class="p-2 -mr-2 text-white/80 hover:text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-white/50">
                         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>

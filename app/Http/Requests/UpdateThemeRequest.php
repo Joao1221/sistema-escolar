@@ -15,6 +15,7 @@ class UpdateThemeRequest extends FormRequest
     {
         return [
             'theme' => ['required', 'in:lilas,grafite,verde'],
+            'redirect_to' => ['nullable', 'string'],
         ];
     }
 }

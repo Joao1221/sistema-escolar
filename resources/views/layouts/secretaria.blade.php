@@ -14,22 +14,41 @@
         <!-- Scripts -->
         @vite(['resources/css/app.css', 'resources/js/app.js'])
         <style>
-            .secretaria-desktop-sidebar {
-                display: block;
-                width: 16rem;
-                flex: 0 0 16rem;
-            }
-
             .secretaria-desktop-toggle {
                 display: inline-flex;
             }
 
             .secretaria-mobile-header,
-            .secretaria-mobile-sidebar {
+            .secretaria-mobile-sidebar,
+            .secretaria-mobile-overlay {
                 display: none;
             }
 
-            @media (max-width: 479px) {
+            /* Sidebar fixa desktop */
+            .secretaria-desktop-sidebar {
+                position: fixed;
+                top: 0;
+                left: 0;
+                height: 100vh;
+                width: 16rem;
+                z-index: 30;
+            }
+
+            .secretaria-desktop-sidebar.collapsed {
+                width: 0;
+                overflow: hidden;
+            }
+
+            .secretaria-content {
+                margin-left: 16rem;
+                transition: margin-left 0.3s ease-in-out;
+            }
+
+            .secretaria-content.collapsed {
+                margin-left: 0;
+            }
+
+            @media (max-width: 1023px) {
                 .secretaria-desktop-sidebar,
                 .secretaria-desktop-toggle {
                     display: none !important;
@@ -39,11 +58,16 @@
                 .secretaria-mobile-sidebar {
                     display: flex !important;
                 }
+
+                .secretaria-content {
+                    margin-left: 0 !important;
+                }
             }
 
-            @media (min-width: 480px) {
+            @media (min-width: 1024px) {
                 .secretaria-mobile-header,
-                .secretaria-mobile-sidebar {
+                .secretaria-mobile-sidebar,
+                .secretaria-mobile-overlay {
                     display: none !important;
                 }
             }
@@ -58,31 +82,30 @@
              x-transition:leave="transition-opacity ease-linear duration-300" 
              x-transition:leave-start="opacity-100" 
              x-transition:leave-end="opacity-0" 
-             class="fixed inset-0 z-40 bg-gray-900/80 backdrop-blur-sm lg:hidden" 
+             class="secretaria-mobile-overlay fixed inset-0 z-40 bg-gray-900/80 backdrop-blur-sm" 
              @click="sidebarOpen = false" 
              style="display: none;"></div>
 
-        <div class="min-h-screen flex">
-            <!-- Desktop Sidebar -->
-            <aside class="secretaria-desktop-sidebar flex-shrink-0 overflow-hidden transition-[width,opacity] duration-300 ease-in-out"
-                   :style="sidebarCollapsed
-                        ? 'width: 0; flex-basis: 0; opacity: 0; pointer-events: none;'
-                        : 'width: 16rem; flex-basis: 16rem; opacity: 1; pointer-events: auto;'">
-                <div class="sticky top-0 h-screen w-64">
-                    @include('components.sidebar-secretaria')
-                </div>
-            </aside>
-
-            <!-- Mobile Sidebar -->
-            <div class="secretaria-mobile-sidebar fixed inset-y-0 left-0 z-50 w-64 -translate-x-full transition-transform duration-300 ease-in-out"
-                 :class="sidebarOpen ? 'translate-x-0' : '-translate-x-full'">
+        <!-- Sidebar fixa (desktop) -->
+        <aside class="secretaria-desktop-sidebar hidden lg:block"
+               :class="sidebarCollapsed ? 'collapsed' : ''">
+            <div class="sticky top-0 h-screen w-64">
                 @include('components.sidebar-secretaria')
             </div>
+        </aside>
 
-            <!-- Page Content -->
-            <div class="flex-1 flex flex-col min-w-0 min-h-screen">
+        <!-- Mobile Sidebar -->
+        <div class="secretaria-mobile-sidebar fixed inset-y-0 left-0 z-50 w-64 -translate-x-full transition-transform duration-300 ease-in-out lg:hidden"
+             :class="sidebarOpen ? 'translate-x-0' : '-translate-x-full'">
+            @include('components.sidebar-secretaria')
+        </div>
+
+        <!-- Conteúdo principal -->
+        <main class="secretaria-content flex-1 flex flex-col"
+             :class="sidebarCollapsed ? 'collapsed' : ''">
+            <div class="min-h-screen flex flex-col">
                 <!-- Mobile Header -->
-                <div class="secretaria-mobile-header flex items-center justify-between px-6 py-4 bg-white border-b border-gray-100">
+                <div class="secretaria-mobile-header flex items-center justify-between px-6 py-4 bg-white border-b border-gray-100 w-full">
                     <div class="font-bold text-gray-800 text-lg">Portal da Secretaria</div>
                     <button @click="sidebarOpen = true" class="p-2 -mr-2 text-gray-600 hover:text-gray-900 rounded-lg focus:outline-none">
                         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
@@ -90,7 +113,7 @@
                 </div>
 
                 <!-- Top Navigation (Desktop) -->
-                <nav class="bg-white border-b border-gray-100 flex items-center justify-between h-16" style="padding-left: 32px; padding-right: 48px;">
+                <nav class="bg-white border-b border-gray-100 flex items-center justify-between h-16 w-full" style="padding-left: 32px; padding-right: 48px;">
                     <div class="flex items-center min-w-0 flex-1 mr-4">
                         <span class="text-gray-500 font-medium mr-4 flex-shrink-0">Portal da Secretaria</span>
                         <div class="truncate">

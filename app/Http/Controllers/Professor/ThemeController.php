@@ -21,6 +21,7 @@ class ThemeController extends Controller
         $user->theme = $dados['theme'];
         $user->save();
 
-        return back()->with('success', 'Tema atualizado com sucesso.');
+        $redirectTo = $dados['redirect_to'] ?? route('professor.dashboard');
+        return redirect($redirectTo)->with('success', 'Tema atualizado com sucesso.');
     }
 }

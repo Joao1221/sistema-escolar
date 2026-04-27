@@ -2,7 +2,7 @@
     <div class="flex flex-wrap items-center justify-between gap-3">
         <div>
             <p class="text-xs font-semibold uppercase tracking-[0.24em] text-slate-500">Visualizacao previa</p>
-            <h1 class="mt-2 text-3xl font-bold text-slate-900">{{ $documento['titulo'] }}</h1>
+            <h1 class="mt-2 text-3xl font-bold {{ ($theme ?? auth()->user()?->theme ?? 'lilas') === 'lilas' ? 'text-slate-900' : 'text-gray-200' }}">{{ $documento['titulo'] }}</h1>
         </div>
 
         @if (! empty($urlImpressaoDireta ?? null))
