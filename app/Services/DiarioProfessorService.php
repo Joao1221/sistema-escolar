@@ -30,7 +30,18 @@ class DiarioProfessorService
             ->withCount(['registrosAula', 'observacoesAluno', 'ocorrencias', 'pendencias']);
 
         $this->aplicarEscopoDeAcesso($query, $usuario);
+        $this->aplicarFiltros($query, $filtros);
 
+        return $query
+            ->orderByDesc('ano_letivo')
+            ->orderBy('periodo_tipo')
+            ->orderBy('periodo_referencia')
+            ->paginate($paginacao)
+            ->withQueryString();
+    }
+
+    private function aplicarFiltros(Builder $query, array $filtros): void
+    {
         if (! empty($filtros['escola_id'])) {
             $query->where('escola_id', $filtros['escola_id']);
         }
@@ -58,13 +69,6 @@ class DiarioProfessorService
         if (! empty($filtros['periodo_referencia'])) {
             $query->where('periodo_referencia', $filtros['periodo_referencia']);
         }
-
-        return $query
-            ->orderByDesc('ano_letivo')
-            ->orderBy('periodo_tipo')
-            ->orderBy('periodo_referencia')
-            ->paginate($paginacao)
-            ->withQueryString();
     }
 
     public function opcoesCriacaoParaUsuario(Usuario $usuario): Collection

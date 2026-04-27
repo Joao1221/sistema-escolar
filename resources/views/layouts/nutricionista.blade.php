@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" class="h-full lg:overflow-hidden">
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" class="h-full">
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -16,12 +16,7 @@
         <style>
             body { font-family: 'Manrope', sans-serif; }
             .font-fraunces { font-family: 'Fraunces', serif; }
-            .nutricionista-desktop-sidebar {
-                display: block;
-                width: 16rem;
-                flex: 0 0 16rem;
-            }
-
+            
             .nutricionista-desktop-toggle {
                 display: inline-flex;
             }
@@ -30,6 +25,33 @@
             .nutricionista-mobile-sidebar,
             .nutricionista-mobile-overlay {
                 display: none;
+            }
+
+            /* Sidebar fixa desktop */
+            .nutricionista-desktop-sidebar {
+                position: fixed;
+                top: 0;
+                left: 0;
+                height: 100vh;
+                width: 16rem;
+                z-index: 30;
+                transition: width 0.3s ease-in-out, opacity 0.3s ease-in-out;
+            }
+
+            .nutricionista-desktop-sidebar.collapsed {
+                width: 0;
+                opacity: 0;
+                overflow: hidden;
+            }
+
+            /* Padding para o conteúdo não ficar atrás do sidebar */
+            .nutricionista-content-wrapper {
+                margin-left: 16rem;
+                transition: margin-left 0.3s ease-in-out;
+            }
+
+            .nutricionista-content-wrapper.sidebar-collapsed {
+                margin-left: 0;
             }
 
             @media (max-width: 479px) {
@@ -42,6 +64,10 @@
                 .nutricionista-mobile-sidebar {
                     display: flex !important;
                 }
+
+                .nutricionista-content-wrapper {
+                    margin-left: 0 !important;
+                }
             }
 
             @media (min-width: 480px) {
@@ -53,7 +79,7 @@
             }
         </style>
     </head>
-    <body class="min-h-full bg-[radial-gradient(circle_at_top,_#fff5dd_0%,_#f4efe8_40%,_#e7f1ec_100%)] text-slate-900 antialiased" x-data="{ sidebarOpen: false, sidebarCollapsed: false, toggleSidebar() { this.sidebarCollapsed = !this.sidebarCollapsed; } }">
+    <body class="min-h-screen bg-[radial-gradient(circle_at_top,_#fff5dd_0%,_#f4efe8_40%,_#e7f1ec_100%)] text-slate-900 antialiased" x-data="{ sidebarOpen: false, sidebarCollapsed: false, toggleSidebar() { this.sidebarCollapsed = !this.sidebarCollapsed; } }">
         <!-- Mobile overlay -->
         <div x-show="sidebarOpen" 
              x-transition:enter="transition-opacity ease-linear duration-300" 
@@ -66,24 +92,24 @@
              @click="sidebarOpen = false" 
              style="display: none;"></div>
 
-        <div class="flex min-h-screen">
-            <!-- Sidebar -->
-            <aside class="nutricionista-desktop-sidebar flex-shrink-0 overflow-hidden transition-[width,opacity] duration-300 ease-in-out"
-                   :style="sidebarCollapsed
-                        ? 'width: 0; flex-basis: 0; opacity: 0; pointer-events: none;'
-                        : 'width: 16rem; flex-basis: 16rem; opacity: 1; pointer-events: auto;'">
-                <x-sidebar-nutricionista />
-            </aside>
+        <!-- Sidebar fixa (desktop) -->
+        <aside class="nutricionista-desktop-sidebar"
+               :class="sidebarCollapsed ? 'collapsed' : ''">
+            <x-sidebar-nutricionista />
+        </aside>
 
-            <!-- Mobile Sidebar -->
-            <div class="nutricionista-mobile-sidebar fixed inset-y-0 left-0 z-50 w-64 -translate-x-full transition-transform duration-300 ease-in-out"
-                 :class="sidebarOpen ? 'translate-x-0' : '-translate-x-full'">
-                <x-sidebar-nutricionista />
-            </div>
+        <!-- Mobile Sidebar -->
+        <div class="nutricionista-mobile-sidebar fixed inset-y-0 left-0 z-50 w-64 -translate-x-full transition-transform duration-300 ease-in-out"
+             :class="sidebarOpen ? 'translate-x-0' : '-translate-x-full'">
+            <x-sidebar-nutricionista />
+        </div>
 
-            <div class="flex-1 flex flex-col min-w-0">
+        <!-- Conteúdo principal com margem para o sidebar -->
+        <div class="nutricionista-content-wrapper"
+             :class="sidebarCollapsed ? 'sidebar-collapsed' : ''">
+            <div class="flex min-h-screen">
                 <!-- Mobile Header -->
-                <div class="nutricionista-mobile-header flex items-center justify-between p-4 border-b border-white/40 bg-[#f4efe8]">
+                <div class="nutricionista-mobile-header flex items-center justify-between p-4 border-b border-white/40 bg-[#f4efe8] w-full">
                     <div class="font-fraunces font-bold text-xl text-[#17332a]">Portal da Nutricionista</div>
                     <button @click="sidebarOpen = true" class="p-2 -mr-2 text-[#17332a] hover:opacity-75 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#17332a]/50">
                         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
@@ -91,8 +117,8 @@
                 </div>
 
                 <div class="flex-1 p-4 lg:p-5">
-                    <div class="h-full overflow-hidden rounded-[2rem] border border-white/60 bg-white/85 shadow-[0_25px_80px_rgba(29,53,40,0.18)] backdrop-blur lg:flex lg:flex-col">
-                        <header class="border-b border-emerald-100 bg-[linear-gradient(135deg,#fffef9_0%,#f5f4eb_48%,#edf8f2_100%)] px-5 py-5 lg:px-10">
+                    <div class="h-full rounded-[2rem] border border-white/60 bg-white/85 shadow-[0_25px_80px_rgba(29,53,40,0.18)] backdrop-blur lg:flex lg:flex-col">
+                        <header class="border-b border-emerald-100 bg-[linear-gradient(135deg,#fffef9_0%,#f5f4eb_48%,#edf8f2_100%)] px-5 py-5 lg:px-10 shrink-0">
                         <div class="flex flex-col gap-5 lg:flex-row lg:items-end lg:justify-between">
                             <div class="min-w-0">
                                 <x-nutricionista-breadcrumbs :items="$breadcrumbs" />
@@ -128,7 +154,7 @@
                         </div>
                     </header>
 
-                    <main class="px-6 py-6 lg:flex-1 lg:min-h-0 lg:overflow-y-auto lg:px-10 lg:py-8">
+                    <main class="px-6 py-6 flex-1 lg:min-h-0 lg:overflow-y-auto lg:px-10 lg:py-8">
                         @if (session('success'))
                             <div class="mb-6 rounded-2xl border border-emerald-200 bg-emerald-50 px-5 py-4 text-emerald-900 shadow-sm">
                                 {{ session('success') }}

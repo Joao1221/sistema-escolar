@@ -44,20 +44,8 @@ class MatriculaController extends Controller
             ->orderBy('nome')
             ->get();
 
-        $baseQuery = Matricula::where('escola_id', $escolaId);
-        $stats = [
-            'ativas' => (clone $baseQuery)->where('status', 'ativa')->count(),
-            'sem_turma' => (clone $baseQuery)->where('status', 'ativa')->whereNull('turma_id')->count(),
-            'regular' => (clone $baseQuery)->where('tipo', 'regular')->count(),
-            'aee' => (clone $baseQuery)->where('tipo', 'aee')->count(),
-            'concluidas' => (clone $baseQuery)->where('status', 'concluida')->count(),
-        ];
-
-        $anosDisponiveis = (clone $baseQuery)
-            ->select('ano_letivo')
-            ->distinct()
-            ->orderByDesc('ano_letivo')
-            ->pluck('ano_letivo');
+        $stats = $this->matriculaService->obterStats($escolaId);
+        $anosDisponiveis = $this->matriculaService->obterAnosLetivos($escolaId);
 
         return view('secretaria-escolar.matriculas.index', compact('matriculas', 'turmas', 'stats', 'anosDisponiveis'));
     }

@@ -169,4 +169,32 @@ class MatriculaService
 
         return $query->latest()->paginate(15);
     }
+
+    /**
+     * Obtém estatísticas de matrículas para uma escola.
+     */
+    public function obterStats(int $escolaId): array
+    {
+        $baseQuery = Matricula::where('escola_id', $escolaId);
+
+        return [
+            'ativas' => (clone $baseQuery)->where('status', 'ativa')->count(),
+            'sem_turma' => (clone $baseQuery)->where('status', 'ativa')->whereNull('turma_id')->count(),
+            'regular' => (clone $baseQuery)->where('tipo', 'regular')->count(),
+            'aee' => (clone $baseQuery)->where('tipo', 'aee')->count(),
+            'concluidas' => (clone $baseQuery)->where('status', 'concluida')->count(),
+        ];
+    }
+
+    /**
+     * Obtém anos letivos disponíveis para uma escola.
+     */
+    public function obterAnosLetivos(int $escolaId)
+    {
+        return Matricula::where('escola_id', $escolaId)
+            ->select('ano_letivo')
+            ->distinct()
+            ->orderByDesc('ano_letivo')
+            ->pluck('ano_letivo');
+    }
 }

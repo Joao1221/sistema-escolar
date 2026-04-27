@@ -23,6 +23,10 @@ class DiarioProfessor extends Model
         'observacoes_gerais',
     ];
 
+    protected $casts = [
+        'ano_letivo' => 'integer',
+    ];
+
     public function escola()
     {
         return $this->belongsTo(Escola::class);

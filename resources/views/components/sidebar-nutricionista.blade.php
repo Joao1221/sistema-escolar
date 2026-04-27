@@ -25,7 +25,7 @@
                 @endphp
 
                 @foreach ($links as $link)
-                    <a href="{{ route($link['rota']) }}" class="flex items-center justify-between rounded-2xl px-4 py-3 text-sm font-semibold transition {{ request()->routeIs(str_replace('.index', '.*', $link['rota'])) || request()->routeIs($link['rota']) ? 'bg-white text-[#17332a] shadow-lg' : 'text-emerald-100/80 hover:bg-white/10 hover:text-white' }}">
+                    <a href="{{ route($link['rota']) }}" class="flex items-center justify-between rounded-2xl px-4 py-2 text-sm font-semibold transition {{ request()->routeIs(str_replace('.index', '.*', $link['rota'])) || request()->routeIs($link['rota']) ? 'bg-white text-[#17332a] shadow-lg' : 'text-emerald-100/80 hover:bg-white/10 hover:text-white' }}">
                         <span>{{ $link['label'] }}</span>
                         <span class="text-[10px] uppercase tracking-[0.25em] {{ request()->routeIs(str_replace('.index', '.*', $link['rota'])) || request()->routeIs($link['rota']) ? 'text-amber-600' : 'text-emerald-200/60' }}">Abrir</span>
                     </a>

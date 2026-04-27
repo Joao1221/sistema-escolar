@@ -1,4 +1,3 @@
-parou nesse ponto: Posso seguir para o próximo lote da Onda 2.
 
 
 🧠 ESTRATÉGIA
