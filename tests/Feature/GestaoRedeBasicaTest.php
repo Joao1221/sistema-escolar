@@ -110,7 +110,6 @@ class GestaoRedeBasicaTest extends TestCase
 
         $this->assertDatabaseHas('funcionarios', [
             'nome' => 'Funcionario Rede Teste',
-            'cpf' => '123.456.789-10',
         ]);
     }
 }

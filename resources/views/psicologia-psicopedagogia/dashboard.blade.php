@@ -82,7 +82,7 @@
                             <div class="flex items-center justify-between gap-4">
                                 <div>
                                     <p class="font-semibold text-[#14363a]">{{ $atendimento->nome_atendido }}</p>
-                                    <p class="mt-1 text-xs text-slate-500">{{ ucfirst($atendimento->tipo_publico) }} | {{ ucfirst($atendimento->tipo_atendimento) }} | {{ $atendimento->escola?->nome }}</p>
+                                    <p class="mt-1 text-xs text-slate-500">{{ $atendimento->tipo_publico_label }} | {{ ucfirst($atendimento->tipo_atendimento) }} | {{ $atendimento->escola?->nome }}</p>
                                 </div>
                                 <span class="rounded-full bg-cyan-50 px-3 py-1 text-xs font-semibold text-cyan-700">{{ $atendimento->data_agendada->format('H:i') }}</span>
                             </div>

@@ -7,10 +7,12 @@ return new class extends Migration
 {
     public function up(): void
     {
-        DB::statement("
-            ALTER TABLE demandas_psicossociais
-            MODIFY tipo_publico ENUM('aluno', 'professor', 'funcionario', 'responsavel', 'coletivo') NOT NULL
-        ");
+        if (DB::getDriverName() === 'mysql') {
+            DB::statement("
+                ALTER TABLE demandas_psicossociais
+                MODIFY tipo_publico ENUM('aluno', 'professor', 'funcionario', 'responsavel', 'coletivo') NOT NULL
+            ");
+        }
     }
 
     public function down(): void
@@ -23,9 +25,11 @@ return new class extends Migration
             throw new RuntimeException('Nao e possivel reverter a migration enquanto existirem demandas coletivas.');
         }
 
-        DB::statement("
-            ALTER TABLE demandas_psicossociais
-            MODIFY tipo_publico ENUM('aluno', 'professor', 'funcionario', 'responsavel') NOT NULL
-        ");
+        if (DB::getDriverName() === 'mysql') {
+            DB::statement("
+                ALTER TABLE demandas_psicossociais
+                MODIFY tipo_publico ENUM('aluno', 'professor', 'funcionario', 'responsavel') NOT NULL
+            ");
+        }
     }
 };

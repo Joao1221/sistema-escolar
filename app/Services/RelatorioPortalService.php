@@ -18,6 +18,7 @@ use App\Models\Turma;
 use App\Models\Usuario;
 use App\Support\ArquivoPublicoUrl;
 use App\Support\RelatoriosPortal;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection as EloquentCollection;
 use Illuminate\Support\Collection;
@@ -182,7 +183,7 @@ class RelatorioPortalService
     private function relatorioSituacaoMatriculas(string $portal, Usuario $usuario, array $filtros): array
     {
         $matriculas = $this->baseMatriculas($portal, $usuario, $filtros)
-            ->with(['aluno', 'escola', 'turma', 'historico'])
+            ->with(['aluno', 'escola', 'turma'])
             ->get();
 
         $historicos = MatriculaHistorico::query()
@@ -207,8 +208,8 @@ class RelatorioPortalService
                 'titulo' => 'Resumo por matricula',
                 'tipo' => 'tabela',
                 'colunas' => ['Aluno', 'Turma', 'Status atual', 'Ultima movimentacao'],
-                'linhas' => $matriculas->map(function (Matricula $matricula) {
-                    $ultimaAcao = $matricula->historico->sortByDesc('created_at')->first();
+                'linhas' => $matriculas->map(function (Matricula $matricula) use ($historicos) {
+                    $ultimaAcao = $historicos->where('matricula_id', $matricula->id)->sortByDesc('created_at')->first();
 
                     return [
                         $matricula->aluno?->nome_completo ?? '-',
@@ -270,7 +271,9 @@ class RelatorioPortalService
 
     private function relatorioQuantitativoMatriculas(string $portal, Usuario $usuario, array $filtros): array
     {
-        $matriculas = $this->baseMatriculas($portal, $usuario, $filtros)->get();
+        $matriculas = $this->baseMatriculas($portal, $usuario, $filtros)
+            ->with(['escola', 'turma'])
+            ->get();
         $duplas = $matriculas->where('tipo', 'aee')
             ->filter(fn (Matricula $matricula) => $matriculas->contains(fn (Matricula $outra) => $outra->aluno_id === $matricula->aluno_id && $outra->tipo === 'regular'));
 
@@ -1014,25 +1017,27 @@ class RelatorioPortalService
 
     private function dadosInstitucionais(): array
     {
-        $instituicao = Instituicao::query()->first();
+        return Cache::remember('instituicao_dados', now()->addDay(), function () {
+            $instituicao = Instituicao::query()->first();
 
-        return [
-            'nome_prefeitura' => $instituicao?->nome_prefeitura,
-            'nome_secretaria' => $instituicao?->nome_secretaria,
-            'municipio' => $instituicao?->municipio,
-            'uf' => $instituicao?->uf,
-            'telefone' => $instituicao?->telefone,
-            'email' => $instituicao?->email,
-            'texto' => $instituicao?->textos_institucionais,
-            'assinaturas' => collect(preg_split('/\r\n|\r|\n/', (string) $instituicao?->assinaturas_cargos))
-                ->map(fn (?string $linha) => trim((string) $linha))
-                ->filter()
-                ->values()
-                ->all(),
-            'brasao_url' => $this->resolverArquivoPublico($instituicao?->brasao_path),
-            'logo_prefeitura_url' => $this->resolverArquivoPublico($instituicao?->logo_prefeitura_path),
-            'logo_secretaria_url' => $this->resolverArquivoPublico($instituicao?->logo_secretaria_path),
-        ];
+            return [
+                'nome_prefeitura' => $instituicao?->nome_prefeitura,
+                'nome_secretaria' => $instituicao?->nome_secretaria,
+                'municipio' => $instituicao?->municipio,
+                'uf' => $instituicao?->uf,
+                'telefone' => $instituicao?->telefone,
+                'email' => $instituicao?->email,
+                'texto' => $instituicao?->textos_institucionais,
+                'assinaturas' => collect(preg_split('/\r\n|\r|\n/', (string) $instituicao?->assinaturas_cargos))
+                    ->map(fn (?string $linha) => trim((string) $linha))
+                    ->filter()
+                    ->values()
+                    ->all(),
+                'brasao_url' => $this->resolverArquivoPublico($instituicao?->brasao_path),
+                'logo_prefeitura_url' => $this->resolverArquivoPublico($instituicao?->logo_prefeitura_path),
+                'logo_secretaria_url' => $this->resolverArquivoPublico($instituicao?->logo_secretaria_path),
+            ];
+        });
     }
 
     private function resolverArquivoPublico(?string $path): ?string

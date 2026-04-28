@@ -5,6 +5,8 @@ namespace App\Http\Requests;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
+use App\Enums\TipoPublicoPsicossocial;
+
 class StoreDemandaPsicossocialEscolarRequest extends FormRequest
 {
     public function authorize(): bool
@@ -15,11 +17,12 @@ class StoreDemandaPsicossocialEscolarRequest extends FormRequest
     public function rules(): array
     {
         $tipoPublico = (string) $this->input('tipo_publico');
+        $tiposPublicoValidos = collect(TipoPublicoPsicossocial::cases())->map(fn ($e) => $e->value)->all();
 
         return [
             'escola_id' => ['required', 'exists:escolas,id'],
             'tipo_atendimento' => ['required', Rule::in(['psicologia', 'psicopedagogia', 'psicossocial'])],
-            'tipo_publico' => ['required', Rule::in(['aluno', 'professor', 'funcionario', 'responsavel', 'coletivo'])],
+            'tipo_publico' => ['required', Rule::in($tiposPublicoValidos)],
             'aluno_id' => [Rule::requiredIf($tipoPublico === 'aluno'), 'nullable', 'exists:alunos,id'],
             'funcionario_id' => [Rule::requiredIf(in_array($tipoPublico, ['professor', 'funcionario'], true)), 'nullable', 'exists:funcionarios,id'],
             'responsavel_nome' => [Rule::requiredIf($tipoPublico === 'responsavel'), 'nullable', 'string', 'max:255'],

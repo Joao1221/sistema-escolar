@@ -171,4 +171,9 @@ class AtendimentoPsicossocial extends Model
         return ($funcionarioId !== null && (int) $this->profissional_responsavel_id === (int) $funcionarioId)
             || ($this->profissional_responsavel_id === null && (int) $this->usuario_registro_id === (int) $usuario->id);
     }
+
+    public function getTipoPublicoLabelAttribute(): string
+    {
+        return ucfirst(is_object($this->tipo_publico) ? $this->tipo_publico->value : ($this->tipo_publico ?? ''));
+    }
 }

@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\StatusDemandaPsicossocial;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -93,14 +94,24 @@ class DemandaPsicossocial extends Model
             ?? ($this->tipo_publico === 'coletivo' ? 'Atendimento coletivo' : null);
     }
 
+    public function getTipoPublicoLabelAttribute(): string
+    {
+        return ucfirst($this->tipo_publico ?? '');
+    }
+
+    public function getStatusLabelAttribute(): string
+    {
+        return ucfirst(str_replace('_', ' ', $this->status ?? ''));
+    }
+
     public function scopeAbertas($query)
     {
-        return $query->where('status', 'aberta');
+        return $query->where('status', StatusDemandaPsicossocial::Aberta);
     }
 
     public function scopeEmTriagem($query)
     {
-        return $query->where('status', 'em_triagem');
+        return $query->where('status', StatusDemandaPsicossocial::EmTriagem);
     }
 
     public function scopeEncaminhadas($query)

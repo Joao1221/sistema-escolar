@@ -3,6 +3,10 @@
 namespace App\Services;
 
 use App\Models\Aluno;
+use App\Enums\StatusDemandaPsicossocial;
+use App\Enums\StatusMatricula;
+use App\Enums\StatusPendenciaDiario;
+use App\Enums\TipoPublicoPsicossocial;
 use App\Models\AtendidoExterno;
 use App\Models\AtendimentoPsicossocial;
 use App\Models\CasoDisciplinarSigiloso;
@@ -42,7 +46,7 @@ class PsicossocialService
 
         $demandasAbertas = DemandaPsicossocial::query()
             ->whereIn('escola_id', $escolaIds)
-            ->where('status', 'aberta')
+            ->where('status', StatusDemandaPsicossocial::Aberta->value)
             ->count();
 
         return [
@@ -66,9 +70,9 @@ class PsicossocialService
                     ->whereHas('atendimento', fn ($query) => $query->visivelParaUsuario($usuario))
                     ->count(),
             ],
-            'porPublico' => collect(['aluno', 'professor', 'funcionario', 'responsavel', 'coletivo'])
-                ->mapWithKeys(fn (string $tipo) => [
-                    $tipo => (clone $atendimentos)->where('tipo_publico', $tipo)->count(),
+            'porPublico' => collect(TipoPublicoPsicossocial::cases())
+                ->mapWithKeys(fn (TipoPublicoPsicossocial $tipo) => [
+                    $tipo->value => $atendimentos->where('tipo_publico', $tipo->value)->count(),
                 ])
                 ->all(),
             'agendaHoje' => $agendaHoje,
@@ -221,7 +225,7 @@ class PsicossocialService
 
         return [
             'alunos' => Aluno::query()
-                ->whereHas('matriculas', fn ($query) => $query->where('escola_id', $escolaId)->where('status', 'ativa'))
+                ->whereHas('matriculas', fn ($query) => $query->where('escola_id', $escolaId)->where('status', StatusMatricula::Ativa->value))
                 ->where('ativo', true)
                 ->orderBy('nome_completo')
                 ->get(['id', 'nome_completo']),
@@ -628,7 +632,7 @@ class PsicossocialService
                 'responsavel_vinculo' => $dados['responsavel_vinculo'] ?? null,
                 'motivo_inicial' => $dados['motivo_inicial'],
                 'prioridade' => $dados['prioridade'] ?? 'media',
-                'status' => 'aberta',
+                'status' => StatusDemandaPsicossocial::Aberta->value,
                 'data_solicitacao' => $dados['data_solicitacao'] ?? now()->toDateString(),
                 'observacoes' => $dados['observacoes'] ?? null,
                 'aberta_pela_escola' => (bool) ($dados['aberta_pela_escola'] ?? false),
@@ -712,7 +716,7 @@ class PsicossocialService
         $this->garantirEscolaPermitida($usuario, $demanda->escola_id);
 
         if ($dados['decisao'] !== 'iniciar_atendimento') {
-            $demanda->update(['status' => $dados['decisao'] === 'encerrar_sem_atendimento' ? 'encerrada' : 'observacao']);
+            $demanda->update(['status' => $dados['decisao'] === 'encerrar_sem_atendimento' ? StatusDemandaPsicossocial::Encerrada->value : StatusDemandaPsicossocial::Observacao->value]);
 
             return null;
         }
@@ -840,7 +844,7 @@ class PsicossocialService
             ->where('status', 'em_atendimento')
             ->whereNotNull('atendimento_id')
             ->whereHas('atendimento', fn ($query) => $query->where('status', 'encerrado'))
-            ->update(['status' => 'encerrada']);
+->update(['status' => StatusDemandaPsicossocial::Encerrada->value]);
     }
 
     private function sincronizarDemandaComAtendimento(?DemandaPsicossocial $demanda): void
@@ -851,8 +855,8 @@ class PsicossocialService
 
         $demanda->loadMissing('atendimento');
 
-        if ($demanda->atendimento?->status === 'encerrado' && $demanda->status !== 'encerrada') {
-            $demanda->update(['status' => 'encerrada']);
+        if ($demanda->atendimento?->status === 'encerrado' && $demanda->status !== StatusDemandaPsicossocial::Encerrada->value) {
+            $demanda->update(['status' => StatusDemandaPsicossocial::Encerrada->value]);
         }
     }
 

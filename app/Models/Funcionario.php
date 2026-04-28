@@ -21,6 +21,10 @@ class Funcionario extends Model
         'ativo',
     ];
 
+    protected $casts = [
+        'ativo' => 'boolean',
+    ];
+
     public function escolas()
     {
         return $this->belongsToMany(Escola::class, 'funcionario_escola', 'funcionario_id', 'escola_id');

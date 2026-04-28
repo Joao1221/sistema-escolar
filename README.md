@@ -211,6 +211,16 @@ Esse usuario serve para o primeiro acesso e para criar os demais perfis e usuari
 - documentos sigilosos
 - auditoria sigilosa
 
+## Stack
+
+- PHP 8.2+ no estado atual do projeto
+- Laravel 11
+- MySQL ou MariaDB
+- Blade
+- Tailwind + Vite
+- Spatie Laravel Permission
+- PHPUnit
+
 ## Testes
 
 Para rodar a suite principal:
@@ -219,27 +229,39 @@ Para rodar a suite principal:
 php artisan test
 ```
 
-Suite validada nesta etapa:
-- autenticacao
-- verificacao de email
-- profile
-- usuarios
-- dados institucionais
-- escolas
-- funcionarios
-- matrículas regulares e AEE
-- diario
-- coordenacao
-- direcao
-- alimentacao escolar
-- nutricionista
-- psicologia/psicopedagogia
-- documentos
-- relatorios
-- auditoria
+Suite atual: **69 testes** (17 Unit + 52 Feature)
 
-Resultado da consolidacao da ETAPA 24:
-- `68 passed`
+Executar suite especifica:
+
+```bash
+php artisan test --filter=PsicossocialTest
+php artisan test --filter=MatriculaAeeTest
+php artisan test tests/Unit
+```
+
+## Resultado da Consolidacao - Ondas 1-5
+
+### Onda 1 — Tipagem e Qualidade
+- Tipagem explicita em controllers e services
+- Pint aplicado em arquivos criticos
+- Retornos tipados
+
+### Onda 2 — Form Requests
+- Form Requests para validacao centralizada
+- Padronizacao de validacao
+
+### Onda 3 — Enums de Dominio
+- 6 Enums criados: StatusMatricula, TipoMatricula, StatusDemandaPsicossocial, StatusAtendimentoPsicossocial, TipoPublicoPsicossocial, StatusPendenciaDiario
+- Migracao de strings para Enums em Services e Requests
+- Accessors nos Models
+
+### Onda 4 — Testes Unit
+- Tests\Unit\EnumsTest (11 testes)
+- Tests\Unit\MatriculaServiceTest (6 testes)
+
+### Onda 5 — Documentacao
+- docs/arquitetura.md
+- docs/contribuicao.md
 
 ## Comandos Uteis
 

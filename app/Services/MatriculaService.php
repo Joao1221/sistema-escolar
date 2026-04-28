@@ -4,6 +4,8 @@ namespace App\Services;
 
 use App\Models\Matricula;
 use App\Models\MatriculaHistorico;
+use App\Enums\StatusMatricula;
+use App\Enums\TipoMatricula;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -21,8 +23,8 @@ class MatriculaService
                 'escola_id' => $data['escola_id'],
                 'turma_id' => $data['turma_id'] ?? null,
                 'ano_letivo' => $data['ano_letivo'],
-                'tipo' => $data['tipo'], // 'regular' ou 'aee'
-                'status' => 'ativa',
+                'tipo' => $data['tipo'], // TipoMatricula::Regular ou TipoMatricula::Aee
+                'status' => StatusMatricula::Ativa->value,
                 'matricula_regular_id' => $data['matricula_regular_id'] ?? null,
                 'data_matricula' => $data['data_matricula'] ?? now(),
                 'observacoes' => $data['observacoes'] ?? null,
@@ -96,7 +98,7 @@ class MatriculaService
                 'turma_id' => null, // Rematrícula geralmente começa sem turma definida
                 'ano_letivo' => $novoAnoLetivo,
                 'tipo' => $matriculaAnterior->tipo,
-                'status' => 'ativa',
+                'status' => StatusMatricula::Ativa->value,
                 'data_matricula' => now(),
             ]);
 

@@ -64,7 +64,7 @@
                                 </td>
                                 <td class="px-6 py-4 text-slate-700">{{ $atendimento->nome_atendido }}</td>
                                 <td class="px-6 py-4 text-slate-700">{{ $atendimento->escola?->nome }}</td>
-                                <td class="px-6 py-4 text-slate-700">{{ ucfirst($atendimento->tipo_publico) }} / {{ ucfirst($atendimento->tipo_atendimento) }}</td>
+                                <td class="px-6 py-4 text-slate-700">{{ $atendimento->tipo_publico_label }} / {{ ucfirst($atendimento->tipo_atendimento) }}</td>
                                 <td class="px-6 py-4 text-slate-700">{{ ucfirst($atendimento->status) }}</td>
                             </tr>
                         @empty

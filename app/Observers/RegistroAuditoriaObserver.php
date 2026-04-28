@@ -11,12 +11,12 @@ class RegistroAuditoriaObserver
 
     public function updating(Model $model): void
     {
-        self::$originais[spl_object_id($model)] = $model->getOriginal();
+        self::$originais[spl_object_id($model)] = $model->getRawOriginal();
     }
 
     public function deleting(Model $model): void
     {
-        self::$originais[spl_object_id($model)] = $model->getAttributes();
+        self::$originais[spl_object_id($model)] = $model->getRawOriginal();
     }
 
     public function created(Model $model): void
@@ -36,7 +36,7 @@ class RegistroAuditoriaObserver
     public function deleted(Model $model): void
     {
         $key = spl_object_id($model);
-        $antes = self::$originais[$key] ?? $model->getAttributes();
+        $antes = self::$originais[$key] ?? $model->getRawOriginal();
         unset(self::$originais[$key]);
 
         app(AuditoriaService::class)->registrarModelo('exclusao', $model, $antes, []);

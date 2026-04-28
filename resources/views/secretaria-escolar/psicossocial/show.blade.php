@@ -4,7 +4,7 @@
             <div>
                 <p class="text-sm font-semibold uppercase tracking-[0.3em] text-emerald-600">Registro Sigiloso</p>
                 <h1 class="mt-2 text-3xl font-bold text-slate-900">{{ $atendimento->nome_atendido }}</h1>
-                <p class="mt-2 text-sm text-slate-500">{{ ucfirst($atendimento->tipo_publico) }} | {{ ucfirst($atendimento->tipo_atendimento) }} | {{ $atendimento->data_agendada->format('d/m/Y H:i') }}</p>
+                <p class="mt-2 text-sm text-slate-500">{{ $atendimento->tipo_publico_label }} | {{ ucfirst($atendimento->tipo_atendimento) }} | {{ $atendimento->data_agendada->format('d/m/Y H:i') }}</p>
             </div>
             <div class="flex gap-3">
                 <a href="{{ route('secretaria-escolar.psicossocial.historico') }}" class="rounded-xl border border-slate-300 px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50">Historico</a>

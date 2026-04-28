@@ -70,7 +70,7 @@
                                 </td>
                                 <td class="py-4">
                                     <p class="font-semibold text-[#14363a]">{{ $demanda->nome_atendido }}</p>
-                                    <p class="text-xs text-slate-500">{{ ucfirst($demanda->tipo_publico) }}</p>
+                                    <p class="text-xs text-slate-500">{{ $demanda->tipo_publico_label }}</p>
                                 </td>
                                 <td class="py-4 text-sm text-slate-600">
                                     {{ ucfirst($demanda->tipo_atendimento) }}

@@ -5,7 +5,7 @@
                 <p class="text-sm font-semibold uppercase tracking-[0.3em] text-cyan-700">Demanda</p>
                 <h1 class="mt-2 text-3xl font-bold text-[#14363a]">{{ $demanda->nome_atendido }}</h1>
                 <p class="mt-2 text-sm text-slate-500">
-                    {{ ucfirst($demanda->tipo_publico) }} | 
+                    {{ $demanda->tipo_publico_label }} | 
                     {{ ucfirst($demanda->tipo_atendimento) }} | 
                     {{ ucfirst(str_replace('_', ' ', $demanda->origem_demanda)) }}
                 </p>

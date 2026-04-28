@@ -85,8 +85,8 @@
                                 <a href="{{ route($rotaShow, $atendimento) }}" class="font-semibold text-[#14363a] hover:text-cyan-700">{{ $atendimento->nome_atendido }}</a>
                             </td>
                             <td class="px-6 py-4 text-slate-700">{{ $atendimento->escola?->nome }}</td>
-                            <td class="px-6 py-4 text-slate-700">{{ ucfirst($atendimento->tipo_publico) }} / {{ ucfirst($atendimento->tipo_atendimento) }}</td>
-                            <td class="px-6 py-4 text-slate-700">{{ ucfirst(str_replace('_', ' ', $atendimento->status)) }}</td>
+                            <td class="px-6 py-4 text-slate-700">{{ $atendimento->tipo_publico_label }} / {{ ucfirst($atendimento->tipo_atendimento) }}</td>
+                            <td class="px-6 py-4 text-slate-700">{{ ucfirst(str_replace('_', ' ', is_object($atendimento->status) ? $atendimento->status->value : ($atendimento->status ?? '-'))) }}</td>
                         </tr>
                     @empty
                         <tr>

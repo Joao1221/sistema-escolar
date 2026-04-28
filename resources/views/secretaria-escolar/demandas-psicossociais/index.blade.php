@@ -86,7 +86,7 @@
                                         {{ $demanda->nome_atendido ?? 'Demanda sem identificado' }}
                                     </a>
                                     <p class="mt-1 text-xs text-slate-500">
-                                        {{ ucfirst($demanda->tipo_publico) }} |
+                                        {{ $demanda->tipo_publico_label }} |
                                         {{ ucfirst(str_replace('_', ' ', $demanda->origem_demanda)) }} |
                                         {{ $demanda->data_solicitacao?->format('d/m/Y') }}
                                     </p>

@@ -16,7 +16,7 @@
                 'data_realizacao' => $atendimento->data_realizacao?->format('d/m/Y H:i') ?? '-',
                 'nome_atendido' => $atendimento->nome_atendido,
                 'escola' => $atendimento->escola?->nome ?? '-',
-                'tipo_publico' => ucfirst(str_replace('_', ' ', $atendimento->tipo_publico ?? '-')),
+                'tipo_publico' => is_object($atendimento->tipo_publico) ? ucfirst($atendimento->tipo_publico->value) : ucfirst(str_replace('_', ' ', $atendimento->tipo_publico ?? '-')),
                 'tipo_atendimento' => ucfirst(str_replace('_', ' ', $atendimento->tipo_atendimento ?? '-')),
                 'status' => ucfirst(str_replace('_', ' ', $atendimento->status ?? '-')),
                 'profissional_responsavel' => $atendimento->profissionalResponsavel?->nome ?? 'Nao vinculado',
