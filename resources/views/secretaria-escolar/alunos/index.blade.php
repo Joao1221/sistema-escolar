@@ -16,26 +16,41 @@
 
     {{-- Filtros --}}
     <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 mb-6">
-        <form action="{{ route('secretaria-escolar.alunos.index') }}" method="GET" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-            <div>
-                <x-input-label for="nome" :value="__('Nome do Aluno')" />
-                <x-text-input id="nome" name="nome" type="text" class="mt-1 block w-full" :value="request('nome')" placeholder="Digite o nome..." />
+        <form action="{{ route('secretaria-escolar.alunos.index') }}" method="GET" class="flex items-end gap-4">
+            <div style="width: 200px;">
+                <label for="turma_id" class="block text-xs font-medium text-gray-700 uppercase tracking-wider mb-1">Turma</label>
+                <select id="turma_id" name="turma_id" class="w-full border-gray-300 focus:border-emerald-500 focus:ring-emerald-500 rounded-md shadow-sm text-sm py-2 px-3">
+                    <option value="">Todas</option>
+                    @foreach ($turmas as $turma)
+                        <option value="{{ $turma->id }}" {{ request('turma_id') == $turma->id ? 'selected' : '' }}>
+                            {{ $turma->nome }}
+                        </option>
+                    @endforeach
+                </select>
             </div>
-            <div>
-                <x-input-label for="rgm" :value="__('Matrícula (RGM)')" />
-                <x-text-input id="rgm" name="rgm" type="text" class="mt-1 block w-full" :value="request('rgm')" placeholder="Ex: 20260001" />
+            <div style="width: 340px;">
+                <label for="nome" class="block text-xs font-medium text-gray-700 uppercase tracking-wider mb-1">Nome do Aluno</label>
+                <input type="text" id="nome" name="nome" value="{{ request('nome') }}" placeholder="Digite o nome..." class="w-full border-gray-300 rounded-md shadow-sm text-sm py-2 px-3 focus:ring-emerald-500 focus:border-emerald-500">
             </div>
-            <div>
-                <x-input-label for="status" :value="__('Status')" />
-                <select id="status" name="status" class="mt-1 block w-full border-gray-300 focus:border-emerald-500 focus:ring-emerald-500 rounded-md shadow-sm">
+            <div style="width: 200px;">
+                <label for="rgm" class="block text-xs font-medium text-gray-700 uppercase tracking-wider mb-1">Matrícula (RGM)</label>
+                <input type="text" id="rgm" name="rgm" value="{{ request('rgm') }}" placeholder="Ex: 20260001" class="w-full border-gray-300 rounded-md shadow-sm text-sm py-2 px-3 focus:ring-emerald-500 focus:border-emerald-500">
+            </div>
+            <div style="width: 180px;">
+                <label for="status" class="block text-xs font-medium text-gray-700 uppercase tracking-wider mb-1">Status</label>
+                <select id="status" name="status" class="w-full border-gray-300 focus:border-emerald-500 focus:ring-emerald-500 rounded-md shadow-sm text-sm py-2 px-3">
                     <option value="">Todos</option>
                     <option value="1" {{ request('status') === '1' ? 'selected' : '' }}>Ativo</option>
                     <option value="0" {{ request('status') === '0' ? 'selected' : '' }}>Inativo</option>
                 </select>
             </div>
-            <div class="flex items-end space-x-2">
-                <x-primary-button style="background-color: #059669;">Filtrar</x-primary-button>
-                <a href="{{ route('secretaria-escolar.alunos.index') }}" class="px-4 py-2 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300 transition text-sm font-semibold uppercase tracking-widest">Limpar</a>
+            <div class="flex gap-2" style="width: 240px;">
+                <button type="submit" class="px-4 py-2 bg-emerald-600 text-white rounded-md hover:bg-emerald-700 transition text-xs font-semibold uppercase tracking-widest whitespace-nowrap">
+                    Filtrar
+                </button>
+                <a href="{{ route('secretaria-escolar.alunos.index') }}" class="px-4 py-2 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300 transition text-xs font-semibold uppercase tracking-widest whitespace-nowrap">
+                    Limpar
+                </a>
             </div>
         </form>
     </div>

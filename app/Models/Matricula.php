@@ -24,13 +24,35 @@ class Matricula extends Model
         'matricula_regular_id',
         'data_matricula',
         'data_encerramento',
+        'turno',
+        'serie_pretendida',
+        'escola_origem',
+        'escola_inep',
+        'rede',
+        'cidade_uf',
+        'serie_cursada',
+        'ano_cursado',
+        'situacao',
+        'data_transferencia',
+        'transporte',
+        'transporte_veiculo',
+        'bolsa_familia',
+        'bolsa_cartao',
+        'escolarizacao_outro',
+        'pendencias',
+        'obs_pendencias',
         'observacoes',
     ];
 
     protected $casts = [
         'data_matricula' => 'date',
         'data_encerramento' => 'date',
+        'data_transferencia' => 'date',
         'ano_letivo' => 'integer',
+        'ano_cursado' => 'integer',
+        'transporte' => 'boolean',
+        'bolsa_familia' => 'boolean',
+        'pendencias' => 'boolean',
     ];
 
     /**
@@ -63,6 +85,14 @@ class Matricula extends Model
     public function historico(): HasMany
     {
         return $this->hasMany(MatriculaHistorico::class);
+    }
+
+    /**
+     * Relacionamento com Histórico Escolar (escola de origem).
+     */
+    public function historicoEscolar(): HasOne
+    {
+        return $this->hasOne(HistoricoEscolar::class);
     }
 
     /**

@@ -4,7 +4,7 @@
         <div class="border-b border-white/10 px-6 py-7">
             <p class="text-xs font-semibold uppercase tracking-[0.35em] text-amber-200">Rede Municipal</p>
             <h2 class="mt-3 text-3xl font-bold font-fraunces text-white">Portal da Nutricionista</h2>
-            <p class="mt-2 text-sm text-emerald-100/80">Analise tecnica, comparativos entre escolas e visao gerencial da alimentacao escolar.</p>
+            <p class="mt-2 text-[10px] text-emerald-100/80">Analise tecnica, comparativos entre escolas e visao gerencial da alimentacao escolar.</p>
         </div>
 
         <div class="flex-1 px-4 py-6">
@@ -35,8 +35,8 @@
 
         <div class="border-t border-white/10 px-6 py-5">
             <div class="rounded-2xl bg-white/8 p-4">
-                <p class="text-xs font-semibold uppercase tracking-[0.3em] text-amber-200">Operacao da escola</p>
-                <p class="mt-2 text-sm text-emerald-100/80">A escola mantém o registro diário do cardápio.</p>
+                <p class="text-[10px] font-semibold uppercase tracking-[0.3em] text-amber-200">Operacao da escola</p>
+                <p class="mt-2 text-[10px] text-emerald-100/80">A escola mantém o registro diário do cardápio.</p>
             </div>
         </div>
     </div>

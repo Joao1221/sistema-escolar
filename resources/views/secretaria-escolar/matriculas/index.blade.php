@@ -205,6 +205,10 @@
                                            class="inline-flex items-center rounded-lg bg-slate-100 px-3 py-1.5 text-xs font-bold text-slate-700 transition hover:bg-slate-200">
                                             Ver
                                         </a>
+                                        <a href="{{ route('secretaria-escolar.matriculas.edit', $matricula) }}"
+                                           class="inline-flex items-center rounded-lg bg-blue-50 px-3 py-1.5 text-xs font-bold text-blue-700 transition hover:bg-blue-100">
+                                            Editar
+                                        </a>
 
                                         @if ($matricula->status === 'ativa' && ! $matricula->turma_id)
                                             <a href="{{ route('secretaria-escolar.matriculas.enturmar.form', $matricula) }}"

@@ -161,4 +161,72 @@ class MatriculaController extends Controller
         return redirect()->route('secretaria-escolar.matriculas.index')
             ->with('success', 'Rematrícula realizada com sucesso!');
     }
+
+    /**
+     * Tela de edição da matrícula.
+     */
+    public function edit(Matricula $matricula): View
+    {
+        // $this->authorize('editar matrícula');
+
+        $escolaId = Auth::user()->escola_id;
+        $alunos = Aluno::where('escola_id', $escolaId)
+            ->where('ativo', true)
+            ->orderBy('nome_completo')
+            ->get();
+        $turmas = Turma::where('escola_id', $escolaId)->where('ativa', true)->get();
+
+        return view('secretaria-escolar.matriculas.edit', compact('matricula', 'alunos', 'turmas'));
+    }
+
+    /**
+     * Atualizar matrícula.
+     */
+    public function update(Request $request, Matricula $matricula): RedirectResponse
+    {
+        // $this->authorize('editar matrícula');
+
+        $user = Auth::user();
+        $isGestor = $user->hasRole('Coordenador Pedagógico') || $user->hasRole('Diretor Escolar') || $user->hasRole('Admin');
+
+        $rules = [
+            'aluno_id' => 'required|exists:alunos,id',
+            'tipo' => 'required|in:regular,aee',
+            'status' => 'required|in:ativa,concluida,transferida,cancelada',
+            'ano_letivo' => 'required|integer|min:2000|max:2100',
+            'serie_pretendida' => 'required|string|max:50',
+            'turno' => 'nullable|in:manha,tarde,noite,integral',
+            'escola_origem' => 'nullable|string|max:255',
+            'escola_inep' => 'nullable|string|max:8',
+            'rede' => 'nullable|in:municipal,publica,privada,outra',
+            'cidade_uf' => 'nullable|string|max:100',
+            'serie_cursada' => 'nullable|string|max:50',
+            'ano_cursado' => 'nullable|integer|min:2000|max:2100',
+            'situacao' => 'nullable|in:transferido,concluiu,cursando,desistente',
+            'data_transferencia' => 'nullable|date',
+            'transporte' => 'nullable|in:0,1',
+            'transporte_veiculo' => 'nullable|in:nao,vans,onibus,bicicleta,outros',
+            'bolsa_familia' => 'nullable|in:0,1',
+            'bolsa_cartao' => 'nullable|string|max:11',
+            'escolarizacao_outro' => 'nullable|in:nao,hospital,domicilio',
+            'observacoes' => 'nullable|string',
+            'pendencias' => 'nullable|boolean',
+            'obs_pendencias' => 'nullable|string',
+        ];
+
+        if ($isGestor) {
+            $rules['turma_id'] = 'nullable|exists:turmas,id';
+        }
+
+        $validated = $request->validate($rules);
+
+        if (!$isGestor) {
+            unset($validated['turma_id']);
+        }
+
+        $matricula->update($validated);
+
+        return redirect()->route('secretaria-escolar.matriculas.show', $matricula)
+            ->with('success', 'Matrícula atualizada com sucesso!');
+    }
 }

@@ -146,27 +146,32 @@ class UsuarioService
         $deveSerChefe = (bool) ($dados['chefe_nucleo_psicossocial'] ?? false);
         $possuiPerfilPsicossocial = $this->possuiPerfilPsicossocial($dados['role'] ?? null);
 
+        $permissaoNome = self::PERMISSAO_ACESSO_IRRESTRITO_PSICOSSOCIAL;
+        $permissao = Permission::where('name', $permissaoNome)->where('guard_name', 'web')->first();
+
+        if (! $permissao) {
+            $permissao = Permission::create(['name' => $permissaoNome, 'guard_name' => 'web']);
+        }
+
         if (! $deveSerChefe || ! $possuiPerfilPsicossocial) {
-            if ($usuario->hasDirectPermission(self::PERMISSAO_ACESSO_IRRESTRITO_PSICOSSOCIAL)) {
-                $usuario->revokePermissionTo(self::PERMISSAO_ACESSO_IRRESTRITO_PSICOSSOCIAL);
+            if ($usuario->hasDirectPermission($permissao)) {
+                $usuario->revokePermissionTo($permissao);
             }
 
             return;
         }
-
-        $permissao = Permission::findOrCreate(self::PERMISSAO_ACESSO_IRRESTRITO_PSICOSSOCIAL, 'web');
 
         Usuario::query()
             ->whereKeyNot($usuario->id)
             ->permission($permissao->name)
             ->get()
             ->each(function (Usuario $outroUsuario) use ($permissao): void {
-                if ($outroUsuario->hasDirectPermission($permissao->name)) {
-                    $outroUsuario->revokePermissionTo($permissao->name);
+                if ($outroUsuario->hasDirectPermission($permissao)) {
+                    $outroUsuario->revokePermissionTo($permissao);
                 }
             });
 
-        if (! $usuario->hasDirectPermission($permissao->name)) {
+        if (! $usuario->hasDirectPermission($permissao)) {
             $usuario->givePermissionTo($permissao);
         }
     }

@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreAlunoRequest;
 use App\Http\Requests\UpdateAlunoRequest;
 use App\Models\Aluno;
+use App\Models\Turma;
 use App\Services\AlunoService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -29,11 +30,17 @@ class AlunoController extends Controller
     {
         $this->authorize('visualizar alunos');
 
-        $filtros = $request->only(['nome', 'rgm', 'status']);
+        $filtros = $request->only(['nome', 'rgm', 'status', 'turma_id']);
         $escolaId = (int) Auth::user()->escola_id;
+        
+        $turmas = Turma::where('escola_id', $escolaId)
+            ->where('ano_letivo', date('Y'))
+            ->orderBy('nome')
+            ->get();
+        
         $alunos = $this->alunoService->listarAlunos($filtros + ['escola_id' => $escolaId]);
 
-        return view('secretaria-escolar.alunos.index', compact('alunos'));
+        return view('secretaria-escolar.alunos.index', compact('alunos', 'turmas'));
     }
 
     /**

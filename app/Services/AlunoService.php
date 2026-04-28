@@ -31,6 +31,14 @@ class AlunoService
             $query->where('ativo', $filtros['status']);
         }
 
+        if (! empty($filtros['turma_id'])) {
+            $query->whereHas('matriculas', function ($q) use ($filtros) {
+                $q->where('turma_id', $filtros['turma_id'])
+                  ->where('ano_letivo', date('Y'))
+                  ->whereIn('status', ['ativa', 'concluida']);
+            });
+        }
+
         return $query->orderBy('nome_completo')->paginate($paginacao);
     }
 
