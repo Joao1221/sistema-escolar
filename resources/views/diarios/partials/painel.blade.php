@@ -66,19 +66,46 @@
             @unless ($modoConsulta)
                 <form method="POST" action="{{ route('professor.diario.planejamento-anual.store', $diario) }}" class="mt-6 space-y-4">
                     @csrf
-                    <x-text-input name="tema_gerador" type="text" class="block w-full" :value="old('tema_gerador', $diario->planejamentoAnual?->tema_gerador)" placeholder="Tema gerador" />
-                    <div class="grid gap-4 md:grid-cols-2">
-                        <x-text-input name="periodo_vigencia_inicio" type="date" class="block w-full" :value="old('periodo_vigencia_inicio', optional($diario->planejamentoAnual?->periodo_vigencia_inicio)->format('Y-m-d'))" />
-                        <x-text-input name="periodo_vigencia_fim" type="date" class="block w-full" :value="old('periodo_vigencia_fim', optional($diario->planejamentoAnual?->periodo_vigencia_fim)->format('Y-m-d'))" />
+                    <div>
+                        <label for="pa_tema_gerador" class="block text-sm font-medium text-[#4b3728] mb-1">Tema gerador</label>
+                        <x-text-input id="pa_tema_gerador" name="tema_gerador" type="text" class="block w-full" :value="old('tema_gerador', $diario->planejamentoAnual?->tema_gerador)" placeholder="Tema gerador" />
                     </div>
-                    <textarea name="objetivos_gerais" rows="3" class="block w-full rounded-xl border-stone-300 shadow-sm" placeholder="Objetivos de aprendizagem">{{ old('objetivos_gerais', $diario->planejamentoAnual?->objetivos_gerais) }}</textarea>
-                    <textarea name="competencias_habilidades" rows="3" class="block w-full rounded-xl border-stone-300 shadow-sm" placeholder="Habilidades e competencias">{{ old('competencias_habilidades', $diario->planejamentoAnual?->competencias_habilidades) }}</textarea>
-                    <textarea name="conteudos" rows="3" class="block w-full rounded-xl border-stone-300 shadow-sm" placeholder="Conteudos">{{ old('conteudos', $diario->planejamentoAnual?->conteudos) }}</textarea>
                     <div class="grid gap-4 md:grid-cols-2">
-                        <textarea name="metodologia" rows="3" class="block w-full rounded-xl border-stone-300 shadow-sm" placeholder="Metodologia">{{ old('metodologia', $diario->planejamentoAnual?->metodologia) }}</textarea>
-                        <textarea name="instrumentos_avaliacao" rows="3" class="block w-full rounded-xl border-stone-300 shadow-sm" placeholder="Instrumentos de avaliacao">{{ old('instrumentos_avaliacao', $diario->planejamentoAnual?->instrumentos_avaliacao) }}</textarea>
+                        <div>
+                            <label for="pa_vigencia_inicio" class="block text-sm font-medium text-[#4b3728] mb-1">Início da vigência</label>
+                            <x-text-input id="pa_vigencia_inicio" name="periodo_vigencia_inicio" type="date" class="block w-full" :value="old('periodo_vigencia_inicio', optional($diario->planejamentoAnual?->periodo_vigencia_inicio)->format('Y-m-d'))" />
+                        </div>
+                        <div>
+                            <label for="pa_vigencia_fim" class="block text-sm font-medium text-[#4b3728] mb-1">Fim da vigência</label>
+                            <x-text-input id="pa_vigencia_fim" name="periodo_vigencia_fim" type="date" class="block w-full" :value="old('periodo_vigencia_fim', optional($diario->planejamentoAnual?->periodo_vigencia_fim)->format('Y-m-d'))" />
+                        </div>
                     </div>
-                    <textarea name="adequacoes_inclusao" rows="3" class="block w-full rounded-xl border-stone-300 shadow-sm" placeholder="Adequacoes para inclusao">{{ old('adequacoes_inclusao', $diario->planejamentoAnual?->adequacoes_inclusao) }}</textarea>
+                    <div>
+                        <label for="pa_objetivos" class="block text-sm font-medium text-[#4b3728] mb-1">Objetivos de aprendizagem</label>
+                        <textarea id="pa_objetivos" name="objetivos_gerais" rows="3" class="block w-full rounded-xl border-stone-300 shadow-sm">{{ old('objetivos_gerais', $diario->planejamentoAnual?->objetivos_gerais) }}</textarea>
+                    </div>
+                    <div>
+                        <label for="pa_competencias" class="block text-sm font-medium text-[#4b3728] mb-1">Habilidades e competências</label>
+                        <textarea id="pa_competencias" name="competencias_habilidades" rows="3" class="block w-full rounded-xl border-stone-300 shadow-sm">{{ old('competencias_habilidades', $diario->planejamentoAnual?->competencias_habilidades) }}</textarea>
+                    </div>
+                    <div>
+                        <label for="pa_conteudos" class="block text-sm font-medium text-[#4b3728] mb-1">Conteúdos</label>
+                        <textarea id="pa_conteudos" name="conteudos" rows="3" class="block w-full rounded-xl border-stone-300 shadow-sm">{{ old('conteudos', $diario->planejamentoAnual?->conteudos) }}</textarea>
+                    </div>
+                    <div class="grid gap-4 md:grid-cols-2">
+                        <div>
+                            <label for="pa_metodologia" class="block text-sm font-medium text-[#4b3728] mb-1">Metodologia</label>
+                            <textarea id="pa_metodologia" name="metodologia" rows="3" class="block w-full rounded-xl border-stone-300 shadow-sm">{{ old('metodologia', $diario->planejamentoAnual?->metodologia) }}</textarea>
+                        </div>
+                        <div>
+                            <label for="pa_instrumentos" class="block text-sm font-medium text-[#4b3728] mb-1">Instrumentos de avaliação</label>
+                            <textarea id="pa_instrumentos" name="instrumentos_avaliacao" rows="3" class="block w-full rounded-xl border-stone-300 shadow-sm">{{ old('instrumentos_avaliacao', $diario->planejamentoAnual?->instrumentos_avaliacao) }}</textarea>
+                        </div>
+                    </div>
+                    <div>
+                        <label for="pa_adequacoes" class="block text-sm font-medium text-[#4b3728] mb-1">Adequações para inclusão</label>
+                        <textarea id="pa_adequacoes" name="adequacoes_inclusao" rows="3" class="block w-full rounded-xl border-stone-300 shadow-sm">{{ old('adequacoes_inclusao', $diario->planejamentoAnual?->adequacoes_inclusao) }}</textarea>
+                    </div>
                     <button type="submit" class="inline-flex rounded-xl bg-[#2b1710] px-4 py-2 text-sm font-bold uppercase tracking-widest text-white transition hover:bg-[#8b4d28]">Salvar planejamento anual</button>
                 </form>
             @endunless
@@ -106,26 +133,56 @@
             @unless ($modoConsulta)
                 <form method="POST" action="{{ route('professor.diario.planejamento-periodo.store', $diario) }}" class="mt-6 space-y-4 rounded-[1.6rem] bg-[#fcf7f0] p-5">
                     @csrf
-                    <select name="tipo_planejamento" x-model="tipoPlanejamento" class="block w-full rounded-xl border-stone-300">
-                        @foreach ($rotulosPlanejamento as $valor => $rotulo)
-                            <option value="{{ $valor }}">{{ $rotulo }}</option>
-                        @endforeach
-                    </select>
+                    <div>
+                        <label for="pp_tipo" class="block text-sm font-medium text-[#4b3728] mb-1">Tipo de planejamento</label>
+                        <select id="pp_tipo" name="tipo_planejamento" x-model="tipoPlanejamento" class="block w-full rounded-xl border-stone-300">
+                            @foreach ($rotulosPlanejamento as $valor => $rotulo)
+                                <option value="{{ $valor }}">{{ $rotulo }}</option>
+                            @endforeach
+                        </select>
+                    </div>
                     <div class="grid gap-4 md:grid-cols-3">
-                        <x-text-input name="periodo_referencia" type="text" class="block w-full" :value="old('periodo_referencia')" x-bind:placeholder="tipoPlanejamento === 'quinzenal' ? 'Ex.: 1a quinzena de abril' : (tipoPlanejamento === 'mensal' ? 'Ex.: Abril/2026' : (tipoPlanejamento === 'semestral' ? 'Ex.: 1o semestre/2026' : 'Ex.: Semana 1'))" />
-                        <x-text-input name="data_inicio" type="date" class="block w-full" :value="old('data_inicio')" />
-                        <x-text-input name="data_fim" type="date" class="block w-full" :value="old('data_fim')" />
+                        <div>
+                            <label for="pp_referencia" class="block text-sm font-medium text-[#4b3728] mb-1">Referência do período</label>
+                            <x-text-input id="pp_referencia" name="periodo_referencia" type="text" class="block w-full" :value="old('periodo_referencia')" x-bind:placeholder="tipoPlanejamento === 'quinzenal' ? 'Ex.: 1a quinzena de abril' : (tipoPlanejamento === 'mensal' ? 'Ex.: Abril/2026' : (tipoPlanejamento === 'semestral' ? 'Ex.: 1o semestre/2026' : 'Ex.: Semana 1'))" />
+                        </div>
+                        <div>
+                            <label for="pp_data_inicio" class="block text-sm font-medium text-[#4b3728] mb-1">Data de início</label>
+                            <x-text-input id="pp_data_inicio" name="data_inicio" type="date" class="block w-full" :value="old('data_inicio')" />
+                        </div>
+                        <div>
+                            <label for="pp_data_fim" class="block text-sm font-medium text-[#4b3728] mb-1">Data de fim</label>
+                            <x-text-input id="pp_data_fim" name="data_fim" type="date" class="block w-full" :value="old('data_fim')" />
+                        </div>
                     </div>
-                    <textarea name="objetivos_aprendizagem" rows="3" class="block w-full rounded-xl border-stone-300 shadow-sm" placeholder="Objetivos de aprendizagem">{{ old('objetivos_aprendizagem') }}</textarea>
+                    <div>
+                        <label for="pp_objetivos" class="block text-sm font-medium text-[#4b3728] mb-1">Objetivos de aprendizagem</label>
+                        <textarea id="pp_objetivos" name="objetivos_aprendizagem" rows="3" class="block w-full rounded-xl border-stone-300 shadow-sm">{{ old('objetivos_aprendizagem') }}</textarea>
+                    </div>
                     <div class="grid gap-4 md:grid-cols-2">
-                        <textarea name="habilidades_competencias" rows="3" class="block w-full rounded-xl border-stone-300 shadow-sm" placeholder="Habilidades e competencias">{{ old('habilidades_competencias') }}</textarea>
-                        <textarea name="conteudos" rows="3" class="block w-full rounded-xl border-stone-300 shadow-sm" placeholder="Conteudos">{{ old('conteudos') }}</textarea>
+                        <div>
+                            <label for="pp_habilidades" class="block text-sm font-medium text-[#4b3728] mb-1">Habilidades e competências</label>
+                            <textarea id="pp_habilidades" name="habilidades_competencias" rows="3" class="block w-full rounded-xl border-stone-300 shadow-sm">{{ old('habilidades_competencias') }}</textarea>
+                        </div>
+                        <div>
+                            <label for="pp_conteudos" class="block text-sm font-medium text-[#4b3728] mb-1">Conteúdos</label>
+                            <textarea id="pp_conteudos" name="conteudos" rows="3" class="block w-full rounded-xl border-stone-300 shadow-sm">{{ old('conteudos') }}</textarea>
+                        </div>
                     </div>
                     <div class="grid gap-4 md:grid-cols-2">
-                        <textarea name="metodologia" rows="3" class="block w-full rounded-xl border-stone-300 shadow-sm" placeholder="Metodologia">{{ old('metodologia') }}</textarea>
-                        <textarea name="instrumentos_avaliacao" rows="3" class="block w-full rounded-xl border-stone-300 shadow-sm" placeholder="Instrumentos de avaliacao">{{ old('instrumentos_avaliacao') }}</textarea>
+                        <div>
+                            <label for="pp_metodologia" class="block text-sm font-medium text-[#4b3728] mb-1">Metodologia</label>
+                            <textarea id="pp_metodologia" name="metodologia" rows="3" class="block w-full rounded-xl border-stone-300 shadow-sm">{{ old('metodologia') }}</textarea>
+                        </div>
+                        <div>
+                            <label for="pp_instrumentos" class="block text-sm font-medium text-[#4b3728] mb-1">Instrumentos de avaliação</label>
+                            <textarea id="pp_instrumentos" name="instrumentos_avaliacao" rows="3" class="block w-full rounded-xl border-stone-300 shadow-sm">{{ old('instrumentos_avaliacao') }}</textarea>
+                        </div>
                     </div>
-                    <textarea name="adequacoes_inclusao" rows="3" class="block w-full rounded-xl border-stone-300 shadow-sm" placeholder="Adequacoes para inclusao">{{ old('adequacoes_inclusao') }}</textarea>
+                    <div>
+                        <label for="pp_adequacoes" class="block text-sm font-medium text-[#4b3728] mb-1">Adequações para inclusão</label>
+                        <textarea id="pp_adequacoes" name="adequacoes_inclusao" rows="3" class="block w-full rounded-xl border-stone-300 shadow-sm">{{ old('adequacoes_inclusao') }}</textarea>
+                    </div>
                     <button type="submit" class="inline-flex rounded-xl bg-[#2b1710] px-4 py-2 text-sm font-bold uppercase tracking-widest text-white transition hover:bg-[#8b4d28]">Registrar planejamento do periodo</button>
                 </form>
             @endunless
@@ -158,21 +215,38 @@
             </table>
         </div>
         @unless ($modoConsulta)
-            <form method="POST" action="{{ route('professor.diario.avaliacoes.store', $diario) }}" class="mt-6 grid gap-4 rounded-[1.6rem] bg-[#fcf7f0] p-5 xl:grid-cols-4">
+            <form method="POST" action="{{ route('professor.diario.avaliacoes.store', $diario) }}" class="mt-6 space-y-4 rounded-[1.6rem] bg-[#fcf7f0] p-5">
                 @csrf
-                <select name="matricula_id" class="block w-full rounded-xl border-stone-300">
-                    @foreach ($matriculasAtivas as $matricula)
-                        <option value="{{ $matricula->id }}">{{ $matricula->aluno->nome_completo }} - {{ strtoupper($matricula->tipo) }}</option>
-                    @endforeach
-                </select>
-                <x-text-input name="avaliacao_referencia" type="text" class="block w-full" :value="old('avaliacao_referencia', $diario->periodo_tipo . ' ' . $diario->periodo_referencia)" />
-                @if ($usaNota)
-                    <x-text-input name="valor_numerico" type="number" step="0.01" min="0" max="100" class="block w-full" :value="old('valor_numerico')" />
-                @else
-                    <x-text-input name="conceito" type="text" class="block w-full" :value="old('conceito')" />
-                @endif
-                <button type="submit" class="inline-flex items-center justify-center rounded-xl bg-[#2b1710] px-4 py-2 text-sm font-bold uppercase tracking-widest text-white transition hover:bg-[#8b4d28]">Salvar avaliacao</button>
-                <textarea name="observacoes" rows="3" class="xl:col-span-4 block w-full rounded-xl border-stone-300 shadow-sm" placeholder="Observacoes">{{ old('observacoes') }}</textarea>
+                <div class="grid gap-4 xl:grid-cols-4">
+                    <div>
+                        <label for="av_matricula" class="block text-sm font-medium text-[#4b3728] mb-1">Aluno</label>
+                        <select id="av_matricula" name="matricula_id" class="block w-full rounded-xl border-stone-300">
+                            @foreach ($matriculasAtivas as $matricula)
+                                <option value="{{ $matricula->id }}">{{ $matricula->aluno->nome_completo }} - {{ strtoupper($matricula->tipo) }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <div>
+                        <label for="av_referencia" class="block text-sm font-medium text-[#4b3728] mb-1">Referência da avaliação</label>
+                        <x-text-input id="av_referencia" name="avaliacao_referencia" type="text" class="block w-full" :value="old('avaliacao_referencia', $diario->periodo_tipo . ' ' . $diario->periodo_referencia)" />
+                    </div>
+                    <div>
+                        @if ($usaNota)
+                            <label for="av_valor" class="block text-sm font-medium text-[#4b3728] mb-1">Nota (0–100)</label>
+                            <x-text-input id="av_valor" name="valor_numerico" type="number" step="0.01" min="0" max="100" class="block w-full" :value="old('valor_numerico')" />
+                        @else
+                            <label for="av_conceito" class="block text-sm font-medium text-[#4b3728] mb-1">Conceito</label>
+                            <x-text-input id="av_conceito" name="conceito" type="text" class="block w-full" :value="old('conceito')" />
+                        @endif
+                    </div>
+                    <div class="flex items-end">
+                        <button type="submit" class="w-full inline-flex items-center justify-center rounded-xl bg-[#2b1710] px-4 py-2 text-sm font-bold uppercase tracking-widest text-white transition hover:bg-[#8b4d28]">Salvar avaliação</button>
+                    </div>
+                </div>
+                <div>
+                    <label for="av_obs" class="block text-sm font-medium text-[#4b3728] mb-1">Observações</label>
+                    <textarea id="av_obs" name="observacoes" rows="3" class="block w-full rounded-xl border-stone-300 shadow-sm">{{ old('observacoes') }}</textarea>
+                </div>
             </form>
         @endunless
     </section>
@@ -195,17 +269,32 @@
                 <form method="POST" action="{{ route('professor.diario.registro-aula.store', $diario) }}" class="mt-6 space-y-4">
                     @csrf
                     <div class="grid gap-4 md:grid-cols-2">
-                        <x-text-input name="data_aula" type="date" class="block w-full" :value="old('data_aula')" />
-                        <x-text-input name="quantidade_aulas" type="number" class="block w-full" :value="old('quantidade_aulas', 1)" />
+                        <div>
+                            <label for="ra_data" class="block text-sm font-medium text-[#4b3728] mb-1">Data da aula</label>
+                            <x-text-input id="ra_data" name="data_aula" type="date" class="block w-full" :value="old('data_aula')" />
+                        </div>
+                        <div>
+                            <label for="ra_qtd" class="block text-sm font-medium text-[#4b3728] mb-1">Quantidade de aulas</label>
+                            <x-text-input id="ra_qtd" name="quantidade_aulas" type="number" class="block w-full" :value="old('quantidade_aulas', 1)" />
+                        </div>
                     </div>
-                    <x-text-input name="titulo" type="text" class="block w-full" :value="old('titulo')" placeholder="Titulo da aula" />
-                    <select name="horario_aula_id" class="block w-full rounded-xl border-stone-300">
-                        <option value="">Sem vinculo especifico</option>
-                        @foreach ($horariosRelacionados as $horario)
-                            <option value="{{ $horario->id }}">{{ $diasSemana[$horario->dia_semana] ?? 'Dia' }} • {{ \Carbon\Carbon::parse($horario->horario_inicial)->format('H:i') }} - {{ \Carbon\Carbon::parse($horario->horario_final)->format('H:i') }}</option>
-                        @endforeach
-                    </select>
-                    <textarea name="conteudo_ministrado" rows="4" class="block w-full rounded-xl border-stone-300 shadow-sm" placeholder="Conteudo ministrado">{{ old('conteudo_ministrado') }}</textarea>
+                    <div>
+                        <label for="ra_titulo" class="block text-sm font-medium text-[#4b3728] mb-1">Título da aula</label>
+                        <x-text-input id="ra_titulo" name="titulo" type="text" class="block w-full" :value="old('titulo')" />
+                    </div>
+                    <div>
+                        <label for="ra_horario" class="block text-sm font-medium text-[#4b3728] mb-1">Horário vinculado</label>
+                        <select id="ra_horario" name="horario_aula_id" class="block w-full rounded-xl border-stone-300">
+                            <option value="">Sem vínculo específico</option>
+                            @foreach ($horariosRelacionados as $horario)
+                                <option value="{{ $horario->id }}">{{ $diasSemana[$horario->dia_semana] ?? 'Dia' }} • {{ \Carbon\Carbon::parse($horario->horario_inicial)->format('H:i') }} - {{ \Carbon\Carbon::parse($horario->horario_final)->format('H:i') }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <div>
+                        <label for="ra_conteudo" class="block text-sm font-medium text-[#4b3728] mb-1">Conteúdo ministrado</label>
+                        <textarea id="ra_conteudo" name="conteudo_ministrado" rows="4" class="block w-full rounded-xl border-stone-300 shadow-sm">{{ old('conteudo_ministrado') }}</textarea>
+                    </div>
                     <button type="submit" class="inline-flex rounded-xl bg-[#2b1710] px-4 py-2 text-sm font-bold uppercase tracking-widest text-white transition hover:bg-[#8b4d28]">Registrar aula</button>
                 </form>
             @endunless
@@ -216,21 +305,30 @@
             @unless ($modoConsulta)
                 <form method="POST" action="{{ route('professor.diario.frequencia.store', $diario) }}" class="mt-6 space-y-4">
                     @csrf
-                    <select name="registro_aula_id" class="block w-full rounded-xl border-stone-300">
-                        <option value="">Selecione a aula</option>
-                        @foreach ($diario->registrosAula as $registro)
-                            <option value="{{ $registro->id }}">{{ optional($registro->data_aula)->format('d/m/Y') }} • {{ $registro->titulo }}</option>
-                        @endforeach
-                    </select>
+                    <div>
+                        <label for="freq_aula" class="block text-sm font-medium text-[#4b3728] mb-1">Aula de referência</label>
+                        <select id="freq_aula" name="registro_aula_id" class="block w-full rounded-xl border-stone-300">
+                            <option value="">Selecione a aula</option>
+                            @foreach ($diario->registrosAula as $registro)
+                                <option value="{{ $registro->id }}">{{ optional($registro->data_aula)->format('d/m/Y') }} • {{ $registro->titulo }}</option>
+                            @endforeach
+                        </select>
+                    </div>
                     <div class="max-h-80 space-y-4 overflow-y-auto pr-2">
                         @foreach ($matriculasAtivas as $index => $matricula)
                             <div class="rounded-2xl border border-[#ead9c3] p-4">
                                 <input type="hidden" name="frequencias[{{ $index }}][matricula_id]" value="{{ $matricula->id }}">
                                 <div class="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
                                     <div><p class="font-semibold text-[#24120d]">{{ $matricula->aluno->nome_completo }}</p><p class="text-xs text-[#8b6f5a]">Matricula {{ strtoupper($matricula->tipo) }} #{{ $matricula->id }}</p></div>
-                                    <select name="frequencias[{{ $index }}][situacao]" class="md:w-56 block rounded-xl border-stone-300"><option value="presente">Presente</option><option value="falta">Falta</option><option value="falta_justificada">Falta justificada</option><option value="atraso">Atraso</option></select>
+                                    <div>
+                                        <label class="block text-xs font-medium text-[#4b3728] mb-1">Situação</label>
+                                        <select name="frequencias[{{ $index }}][situacao]" class="md:w-56 block rounded-xl border-stone-300"><option value="presente">Presente</option><option value="falta">Falta</option><option value="falta_justificada">Falta justificada</option><option value="atraso">Atraso</option></select>
+                                    </div>
                                 </div>
-                                <textarea name="frequencias[{{ $index }}][observacao]" rows="2" class="mt-3 block w-full rounded-xl border-stone-300 shadow-sm" placeholder="Observacao opcional"></textarea>
+                                <div>
+                                    <label class="block text-xs font-medium text-[#4b3728] mb-1">Observação</label>
+                                    <textarea name="frequencias[{{ $index }}][observacao]" rows="2" class="mt-1 block w-full rounded-xl border-stone-300 shadow-sm"></textarea>
+                                </div>
                             </div>
                         @endforeach
                     </div>
@@ -261,11 +359,33 @@
             @unless ($modoConsulta)
                 <form method="POST" action="{{ route('professor.diario.observacoes.store', $diario) }}" class="mt-6 space-y-4">
                     @csrf
-                    <select name="matricula_id" class="block w-full rounded-xl border-stone-300">@foreach ($matriculasAtivas as $matricula)<option value="{{ $matricula->id }}">{{ $matricula->aluno->nome_completo }} - {{ strtoupper($matricula->tipo) }}</option>@endforeach</select>
-                    <div class="grid gap-4 md:grid-cols-2"><x-text-input name="data_observacao" type="date" class="block w-full" :value="old('data_observacao', now()->toDateString())" /><select name="categoria" class="block w-full rounded-xl border-stone-300"><option value="pedagogica">Pedagogica</option><option value="comportamental">Comportamental</option><option value="inclusao">Inclusao</option><option value="acompanhamento">Acompanhamento</option></select></div>
-                    <textarea name="descricao" rows="3" class="block w-full rounded-xl border-stone-300 shadow-sm" placeholder="Descricao da observacao"></textarea>
-                    <textarea name="encaminhamento" rows="2" class="block w-full rounded-xl border-stone-300 shadow-sm" placeholder="Encaminhamento opcional"></textarea>
-                    <button type="submit" class="inline-flex rounded-xl bg-[#2b1710] px-4 py-2 text-sm font-bold uppercase tracking-widest text-white transition hover:bg-[#8b4d28]">Registrar observacao</button>
+                    <div>
+                        <label for="obs_aluno" class="block text-sm font-medium text-[#4b3728] mb-1">Aluno</label>
+                        <select id="obs_aluno" name="matricula_id" class="block w-full rounded-xl border-stone-300">
+                            @foreach ($matriculasAtivas as $matricula)
+                                <option value="{{ $matricula->id }}">{{ $matricula->aluno->nome_completo }} - {{ strtoupper($matricula->tipo) }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <div class="grid gap-4 md:grid-cols-2">
+                        <div>
+                            <label for="obs_data" class="block text-sm font-medium text-[#4b3728] mb-1">Data da observação</label>
+                            <x-text-input id="obs_data" name="data_observacao" type="date" class="block w-full" :value="old('data_observacao', now()->toDateString())" />
+                        </div>
+                        <div>
+                            <label for="obs_categoria" class="block text-sm font-medium text-[#4b3728] mb-1">Categoria</label>
+                            <select id="obs_categoria" name="categoria" class="block w-full rounded-xl border-stone-300"><option value="pedagogica">Pedagógica</option><option value="comportamental">Comportamental</option><option value="inclusao">Inclusão</option><option value="acompanhamento">Acompanhamento</option></select>
+                        </div>
+                    </div>
+                    <div>
+                        <label for="obs_descricao" class="block text-sm font-medium text-[#4b3728] mb-1">Descrição da observação</label>
+                        <textarea id="obs_descricao" name="descricao" rows="3" class="block w-full rounded-xl border-stone-300 shadow-sm"></textarea>
+                    </div>
+                    <div>
+                        <label for="obs_encaminhamento" class="block text-sm font-medium text-[#4b3728] mb-1">Encaminhamento (opcional)</label>
+                        <textarea id="obs_encaminhamento" name="encaminhamento" rows="2" class="block w-full rounded-xl border-stone-300 shadow-sm"></textarea>
+                    </div>
+                    <button type="submit" class="inline-flex rounded-xl bg-[#2b1710] px-4 py-2 text-sm font-bold uppercase tracking-widest text-white transition hover:bg-[#8b4d28]">Registrar observação</button>
                 </form>
             @endunless
         </div>
@@ -282,12 +402,33 @@
             @unless ($modoConsulta)
                 <form method="POST" action="{{ route('professor.diario.ocorrencias.store', $diario) }}" class="mt-6 space-y-4">
                     @csrf
-                    <select name="matricula_id" class="block w-full rounded-xl border-stone-300"><option value="">Ocorrencia geral da turma</option>@foreach ($matriculasAtivas as $matricula)<option value="{{ $matricula->id }}">{{ $matricula->aluno->nome_completo }}</option>@endforeach</select>
-                    <div class="grid gap-4 md:grid-cols-2"><x-text-input name="data_ocorrencia" type="date" class="block w-full" :value="old('data_ocorrencia', now()->toDateString())" /><select name="tipo" class="block w-full rounded-xl border-stone-300"><option value="disciplinar">Disciplinar</option><option value="pedagogica">Pedagogica</option><option value="convivencia">Convivencia</option><option value="encaminhamento">Encaminhamento</option></select></div>
-                    <textarea name="descricao" rows="3" class="block w-full rounded-xl border-stone-300 shadow-sm" placeholder="Descricao"></textarea>
-                    <textarea name="providencias" rows="2" class="block w-full rounded-xl border-stone-300 shadow-sm" placeholder="Providencias"></textarea>
-                    <select name="status" class="block w-full rounded-xl border-stone-300"><option value="aberta">Aberta</option><option value="em_acompanhamento">Em acompanhamento</option><option value="encerrada">Encerrada</option></select>
-                    <button type="submit" class="inline-flex rounded-xl bg-[#2b1710] px-4 py-2 text-sm font-bold uppercase tracking-widest text-white transition hover:bg-[#8b4d28]">Registrar ocorrencia</button>
+                    <div>
+                        <label for="oc_aluno" class="block text-sm font-medium text-[#4b3728] mb-1">Aluno (ou turma)</label>
+                        <select id="oc_aluno" name="matricula_id" class="block w-full rounded-xl border-stone-300"><option value="">Ocorrência geral da turma</option>@foreach ($matriculasAtivas as $matricula)<option value="{{ $matricula->id }}">{{ $matricula->aluno->nome_completo }}</option>@endforeach</select>
+                    </div>
+                    <div class="grid gap-4 md:grid-cols-2">
+                        <div>
+                            <label for="oc_data" class="block text-sm font-medium text-[#4b3728] mb-1">Data da ocorrência</label>
+                            <x-text-input id="oc_data" name="data_ocorrencia" type="date" class="block w-full" :value="old('data_ocorrencia', now()->toDateString())" />
+                        </div>
+                        <div>
+                            <label for="oc_tipo" class="block text-sm font-medium text-[#4b3728] mb-1">Tipo</label>
+                            <select id="oc_tipo" name="tipo" class="block w-full rounded-xl border-stone-300"><option value="disciplinar">Disciplinar</option><option value="pedagogica">Pedagógica</option><option value="convivencia">Convivência</option><option value="encaminhamento">Encaminhamento</option></select>
+                        </div>
+                    </div>
+                    <div>
+                        <label for="oc_descricao" class="block text-sm font-medium text-[#4b3728] mb-1">Descrição</label>
+                        <textarea id="oc_descricao" name="descricao" rows="3" class="block w-full rounded-xl border-stone-300 shadow-sm"></textarea>
+                    </div>
+                    <div>
+                        <label for="oc_providencias" class="block text-sm font-medium text-[#4b3728] mb-1">Providências</label>
+                        <textarea id="oc_providencias" name="providencias" rows="2" class="block w-full rounded-xl border-stone-300 shadow-sm"></textarea>
+                    </div>
+                    <div>
+                        <label for="oc_status" class="block text-sm font-medium text-[#4b3728] mb-1">Status</label>
+                        <select id="oc_status" name="status" class="block w-full rounded-xl border-stone-300"><option value="aberta">Aberta</option><option value="em_acompanhamento">Em acompanhamento</option><option value="encerrada">Encerrada</option></select>
+                    </div>
+                    <button type="submit" class="inline-flex rounded-xl bg-[#2b1710] px-4 py-2 text-sm font-bold uppercase tracking-widest text-white transition hover:bg-[#8b4d28]">Registrar ocorrência</button>
                 </form>
             @endunless
         </div>
@@ -304,11 +445,29 @@
             @unless ($modoConsulta)
                 <form method="POST" action="{{ route('professor.diario.pendencias.store', $diario) }}" class="mt-6 space-y-4">
                     @csrf
-                    <x-text-input name="titulo" type="text" class="block w-full" :value="old('titulo')" placeholder="Titulo da pendencia" />
-                    <textarea name="descricao" rows="3" class="block w-full rounded-xl border-stone-300 shadow-sm" placeholder="Descricao"></textarea>
-                    <div class="grid gap-4 md:grid-cols-2"><select name="origem" class="block w-full rounded-xl border-stone-300"><option value="diario">Diario</option><option value="coordenacao">Coordenacao</option><option value="direcao">Direcao</option><option value="secretaria">Secretaria</option></select><x-text-input name="prazo" type="date" class="block w-full" :value="old('prazo')" /></div>
-                    <select name="status" class="block w-full rounded-xl border-stone-300"><option value="aberta">Aberta</option><option value="em_andamento">Em andamento</option><option value="concluida">Concluida</option></select>
-                    <button type="submit" class="inline-flex rounded-xl bg-[#2b1710] px-4 py-2 text-sm font-bold uppercase tracking-widest text-white transition hover:bg-[#8b4d28]">Registrar pendencia</button>
+                    <div>
+                        <label for="pend_titulo" class="block text-sm font-medium text-[#4b3728] mb-1">Título da pendência</label>
+                        <x-text-input id="pend_titulo" name="titulo" type="text" class="block w-full" :value="old('titulo')" />
+                    </div>
+                    <div>
+                        <label for="pend_descricao" class="block text-sm font-medium text-[#4b3728] mb-1">Descrição</label>
+                        <textarea id="pend_descricao" name="descricao" rows="3" class="block w-full rounded-xl border-stone-300 shadow-sm"></textarea>
+                    </div>
+                    <div class="grid gap-4 md:grid-cols-2">
+                        <div>
+                            <label for="pend_origem" class="block text-sm font-medium text-[#4b3728] mb-1">Origem</label>
+                            <select id="pend_origem" name="origem" class="block w-full rounded-xl border-stone-300"><option value="diario">Diário</option><option value="coordenacao">Coordenação</option><option value="direcao">Direção</option><option value="secretaria">Secretaria</option></select>
+                        </div>
+                        <div>
+                            <label for="pend_prazo" class="block text-sm font-medium text-[#4b3728] mb-1">Prazo</label>
+                            <x-text-input id="pend_prazo" name="prazo" type="date" class="block w-full" :value="old('prazo')" />
+                        </div>
+                    </div>
+                    <div>
+                        <label for="pend_status" class="block text-sm font-medium text-[#4b3728] mb-1">Status</label>
+                        <select id="pend_status" name="status" class="block w-full rounded-xl border-stone-300"><option value="aberta">Aberta</option><option value="em_andamento">Em andamento</option><option value="concluida">Concluída</option></select>
+                    </div>
+                    <button type="submit" class="inline-flex rounded-xl bg-[#2b1710] px-4 py-2 text-sm font-bold uppercase tracking-widest text-white transition hover:bg-[#8b4d28]">Registrar pendência</button>
                 </form>
             @endunless
         </div>

@@ -88,26 +88,30 @@
 }
 
 @layer components {
+    .portal-professor label {
+        color: #111827 !important;
+    }
+
     .portal-professor input:not([type='checkbox']):not([type='radio']):not([type='file']),
     .portal-professor textarea {
-        background-color: #ffffff;
-        color: #1c1917;
+        background-color: #ffffff !important;
+        color: #1c1917 !important;
     }
 
     .portal-professor input::placeholder,
     .portal-professor textarea::placeholder {
-        color: #78716c;
-        opacity: 1;
+        color: #78716c !important;
+        opacity: 1 !important;
     }
 
     .portal-professor select {
-        background-color: #ffffff;
-        color: #1c1917;
+        background-color: #ffffff !important;
+        color: #1c1917 !important;
     }
 
     .portal-professor select option {
-        background-color: #ffffff;
-        color: #1c1917;
+        background-color: #ffffff !important;
+        color: #1c1917 !important;
     }
 }
 
