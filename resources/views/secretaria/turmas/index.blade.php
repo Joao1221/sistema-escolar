@@ -1,14 +1,14 @@
 <x-secretaria-layout>
 
     <x-slot name="header">
-        <div class="flex justify-between items-center relative z-10">
+        <div class="relative z-10 flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
             <div>
                 <h2 class="font-semibold text-xl text-gray-800 leading-tight">
                     {{ __('Consulta de Turmas') }}
                 </h2>
                 <p class="text-sm text-gray-500 mt-1 uppercase">Visão Consolidada da Rede Municipal</p>
             </div>
-            <div class="bg-blue-50 text-blue-700 px-4 py-2 rounded-lg text-xs font-bold uppercase border border-blue-100 italic">
+            <div class="self-start bg-blue-50 text-blue-700 px-4 py-2 rounded-lg text-xs font-bold uppercase border border-blue-100 italic md:self-auto">
                 Visualização de Consulta (Somente Leitura)
             </div>
         </div>
@@ -16,7 +16,7 @@
 
     {{-- Filtros --}}
     <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 mb-6 font-medium">
-        <form action="{{ route('secretaria.turmas.index') }}" method="GET" class="grid grid-cols-1 md:grid-cols-4 gap-4">
+        <form action="{{ route('secretaria.turmas.index') }}" method="GET" class="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-4">
             <div>
                 <x-input-label for="escola_id" :value="__('Unidade Escolar')" />
                 <select id="escola_id" name="escola_id" class="mt-1 block w-full border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm">
@@ -39,9 +39,9 @@
                 <x-input-label for="ano_letivo" :value="__('Ano Letivo')" />
                 <x-text-input id="ano_letivo" name="ano_letivo" type="number" class="mt-1 block w-full" :value="request('ano_letivo', date('Y'))" />
             </div>
-            <div class="flex items-end space-x-2">
-                <x-primary-button class="bg-black hover:bg-gray-800">Filtrar</x-primary-button>
-                <a href="{{ route('secretaria.turmas.index') }}" class="px-4 py-2 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300 transition text-sm font-semibold uppercase tracking-widest">Limpar</a>
+            <div class="flex flex-col gap-2 md:flex-row md:items-end">
+                <x-primary-button class="justify-center bg-black hover:bg-gray-800">Filtrar</x-primary-button>
+                <a href="{{ route('secretaria.turmas.index') }}" class="inline-flex justify-center px-4 py-2 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300 transition text-sm font-semibold uppercase tracking-widest">Limpar</a>
             </div>
         </form>
     </div>
@@ -49,7 +49,7 @@
     <div class="bg-white overflow-hidden shadow-sm rounded-2xl border border-gray-100">
         <div class="p-6 text-gray-900">
             <div class="overflow-x-auto">
-                <table class="w-full text-sm text-left text-gray-500">
+                <table class="min-w-[820px] w-full text-sm text-left text-gray-500">
                     <thead class="text-xs text-gray-700 uppercase bg-gray-50 tracking-wider">
                         <tr>
                             <th class="py-3 px-6">Unidade Escolar</th>

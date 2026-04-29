@@ -21,12 +21,12 @@
 
         <section class="grid gap-8 xl:grid-cols-[1.4fr_1fr]">
             <div class="rounded-[2rem] border border-[#e2d3bf] bg-white p-6 shadow-sm">
-                <div class="flex items-center justify-between gap-4">
+                <div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
                     <div>
                         <p class="text-[11px] uppercase tracking-[0.28em] text-[#9a7d67]">Ação em destaque</p>
                         <h2 class="mt-2 text-2xl font-outfit font-bold text-[#24120d]">Painel do professor</h2>
                     </div>
-                    <div class="rounded-2xl bg-[#f8efe1] px-4 py-3 text-right">
+                    <div class="w-full rounded-2xl bg-[#f8efe1] px-4 py-3 text-left sm:w-auto sm:text-right">
                         <p class="text-xs uppercase tracking-[0.22em] text-[#926d52]">Professor</p>
                         <p class="mt-1 font-semibold text-[#3a2218]">{{ $funcionario->nome }}</p>
                     </div>
@@ -37,7 +37,7 @@
                         <p class="text-xs uppercase tracking-[0.28em] text-amber-200">Próxima ação</p>
                         <h3 class="mt-3 text-2xl font-outfit font-semibold">{{ $proximaAcao['titulo'] }}</h3>
                         <p class="mt-2 max-w-2xl text-sm text-white/75">{{ $proximaAcao['descricao'] }}</p>
-                        <a href="{{ $proximaAcao['url'] }}" class="mt-5 inline-flex items-center rounded-xl bg-white px-4 py-3 text-xs font-bold uppercase tracking-widest text-[#6d3e25] transition hover:bg-amber-50">
+                        <a href="{{ $proximaAcao['url'] }}" class="mt-5 inline-flex w-full items-center justify-center rounded-xl bg-white px-4 py-3 text-xs font-bold uppercase tracking-widest text-[#6d3e25] transition hover:bg-amber-50 sm:w-auto">
                             Continuar
                         </a>
                     </div>
@@ -65,7 +65,7 @@
 
             <div class="space-y-8">
                 <div class="rounded-[2rem] border border-[#e2d3bf] bg-white p-6 shadow-sm">
-                    <div class="flex items-center justify-between">
+                    <div class="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
                         <h3 class="text-xl font-outfit font-semibold text-[#24120d]">Aulas de hoje</h3>
                         <a href="{{ route('professor.horarios.index') }}" class="text-xs font-bold uppercase tracking-widest text-[#8b4d28]">Ver horário</a>
                     </div>
@@ -82,7 +82,7 @@
                 </div>
 
                 <div class="rounded-[2rem] border border-[#e2d3bf] bg-white p-6 shadow-sm">
-                    <div class="flex items-center justify-between">
+                    <div class="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
                         <h3 class="text-xl font-outfit font-semibold text-[#24120d]">Diários recentes</h3>
                         <a href="{{ route('professor.diario.index') }}" class="text-xs font-bold uppercase tracking-widest text-[#8b4d28]">Ver todos</a>
                     </div>

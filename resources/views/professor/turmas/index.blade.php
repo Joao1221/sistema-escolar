@@ -11,11 +11,11 @@
 
                     <div class="flex flex-wrap gap-3">
                         @if ($item->diarios->isNotEmpty())
-                            <a href="{{ route('professor.diario.show', $item->diarios->first()) }}" class="inline-flex items-center rounded-xl bg-[#2b1710] px-4 py-2 text-xs font-bold uppercase tracking-widest text-white hover:bg-[#8b4d28] transition">
+                            <a href="{{ route('professor.diario.show', $item->diarios->first()) }}" class="inline-flex w-full items-center justify-center rounded-xl bg-[#2b1710] px-4 py-2 text-xs font-bold uppercase tracking-widest text-white hover:bg-[#8b4d28] transition sm:w-auto">
                                 Abrir diário
                             </a>
                         @else
-                            <a href="{{ route('professor.diario.create') }}" class="inline-flex items-center rounded-xl border border-[#c6a98f] px-4 py-2 text-xs font-bold uppercase tracking-widest text-[#7b4b2a] hover:bg-[#fffaf4] transition">
+                            <a href="{{ route('professor.diario.create') }}" class="inline-flex w-full items-center justify-center rounded-xl border border-[#c6a98f] px-4 py-2 text-xs font-bold uppercase tracking-widest text-[#7b4b2a] hover:bg-[#fffaf4] transition sm:w-auto">
                                 Criar diário
                             </a>
                         @endif

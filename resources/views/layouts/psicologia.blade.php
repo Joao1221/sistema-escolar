@@ -22,8 +22,7 @@
             }
 
             .psicologia-mobile-header,
-            .psicologia-mobile-sidebar,
-            .psicologia-mobile-overlay {
+            .psicologia-mobile-sidebar {
                 display: none;
             }
 
@@ -54,7 +53,7 @@
                 margin-left: 0;
             }
 
-            @media (max-width: 479px) {
+            @media (max-width: 1023px) {
                 .psicologia-desktop-sidebar,
                 .psicologia-desktop-toggle {
                     display: none !important;
@@ -70,7 +69,7 @@
                 }
             }
 
-            @media (min-width: 480px) {
+            @media (min-width: 1024px) {
                 .psicologia-mobile-header,
                 .psicologia-mobile-sidebar,
                 .psicologia-mobile-overlay {
@@ -79,7 +78,7 @@
             }
         </style>
     </head>
-    <body class="bg-[radial-gradient(circle_at_top,_#e7faf8_0%,_#edf4ff_42%,_#eef5ea_100%)] text-slate-900 antialiased" x-data="{ sidebarOpen: false, sidebarCollapsed: false, toggleSidebar() { this.sidebarCollapsed = !this.sidebarCollapsed; } }">
+    <body class="portal-psicologia min-h-screen overflow-x-hidden bg-[radial-gradient(circle_at_top,_#e7faf8_0%,_#edf4ff_42%,_#eef5ea_100%)] text-slate-900 antialiased" x-data="{ sidebarOpen: false, sidebarCollapsed: false, toggleSidebar() { this.sidebarCollapsed = !this.sidebarCollapsed; } }" @keydown.escape.window="sidebarOpen = false">
         <!-- Mobile overlay -->
         <div x-show="sidebarOpen" 
              x-transition:enter="transition-opacity ease-linear duration-300" 
@@ -101,6 +100,11 @@
         <!-- Mobile Sidebar -->
         <div class="psicologia-mobile-sidebar fixed inset-y-0 left-0 z-50 w-64 -translate-x-full transition-transform duration-300 ease-in-out"
              :class="sidebarOpen ? 'translate-x-0' : '-translate-x-full'">
+            <button type="button" @click="sidebarOpen = false" class="absolute right-3 top-3 z-10 inline-flex h-9 w-9 items-center justify-center rounded-xl bg-white/10 text-white ring-1 ring-white/20 transition hover:bg-white/20 focus:outline-none focus:ring-2 focus:ring-white/60" aria-label="Fechar menu">
+                <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+            </button>
             <x-sidebar-psicologia />
         </div>
 
@@ -122,7 +126,7 @@
                         <div class="flex flex-col gap-5 lg:flex-row lg:items-end lg:justify-between">
                             <div class="min-w-0">
                                 <x-psicologia-breadcrumbs :items="$breadcrumbs" />
-                                <h1 class="mt-3 text-3xl font-bold tracking-tight text-white font-fraunces" style="color: #ffffff !important;">{{ $titulo }}</h1>
+                                <h1 class="mt-3 text-2xl font-bold tracking-tight text-white font-fraunces sm:text-3xl" style="color: #ffffff !important;">{{ $titulo }}</h1>
                                 @if ($subtitulo)
                                     <p class="mt-2 max-w-3xl text-sm lg:text-base" style="color: rgba(255,255,255,0.9) !important;">{{ $subtitulo }}</p>
                                 @endif
@@ -156,7 +160,7 @@
                         </div>
                     </header>
 
-                    <main class="px-6 py-6 lg:px-10 lg:py-8">
+                    <main class="px-4 py-5 sm:px-6 lg:px-10 lg:py-8">
                         @if (session('success'))
                             <div class="mb-6 rounded-2xl border border-emerald-200 bg-emerald-50 px-5 py-4 text-emerald-900 shadow-sm">
                                 {{ session('success') }}

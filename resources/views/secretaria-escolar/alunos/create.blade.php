@@ -1,8 +1,8 @@
 <x-secretaria-escolar-layout>
 
-    <div class="flex justify-between items-center mb-6 px-6">
+    <div class="mb-6 flex flex-col gap-4 px-0 sm:px-6 md:flex-row md:items-center md:justify-between">
         <div>
-            <h1 class="text-3xl font-bold text-gray-800 uppercase tracking-tight">Cadastrar Novo Aluno</h1>
+            <h1 class="text-2xl font-bold text-gray-800 uppercase tracking-tight sm:text-3xl">Cadastrar Novo Aluno</h1>
             <p class="text-slate-500 mt-1 uppercase decoration-emerald-200 decoration-2">Ficha completa de matrícula escolar.</p>
         </div>
         <a href="{{ route('secretaria-escolar.alunos.index') }}" class="flex items-center space-x-2 text-sm text-slate-400 hover:text-emerald-600 font-bold uppercase transition group">
@@ -136,12 +136,12 @@
                                  <label class="block text-xs font-semibold text-gray-700 uppercase tracking-wider mb-1">Bairro <span class="text-red-500">*</span></label>
                                  <input type="text" name="bairro" value="{{ old('bairro') }}" class="w-full border-gray-300 rounded-md shadow-sm text-sm py-2 px-3 focus:ring-emerald-500 focus:border-emerald-500 uppercase" required>
                              </div>
-                             <div class="md:col-span-4 flex gap-4">
-                                 <div style="width: 75%;">
+                             <div class="grid gap-4 md:col-span-4 md:grid-cols-4">
+                                 <div class="md:col-span-3">
                                      <label class="block text-xs font-semibold text-gray-700 uppercase tracking-wider mb-1">Cidade <span class="text-red-500">*</span></label>
                                      <input type="text" name="cidade" value="{{ old('cidade') }}" class="w-full border-gray-300 rounded-md shadow-sm text-sm py-2 px-3 focus:ring-emerald-500 focus:border-emerald-500 uppercase" required>
                                  </div>
-                                 <div style="width: 25%;">
+                                 <div>
                                      <label class="block text-xs font-semibold text-gray-700 uppercase tracking-wider mb-1">UF <span class="text-red-500">*</span></label>
                                      <input type="text" name="uf" value="{{ old('uf') }}" class="w-full border-gray-300 rounded-md shadow-sm text-sm py-2 px-3 focus:ring-emerald-500 focus:border-emerald-500 uppercase" maxlength="2" required>
                                  </div>

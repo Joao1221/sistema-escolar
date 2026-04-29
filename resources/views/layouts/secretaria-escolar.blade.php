@@ -25,8 +25,7 @@
             }
 
             .secretaria-escolar-mobile-header,
-            .secretaria-escolar-mobile-sidebar,
-            .secretaria-escolar-mobile-overlay {
+            .secretaria-escolar-mobile-sidebar {
                 display: none;
             }
 
@@ -57,7 +56,7 @@
                 margin-left: 0;
             }
 
-            @media (max-width: 479px) {
+            @media (max-width: 1023px) {
                 .secretaria-escolar-desktop-sidebar,
                 .secretaria-escolar-desktop-toggle {
                     display: none !important;
@@ -73,7 +72,7 @@
                 }
             }
 
-            @media (min-width: 480px) {
+            @media (min-width: 1024px) {
                 .secretaria-escolar-mobile-header,
                 .secretaria-escolar-mobile-sidebar,
                 .secretaria-escolar-mobile-overlay {
@@ -82,7 +81,11 @@
             }
         </style>
     </head>
-    <body class="bg-emerald-900 text-slate-900 antialiased" x-data="{ sidebarOpen: false, sidebarCollapsed: false, toggleSidebar() { this.sidebarCollapsed = !this.sidebarCollapsed; } }" x-init="sidebarOpen = false; sidebarCollapsed = false">
+    <body @class([
+        'portal-secretaria-escolar bg-emerald-900 text-slate-900 antialiased overflow-x-hidden',
+        'portal-coordenacao-pedagogica' => request()->routeIs('secretaria-escolar.coordenacao.*'),
+        'portal-direcao-escolar' => request()->routeIs('secretaria-escolar.direcao.*'),
+    ]) x-data="{ sidebarOpen: false, sidebarCollapsed: false, toggleSidebar() { this.sidebarCollapsed = !this.sidebarCollapsed; } }" x-init="sidebarOpen = false; sidebarCollapsed = false" @keydown.escape.window="sidebarOpen = false">
         <!-- Mobile overlay -->
         <div x-show="sidebarOpen" 
              x-transition:enter="transition-opacity ease-linear duration-300" 
@@ -106,6 +109,11 @@
         <!-- Mobile Sidebar -->
         <div class="secretaria-escolar-mobile-sidebar fixed inset-y-0 left-0 z-50 w-64 -translate-x-full transition-transform duration-300 ease-in-out"
              :class="sidebarOpen ? 'translate-x-0' : '-translate-x-full'">
+            <button type="button" @click="sidebarOpen = false" class="absolute right-3 top-3 z-10 inline-flex h-9 w-9 items-center justify-center rounded-xl bg-white/10 text-white ring-1 ring-white/20 transition hover:bg-white/20 focus:outline-none focus:ring-2 focus:ring-white/60" aria-label="Fechar menu">
+                <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+            </button>
             <x-sidebar-secretaria-escolar />
         </div>
 
@@ -124,7 +132,7 @@
                 <div class="flex-1 flex flex-col min-w-0 min-h-screen">
                     <div class="flex-1 flex flex-col bg-slate-50 overflow-hidden relative">
                         <!-- Navbar / Header -->
-                        <header class="bg-white/80 backdrop-blur-md border-b border-emerald-100 h-20 flex-none flex items-center justify-between px-6 lg:px-12 z-10 shadow-sm text-gray-800">
+                        <header class="no-print hidden h-20 flex-none items-center justify-between border-b border-emerald-100 bg-white/80 px-6 text-gray-800 shadow-sm backdrop-blur-md lg:flex lg:px-12 z-10">
                             <div class="flex items-center overflow-hidden">
                                <x-breadcrumbs />
                             </div>
@@ -192,7 +200,7 @@
                     </header>
 
                     <!-- Scrollable Page Content -->
-                    <main class="flex-1 overflow-y-auto overflow-x-hidden px-12 py-10 min-h-0">
+                    <main class="flex-1 overflow-y-auto overflow-x-hidden px-4 py-6 sm:px-6 lg:px-12 lg:py-10 min-h-0">
                         <div class="pb-12">
                         
                         @if (session('success'))

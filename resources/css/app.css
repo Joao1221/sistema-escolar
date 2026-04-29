@@ -1,3 +1,131 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer utilities {
+    .print-only {
+        display: none;
+    }
+
+    .print-break-avoid {
+        break-inside: avoid;
+        page-break-inside: avoid;
+    }
+
+    @media print {
+        @page {
+            size: A4 portrait;
+            margin: 12mm;
+        }
+
+        html,
+        body {
+            background: #ffffff !important;
+            color: #111827 !important;
+        }
+
+        .no-print {
+            display: none !important;
+        }
+
+        .print-only {
+            display: block !important;
+        }
+
+        .print-readable,
+        .print-readable * {
+            background: #ffffff !important;
+            box-shadow: none !important;
+            color: #111827 !important;
+            text-shadow: none !important;
+        }
+
+        .print-readable {
+            border-color: #e5e7eb !important;
+        }
+
+        .secretaria-desktop-sidebar,
+        .secretaria-mobile-header,
+        .secretaria-mobile-sidebar,
+        .secretaria-mobile-overlay,
+        .secretaria-desktop-toggle,
+        .secretaria-escolar-desktop-sidebar,
+        .secretaria-escolar-mobile-header,
+        .secretaria-escolar-mobile-sidebar,
+        .secretaria-escolar-mobile-overlay,
+        .secretaria-escolar-desktop-toggle,
+        .nutricionista-desktop-sidebar,
+        .nutricionista-mobile-header,
+        .nutricionista-mobile-sidebar,
+        .nutricionista-mobile-overlay,
+        .nutricionista-desktop-toggle {
+            display: none !important;
+        }
+
+        .secretaria-content,
+        .secretaria-escolar-content-wrapper,
+        .nutricionista-content-wrapper {
+            margin-left: 0 !important;
+        }
+
+        .print-break-avoid,
+        section,
+        article,
+        tr,
+        img {
+            break-inside: avoid;
+            page-break-inside: avoid;
+        }
+
+        thead {
+            display: table-header-group;
+        }
+
+        tfoot {
+            display: table-footer-group;
+        }
+    }
+}
+
+@layer components {
+    .portal-professor input:not([type='checkbox']):not([type='radio']):not([type='file']),
+    .portal-professor textarea {
+        background-color: #ffffff;
+        color: #1c1917;
+    }
+
+    .portal-professor input::placeholder,
+    .portal-professor textarea::placeholder {
+        color: #78716c;
+        opacity: 1;
+    }
+
+    .portal-professor select {
+        background-color: #ffffff;
+        color: #1c1917;
+    }
+
+    .portal-professor select option {
+        background-color: #ffffff;
+        color: #1c1917;
+    }
+}
+
+@media (max-width: 639px) {
+    .portal-secretaria-educacao :where(.px-8.py-6),
+    .portal-secretaria-escolar :where(.px-8.py-6),
+    .portal-nutricionista :where(.px-8.py-6),
+    .portal-psicologia :where(.px-8.py-6) {
+        padding: 1rem;
+    }
+
+    .portal-secretaria-escolar :where(.p-8),
+    .portal-secretaria-educacao :where(.p-8) {
+        padding: 1rem;
+    }
+
+    .portal-secretaria-escolar :where(.px-8.py-5) {
+        padding-left: 1rem;
+        padding-right: 1rem;
+    }
+}

@@ -22,8 +22,7 @@
             }
 
             .professor-mobile-header,
-            .professor-mobile-sidebar,
-            .professor-mobile-overlay {
+            .professor-mobile-sidebar {
                 display: none;
             }
 
@@ -76,7 +75,7 @@
             }
         </style>
     </head>
-    <body class="min-h-full text-stone-100 antialiased" x-data="{ sidebarOpen: false, sidebarCollapsed: false, toggleSidebar() { this.sidebarCollapsed = !this.sidebarCollapsed; } }" style="background: radial-gradient(circle at top, #2b1f3a 0%, #1e142d 45%, #120b1f 100%);">
+    <body class="portal-professor min-h-full overflow-x-hidden text-stone-100 antialiased" x-data="{ sidebarOpen: false, sidebarCollapsed: false, toggleSidebar() { this.sidebarCollapsed = !this.sidebarCollapsed; } }" @keydown.escape.window="sidebarOpen = false" style="background: radial-gradient(circle at top, #2b1f3a 0%, #1e142d 45%, #120b1f 100%);">
         @php
             $theme = auth()->user()?->theme ?? 'lilas';
             $pal = match ($theme) {
@@ -158,6 +157,11 @@
         <!-- Mobile Sidebar -->
         <div class="professor-mobile-sidebar fixed inset-y-0 left-0 z-50 w-80 max-w-[80vw] -translate-x-full transition-transform duration-300 ease-in-out lg:hidden"
              :class="sidebarOpen ? 'translate-x-0' : '-translate-x-full'">
+            <button type="button" @click="sidebarOpen = false" class="absolute right-3 top-3 z-10 inline-flex h-9 w-9 items-center justify-center rounded-xl bg-white/10 text-white ring-1 ring-white/20 transition hover:bg-white/20 focus:outline-none focus:ring-2 focus:ring-white/60" aria-label="Fechar menu">
+                <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+            </button>
             <x-sidebar-professor :theme="$theme" />
         </div>
 
@@ -174,19 +178,19 @@
                 </div>
 
                 <div class="flex-1 p-3 lg:p-5">
-                    <div class="h-full rounded-[2rem] border shadow-[0_25px_80px_rgba(18,12,35,0.35)]"
+                    <div class="h-full rounded-[1.5rem] border shadow-[0_25px_80px_rgba(18,12,35,0.35)] sm:rounded-[2rem]"
                          style="background: {{ $pal['cardBg'] }}; border-color: {{ $pal['cardBorder'] }}; box-shadow: {{ $pal['cardShadow'] }};">
                     <header class="px-6 py-5 lg:px-10" style="border-bottom:1px solid {{ $pal['headerBorder'] }}; background: {{ $pal['headerBg'] }};">
                         <div class="flex flex-col gap-5 lg:flex-row lg:items-end lg:justify-between">
                             <div class="min-w-0">
                                 <x-professor-breadcrumbs :items="$breadcrumbs" />
-                                <h1 class="mt-3 text-3xl font-bold tracking-tight font-outfit" style="color: {{ $pal['heading'] }};">{{ $titulo }}</h1>
+                                <h1 class="mt-3 text-2xl font-bold tracking-tight font-outfit sm:text-3xl" style="color: {{ $pal['heading'] }};">{{ $titulo }}</h1>
                                 @if ($subtitulo)
                                     <p class="mt-2 max-w-3xl text-sm lg:text-base" style="color: {{ $pal['muted'] }};">{{ $subtitulo }}</p>
                                 @endif
                             </div>
 
-                            <div class="flex items-start gap-4 self-start lg:self-auto">
+                            <div class="flex flex-wrap items-start gap-3 self-start lg:self-auto">
                                 <button type="button" @click="toggleSidebar()" class="professor-desktop-toggle inline-flex items-center gap-2 rounded-xl border px-4 py-2 text-xs font-bold uppercase tracking-widest transition"
                                         style="border-color: {{ $pal['chipBorder'] }}; background: {{ $pal['chipBg'] }}; color: {{ $pal['chipText'] }};">
                                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -217,7 +221,7 @@
                         </div>
                     </header>
 
-                    <main class="px-6 py-6 lg:px-10 lg:py-8">
+                    <main class="px-4 py-5 sm:px-6 lg:px-10 lg:py-8">
                         @if (session('success'))
                             <div class="mb-6 rounded-2xl border border-emerald-200 bg-emerald-50 px-5 py-4 text-emerald-900 shadow-sm">
                                 {{ session('success') }}

@@ -1,6 +1,11 @@
 <x-secretaria-layout>
 
-    <div class="flex justify-between items-start mb-6">
+    @include('partials.print-header', [
+        'tituloPrint' => 'Ficha cadastral do aluno',
+        'subtituloPrint' => 'Aluno: ' . $aluno->nome_completo . ' | RGM: ' . $aluno->rgm,
+    ])
+
+    <div class="no-print flex justify-between items-start mb-6">
         <div class="flex items-center space-x-4">
             <div class="bg-indigo-100 p-4 rounded-2xl text-indigo-600">
                 <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -18,6 +23,9 @@
             </div>
         </div>
         <div class="flex space-x-3">
+            <button type="button" onclick="window.print()" class="px-4 py-2 bg-gray-900 rounded-lg font-semibold text-xs text-white uppercase tracking-widest shadow-sm hover:bg-gray-800 transition">
+                Imprimir
+            </button>
             <a href="{{ route('secretaria.alunos.index') }}" class="px-4 py-2 bg-white border border-gray-300 rounded-lg font-semibold text-xs text-gray-700 uppercase tracking-widest shadow-sm hover:bg-gray-50 transition">
                 Voltar
             </a>
@@ -27,11 +35,11 @@
         </div>
     </div>
 
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 print:grid-cols-1">
         
         {{-- Coluna 1: Informações Pessoais e Contato --}}
         <div class="col-span-1 space-y-6">
-            <div class="bg-white overflow-hidden shadow-sm rounded-2xl border border-gray-100 p-6">
+            <div class="print-break-avoid print-readable bg-white overflow-hidden shadow-sm rounded-2xl border border-gray-100 p-6">
                 <h3 class="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-4 border-b pb-2">Identificação do Aluno</h3>
                 <div class="space-y-4">
                     <div>
@@ -65,7 +73,7 @@
                 </div>
             </div>
 
-            <div class="bg-white overflow-hidden shadow-sm rounded-2xl border border-gray-100 p-6">
+            <div class="print-break-avoid print-readable bg-white overflow-hidden shadow-sm rounded-2xl border border-gray-100 p-6">
                 <h3 class="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-4 border-b pb-2">Família / Responsável</h3>
                 <div class="space-y-4">
                     <div>
@@ -88,7 +96,7 @@
         <div class="col-span-1 md:col-span-2 space-y-6">
             
             {{-- Endereço --}}
-            <div class="bg-white overflow-hidden shadow-sm rounded-2xl border border-gray-100 p-6">
+            <div class="print-break-avoid print-readable bg-white overflow-hidden shadow-sm rounded-2xl border border-gray-100 p-6">
                 <h3 class="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-4 border-b pb-2">Localização</h3>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div class="md:col-span-2">
@@ -100,16 +108,16 @@
             </div>
 
             {{-- Saúde --}}
-            <div class="bg-white overflow-hidden shadow-sm rounded-2xl border border-gray-100 p-6">
+            <div class="print-break-avoid print-readable bg-white overflow-hidden shadow-sm rounded-2xl border border-gray-100 p-6">
                 <h3 class="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-4 border-b pb-2">Informações Críticas de Saúde</h3>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div class="bg-indigo-50 p-4 rounded-xl border border-indigo-100">
+                    <div class="print-readable bg-indigo-50 p-4 rounded-xl border border-indigo-100">
                         <p class="text-[10px] text-indigo-500 font-bold uppercase mb-1 underline">Alergias e Restrições</p>
                         <p class="text-xs text-indigo-900 leading-relaxed font-medium uppercase">
                             {{ $aluno->alergias ?: 'Sem registros' }} / {{ $aluno->restricoes_alimentares ?: 'Sem restrições' }}
                         </p>
                     </div>
-                    <div class="bg-slate-50 p-4 rounded-xl border border-slate-100">
+                    <div class="print-readable bg-slate-50 p-4 rounded-xl border border-slate-100">
                         <p class="text-[10px] text-slate-500 font-bold uppercase mb-1">Observações Médicas</p>
                         <p class="text-xs text-slate-800 leading-relaxed font-medium uppercase">
                             {{ $aluno->obs_saude ?: '-' }}
@@ -119,7 +127,7 @@
             </div>
 
             {{-- Área Estatística (Placeholder) --}}
-            <div class="bg-indigo-900 text-white rounded-2xl p-8 shadow-sm">
+            <div class="print-break-avoid print-readable bg-indigo-900 text-white rounded-2xl p-8 shadow-sm">
                 <h4 class="text-indigo-300 text-[10px] font-bold uppercase tracking-widest mb-4">Visão Educacional</h4>
                 <div class="flex items-center space-x-4 opacity-60">
                     <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">

@@ -1,18 +1,18 @@
 <x-secretaria-layout>
 
-    <div class="flex justify-between items-center mb-6">
+    <div class="mb-6 flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
         <div>
             <h1 class="text-2xl font-bold text-gray-800 uppercase">Consulta de Matrículas</h1>
             <p class="text-sm text-gray-500 mt-1 uppercase italic">Visão Consolidada da Rede Municipal</p>
         </div>
-        <div class="bg-indigo-50 text-indigo-700 px-4 py-2 rounded-lg text-xs font-bold uppercase border border-indigo-100 italic">
+        <div class="self-start bg-indigo-50 text-indigo-700 px-4 py-2 rounded-lg text-xs font-bold uppercase border border-indigo-100 italic md:self-auto">
             Somente Leitura
         </div>
     </div>
 
     {{-- Filtros --}}
     <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 mb-6 font-medium">
-        <form action="{{ route('secretaria.matriculas.index') }}" method="GET" class="grid grid-cols-1 md:grid-cols-4 gap-4">
+        <form action="{{ route('secretaria.matriculas.index') }}" method="GET" class="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-4">
             <div>
                 <x-input-label for="aluno_nome" :value="__('Nome do Aluno')" />
                 <x-text-input id="aluno_nome" name="aluno_nome" type="text" class="mt-1 block w-full" :value="request('aluno_nome')" placeholder="Digite o nome..." />
@@ -33,9 +33,9 @@
                     @endforeach
                 </select>
             </div>
-            <div class="flex items-end space-x-2">
+            <div class="flex flex-col gap-2 md:flex-row md:items-end">
                 <x-primary-button style="background-color: #4f46e5;">Filtrar</x-primary-button>
-                <a href="{{ route('secretaria.matriculas.index') }}" class="px-4 py-2 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300 transition text-sm font-semibold uppercase tracking-widest">Limpar</a>
+                <a href="{{ route('secretaria.matriculas.index') }}" class="inline-flex justify-center px-4 py-2 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300 transition text-sm font-semibold uppercase tracking-widest">Limpar</a>
             </div>
         </form>
     </div>
@@ -43,7 +43,7 @@
     <div class="bg-white overflow-hidden shadow-sm rounded-2xl border border-gray-100">
         <div class="p-6 text-gray-900">
             <div class="overflow-x-auto">
-                <table class="w-full text-sm text-left text-gray-500">
+                <table class="min-w-[760px] w-full text-sm text-left text-gray-500">
                     <thead class="text-xs text-gray-700 uppercase bg-gray-50 tracking-wider">
                         <tr>
                             <th class="py-3 px-6">Aluno</th>

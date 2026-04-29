@@ -7,10 +7,10 @@
                 <p class="mt-2 text-sm text-slate-500">Acompanhe as movimentacoes e, quando necessario, registre novos lancamentos diretamente neste portal.</p>
             </div>
             <div class="flex flex-wrap gap-3">
-                <a href="{{ route('nutricionista.movimentacoes.create', ['tipo' => 'entrada']) }}" class="inline-flex items-center justify-center rounded-2xl bg-[#17332a] px-5 py-3 text-sm font-bold text-white shadow-sm transition hover:bg-[#22473b]">
+                <a href="{{ route('nutricionista.movimentacoes.create', ['tipo' => 'entrada']) }}" class="inline-flex w-full items-center justify-center rounded-2xl bg-[#17332a] px-5 py-3 text-sm font-bold text-white shadow-sm transition hover:bg-[#22473b] sm:w-auto">
                     Nova entrada
                 </a>
-                <a href="{{ route('nutricionista.movimentacoes.create', ['tipo' => 'saida']) }}" class="inline-flex items-center justify-center rounded-2xl border border-amber-300 bg-amber-50 px-5 py-3 text-sm font-bold text-amber-800 transition hover:bg-amber-100">
+                <a href="{{ route('nutricionista.movimentacoes.create', ['tipo' => 'saida']) }}" class="inline-flex w-full items-center justify-center rounded-2xl border border-amber-300 bg-amber-50 px-5 py-3 text-sm font-bold text-amber-800 transition hover:bg-amber-100 sm:w-auto">
                     Nova saida
                 </a>
             </div>
@@ -44,9 +44,9 @@
                         @endforeach
                     </select>
                 </div>
-                <div class="flex items-end gap-3">
+                <div class="flex flex-col gap-3 sm:flex-row sm:items-end">
                     <button type="submit" class="w-full rounded-xl bg-[#17332a] px-4 py-2 text-sm font-semibold text-white hover:bg-[#22473b]">Filtrar</button>
-                    <a href="{{ route('nutricionista.movimentacoes.index') }}" class="rounded-xl border border-slate-300 px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50">Limpar</a>
+                    <a href="{{ route('nutricionista.movimentacoes.index') }}" class="inline-flex w-full justify-center rounded-xl border border-slate-300 px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50 sm:w-auto">Limpar</a>
                 </div>
             </form>
         </div>

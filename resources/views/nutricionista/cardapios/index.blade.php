@@ -6,7 +6,7 @@
                 <h2 class="mt-2 text-2xl font-bold text-[#17332a] font-fraunces">Cardapios da rede</h2>
                 <p class="mt-2 text-sm text-slate-500">Consulte, compare e registre cardapios por escola sem sair do portal tecnico.</p>
             </div>
-            <a href="{{ route('nutricionista.cardapios.create') }}" class="inline-flex items-center justify-center rounded-2xl bg-[#17332a] px-5 py-3 text-sm font-bold text-white shadow-sm transition hover:bg-[#22473b]">
+            <a href="{{ route('nutricionista.cardapios.create') }}" class="inline-flex w-full items-center justify-center rounded-2xl bg-[#17332a] px-5 py-3 text-sm font-bold text-white shadow-sm transition hover:bg-[#22473b] sm:w-auto">
                 Novo cardapio
             </a>
         </div>
@@ -26,9 +26,9 @@
                     <label class="text-xs font-semibold uppercase tracking-[0.2em] text-slate-500">Data</label>
                     <input type="date" name="data_cardapio" value="{{ $filtros['data_cardapio'] ?? null }}" class="mt-2 w-full rounded-xl border-slate-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500">
                 </div>
-                <div class="flex items-end gap-3">
+                <div class="flex flex-col gap-3 sm:flex-row sm:items-end">
                     <button type="submit" class="w-full rounded-xl bg-[#17332a] px-4 py-2 text-sm font-semibold text-white hover:bg-[#22473b]">Filtrar</button>
-                    <a href="{{ route('nutricionista.cardapios.index') }}" class="rounded-xl border border-slate-300 px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50">Limpar</a>
+                    <a href="{{ route('nutricionista.cardapios.index') }}" class="inline-flex w-full justify-center rounded-xl border border-slate-300 px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50 sm:w-auto">Limpar</a>
                 </div>
             </form>
         </div>
@@ -36,7 +36,7 @@
         <div class="grid gap-5 lg:grid-cols-2">
             @forelse ($cardapios as $cardapio)
                 <article class="rounded-3xl border border-slate-200 bg-white/90 p-6 shadow-sm">
-                    <div class="flex items-start justify-between gap-4">
+                    <div class="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
                         <div>
                             <p class="text-xs font-semibold uppercase tracking-[0.25em] text-emerald-700">{{ $cardapio->escola?->nome }}</p>
                             <h2 class="mt-3 text-2xl font-bold text-[#17332a] font-fraunces">{{ $cardapio->data_cardapio->format('d/m/Y') }}</h2>

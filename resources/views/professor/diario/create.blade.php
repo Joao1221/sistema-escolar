@@ -2,7 +2,7 @@
     <div class="max-w-4xl space-y-8">
         <div>
             <p class="text-sm uppercase tracking-[0.3em] text-amber-700 font-semibold">Portal do Professor</p>
-            <h2 class="text-3xl font-outfit font-bold" style="color:#f3efff;">Abrir novo diário</h2>
+            <h2 class="text-2xl font-outfit font-bold sm:text-3xl" style="color:#f3efff;">Abrir novo diário</h2>
             <p class="mt-2" style="color:rgba(239,238,255,0.78);">O diário só pode ser aberto para combinações já vinculadas ao horário do professor.</p>
         </div>
 
@@ -80,10 +80,10 @@
                 </div>
 
                 <div class="flex flex-wrap gap-3 pt-4">
-                    <a href="{{ route('professor.diario.index') }}" class="inline-flex items-center rounded-xl border border-[#d0b49a] px-4 py-3 text-sm font-semibold text-[#7b4b2a] hover:bg-[#fffaf4] transition">
+                    <a href="{{ route('professor.diario.index') }}" class="inline-flex w-full items-center justify-center rounded-xl border border-[#d0b49a] px-4 py-3 text-sm font-semibold text-[#7b4b2a] hover:bg-[#fffaf4] transition sm:w-auto">
                         Voltar
                     </a>
-                    <button type="submit" class="inline-flex items-center rounded-xl bg-[#8b4d28] px-5 py-3 text-sm font-bold uppercase tracking-widest text-white hover:bg-[#6f3c20] transition">
+                    <button type="submit" class="inline-flex w-full items-center justify-center rounded-xl bg-[#8b4d28] px-5 py-3 text-sm font-bold uppercase tracking-widest text-white hover:bg-[#6f3c20] transition sm:w-auto">
                         Criar diário
                     </button>
                 </div>

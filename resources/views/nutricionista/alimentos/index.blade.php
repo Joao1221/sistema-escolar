@@ -6,7 +6,7 @@
                 <h2 class="mt-2 text-2xl font-bold text-[#17332a] font-fraunces">Alimentos cadastrados na rede</h2>
                 <p class="mt-2 text-sm text-slate-500">Cadastre e mantenha os alimentos usados pelas escolas e pelos cardapios.</p>
             </div>
-            <a href="{{ route('nutricionista.alimentos.create') }}" class="inline-flex items-center justify-center rounded-2xl bg-[#17332a] px-5 py-3 text-sm font-bold text-white shadow-sm transition hover:bg-[#22473b]">
+            <a href="{{ route('nutricionista.alimentos.create') }}" class="inline-flex w-full items-center justify-center rounded-2xl bg-[#17332a] px-5 py-3 text-sm font-bold text-white shadow-sm transition hover:bg-[#22473b] sm:w-auto">
                 Novo alimento
             </a>
         </div>

@@ -27,12 +27,11 @@
             }
 
             .professor-diario-mobile-header,
-            .professor-diario-mobile-sidebar,
-            .professor-diario-mobile-overlay {
+            .professor-diario-mobile-sidebar {
                 display: none;
             }
 
-            @media (max-width: 479px) {
+            @media (max-width: 1023px) {
                 .professor-diario-desktop-sidebar,
                 .professor-diario-desktop-toggle {
                     display: none !important;
@@ -44,7 +43,7 @@
                 }
             }
 
-            @media (min-width: 480px) {
+            @media (min-width: 1024px) {
                 .professor-diario-mobile-header,
                 .professor-diario-mobile-sidebar,
                 .professor-diario-mobile-overlay {
@@ -53,7 +52,7 @@
             }
         </style>
     </head>
-    <body class="h-full bg-amber-950 antialiased" x-data="{ sidebarOpen: false, sidebarCollapsed: false, toggleSidebar() { this.sidebarCollapsed = !this.sidebarCollapsed; } }">
+    <body class="portal-professor portal-professor-diario h-full overflow-x-hidden bg-amber-950 antialiased" x-data="{ sidebarOpen: false, sidebarCollapsed: false, toggleSidebar() { this.sidebarCollapsed = !this.sidebarCollapsed; } }" @keydown.escape.window="sidebarOpen = false">
         <!-- Mobile overlay -->
         <div x-show="sidebarOpen" 
              x-transition:enter="transition-opacity ease-linear duration-300" 
@@ -66,7 +65,7 @@
              @click="sidebarOpen = false" 
              style="display: none;"></div>
 
-        <div class="min-h-screen flex">
+        <div class="flex min-h-screen flex-col lg:flex-row">
             <!-- Sidebar -->
             <aside class="professor-diario-desktop-sidebar flex-shrink-0 overflow-hidden transition-[width,opacity] duration-300 ease-in-out"
                    :style="sidebarCollapsed
@@ -78,10 +77,15 @@
             <!-- Mobile Sidebar -->
             <div class="professor-diario-mobile-sidebar fixed inset-y-0 left-0 z-50 w-72 max-w-[80vw] -translate-x-full transition-transform duration-300 ease-in-out"
                  :class="sidebarOpen ? 'translate-x-0' : '-translate-x-full'">
+                <button type="button" @click="sidebarOpen = false" class="absolute right-3 top-3 z-10 inline-flex h-9 w-9 items-center justify-center rounded-xl bg-white/10 text-white ring-1 ring-white/20 transition hover:bg-white/20 focus:outline-none focus:ring-2 focus:ring-white/60" aria-label="Fechar menu">
+                    <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                </button>
                 <x-sidebar-professor-diario />
             </div>
 
-            <div class="flex-1 flex flex-col min-w-0 p-4 lg:p-6 lg:ml-0">
+            <div class="flex flex-1 flex-col min-w-0 p-3 sm:p-4 lg:p-6 lg:ml-0">
                 <!-- Mobile Header -->
                 <div class="professor-diario-mobile-header flex items-center justify-between p-4 mb-4 rounded-2xl border border-white/10 bg-gradient-to-b from-amber-900 via-amber-950 to-stone-950 text-white">
                     <div class="font-outfit font-bold text-xl">Diário Eletrônico</div>
@@ -89,14 +93,14 @@
                         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
                     </button>
                 </div>
-                <div class="min-h-[calc(100vh-2rem)] rounded-[2.5rem] bg-stone-50 shadow-2xl border border-white/60 overflow-hidden">
-                    <header class="px-6 lg:px-10 py-5 bg-white/90 backdrop-blur border-b border-stone-200 flex items-center justify-between gap-4">
+                <div class="min-h-[calc(100vh-2rem)] overflow-hidden rounded-[1.5rem] border border-white/60 bg-stone-50 shadow-2xl sm:rounded-[2rem] lg:rounded-[2.5rem]">
+                    <header class="flex flex-col items-start gap-4 border-b border-stone-200 bg-white/90 px-4 py-5 backdrop-blur sm:flex-row sm:items-center sm:justify-between sm:px-6 lg:px-10">
                         <div>
                             <p class="text-[11px] uppercase tracking-[0.3em] text-amber-700 font-semibold">Modulo Operacional</p>
                             <h1 class="text-2xl font-bold font-outfit text-stone-900">Diario do Professor</h1>
                         </div>
 
-                        <div class="flex items-center gap-4">
+                        <div class="flex flex-wrap items-center gap-3 sm:gap-4">
                             <button type="button" @click="toggleSidebar()" class="professor-diario-desktop-toggle inline-flex items-center gap-2 rounded-xl border border-stone-300 bg-white px-4 py-2 text-xs font-bold uppercase tracking-widest text-stone-600 hover:bg-stone-100 transition">
                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
@@ -117,7 +121,7 @@
                         </div>
                     </header>
 
-                    <main class="p-6 lg:p-10">
+                    <main class="p-4 sm:p-6 lg:p-10">
                         @if (session('success'))
                             <div class="mb-6 rounded-2xl border border-emerald-200 bg-emerald-50 px-5 py-4 text-emerald-900">
                                 {{ session('success') }}

@@ -1,6 +1,11 @@
 <x-secretaria-escolar-layout>
 
-    <div class="flex flex-col md:flex-row md:items-start justify-between mb-8 px-4 md:px-0 gap-6">
+    @include('partials.print-header', [
+        'tituloPrint' => 'Ficha cadastral do aluno',
+        'subtituloPrint' => 'Aluno: ' . $aluno->nome_completo . ' | RGM: ' . $aluno->rgm,
+    ])
+
+    <div class="no-print flex flex-col md:flex-row md:items-start justify-between mb-8 px-4 md:px-0 gap-6">
         <div class="flex items-center space-x-4">
             <div class="bg-emerald-100 p-3 md:p-4 rounded-2xl text-emerald-600">
                 <svg class="w-8 h-8 md:w-10 md:h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -18,6 +23,9 @@
             </div>
         </div>
         <div class="flex space-x-3">
+            <button type="button" onclick="window.print()" class="px-4 py-2 bg-gray-900 rounded-lg font-semibold text-xs text-white uppercase tracking-widest shadow-sm hover:bg-gray-800 transition">
+                Imprimir
+            </button>
             <a href="{{ route('secretaria-escolar.alunos.index') }}" class="px-4 py-2 bg-white border border-gray-300 rounded-lg font-semibold text-xs text-gray-700 uppercase tracking-widest shadow-sm hover:bg-gray-50 transition">
                 Voltar
             </a>
@@ -29,11 +37,11 @@
         </div>
     </div>
 
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 px-4 md:px-0 pb-10">
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 px-4 md:px-0 pb-10 print:grid-cols-1 print:px-0 print:pb-0">
         
         {{-- Coluna 1: Informações Pessoais e Contato --}}
         <div class="col-span-1 space-y-6">
-            <div class="bg-white overflow-hidden shadow-sm rounded-2xl border border-gray-100 p-6">
+            <div class="print-break-avoid print-readable bg-white overflow-hidden shadow-sm rounded-2xl border border-gray-100 p-6">
                 <h3 class="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-4 border-b pb-2">Dados Pessoais</h3>
                 <div class="space-y-4">
                     <div>
@@ -67,7 +75,7 @@
                 </div>
             </div>
 
-            <div class="bg-white overflow-hidden shadow-sm rounded-2xl border border-gray-100 p-6">
+            <div class="print-break-avoid print-readable bg-white overflow-hidden shadow-sm rounded-2xl border border-gray-100 p-6">
                 <h3 class="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-4 border-b pb-2">Família / Responsável</h3>
                 <div class="space-y-4">
                     <div>
@@ -101,7 +109,7 @@
         <div class="col-span-1 md:col-span-2 space-y-6">
             
             {{-- Endereço --}}
-            <div class="bg-white overflow-hidden shadow-sm rounded-2xl border border-gray-100 p-6">
+            <div class="print-break-avoid print-readable bg-white overflow-hidden shadow-sm rounded-2xl border border-gray-100 p-6">
                 <h3 class="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-4 border-b pb-2">Endereço Residencial</h3>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div class="md:col-span-2">
@@ -125,28 +133,28 @@
             </div>
 
             {{-- Saúde --}}
-            <div class="bg-white overflow-hidden shadow-sm rounded-2xl border border-gray-100 p-6">
+            <div class="print-break-avoid print-readable bg-white overflow-hidden shadow-sm rounded-2xl border border-gray-100 p-6">
                 <h3 class="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-4 border-b pb-2">Ficha Médica / Saúde</h3>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div class="bg-red-50 p-3 rounded-xl border border-red-100">
+                    <div class="print-readable bg-red-50 p-3 rounded-xl border border-red-100">
                         <p class="text-[10px] text-red-500 font-bold uppercase mb-1">Alergias</p>
                         <p class="text-xs text-red-900 leading-relaxed font-medium uppercase">
                             {{ $aluno->alergias ?: 'Nenhuma alergia registrada.' }}
                         </p>
                     </div>
-                    <div class="bg-blue-50 p-3 rounded-xl border border-blue-100">
+                    <div class="print-readable bg-blue-50 p-3 rounded-xl border border-blue-100">
                         <p class="text-[10px] text-blue-500 font-bold uppercase mb-1">Medicamentos</p>
                         <p class="text-xs text-blue-900 leading-relaxed font-medium uppercase">
                             {{ $aluno->medicamentos ?: 'Nenhum medicamento de uso contínuo.' }}
                         </p>
                     </div>
-                    <div class="bg-orange-50 p-3 rounded-xl border border-orange-100">
+                    <div class="print-readable bg-orange-50 p-3 rounded-xl border border-orange-100">
                         <p class="text-[10px] text-orange-500 font-bold uppercase mb-1">Restrições Alimentares</p>
                         <p class="text-xs text-orange-900 leading-relaxed font-medium uppercase">
                             {{ $aluno->restricoes_alimentares ?: 'Sem restrições alimentares registradas.' }}
                         </p>
                     </div>
-                    <div class="bg-gray-50 p-3 rounded-xl border border-gray-100">
+                    <div class="print-readable bg-gray-50 p-3 rounded-xl border border-gray-100">
                         <p class="text-[10px] text-gray-500 font-bold uppercase mb-1">Observações Gerais</p>
                         <p class="text-xs text-gray-900 leading-relaxed font-medium uppercase">
                             {{ $aluno->obs_saude ?: '-' }}
@@ -156,7 +164,7 @@
             </div>
 
             {{-- Documentos Internos --}}
-            <div class="bg-white overflow-hidden shadow-sm rounded-2xl border border-gray-100 p-6">
+            <div class="print-break-avoid print-readable bg-white overflow-hidden shadow-sm rounded-2xl border border-gray-100 p-6">
                 <h3 class="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-4 border-b pb-2">Documentação</h3>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div>

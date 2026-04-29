@@ -1,8 +1,8 @@
 <x-secretaria-escolar-layout>
 
-    <div class="flex justify-between items-center mb-6 px-6">
+    <div class="mb-6 flex flex-col gap-4 px-0 sm:px-6 md:flex-row md:items-center md:justify-between">
         <div>
-            <h1 class="text-3xl font-bold text-gray-800 uppercase italic tracking-tight">Editar Aluno: {{ $aluno->nome_completo }}</h1>
+            <h1 class="text-2xl font-bold text-gray-800 uppercase italic tracking-tight sm:text-3xl">Editar Aluno: {{ $aluno->nome_completo }}</h1>
             <p class="text-slate-500 mt-1 uppercase decoration-emerald-200 decoration-2">RGM: {{ $aluno->rgm }} | Idade: {{ $aluno->idade }} anos</p>
         </div>
         <a href="{{ route('secretaria-escolar.alunos.index') }}" class="flex items-center space-x-2 text-sm text-slate-400 hover:text-emerald-600 font-bold uppercase transition group">
@@ -185,8 +185,8 @@
 
             </div>
 
-            <div class="flex items-center justify-end border-t pt-8 pb-10 px-6 space-x-6">
-                <a href="{{ route('secretaria-escolar.alunos.index') }}" class="inline-flex items-center px-6 py-3 bg-white border border-gray-300 rounded-xl font-bold text-xs text-gray-500 uppercase tracking-widest shadow-sm hover:bg-gray-50 transition">
+            <div class="flex flex-col gap-3 border-t px-4 pb-8 pt-6 sm:flex-row sm:items-center sm:justify-end sm:px-6">
+                <a href="{{ route('secretaria-escolar.alunos.index') }}" class="inline-flex items-center justify-center px-6 py-3 bg-white border border-gray-300 rounded-xl font-bold text-xs text-gray-500 uppercase tracking-widest shadow-sm hover:bg-gray-50 transition">
                     Cancelar
                 </a>
                 <x-primary-button class="py-3 px-8 text-sm" style="background-color: #059669;">{{ __('Atualizar Aluno') }}</x-primary-button>

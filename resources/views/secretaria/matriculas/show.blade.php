@@ -1,6 +1,12 @@
 <x-secretaria-layout>
 
-    <div class="flex justify-between items-start mb-6">
+    @include('partials.print-header', [
+        'tituloPrint' => 'Ficha de matricula',
+        'subtituloPrint' => 'Aluno: ' . $matricula->aluno->nome_completo . ' | RGM: ' . $matricula->aluno->rgm . ' | Ano letivo: ' . $matricula->ano_letivo,
+        'escolaPrint' => $matricula->escola,
+    ])
+
+    <div class="no-print flex justify-between items-start mb-6">
         <div class="flex items-center space-x-4">
             <div class="bg-indigo-100 p-4 rounded-2xl text-indigo-600">
                 <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -21,6 +27,9 @@
             </div>
         </div>
         <div class="flex space-x-3">
+            <button type="button" onclick="window.print()" class="px-4 py-2 bg-gray-900 rounded-lg font-semibold text-xs text-white uppercase tracking-widest shadow-sm hover:bg-gray-800 transition">
+                Imprimir
+            </button>
             <a href="{{ route('secretaria.matriculas.index') }}" class="px-4 py-2 bg-white border border-gray-300 rounded-lg font-semibold text-xs text-gray-700 uppercase tracking-widest shadow-sm hover:bg-gray-50 transition">
                 Voltar
             </a>
@@ -30,10 +39,10 @@
         </div>
     </div>
 
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 print:grid-cols-1">
         
         <div class="col-span-1 space-y-6">
-            <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
+            <div class="print-break-avoid print-readable bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
                 <h3 class="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-4 border-b pb-2">Vínculo Institucional</h3>
                 <div class="space-y-4">
                     <div>
@@ -55,7 +64,7 @@
                 </div>
             </div>
 
-            <div class="bg-indigo-900 text-white p-6 rounded-2xl shadow-sm">
+            <div class="print-break-avoid print-readable bg-indigo-900 text-white p-6 rounded-2xl shadow-sm">
                 <h4 class="text-indigo-300 text-[10px] font-bold uppercase tracking-widest mb-4">Dados do Aluno</h4>
                 <div class="space-y-3">
                     <p class="text-sm font-medium uppercase">{{ $matricula->aluno->nome_completo }}</p>
@@ -66,7 +75,7 @@
         </div>
 
         <div class="col-span-1 md:col-span-2 space-y-6">
-            <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+            <div class="print-break-avoid print-readable bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
                 <div class="bg-gray-50/50 px-6 py-4 border-b border-gray-100 flex justify-between items-center">
                     <h3 class="text-xs font-bold text-gray-700 uppercase tracking-widest italic">Histórico de Eventos</h3>
                 </div>
@@ -75,7 +84,7 @@
                         <div class="absolute left-4 top-0 bottom-0 w-0.5 bg-gray-100"></div>
                         <div class="space-y-8">
                             @foreach ($matricula->historico as $item)
-                            <div class="relative pl-10">
+                            <div class="print-break-avoid relative pl-10">
                                 <div class="absolute left-[13px] top-1 w-2.5 h-2.5 rounded-full border-2 bg-indigo-500 border-indigo-100"></div>
                                 <div class="flex flex-col">
                                     <div class="flex justify-between items-center mb-1">

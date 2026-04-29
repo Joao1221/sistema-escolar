@@ -13,8 +13,8 @@
     }
 @endphp
 
-<div class="rounded-[2rem] border border-slate-200 bg-white p-8 shadow-sm print:rounded-none print:border-0 print:shadow-none print:p-0">
-    <div class="flex flex-wrap items-start justify-between gap-6 border-b border-slate-200 pb-6">
+<div class="print-break-avoid rounded-[2rem] border border-slate-200 bg-white p-8 shadow-sm print:rounded-none print:border-0 print:bg-white print:p-0 print:text-black print:shadow-none">
+    <div class="print-break-avoid flex flex-wrap items-start justify-between gap-6 border-b border-slate-200 pb-6">
         <div class="flex flex-1 items-start gap-4">
             <div class="flex items-center gap-3">
                 @if (! empty($instituicao['brasao_url']))
@@ -64,7 +64,7 @@
     @if ($ehRelatorioTecnico && $quantidadeDadosChave === 4)
         <div class="mt-8 flex flex-row gap-3 print:flex-row">
             @foreach ($documento['dados_chave'] as $label => $valor)
-                <div class="min-w-0 flex-1 rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3">
+                <div class="print-break-avoid min-w-0 flex-1 rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3">
                     <p class="text-[11px] font-semibold uppercase tracking-[0.22em] text-slate-500">{{ $label }}</p>
                     <p class="mt-2 text-sm font-semibold text-slate-900">{{ $valor }}</p>
                 </div>
@@ -73,7 +73,7 @@
     @elseif ($ehRelatorioTecnico && $quantidadeDadosChave === 3)
         <div class="mt-8 grid grid-cols-3 gap-3 print:grid-cols-3">
             @foreach ($documento['dados_chave'] as $label => $valor)
-                <div class="rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3">
+                <div class="print-break-avoid rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3">
                     <p class="text-[11px] font-semibold uppercase tracking-[0.22em] text-slate-500">{{ $label }}</p>
                     <p class="mt-2 text-sm font-semibold text-slate-900">{{ $valor }}</p>
                 </div>
@@ -87,7 +87,7 @@
             'md:grid-cols-1 print:grid-cols-1' => $quantidadeDadosChave <= 1,
         ])>
             @foreach ($documento['dados_chave'] as $label => $valor)
-                <div class="rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3">
+                <div class="print-break-avoid rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3">
                     <p class="text-[11px] font-semibold uppercase tracking-[0.24em] text-slate-500">{{ $label }}</p>
                     <p class="mt-2 text-sm font-semibold text-slate-900">{{ $valor }}</p>
                 </div>
@@ -104,23 +104,23 @@
     @endif
 
     @foreach ($documento['secoes'] as $secao)
-        <section class="mt-8">
+        <section class="print-break-avoid mt-8">
             <h3 class="text-lg font-bold text-slate-900">{{ $secao['titulo'] }}</h3>
 
             @if ($secao['tipo'] === 'texto')
-                <div class="mt-3 rounded-2xl border border-slate-200 bg-slate-50 px-5 py-4 text-sm leading-7 text-slate-700 whitespace-pre-line">{{ $secao['conteudo'] }}</div>
+                <div class="print-break-avoid mt-3 rounded-2xl border border-slate-200 bg-slate-50 px-5 py-4 text-sm leading-7 text-slate-700 whitespace-pre-line">{{ $secao['conteudo'] }}</div>
             @elseif ($secao['tipo'] === 'lista')
                 <div class="mt-3 grid gap-3 md:grid-cols-2">
                     @foreach ($secao['itens'] as $item)
-                        <div class="rounded-2xl border border-slate-200 px-4 py-3">
+                        <div class="print-break-avoid rounded-2xl border border-slate-200 px-4 py-3">
                             <p class="text-[11px] font-semibold uppercase tracking-[0.24em] text-slate-500">{{ $item['label'] }}</p>
                             <p class="mt-2 text-sm text-slate-800">{{ $item['valor'] }}</p>
                         </div>
                     @endforeach
                 </div>
             @elseif ($secao['tipo'] === 'tabela')
-                <div class="mt-3 overflow-x-auto rounded-2xl border border-slate-200">
-                    <table class="min-w-full divide-y divide-slate-200 text-sm">
+                <div class="mt-3 overflow-x-auto rounded-2xl border border-slate-200 print:overflow-visible print:rounded-none">
+                    <table class="min-w-full divide-y divide-slate-200 text-sm print:text-xs">
                         <thead class="bg-slate-50 text-left text-xs font-semibold uppercase tracking-[0.2em] text-slate-500">
                             <tr>
                                 @foreach ($secao['colunas'] as $coluna)
@@ -130,13 +130,13 @@
                         </thead>
                         <tbody class="divide-y divide-slate-100">
                             @forelse ($secao['linhas'] as $linha)
-                                <tr>
+                                <tr class="print-break-avoid">
                                     @foreach ($linha as $celula)
                                         <td class="px-4 py-3 text-slate-700">{{ $celula }}</td>
                                     @endforeach
                                 </tr>
                             @empty
-                                <tr>
+                                <tr class="print-break-avoid">
                                     <td colspan="{{ count($secao['colunas']) }}" class="px-4 py-6 text-center text-slate-500">Sem registros para exibir.</td>
                                 </tr>
                             @endforelse
@@ -147,9 +147,9 @@
         </section>
     @endforeach
 
-    <div class="mt-10 grid gap-4 md:grid-cols-2">
+    <div class="print-break-avoid mt-10 grid gap-4 md:grid-cols-2">
         @unless ($ehRelatorioTecnico)
-            <div class="rounded-2xl border border-slate-200 bg-slate-50 px-5 py-4">
+            <div class="print-break-avoid rounded-2xl border border-slate-200 bg-slate-50 px-5 py-4">
                 <p class="text-xs font-semibold uppercase tracking-[0.24em] text-slate-500">Contato institucional</p>
                 <p class="mt-2 text-sm text-slate-700">{{ $instituicao['telefone'] ?: 'Telefone nao informado' }}</p>
                 <p class="mt-1 text-sm text-slate-700">{{ $instituicao['email'] ?: 'Email nao informado' }}</p>
@@ -159,7 +159,7 @@
             </div>
         @endunless
 
-        <div class="rounded-2xl border border-slate-200 bg-white px-5 py-4 {{ $ehRelatorioTecnico ? 'md:col-span-2' : '' }}">
+        <div class="print-break-avoid rounded-2xl border border-slate-200 bg-white px-5 py-4 {{ $ehRelatorioTecnico ? 'md:col-span-2' : '' }}">
             <p class="text-xs font-semibold uppercase tracking-[0.24em] text-slate-500">Assinaturas e cargos</p>
             <div class="mt-4 space-y-4">
                 @foreach ($assinaturas as $assinatura)

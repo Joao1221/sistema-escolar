@@ -6,7 +6,7 @@
                 <h1 class="mt-2 text-3xl font-bold text-[#14363a]">Demandas</h1>
             </div>
             <div class="flex gap-3">
-                <a href="{{ route('psicologia.demandas.create') }}" class="rounded-xl border border-emerald-600 bg-emerald-600 px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-emerald-700">
+                <a href="{{ route('psicologia.demandas.create') }}" class="inline-flex w-full justify-center rounded-xl border border-emerald-600 bg-emerald-600 px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-emerald-700 sm:w-auto">
                     Nova demanda
                 </a>
             </div>
@@ -42,7 +42,7 @@
             </form>
 
             <div class="overflow-x-auto">
-                <table class="w-full">
+                <table class="min-w-[760px] w-full">
                     <thead>
                         <tr class="border-b border-slate-100 text-left">
                             <th class="pb-3 text-xs font-semibold uppercase tracking-wider text-slate-500">Prioridade</th>

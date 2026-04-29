@@ -1,8 +1,8 @@
 <x-psicologia-layout :titulo="$tituloPagina" :subtitulo="$subtituloPagina" :breadcrumbs="$breadcrumbs">
-    <div class="mx-auto max-w-6xl rounded-[1.75rem] border border-slate-200 bg-white p-8 shadow-sm">
+    <div class="mx-auto max-w-6xl rounded-[1.75rem] border border-slate-200 bg-white p-4 shadow-sm sm:p-6 lg:p-8">
             <div class="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
                 <div>
-                    <h1 class="text-3xl font-bold text-[#14363a]">Novo atendimento sigiloso</h1>
+                    <h1 class="text-2xl font-bold text-[#14363a] sm:text-3xl">Novo atendimento sigiloso</h1>
                     <p class="mt-2 text-sm text-slate-500">Cadastre um atendimento para aluno, professor, funcionario, responsavel ou publico coletivo com nivel de sigilo reforcado.</p>
                 </div>
                 <a href="{{ route('psicologia.dashboard') }}" class="text-sm font-semibold text-cyan-700 hover:text-cyan-800">Voltar ao painel</a>

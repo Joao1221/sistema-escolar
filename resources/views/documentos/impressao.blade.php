@@ -6,13 +6,18 @@
         <title>{{ $documento['titulo'] }}</title>
         @vite(['resources/css/app.css'])
         <style>
-            @if (! empty($orientacaoPagina ?? null))
-                @page {
-                    size: A4 {{ $orientacaoPagina }};
-                }
-            @endif
+            @page {
+                size: A4 {{ $orientacaoPagina ?? 'portrait' }};
+                margin: 12mm;
+            }
 
             @media print {
+                body {
+                    background: #ffffff !important;
+                    color: #111827 !important;
+                    padding: 0 !important;
+                }
+
                 .print\:border-0,
                 .print\:border-0 * {
                     border: none !important;
@@ -27,7 +32,7 @@
             }
         </style>
     </head>
-    <body class="bg-white p-8 text-slate-900">
+    <body class="bg-white p-8 text-slate-900 print:bg-white print:p-0 print:text-black">
         @include('documentos.partials.conteudo', ['documento' => $documento])
 
         <script>

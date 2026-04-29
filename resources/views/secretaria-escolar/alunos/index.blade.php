@@ -1,13 +1,13 @@
 <x-secretaria-escolar-layout>
 
-    <div class="flex justify-between items-center mb-6 px-6">
+    <div class="mb-6 flex flex-col gap-4 px-0 sm:px-6 md:flex-row md:items-center md:justify-between">
         <div>
             <h1 class="text-2xl font-bold text-gray-800">Gestão de Alunos</h1>
             <p class="text-sm text-gray-500 mt-1 uppercase">Listagem completa e busca de estudantes.</p>
         </div>
         @can('criar aluno')
         <a href="{{ route('secretaria-escolar.alunos.create') }}" 
-           class="inline-flex items-center px-4 py-2 bg-emerald-600 rounded-lg font-semibold text-xs text-white uppercase tracking-widest hover:bg-emerald-700 transition" 
+           class="inline-flex w-full items-center justify-center px-4 py-2 bg-emerald-600 rounded-lg font-semibold text-xs text-white uppercase tracking-widest hover:bg-emerald-700 transition sm:w-auto" 
            style="background-color: #059669;">
             + Novo Aluno
         </a>
@@ -16,8 +16,8 @@
 
     {{-- Filtros --}}
     <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 mb-6">
-        <form action="{{ route('secretaria-escolar.alunos.index') }}" method="GET" class="flex items-end gap-4">
-            <div style="width: 200px;">
+        <form action="{{ route('secretaria-escolar.alunos.index') }}" method="GET" class="grid gap-4 md:grid-cols-2 xl:grid-cols-[200px_1fr_200px_180px_auto] xl:items-end">
+            <div>
                 <label for="turma_id" class="block text-xs font-medium text-gray-700 uppercase tracking-wider mb-1">Turma</label>
                 <select id="turma_id" name="turma_id" class="w-full border-gray-300 focus:border-emerald-500 focus:ring-emerald-500 rounded-md shadow-sm text-sm py-2 px-3">
                     <option value="">Todas</option>
@@ -28,15 +28,15 @@
                     @endforeach
                 </select>
             </div>
-            <div style="width: 340px;">
+            <div>
                 <label for="nome" class="block text-xs font-medium text-gray-700 uppercase tracking-wider mb-1">Nome do Aluno</label>
                 <input type="text" id="nome" name="nome" value="{{ request('nome') }}" placeholder="Digite o nome..." class="w-full border-gray-300 rounded-md shadow-sm text-sm py-2 px-3 focus:ring-emerald-500 focus:border-emerald-500">
             </div>
-            <div style="width: 200px;">
+            <div>
                 <label for="rgm" class="block text-xs font-medium text-gray-700 uppercase tracking-wider mb-1">Matrícula (RGM)</label>
                 <input type="text" id="rgm" name="rgm" value="{{ request('rgm') }}" placeholder="Ex: 20260001" class="w-full border-gray-300 rounded-md shadow-sm text-sm py-2 px-3 focus:ring-emerald-500 focus:border-emerald-500">
             </div>
-            <div style="width: 180px;">
+            <div>
                 <label for="status" class="block text-xs font-medium text-gray-700 uppercase tracking-wider mb-1">Status</label>
                 <select id="status" name="status" class="w-full border-gray-300 focus:border-emerald-500 focus:ring-emerald-500 rounded-md shadow-sm text-sm py-2 px-3">
                     <option value="">Todos</option>
@@ -44,11 +44,11 @@
                     <option value="0" {{ request('status') === '0' ? 'selected' : '' }}>Inativo</option>
                 </select>
             </div>
-            <div class="flex gap-2" style="width: 240px;">
-                <button type="submit" class="px-4 py-2 bg-emerald-600 text-white rounded-md hover:bg-emerald-700 transition text-xs font-semibold uppercase tracking-widest whitespace-nowrap">
+            <div class="flex flex-col gap-2 sm:flex-row xl:justify-end">
+                <button type="submit" class="w-full px-4 py-2 bg-emerald-600 text-white rounded-md hover:bg-emerald-700 transition text-xs font-semibold uppercase tracking-widest whitespace-nowrap sm:w-auto">
                     Filtrar
                 </button>
-                <a href="{{ route('secretaria-escolar.alunos.index') }}" class="px-4 py-2 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300 transition text-xs font-semibold uppercase tracking-widest whitespace-nowrap">
+                <a href="{{ route('secretaria-escolar.alunos.index') }}" class="inline-flex w-full justify-center px-4 py-2 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300 transition text-xs font-semibold uppercase tracking-widest whitespace-nowrap sm:w-auto">
                     Limpar
                 </a>
             </div>

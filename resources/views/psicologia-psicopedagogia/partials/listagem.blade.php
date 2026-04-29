@@ -7,7 +7,7 @@
 
 <div class="space-y-6">
     <div class="rounded-[1.75rem] border border-slate-200 bg-white p-6 shadow-sm">
-        <form id="filtros-atendimentos" method="GET" action="{{ $rota }}" class="grid gap-4 {{ $mostrarFiltroProfissional ? 'md:grid-cols-6' : 'md:grid-cols-5' }}">
+        <form id="filtros-atendimentos" method="GET" action="{{ $rota }}" class="grid gap-4 md:grid-cols-2 {{ $mostrarFiltroProfissional ? 'xl:grid-cols-6' : 'xl:grid-cols-5' }}">
             <div>
                 <label class="text-xs font-semibold uppercase tracking-widest text-slate-500">Escola</label>
                 <select name="escola_id" class="mt-2 w-full rounded-xl border-slate-300 shadow-sm">
@@ -56,9 +56,9 @@
                     </select>
                 </div>
             @endif
-            <div class="flex items-end gap-3">
+            <div class="flex flex-col gap-3 sm:flex-row sm:items-end">
                 <button type="submit" class="w-full rounded-xl border border-black bg-black px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-slate-900">Filtrar</button>
-                <a href="{{ $rota }}" class="rounded-xl border border-black bg-black px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-slate-900">Limpar</a>
+                <a href="{{ $rota }}" class="inline-flex w-full justify-center rounded-xl border border-black bg-black px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-slate-900 sm:w-auto">Limpar</a>
             </div>
         </form>
     </div>

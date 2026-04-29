@@ -3,12 +3,12 @@
         <section class="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
             <div>
                 <p class="text-sm uppercase tracking-[0.3em] text-amber-700 font-semibold">Portal do Professor</p>
-                <h2 class="text-3xl font-outfit font-bold" style="color:#f3efff;">Meus diários ativos</h2>
+                <h2 class="text-2xl font-outfit font-bold sm:text-3xl" style="color:#f3efff;">Meus diários ativos</h2>
                 <p class="mt-2" style="color:rgba(239,238,255,0.78);">Acesse os diários da sua rotina, registre aula, frequência, planejamentos, observações, ocorrências e pendências.</p>
             </div>
 
             @can('criar diarios')
-                <a href="{{ route('professor.diario.create') }}" class="inline-flex items-center justify-center rounded-2xl bg-[#8b4d28] px-5 py-3 text-sm font-bold uppercase tracking-widest text-white shadow-lg shadow-amber-200 hover:bg-[#6f3c20] transition">
+                <a href="{{ route('professor.diario.create') }}" class="inline-flex w-full items-center justify-center rounded-2xl bg-[#8b4d28] px-5 py-3 text-sm font-bold uppercase tracking-widest text-white shadow-lg shadow-amber-200 hover:bg-[#6f3c20] transition sm:w-auto">
                     Abrir novo diário
                 </a>
             @endcan
@@ -30,7 +30,7 @@
         </section>
 
         <section class="rounded-[2rem] bg-white border border-[#e2d3bf] shadow-sm overflow-hidden">
-            <div class="px-6 py-5 border-b border-[#ead9c3]">
+            <div class="border-b border-[#ead9c3] px-4 py-5 sm:px-6">
                 <h3 class="text-xl font-outfit font-semibold text-[#24120d]">Diários cadastrados</h3>
             </div>
 

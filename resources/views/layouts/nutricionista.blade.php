@@ -22,8 +22,7 @@
             }
 
             .nutricionista-mobile-header,
-            .nutricionista-mobile-sidebar,
-            .nutricionista-mobile-overlay {
+            .nutricionista-mobile-sidebar {
                 display: none;
             }
 
@@ -54,7 +53,7 @@
                 margin-left: 0;
             }
 
-            @media (max-width: 479px) {
+            @media (max-width: 1023px) {
                 .nutricionista-desktop-sidebar,
                 .nutricionista-desktop-toggle {
                     display: none !important;
@@ -70,7 +69,7 @@
                 }
             }
 
-            @media (min-width: 480px) {
+            @media (min-width: 1024px) {
                 .nutricionista-mobile-header,
                 .nutricionista-mobile-sidebar,
                 .nutricionista-mobile-overlay {
@@ -79,7 +78,7 @@
             }
         </style>
     </head>
-    <body class="min-h-screen bg-[radial-gradient(circle_at_top,_#fff5dd_0%,_#f4efe8_40%,_#e7f1ec_100%)] text-slate-900 antialiased" x-data="{ sidebarOpen: false, sidebarCollapsed: false, toggleSidebar() { this.sidebarCollapsed = !this.sidebarCollapsed; } }">
+    <body class="portal-nutricionista min-h-screen overflow-x-hidden bg-[radial-gradient(circle_at_top,_#fff5dd_0%,_#f4efe8_40%,_#e7f1ec_100%)] text-slate-900 antialiased" x-data="{ sidebarOpen: false, sidebarCollapsed: false, toggleSidebar() { this.sidebarCollapsed = !this.sidebarCollapsed; } }" @keydown.escape.window="sidebarOpen = false">
         <!-- Mobile overlay -->
         <div x-show="sidebarOpen" 
              x-transition:enter="transition-opacity ease-linear duration-300" 
@@ -101,13 +100,18 @@
         <!-- Mobile Sidebar -->
         <div class="nutricionista-mobile-sidebar fixed inset-y-0 left-0 z-50 w-64 -translate-x-full transition-transform duration-300 ease-in-out"
              :class="sidebarOpen ? 'translate-x-0' : '-translate-x-full'">
+            <button type="button" @click="sidebarOpen = false" class="absolute right-3 top-3 z-10 inline-flex h-9 w-9 items-center justify-center rounded-xl bg-white/10 text-white ring-1 ring-white/20 transition hover:bg-white/20 focus:outline-none focus:ring-2 focus:ring-white/60" aria-label="Fechar menu">
+                <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+            </button>
             <x-sidebar-nutricionista />
         </div>
 
         <!-- Conteúdo principal com margem para o sidebar -->
         <div class="nutricionista-content-wrapper"
              :class="sidebarCollapsed ? 'sidebar-collapsed' : ''">
-            <div class="flex min-h-screen">
+            <div class="flex min-h-screen flex-col">
                 <!-- Mobile Header -->
                 <div class="nutricionista-mobile-header flex items-center justify-between p-4 border-b border-white/40 bg-[#f4efe8] w-full">
                     <div class="font-fraunces font-bold text-xl text-[#17332a]">Portal da Nutricionista</div>
@@ -118,17 +122,17 @@
 
                 <div class="flex-1 p-4 lg:p-5">
                     <div class="h-full rounded-[2rem] border border-white/60 bg-white/85 shadow-[0_25px_80px_rgba(29,53,40,0.18)] backdrop-blur lg:flex lg:flex-col">
-                        <header class="border-b border-emerald-100 bg-[linear-gradient(135deg,#fffef9_0%,#f5f4eb_48%,#edf8f2_100%)] px-5 py-5 lg:px-10 shrink-0">
+                        <header class="no-print border-b border-emerald-100 bg-[linear-gradient(135deg,#fffef9_0%,#f5f4eb_48%,#edf8f2_100%)] px-5 py-5 lg:px-10 shrink-0">
                         <div class="flex flex-col gap-5 lg:flex-row lg:items-end lg:justify-between">
                             <div class="min-w-0">
                                 <x-nutricionista-breadcrumbs :items="$breadcrumbs" />
-                                <h1 class="mt-3 text-3xl font-bold tracking-tight text-[#17332a] font-fraunces">{{ $titulo }}</h1>
+                                <h1 class="mt-3 text-2xl font-bold tracking-tight text-[#17332a] font-fraunces sm:text-3xl">{{ $titulo }}</h1>
                                 @if ($subtitulo)
                                     <p class="mt-2 max-w-3xl text-sm text-[#496357] lg:text-base">{{ $subtitulo }}</p>
                                 @endif
                             </div>
 
-                            <div class="flex items-center gap-3 self-start lg:self-auto">
+                            <div class="flex flex-wrap items-center gap-3 self-start lg:self-auto">
                                 <button type="button" @click="toggleSidebar()" class="nutricionista-desktop-toggle inline-flex items-center gap-2 rounded-xl border border-[#cfd9cf] bg-white/80 px-4 py-2 text-xs font-bold uppercase tracking-widest text-[#3d5b4e] transition hover:bg-white">
                                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
@@ -154,7 +158,7 @@
                         </div>
                     </header>
 
-                    <main class="px-6 py-6 flex-1 lg:min-h-0 lg:overflow-y-auto lg:px-10 lg:py-8">
+                    <main class="flex-1 px-4 py-5 sm:px-6 lg:min-h-0 lg:overflow-y-auto lg:px-10 lg:py-8">
                         @if (session('success'))
                             <div class="mb-6 rounded-2xl border border-emerald-200 bg-emerald-50 px-5 py-4 text-emerald-900 shadow-sm">
                                 {{ session('success') }}

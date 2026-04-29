@@ -27,7 +27,7 @@
                     <label class="text-xs font-semibold uppercase tracking-[0.2em] text-slate-500">Descricao</label>
                     <input type="text" name="descricao" value="{{ old('descricao', $categoriaEmEdicao?->descricao) }}" class="mt-2 w-full rounded-xl border-slate-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500">
                 </div>
-                <div class="flex items-end gap-3">
+                <div class="flex flex-col gap-3 sm:flex-row sm:items-end">
                     <label class="inline-flex items-center gap-2 text-sm text-slate-600">
                         <input type="checkbox" name="ativo" value="1" @checked(old('ativo', $categoriaEmEdicao?->ativo ?? true)) class="rounded border-slate-300 text-emerald-600 shadow-sm focus:ring-emerald-500">
                         Ativa
@@ -42,7 +42,7 @@
         <div class="grid gap-5 md:grid-cols-2 xl:grid-cols-3">
             @forelse ($categorias as $categoria)
                 <article class="rounded-3xl border border-slate-200 bg-white/90 p-6 shadow-sm">
-                    <div class="flex items-start justify-between gap-4">
+                    <div class="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
                         <div>
                             <p class="text-xs font-semibold uppercase tracking-[0.25em] text-emerald-700">{{ $categoria->ativo ? 'Ativa' : 'Inativa' }}</p>
                             <h2 class="mt-3 text-2xl font-bold text-[#17332a] font-fraunces">{{ $categoria->nome }}</h2>

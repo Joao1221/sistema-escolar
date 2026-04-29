@@ -53,7 +53,7 @@
                     <label class="text-xs font-semibold uppercase tracking-[0.2em] text-slate-500">Observacoes</label>
                     <input type="text" name="observacoes" value="{{ old('observacoes', $fornecedorEmEdicao?->observacoes) }}" class="mt-2 w-full rounded-xl border-slate-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500">
                 </div>
-                <div class="flex items-end justify-between gap-3">
+                <div class="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
                     <label class="inline-flex items-center gap-2 text-sm text-slate-600">
                         <input type="checkbox" name="ativo" value="1" @checked(old('ativo', $fornecedorEmEdicao?->ativo ?? true)) class="rounded border-slate-300 text-emerald-600 shadow-sm focus:ring-emerald-500">
                         Ativo
@@ -68,13 +68,13 @@
         <div class="grid gap-5 xl:grid-cols-2">
             @forelse ($fornecedores as $fornecedor)
                 <article class="rounded-3xl border border-slate-200 bg-white/90 p-6 shadow-sm">
-                    <div class="flex items-start justify-between gap-4">
+                    <div class="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
                         <div>
                             <p class="text-xs font-semibold uppercase tracking-[0.25em] text-emerald-700">{{ $fornecedor->ativo ? 'Ativo' : 'Inativo' }}</p>
                             <h2 class="mt-3 text-2xl font-bold text-[#17332a] font-fraunces">{{ $fornecedor->nome }}</h2>
                             <p class="mt-2 text-sm text-slate-500">{{ $fornecedor->cidade ?: 'Cidade nao informada' }}{{ $fornecedor->uf ? ' - '.$fornecedor->uf : '' }}</p>
                         </div>
-                        <div class="text-right">
+                        <div class="text-left sm:text-right">
                             <span class="rounded-full bg-slate-100 px-3 py-1 text-xs font-semibold text-slate-600">{{ $fornecedor->movimentacoes_count }} mov.</span>
                             <div class="mt-3">
                                 <a href="{{ route('nutricionista.fornecedores.index', ['editar' => $fornecedor->id]) }}" class="text-sm font-semibold text-emerald-700 hover:text-emerald-800">Editar</a>

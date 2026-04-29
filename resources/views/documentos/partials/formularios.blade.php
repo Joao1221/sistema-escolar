@@ -26,11 +26,14 @@
                 @csrf
 
                 @foreach ($documento['campos'] as $campo)
+                    @php
+                        $campoId = 'documento-' . $documento['tipo'] . '-' . $campo['nome'];
+                    @endphp
                     <div>
-                        <label class="text-xs font-semibold uppercase tracking-widest text-slate-500">{{ $campo['label'] }}</label>
+                        <label for="{{ $campoId }}" class="text-xs font-semibold uppercase tracking-widest text-slate-500">{{ $campo['label'] }}</label>
 
                         @if ($campo['tipo'] === 'select')
-                            <select name="{{ $campo['nome'] }}" class="mt-2 w-full rounded-2xl border-slate-300 text-sm shadow-sm">
+                            <select id="{{ $campoId }}" name="{{ $campo['nome'] }}" class="mt-2 w-full rounded-2xl border-slate-300 text-sm shadow-sm">
                                 <option value="">Selecione</option>
                                 @foreach ($mapaOpcoes[$campo['nome']] as $opcao)
                                     @php
@@ -49,9 +52,9 @@
                                 @endforeach
                             </select>
                         @elseif ($campo['tipo'] === 'textarea')
-                            <textarea name="{{ $campo['nome'] }}" rows="5" class="mt-2 w-full rounded-2xl border-slate-300 text-sm shadow-sm">{{ old($campo['nome']) }}</textarea>
+                            <textarea id="{{ $campoId }}" name="{{ $campo['nome'] }}" rows="5" class="mt-2 w-full rounded-2xl border-slate-300 text-sm shadow-sm">{{ old($campo['nome']) }}</textarea>
                         @else
-                            <input type="text" name="{{ $campo['nome'] }}" value="{{ old($campo['nome']) }}" class="mt-2 w-full rounded-2xl border-slate-300 text-sm shadow-sm">
+                            <input id="{{ $campoId }}" type="text" name="{{ $campo['nome'] }}" value="{{ old($campo['nome']) }}" class="mt-2 w-full rounded-2xl border-slate-300 text-sm shadow-sm">
                         @endif
 
                         @error($campo['nome'])

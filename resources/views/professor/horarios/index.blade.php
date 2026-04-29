@@ -2,9 +2,9 @@
     <div class="grid gap-6 xl:grid-cols-2">
         @forelse ($horariosAgrupados as $grupo)
             <section class="rounded-[2rem] border border-[#e2d3bf] bg-white p-6 shadow-sm">
-                <div class="flex items-center justify-between">
+                <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
                     <h2 class="text-2xl font-outfit font-bold text-[#24120d]">{{ $grupo['rotulo'] }}</h2>
-                    <span class="rounded-full bg-[#f8efe1] px-4 py-2 text-xs font-bold uppercase tracking-[0.24em] text-[#8b6f5a]">
+                    <span class="self-start rounded-full bg-[#f8efe1] px-4 py-2 text-xs font-bold uppercase tracking-[0.24em] text-[#8b6f5a] sm:self-auto">
                         {{ $grupo['itens']->count() }} aula(s)
                     </span>
                 </div>
@@ -17,7 +17,7 @@
                                     <p class="text-lg font-semibold text-[#2b1710]">{{ $horario->turma->nome }} • {{ $horario->disciplina->nome }}</p>
                                     <p class="mt-1 text-sm text-[#6f5648]">{{ $horario->escola->nome }}</p>
                                 </div>
-                                <div class="rounded-xl bg-white px-4 py-3 text-sm font-semibold text-[#5b4033] shadow-sm">
+                                <div class="rounded-xl bg-white px-4 py-3 text-sm font-semibold text-[#5b4033] shadow-sm lg:text-right">
                                     {{ \Carbon\Carbon::parse($horario->horario_inicial)->format('H:i') }} às {{ \Carbon\Carbon::parse($horario->horario_final)->format('H:i') }}
                                 </div>
                             </div>

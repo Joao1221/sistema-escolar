@@ -19,8 +19,7 @@
             }
 
             .secretaria-mobile-header,
-            .secretaria-mobile-sidebar,
-            .secretaria-mobile-overlay {
+            .secretaria-mobile-sidebar {
                 display: none;
             }
 
@@ -73,7 +72,7 @@
             }
         </style>
     </head>
-    <body class="font-sans antialiased bg-gray-50 overflow-x-hidden" x-data="{ sidebarOpen: false, sidebarCollapsed: false, toggleSidebar() { this.sidebarCollapsed = !this.sidebarCollapsed; } }" x-init="sidebarOpen = false; sidebarCollapsed = false">
+    <body class="portal-secretaria-educacao font-sans antialiased bg-gray-50 overflow-x-hidden" x-data="{ sidebarOpen: false, sidebarCollapsed: false, toggleSidebar() { this.sidebarCollapsed = !this.sidebarCollapsed; } }" x-init="sidebarOpen = false; sidebarCollapsed = false" @keydown.escape.window="sidebarOpen = false">
         <!-- Mobile overlay -->
         <div x-show="sidebarOpen" 
              x-transition:enter="transition-opacity ease-linear duration-300" 
@@ -97,6 +96,11 @@
         <!-- Mobile Sidebar -->
         <div class="secretaria-mobile-sidebar fixed inset-y-0 left-0 z-50 w-64 -translate-x-full transition-transform duration-300 ease-in-out lg:hidden"
              :class="sidebarOpen ? 'translate-x-0' : '-translate-x-full'">
+            <button type="button" @click="sidebarOpen = false" class="absolute right-3 top-3 z-10 inline-flex h-9 w-9 items-center justify-center rounded-xl bg-white/10 text-white ring-1 ring-white/20 transition hover:bg-white/20 focus:outline-none focus:ring-2 focus:ring-white/60" aria-label="Fechar menu">
+                <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+            </button>
             @include('components.sidebar-secretaria')
         </div>
 
@@ -113,7 +117,7 @@
                 </div>
 
                 <!-- Top Navigation (Desktop) -->
-                <nav class="bg-white border-b border-gray-100 flex items-center justify-between h-16 w-full" style="padding-left: 32px; padding-right: 48px;">
+                <nav class="no-print hidden h-16 w-full items-center justify-between border-b border-gray-100 bg-white px-4 sm:px-6 lg:flex lg:px-8 xl:px-12">
                     <div class="flex items-center min-w-0 flex-1 mr-4">
                         <span class="text-gray-500 font-medium mr-4 flex-shrink-0">Portal da Secretaria</span>
                         <div class="truncate">
@@ -150,15 +154,15 @@
 
                 <!-- Header -->
                 @isset($header)
-                    <header class="bg-white shadow">
-                        <div class="py-6" style="padding-left: 32px; padding-right: 32px;">
+                    <header class="no-print bg-white shadow">
+                        <div class="px-4 py-6 sm:px-6 lg:px-8">
                             {{ $header }}
                         </div>
                     </header>
                 @endisset
 
                 <!-- Main Content -->
-                <main class="flex-grow py-12" style="padding-left: 32px; padding-right: 32px;">
+                <main class="flex-grow px-4 py-6 sm:px-6 lg:px-8 lg:py-12">
                     @if (session('success'))
                         <div class="mb-6">
                             <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative" role="alert">
