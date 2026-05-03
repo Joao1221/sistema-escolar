@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Tempo de geração: 20/03/2026 às 17:31
--- Versão do servidor: 10.4.28-MariaDB
--- Versão do PHP: 8.2.4
+-- Tempo de geração: 03/05/2026 às 23:41
+-- Versão do servidor: 10.4.32-MariaDB
+-- Versão do PHP: 8.2.12
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -85,13 +85,13 @@ CREATE TABLE `alunos` (
   `nome_completo` varchar(255) NOT NULL,
   `data_nascimento` date NOT NULL,
   `sexo` enum('M','F','O') NOT NULL DEFAULT 'O',
-  `cpf` varchar(14) DEFAULT NULL,
+  `cpf` varchar(500) DEFAULT NULL,
   `nis` varchar(15) DEFAULT NULL,
   `nome_mae` varchar(255) NOT NULL,
   `nome_pai` varchar(255) DEFAULT NULL,
   `responsavel_nome` varchar(255) NOT NULL,
-  `responsavel_cpf` varchar(14) NOT NULL,
-  `responsavel_telefone` varchar(15) NOT NULL,
+  `responsavel_cpf` varchar(500) DEFAULT NULL,
+  `responsavel_telefone` varchar(500) DEFAULT NULL,
   `cep` varchar(9) NOT NULL,
   `logradouro` varchar(255) NOT NULL,
   `numero` varchar(10) NOT NULL,
@@ -117,7 +117,98 @@ CREATE TABLE `alunos` (
 
 INSERT INTO `alunos` (`id`, `escola_id`, `rgm`, `nome_completo`, `data_nascimento`, `sexo`, `cpf`, `nis`, `nome_mae`, `nome_pai`, `responsavel_nome`, `responsavel_cpf`, `responsavel_telefone`, `cep`, `logradouro`, `numero`, `complemento`, `bairro`, `cidade`, `uf`, `certidao_nascimento`, `rg_numero`, `rg_orgao`, `alergias`, `medicamentos`, `restricoes_alimentares`, `obs_saude`, `ativo`, `created_at`, `updated_at`) VALUES
 (3, 5, '20260001', 'João Rezende', '1974-08-11', 'M', '712.775.605-87', '4588723123', 'mae', 'pai', 'mae', '22222222222', '79 77777-7777', '49040-700', 'Rua Quirino', '1100', 'apto 002', 'Inácio Barbosa', 'Aracaju', 'SE', '25632541254521452125452214', '256.562-85', 'SSP/se', 'nenhuma', 'não', 'não', 'Saúde perfeita', 1, '2026-03-18 01:51:28', '2026-03-18 01:51:28'),
-(4, 5, '20260002', 'antonio carlos gonzaga', '2015-06-11', 'M', '66666666666', '24500125420', 'ana júlia', 'josé simeão', 'ana júlia', '44444444444', '(79) 99999-9999', '49700-000', 'Rua Nova', '451', 'Casa', 'Centro', 'Capela', 'SE', '65412398785002450022014005', '632.001-45', 'ssp/se', 'Não possui', 'Não faz uso', 'Não possui', 'Saúde plena', 1, '2026-03-20 00:14:25', '2026-03-20 00:14:25');
+(4, 5, '20260002', 'antonio carlos gonzaga', '2015-06-11', 'M', '66666666666', '24500125420', 'ana júlia', 'josé simeão', 'ana júlia', '44444444444', '(79) 99999-9999', '49700-000', 'Rua Nova', '451', 'Casa', 'Centro', 'Capela', 'SE', '65412398785002450022014005', '632.001-45', 'ssp/se', 'Não possui', 'Não faz uso', 'Não possui', 'Saúde plena', 1, '2026-03-20 00:14:25', '2026-03-20 00:14:25'),
+(5, 6, '20260003', 'Eduardo silva santos gonzaga', '2015-05-01', 'M', '25663285200', NULL, 'CLARICE DOS SANTOS ANDRADE', 'antonio silveira santos', 'clarice dos santos andrade', '44444444444', '79999999999', '49700-000', 'Rua Inacio Silva', '100', 'Casa', 'Centro', 'Capela', 'SE', '65412398785002450022014005806004', '756.098', 'ssp/se', NULL, NULL, NULL, NULL, 1, '2026-04-28 15:57:37', '2026-04-28 20:12:37'),
+(6, 6, '20260004', 'Wilma sondre sandes', '2013-02-14', 'F', '32165498790', '96325812322', 'monica nascimento sandes', 'andré sondré sandes', 'monica nascimento', '22222222222', '(79) 96666-6666', '49040-700', 'Rua Quirino', '1100', 'apto 002', 'Inácio Barbosa', 'Aracaju', 'SE', '2563254126325401452125452214', '963123', 'SSP/se', 'rinite alérgica', 'paracetamol', 'camarão, mariscos', 'possui rinite, meliolite aguda', 1, '2026-04-28 16:27:04', '2026-04-28 16:27:04'),
+(7, 6, '20260005', 'samile santana dos santos', '2010-08-25', 'M', '999.456.987-25', '12345678910', 'maria das flores silva', 'antoni silva santos', 'maria das flores silva', '089.986.456-76', '(79) 0000-00000', '49040-700', 'Rua Quirino', '1100', 'apto 002', 'Inácio Barbosa', 'Aracaju', 'SE', '965.365-000.014-254254.5224-22', '963123', 'SSP', NULL, NULL, NULL, NULL, 1, '2026-04-28 19:08:34', '2026-04-28 19:08:34'),
+(8, 6, '2026/0031', 'GUSTAVO SOUZA MENEZES', '2012-02-07', 'M', '12137007525', '', 'ELAINE SANTOS SOUZA', 'LUCENIO SANTOS MENEZES', '', '', '(79) 99967-2972', '', '', '', NULL, '', '', '', NULL, '', '', NULL, NULL, NULL, NULL, 1, '2026-04-30 23:02:06', '2026-04-30 23:02:06'),
+(9, 6, '2026/0032', 'JOSE CELIO SANTOS JUNIOR', '2011-04-22', 'M', '12160147524', '', 'SANDRA DE JESUS SANTOS', 'JOSE CELIO SANTOS', 'SANDRA DE JESUS SANTOS', '', '', '', '', '', NULL, '', '', '', NULL, '', '', NULL, NULL, NULL, NULL, 1, '2026-04-30 23:03:02', '2026-04-30 23:03:02'),
+(10, 6, '2026/0033', 'JULIA VITORIA FARIAS DE MELO', '2010-10-02', 'F', '11831846543', '', 'JULIANA DE MELO SANTOS', 'JULINALDO FARIAS DOS SANTOS', 'JULIANA DE MELO SANTOS', '', '', '', '', '', NULL, '', '', '', NULL, '', '', NULL, NULL, NULL, NULL, 1, '2026-04-30 23:03:02', '2026-04-30 23:03:02'),
+(11, 6, '2026/0036', 'MYCAEL SOARES LINS DOS SANTOS', '2012-06-16', 'M', '11493464507', '', 'TAMIRES MARIA DA SILVA LINS', 'MAURICIO DOS SANTOS', 'TAMIRES MARIA DA SILVA LINS', '', '', '', '', '', NULL, '', '', '', NULL, '', '', NULL, NULL, NULL, NULL, 1, '2026-04-30 23:03:03', '2026-04-30 23:03:03'),
+(12, 6, '2026/0037', 'MURILO GABRIEL SANTOS DE MELO', '2012-03-21', 'M', '11204138508', '', 'MARIA JOSE SANTOS DE MELO', 'QUERINO SANTOS DE MELO', 'MARIA JOSE SANTOS DE MELO', '', '', '', '', '', NULL, '', '', '', NULL, '', '', NULL, NULL, NULL, NULL, 1, '2026-04-30 23:03:03', '2026-04-30 23:03:03'),
+(13, 6, '2026/0038', 'MICHEL NIBERT MENEZES SANTOS', '2012-06-14', 'M', '10592919595', '', 'EDILENE MENESES SANTOS', 'JOAO PAULO MENEZES SANTOS', 'EDILENE MENSES SANTOS', '', '', '', '', '', NULL, '', '', '', NULL, '', '', NULL, NULL, NULL, NULL, 1, '2026-04-30 23:03:03', '2026-04-30 23:03:03'),
+(14, 6, '2026/0039', 'MAYRA ELIZA NASCIMENTO ARAGAO', '2011-12-18', 'F', '10516319558', '', 'ROSANGELA SANTOS DO NASCIMENTO', 'EMERSON ANDRADE MOTA ARAGAO', 'ROSANGELA SANTOS DO NASCIMENTO', '', '', '', '', '', NULL, '', '', '', NULL, '', '', NULL, NULL, NULL, NULL, 1, '2026-04-30 23:03:03', '2026-04-30 23:03:03'),
+(15, 6, '2026/0052', 'TARCIANA ANDRADE SANTOS', '2011-08-25', 'F', '10508307503', '', 'JOSINETE DOS SANTOS', 'ANTONIO MARCOS ANDRADE DOS SANTOS', 'JOSINETE DOS SANTOS', '', '', '', '', '', NULL, '', '', '', NULL, '', '', NULL, NULL, NULL, NULL, 1, '2026-04-30 23:03:03', '2026-04-30 23:03:03'),
+(16, 6, '2026/0154', 'ERICK ANDRADE DOS SANTOS', '2011-08-31', 'M', '10413916502', '', 'JESSICA ANDRADE DA SILVA', 'ALEXSANDRO BATISTA DOS SANTOS', 'JESSICA ANDRADE DA SILVA', '', '', '', '', '', NULL, '', '', '', NULL, '', '', NULL, NULL, NULL, NULL, 1, '2026-04-30 23:03:03', '2026-04-30 23:03:03'),
+(17, 6, '2026/0155', 'RUAN CARLOS DE MELO PRADO', '2011-04-23', 'M', '12226567526', '', 'MARIA ROMANA DE MELO', 'ARIOSVALDO SANTOS PRADO', 'MARIA ROMANA DE MELO', '', '', '', '', '', NULL, '', '', '', NULL, '', '', NULL, NULL, NULL, NULL, 1, '2026-04-30 23:03:03', '2026-04-30 23:03:03'),
+(18, 6, '2026/0414', 'THAYSLANE CONCEICAO DOS SANTOS', '2011-05-24', 'F', '13266767500', '', 'MARIA TATIANE DOS SANTOS', 'DIEGO DA CONCEICAO SANTOS', 'MARIA TATIANE DOS SANTOS', '', '', '', '', '', NULL, '', '', '', NULL, '', '', NULL, NULL, NULL, NULL, 1, '2026-04-30 23:03:03', '2026-04-30 23:03:03'),
+(19, 6, '2026/1901', 'MARIA EDUARDA SANTOS SILVA', '2012-02-02', 'F', '87005372506', '', 'ROSILEIDE SANTOS SILVA', 'CARLOS ANDRE DA SILVA SANTOS', 'ROSILEIDE SANTOS SILVA', '', '', '', '', '', NULL, '', '', '', NULL, '', '', NULL, NULL, NULL, NULL, 1, '2026-04-30 23:03:03', '2026-04-30 23:03:03'),
+(20, 6, '2026/1902', 'LAVINIA MELO ANDRADE', '2011-06-18', 'F', '10516509500', '', 'JULIA SANTOS MELO', 'ADAILTON SANTOS ANDRADE', '', '', '', '', '', '', NULL, '', '', '', NULL, '', '', NULL, NULL, NULL, NULL, 1, '2026-04-30 23:03:03', '2026-04-30 23:03:03'),
+(21, 6, '2026/1907', 'MIKAELLE RAQUEL OLIVEIRA SILVA', '2011-10-03', 'F', '10691409536', '', 'SELMA OLIVEIRA DA SILVA', 'FERNANDO DOS SANTOS', '', '', '', '', '', '', NULL, '', '', '', NULL, '', '', NULL, NULL, NULL, NULL, 1, '2026-04-30 23:03:03', '2026-04-30 23:03:03'),
+(22, 6, '2026/2258', 'ADRIELI VIEIRA DO NASCIMENTO', '2010-10-29', 'M', '03239799553', '', 'ERIVALDA SANTOS VIEIRA ANDRADE ', 'ERIVALDA SANTOS VIERA ANDRADE', 'ADELMO CLEMENTE DO NASCIMENTO', '', '', '', '', '', NULL, '', '', '', NULL, '', '', NULL, NULL, NULL, NULL, 1, '2026-04-30 23:03:03', '2026-04-30 23:03:03'),
+(23, 6, '2026/2515', 'MARIA HELLOYSE SILVA SANTOS', '2012-02-07', 'F', '10203954513', '', 'ANNE ROBERTA SILVA SANTOS ', 'JOSE TIAGO DOS SANTOS ', 'ANNE ROBERTA SILVA SANTOS ', '', '', '', '', '', NULL, '', '', '', NULL, '', '', NULL, NULL, NULL, NULL, 1, '2026-04-30 23:03:03', '2026-04-30 23:03:03'),
+(24, 6, '2026/3710', 'JOICE RAQUELY DA CONCEICAO SANTOS', '2011-05-19', 'F', '03216268500', '', 'JOCILENE DA CONCEICAO', 'VALDENI DOS SANTOS', 'VALDENI DOS SANTOS', '', '', '', '', '', NULL, '', '', '', NULL, '094335656', '', NULL, NULL, NULL, NULL, 1, '2026-04-30 23:03:03', '2026-04-30 23:03:03'),
+(25, 6, '2026/3825', 'ARYEL ISAAC ROCHA BATISTA', '2011-09-27', 'M', '13103860560', '', 'GLEYCIELE ROCHA SANTOS', 'CLEVERTON BATISTA SANTOS', 'GLEYCIELE ROCHA SANTOS', '', '', '', '', '', NULL, '', '', '', NULL, '095083391', 'SSP', NULL, NULL, NULL, NULL, 1, '2026-04-30 23:03:03', '2026-04-30 23:03:03'),
+(26, 6, '2026/6044', 'DOUGLAS RENATO ANDRADE SANTOS', '2011-07-16', 'M', '11097755550', '', 'RENATA ANDRADE DA SILVA', 'JOSIVAL SANTOS DA SILVA', 'RENATA ANDRADE DA SILVA', '', '(79) 99927-1400', '', '', '', NULL, '', '', '', NULL, '', 'SSP', NULL, NULL, NULL, NULL, 1, '2026-04-30 23:03:03', '2026-04-30 23:03:03'),
+(27, 6, '2026/7401', 'ARIELLY CELINY DOS SANTOS', '2012-02-13', 'F', '11774295512', '', 'MARIA CLEONILDE SANTOS', 'JOSE PEDRO DOS SANTOS', 'MARIA CLEONILDE SANTOS', '', '', '', '', '', NULL, '', '', '', NULL, '41082389', 'SSP', NULL, NULL, NULL, NULL, 1, '2026-04-30 23:03:03', '2026-04-30 23:03:03');
+
+-- --------------------------------------------------------
+
+--
+-- Estrutura para tabela `aluno_autorizacoes`
+--
+
+CREATE TABLE `aluno_autorizacoes` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `aluno_id` bigint(20) UNSIGNED NOT NULL,
+  `aut_uso_imagem` tinyint(1) NOT NULL DEFAULT 1,
+  `aut_passeios` enum('sim','nao','parcial') NOT NULL DEFAULT 'sim',
+  `aut_tratamento_dados` tinyint(1) NOT NULL DEFAULT 1,
+  `aut_saida` tinyint(1) NOT NULL DEFAULT 1,
+  `aut_saida_nome` varchar(100) DEFAULT NULL,
+  `aut_saida_parentesco` varchar(30) DEFAULT NULL,
+  `aut_saida_fone` varchar(20) DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Estrutura para tabela `aluno_enderecos`
+--
+
+CREATE TABLE `aluno_enderecos` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `aluno_id` bigint(20) UNSIGNED NOT NULL,
+  `tipo` enum('residencial','comercial','outro') NOT NULL DEFAULT 'residencial',
+  `zona` enum('urbana','rural') DEFAULT NULL,
+  `cep` varchar(10) DEFAULT NULL,
+  `logradouro` varchar(200) DEFAULT NULL,
+  `numero` varchar(20) DEFAULT NULL,
+  `complemento` varchar(50) DEFAULT NULL,
+  `bairro` varchar(100) DEFAULT NULL,
+  `cidade` varchar(100) DEFAULT NULL,
+  `uf` char(2) DEFAULT NULL,
+  `principal` tinyint(1) NOT NULL DEFAULT 1,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Estrutura para tabela `aluno_saude`
+--
+
+CREATE TABLE `aluno_saude` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `aluno_id` bigint(20) UNSIGNED NOT NULL,
+  `deficiencias` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL CHECK (json_valid(`deficiencias`)),
+  `transtornos` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL CHECK (json_valid(`transtornos`)),
+  `altas_habilidades` tinyint(1) NOT NULL DEFAULT 0,
+  `tipo_sanguineo` varchar(10) DEFAULT NULL,
+  `alergias` varchar(255) DEFAULT NULL,
+  `restricoes_alimentares` varchar(255) DEFAULT NULL,
+  `medicacao_continua` tinyint(1) NOT NULL DEFAULT 0,
+  `medicacao_desc` varchar(255) DEFAULT NULL,
+  `obs_saude` text DEFAULT NULL,
+  `emergencia_nome` varchar(100) DEFAULT NULL,
+  `emergencia_parentesco` varchar(30) DEFAULT NULL,
+  `emergencia_fone` varchar(20) DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -131,8 +222,8 @@ CREATE TABLE `atendidos_externos` (
   `aluno_id` bigint(20) UNSIGNED DEFAULT NULL,
   `nome` varchar(255) NOT NULL,
   `tipo_vinculo` varchar(30) NOT NULL,
-  `cpf` varchar(20) DEFAULT NULL,
-  `telefone` varchar(30) DEFAULT NULL,
+  `cpf` varchar(500) DEFAULT NULL,
+  `telefone` varchar(500) DEFAULT NULL,
   `email` varchar(255) DEFAULT NULL,
   `observacoes` text DEFAULT NULL,
   `ativo` tinyint(1) NOT NULL DEFAULT 1,
@@ -198,7 +289,7 @@ CREATE TABLE `cache` (
 --
 
 INSERT INTO `cache` (`key`, `value`, `expiration`) VALUES
-('spatie.permission.cache', 'a:3:{s:5:\"alias\";a:4:{s:1:\"a\";s:2:\"id\";s:1:\"b\";s:4:\"name\";s:1:\"c\";s:10:\"guard_name\";s:1:\"r\";s:5:\"roles\";}s:11:\"permissions\";a:163:{i:0;a:4:{s:1:\"a\";i:1;s:1:\"b\";s:17:\"visualizar alunos\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:2:{i:0;i:1;i:1;i:2;}}i:1;a:4:{s:1:\"a\";i:2;s:1:\"b\";s:11:\"criar aluno\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:2:{i:0;i:1;i:1;i:2;}}i:2;a:4:{s:1:\"a\";i:3;s:1:\"b\";s:12:\"editar aluno\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:2:{i:0;i:1;i:1;i:2;}}i:3;a:4:{s:1:\"a\";i:4;s:1:\"b\";s:14:\"detalhar aluno\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:2:{i:0;i:1;i:1;i:2;}}i:4;a:4:{s:1:\"a\";i:5;s:1:\"b\";s:21:\"ativar inativar aluno\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:2:{i:0;i:1;i:1;i:2;}}i:5;a:4:{s:1:\"a\";i:6;s:1:\"b\";s:16:\"consultar turmas\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:2:{i:0;i:1;i:1;i:2;}}i:6;a:4:{s:1:\"a\";i:7;s:1:\"b\";s:14:\"detalhar turma\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:2:{i:0;i:1;i:1;i:2;}}i:7;a:4:{s:1:\"a\";i:8;s:1:\"b\";s:16:\"cadastrar turmas\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:2:{i:0;i:1;i:1;i:2;}}i:8;a:4:{s:1:\"a\";i:9;s:1:\"b\";s:13:\"editar turmas\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:2:{i:0;i:1;i:1;i:2;}}i:9;a:4:{s:1:\"a\";i:10;s:1:\"b\";s:14:\"excluir turmas\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:2:{i:0;i:1;i:1;i:2;}}i:10;a:4:{s:1:\"a\";i:11;s:1:\"b\";s:21:\"consultar matrículas\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:2:{i:0;i:1;i:1;i:2;}}i:11;a:4:{s:1:\"a\";i:12;s:1:\"b\";s:20:\"cadastrar matrícula\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:2:{i:0;i:1;i:1;i:2;}}i:12;a:4:{s:1:\"a\";i:13;s:1:\"b\";s:33:\"visualizar detalhes da matrícula\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:2:{i:0;i:1;i:1;i:2;}}i:13;a:4:{s:1:\"a\";i:14;s:1:\"b\";s:8:\"enturmar\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:2:{i:0;i:1;i:1;i:2;}}i:14;a:4:{s:1:\"a\";i:15;s:1:\"b\";s:10:\"transferir\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:2:{i:0;i:1;i:1;i:2;}}i:15;a:4:{s:1:\"a\";i:16;s:1:\"b\";s:12:\"rematricular\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:2:{i:0;i:1;i:1;i:2;}}i:16;a:3:{s:1:\"a\";i:17;s:1:\"b\";s:21:\"gerenciar disciplinas\";s:1:\"c\";s:3:\"web\";}i:17;a:3:{s:1:\"a\";i:18;s:1:\"b\";s:18:\"gerenciar matrizes\";s:1:\"c\";s:3:\"web\";}i:18;a:3:{s:1:\"a\";i:19;s:1:\"b\";s:18:\"consultar matrizes\";s:1:\"c\";s:3:\"web\";}i:19;a:4:{s:1:\"a\";i:20;s:1:\"b\";s:17:\"consultar diarios\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:5:{i:0;i:1;i:1;i:2;i:2;i:4;i:3;i:5;i:4;i:6;}}i:20;a:4:{s:1:\"a\";i:21;s:1:\"b\";s:13:\"criar diarios\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:2:{i:0;i:3;i:1;i:6;}}i:21;a:4:{s:1:\"a\";i:22;s:1:\"b\";s:15:\"registrar aulas\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:2:{i:0;i:3;i:1;i:6;}}i:22;a:4:{s:1:\"a\";i:23;s:1:\"b\";s:17:\"lancar frequencia\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:2:{i:0;i:3;i:1;i:6;}}i:23;a:4:{s:1:\"a\";i:24;s:1:\"b\";s:23:\"gerenciar planejamentos\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:2:{i:0;i:3;i:1;i:6;}}i:24;a:4:{s:1:\"a\";i:25;s:1:\"b\";s:33:\"registrar observacoes pedagogicas\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:2:{i:0;i:3;i:1;i:6;}}i:25;a:4:{s:1:\"a\";i:26;s:1:\"b\";s:33:\"registrar ocorrencias pedagogicas\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:2:{i:0;i:3;i:1;i:6;}}i:26;a:4:{s:1:\"a\";i:27;s:1:\"b\";s:33:\"gerenciar pendencias do professor\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:2:{i:0;i:3;i:1;i:6;}}i:27;a:4:{s:1:\"a\";i:28;s:1:\"b\";s:34:\"acompanhar diarios pedagogicamente\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:2:{i:0;i:4;i:1;i:6;}}i:28;a:4:{s:1:\"a\";i:29;s:1:\"b\";s:26:\"validar planejamento anual\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:2:{i:0;i:4;i:1;i:6;}}i:29;a:4:{s:1:\"a\";i:30;s:1:\"b\";s:28:\"validar planejamento semanal\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:2:{i:0;i:4;i:1;i:6;}}i:30;a:4:{s:1:\"a\";i:31;s:1:\"b\";s:25:\"validar aulas registradas\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:2:{i:0;i:4;i:1;i:6;}}i:31;a:4:{s:1:\"a\";i:32;s:1:\"b\";s:32:\"acompanhar frequencia pedagogica\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:2:{i:0;i:4;i:1;i:6;}}i:32;a:4:{s:1:\"a\";i:33;s:1:\"b\";s:32:\"acompanhar rendimento pedagogico\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:2:{i:0;i:4;i:1;i:6;}}i:33;a:4:{s:1:\"a\";i:34;s:1:\"b\";s:26:\"acompanhar alunos em risco\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:2:{i:0;i:4;i:1;i:6;}}i:34;a:4:{s:1:\"a\";i:35;s:1:\"b\";s:29:\"gerenciar pendencias docentes\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:2:{i:0;i:4;i:1;i:6;}}i:35;a:4:{s:1:\"a\";i:36;s:1:\"b\";s:12:\"ver horarios\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:2:{i:0;i:5;i:1;i:6;}}i:36;a:4:{s:1:\"a\";i:37;s:1:\"b\";s:29:\"acompanhar diarios da direcao\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:2:{i:0;i:5;i:1;i:6;}}i:37;a:4:{s:1:\"a\";i:38;s:1:\"b\";s:33:\"validar planejamento pela direcao\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:2:{i:0;i:5;i:1;i:6;}}i:38;a:4:{s:1:\"a\";i:39;s:1:\"b\";s:26:\"validar aulas pela direcao\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:2:{i:0;i:5;i:1;i:6;}}i:39;a:4:{s:1:\"a\";i:40;s:1:\"b\";s:27:\"justificar faltas de alunos\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:2:{i:0;i:5;i:1;i:6;}}i:40;a:4:{s:1:\"a\";i:41;s:1:\"b\";s:27:\"liberar prazo de lancamento\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:2:{i:0;i:5;i:1;i:6;}}i:41;a:4:{s:1:\"a\";i:42;s:1:\"b\";s:32:\"registrar faltas de funcionarios\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:2:{i:0;i:5;i:1;i:6;}}i:42;a:4:{s:1:\"a\";i:43;s:1:\"b\";s:25:\"iniciar fechamento letivo\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:2:{i:0;i:5;i:1;i:6;}}i:43;a:4:{s:1:\"a\";i:44;s:1:\"b\";s:26:\"concluir fechamento letivo\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:2:{i:0;i:5;i:1;i:6;}}i:44;a:4:{s:1:\"a\";i:45;s:1:\"b\";s:32:\"validar planejamento por periodo\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:2:{i:0;i:4;i:1;i:6;}}i:45;a:4:{s:1:\"a\";i:46;s:1:\"b\";s:39:\"consultar notas e conceitos pedagogicos\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:2:{i:0;i:4;i:1;i:6;}}i:46;a:4:{s:1:\"a\";i:47;s:1:\"b\";s:37:\"alterar notas e conceitos pedagogicos\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:2:{i:0;i:4;i:1;i:6;}}i:47;a:4:{s:1:\"a\";i:48;s:1:\"b\";s:34:\"consultar horarios pedagogicamente\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:2:{i:0;i:4;i:1;i:6;}}i:48;a:4:{s:1:\"a\";i:49;s:1:\"b\";s:34:\"cadastrar horarios pedagogicamente\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:2:{i:0;i:4;i:1;i:6;}}i:49;a:4:{s:1:\"a\";i:50;s:1:\"b\";s:31:\"editar horarios pedagogicamente\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:2:{i:0;i:4;i:1;i:6;}}i:50;a:4:{s:1:\"a\";i:51;s:1:\"b\";s:36:\"reorganizar horarios pedagogicamente\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:2:{i:0;i:4;i:1;i:6;}}i:51;a:4:{s:1:\"a\";i:52;s:1:\"b\";s:31:\"consultar aulas pedagogicamente\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:2:{i:0;i:4;i:1;i:6;}}i:52;a:4:{s:1:\"a\";i:53;s:1:\"b\";s:29:\"ajustar aulas pedagogicamente\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:2:{i:0;i:4;i:1;i:6;}}i:53;a:4:{s:1:\"a\";i:54;s:1:\"b\";s:45:\"validar planejamento por periodo pela direcao\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:2:{i:0;i:5;i:1;i:6;}}i:54;a:4:{s:1:\"a\";i:55;s:1:\"b\";s:38:\"consultar notas e conceitos da direcao\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:2:{i:0;i:5;i:1;i:6;}}i:55;a:4:{s:1:\"a\";i:56;s:1:\"b\";s:36:\"alterar notas e conceitos da direcao\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:2:{i:0;i:5;i:1;i:6;}}i:56;a:4:{s:1:\"a\";i:57;s:1:\"b\";s:29:\"consultar horarios da direcao\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:2:{i:0;i:5;i:1;i:6;}}i:57;a:4:{s:1:\"a\";i:58;s:1:\"b\";s:29:\"cadastrar horarios da direcao\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:2:{i:0;i:5;i:1;i:6;}}i:58;a:4:{s:1:\"a\";i:59;s:1:\"b\";s:26:\"editar horarios da direcao\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:2:{i:0;i:5;i:1;i:6;}}i:59;a:4:{s:1:\"a\";i:60;s:1:\"b\";s:31:\"reorganizar horarios da direcao\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:2:{i:0;i:5;i:1;i:6;}}i:60;a:4:{s:1:\"a\";i:61;s:1:\"b\";s:26:\"consultar aulas da direcao\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:2:{i:0;i:5;i:1;i:6;}}i:61;a:4:{s:1:\"a\";i:62;s:1:\"b\";s:24:\"ajustar aulas da direcao\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:2:{i:0;i:5;i:1;i:6;}}i:62;a:4:{s:1:\"a\";i:63;s:1:\"b\";s:29:\"consultar alimentacao escolar\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:3:{i:0;i:1;i:1;i:2;i:2;i:5;}}i:63;a:4:{s:1:\"a\";i:64;s:1:\"b\";s:19:\"cadastrar alimentos\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:4:{i:0;i:1;i:1;i:2;i:2;i:5;i:3;i:7;}}i:64;a:4:{s:1:\"a\";i:65;s:1:\"b\";s:16:\"editar alimentos\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:4:{i:0;i:1;i:1;i:2;i:2;i:5;i:3;i:7;}}i:65;a:4:{s:1:\"a\";i:66;s:1:\"b\";s:30:\"registrar entrada de alimentos\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:4:{i:0;i:1;i:1;i:2;i:2;i:5;i:3;i:7;}}i:66;a:4:{s:1:\"a\";i:67;s:1:\"b\";s:28:\"registrar saida de alimentos\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:4:{i:0;i:1;i:1;i:2;i:2;i:5;i:3;i:7;}}i:67;a:4:{s:1:\"a\";i:68;s:1:\"b\";s:22:\"lancar cardapio diario\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:4:{i:0;i:1;i:1;i:2;i:2;i:5;i:3;i:7;}}i:68;a:4:{s:1:\"a\";i:69;s:1:\"b\";s:30:\"consultar estoque de alimentos\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:3:{i:0;i:1;i:1;i:2;i:2;i:5;}}i:69;a:4:{s:1:\"a\";i:70;s:1:\"b\";s:36:\"consultar movimentacoes de alimentos\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:3:{i:0;i:1;i:1;i:2;i:2;i:5;}}i:70;a:4:{s:1:\"a\";i:71;s:1:\"b\";s:33:\"cadastrar categorias de alimentos\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:4:{i:0;i:1;i:1;i:2;i:2;i:5;i:3;i:7;}}i:71;a:4:{s:1:\"a\";i:72;s:1:\"b\";s:35:\"cadastrar fornecedores de alimentos\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:4:{i:0;i:1;i:1;i:2;i:2;i:5;i:3;i:7;}}i:72;a:4:{s:1:\"a\";i:73;s:1:\"b\";s:30:\"editar categorias de alimentos\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:4:{i:0;i:1;i:1;i:2;i:2;i:5;i:3;i:7;}}i:73;a:4:{s:1:\"a\";i:74;s:1:\"b\";s:32:\"editar fornecedores de alimentos\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:4:{i:0;i:1;i:1;i:2;i:2;i:5;i:3;i:7;}}i:74;a:4:{s:1:\"a\";i:75;s:1:\"b\";s:31:\"acessar portal da nutricionista\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:1:{i:0;i:7;}}i:75;a:4:{s:1:\"a\";i:76;s:1:\"b\";s:36:\"consultar alimentos da nutricionista\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:1:{i:0;i:7;}}i:76;a:4:{s:1:\"a\";i:77;s:1:\"b\";s:37:\"consultar categorias da nutricionista\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:1:{i:0;i:7;}}i:77;a:4:{s:1:\"a\";i:78;s:1:\"b\";s:39:\"consultar fornecedores da nutricionista\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:1:{i:0;i:7;}}i:78;a:4:{s:1:\"a\";i:79;s:1:\"b\";s:36:\"consultar cardapios da nutricionista\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:1:{i:0;i:7;}}i:79;a:4:{s:1:\"a\";i:80;s:1:\"b\";s:34:\"consultar estoque da nutricionista\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:1:{i:0;i:7;}}i:80;a:4:{s:1:\"a\";i:81;s:1:\"b\";s:35:\"consultar validade da nutricionista\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:1:{i:0;i:7;}}i:81;a:4:{s:1:\"a\";i:82;s:1:\"b\";s:40:\"consultar movimentacoes da nutricionista\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:1:{i:0;i:7;}}i:82;a:4:{s:1:\"a\";i:83;s:1:\"b\";s:50:\"consultar comparativo de alimentacao entre escolas\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:1:{i:0;i:7;}}i:83;a:4:{s:1:\"a\";i:84;s:1:\"b\";s:46:\"consultar relatorios gerenciais da alimentacao\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:1:{i:0;i:7;}}i:84;a:4:{s:1:\"a\";i:85;s:1:\"b\";s:27:\"acessar modulo psicossocial\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:1:{i:0;i:8;}}i:85;a:4:{s:1:\"a\";i:86;s:1:\"b\";s:29:\"consultar agenda psicossocial\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:1:{i:0;i:8;}}i:86;a:4:{s:1:\"a\";i:87;s:1:\"b\";s:36:\"registrar atendimentos psicossociais\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:1:{i:0;i:8;}}i:87;a:4:{s:1:\"a\";i:88;s:1:\"b\";s:32:\"consultar historico psicossocial\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:1:{i:0;i:8;}}i:88;a:4:{s:1:\"a\";i:89;s:1:\"b\";s:45:\"registrar planos de intervencao psicossociais\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:1:{i:0;i:8;}}i:89;a:4:{s:1:\"a\";i:90;s:1:\"b\";s:39:\"registrar encaminhamentos psicossociais\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:1:{i:0;i:8;}}i:90;a:4:{s:1:\"a\";i:91;s:1:\"b\";s:39:\"registrar casos disciplinares sigilosos\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:1:{i:0;i:8;}}i:91;a:4:{s:1:\"a\";i:92;s:1:\"b\";s:40:\"emitir relatorios tecnicos psicossociais\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:1:{i:0;i:8;}}i:92;a:4:{s:1:\"a\";i:93;s:1:\"b\";s:37:\"acessar dados sigilosos psicossociais\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:1:{i:0;i:8;}}i:93;a:4:{s:1:\"a\";i:94;s:1:\"b\";s:30:\"consultar documentos escolares\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:1:{i:0;i:1;}}i:94;a:4:{s:1:\"a\";i:95;s:1:\"b\";s:30:\"emitir declaracao de matricula\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:1:{i:0;i:1;}}i:95;a:4:{s:1:\"a\";i:96;s:1:\"b\";s:31:\"emitir declaracao de frequencia\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:1:{i:0;i:1;}}i:96;a:4:{s:1:\"a\";i:97;s:1:\"b\";s:31:\"emitir comprovante de matricula\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:1:{i:0;i:1;}}i:97;a:4:{s:1:\"a\";i:98;s:1:\"b\";s:31:\"emitir ficha cadastral do aluno\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:1:{i:0;i:1;}}i:98;a:4:{s:1:\"a\";i:99;s:1:\"b\";s:32:\"emitir ficha individual do aluno\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:1:{i:0;i:1;}}i:99;a:4:{s:1:\"a\";i:100;s:1:\"b\";s:28:\"emitir guia de transferencia\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:1:{i:0;i:1;}}i:100;a:4:{s:1:\"a\";i:101;s:1:\"b\";s:24:\"emitir historico escolar\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:1:{i:0;i:1;}}i:101;a:4:{s:1:\"a\";i:102;s:1:\"b\";s:18:\"emitir ata escolar\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:1:{i:0;i:1;}}i:102;a:4:{s:1:\"a\";i:103;s:1:\"b\";s:21:\"emitir oficio escolar\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:1:{i:0;i:1;}}i:103;a:4:{s:1:\"a\";i:104;s:1:\"b\";s:43:\"consultar documentos institucionais da rede\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:1:{i:0;i:6;}}i:104;a:4:{s:1:\"a\";i:105;s:1:\"b\";s:35:\"emitir oficio institucional da rede\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:1:{i:0;i:6;}}i:105;a:4:{s:1:\"a\";i:106;s:1:\"b\";s:35:\"emitir modelo institucional da rede\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:1:{i:0;i:6;}}i:106;a:4:{s:1:\"a\";i:107;s:1:\"b\";s:39:\"consultar documentos da direcao escolar\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:1:{i:0;i:5;}}i:107;a:4:{s:1:\"a\";i:108;s:1:\"b\";s:36:\"emitir documentos da direcao escolar\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:1:{i:0;i:5;}}i:108;a:4:{s:1:\"a\";i:109;s:1:\"b\";s:32:\"consultar documentos pedagogicos\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:1:{i:0;i:4;}}i:109;a:4:{s:1:\"a\";i:110;s:1:\"b\";s:29:\"emitir documentos pedagogicos\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:1:{i:0;i:4;}}i:110;a:4:{s:1:\"a\";i:111;s:1:\"b\";s:33:\"consultar documentos do professor\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:1:{i:0;i:3;}}i:111;a:4:{s:1:\"a\";i:112;s:1:\"b\";s:30:\"emitir documentos do professor\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:1:{i:0;i:3;}}i:112;a:4:{s:1:\"a\";i:113;s:1:\"b\";s:34:\"consultar documentos psicossociais\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:1:{i:0;i:8;}}i:113;a:4:{s:1:\"a\";i:114;s:1:\"b\";s:31:\"emitir documentos psicossociais\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:1:{i:0;i:8;}}i:114;a:4:{s:1:\"a\";i:115;s:1:\"b\";s:28:\"consultar relatorios da rede\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:1:{i:0;i:6;}}i:115;a:4:{s:1:\"a\";i:116;s:1:\"b\";s:38:\"emitir relatorio institucional da rede\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:1:{i:0;i:6;}}i:116;a:4:{s:1:\"a\";i:117;s:1:\"b\";s:38:\"emitir relatorio de matriculas da rede\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:1:{i:0;i:6;}}i:117;a:4:{s:1:\"a\";i:118;s:1:\"b\";s:42:\"emitir relatorio de situacao de matriculas\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:1:{i:0;i:6;}}i:118;a:4:{s:1:\"a\";i:119;s:1:\"b\";s:30:\"emitir relatorio de alunos aee\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:3:{i:0;i:1;i:1;i:2;i:2;i:6;}}i:119;a:4:{s:1:\"a\";i:120;s:1:\"b\";s:43:\"emitir relatorio quantitativo de matriculas\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:3:{i:0;i:1;i:1;i:2;i:2;i:6;}}i:120;a:4:{s:1:\"a\";i:121;s:1:\"b\";s:31:\"emitir relatorio mapa de turmas\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:3:{i:0;i:1;i:1;i:2;i:2;i:6;}}i:121;a:4:{s:1:\"a\";i:122;s:1:\"b\";s:41:\"emitir relatorio de professores por turma\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:3:{i:0;i:1;i:1;i:2;i:2;i:6;}}i:122;a:4:{s:1:\"a\";i:123;s:1:\"b\";s:29:\"emitir relatorio de auditoria\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:1:{i:0;i:6;}}i:123;a:4:{s:1:\"a\";i:124;s:1:\"b\";s:30:\"consultar relatorios escolares\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:2:{i:0;i:1;i:1;i:2;}}i:124;a:4:{s:1:\"a\";i:125;s:1:\"b\";s:43:\"emitir relatorios administrativos escolares\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:2:{i:0;i:1;i:1;i:2;}}i:125;a:4:{s:1:\"a\";i:126;s:1:\"b\";s:42:\"emitir relatorio de frequencia consolidada\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:2:{i:0;i:1;i:1;i:2;}}i:126;a:4:{s:1:\"a\";i:127;s:1:\"b\";s:34:\"emitir relatorio historico escolar\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:3:{i:0;i:1;i:1;i:2;i:2;i:5;}}i:127;a:4:{s:1:\"a\";i:128;s:1:\"b\";s:33:\"emitir relatorio ficha individual\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:4:{i:0;i:1;i:1;i:2;i:2;i:4;i:3;i:5;}}i:128;a:4:{s:1:\"a\";i:129;s:1:\"b\";s:39:\"emitir relatorio de alimentacao escolar\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:2:{i:0;i:1;i:1;i:2;}}i:129;a:4:{s:1:\"a\";i:130;s:1:\"b\";s:41:\"consultar notas e conceitos em relatorios\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:2:{i:0;i:1;i:1;i:2;}}i:130;a:4:{s:1:\"a\";i:131;s:1:\"b\";s:32:\"consultar relatorios pedagogicos\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:1:{i:0;i:4;}}i:131;a:4:{s:1:\"a\";i:132;s:1:\"b\";s:29:\"emitir relatorios pedagogicos\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:1:{i:0;i:4;}}i:132;a:4:{s:1:\"a\";i:133;s:1:\"b\";s:39:\"consultar relatorios da direcao escolar\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:1:{i:0;i:5;}}i:133;a:4:{s:1:\"a\";i:134;s:1:\"b\";s:36:\"emitir relatorios da direcao escolar\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:1:{i:0;i:5;}}i:134;a:4:{s:1:\"a\";i:135;s:1:\"b\";s:37:\"consultar relatorios da nutricionista\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:1:{i:0;i:7;}}i:135;a:4:{s:1:\"a\";i:136;s:1:\"b\";s:34:\"emitir relatorios da nutricionista\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:1:{i:0;i:7;}}i:136;a:4:{s:1:\"a\";i:137;s:1:\"b\";s:45:\"consultar relatorios tecnicos do psicossocial\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:1:{i:0;i:8;}}i:137;a:4:{s:1:\"a\";i:138;s:1:\"b\";s:42:\"emitir relatorios tecnicos do psicossocial\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:1:{i:0;i:8;}}i:138;a:4:{s:1:\"a\";i:139;s:1:\"b\";s:27:\"consultar auditoria da rede\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:1:{i:0;i:6;}}i:139;a:4:{s:1:\"a\";i:140;s:1:\"b\";s:27:\"consultar auditoria escolar\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:2:{i:0;i:1;i:1;i:2;}}i:140;a:4:{s:1:\"a\";i:141;s:1:\"b\";s:30:\"consultar auditoria pedagogica\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:1:{i:0;i:4;}}i:141;a:4:{s:1:\"a\";i:142;s:1:\"b\";s:38:\"consultar auditoria da direcao escolar\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:1:{i:0;i:5;}}i:142;a:4:{s:1:\"a\";i:143;s:1:\"b\";s:47:\"consultar auditoria do proprio trabalho docente\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:1:{i:0;i:3;}}i:143;a:4:{s:1:\"a\";i:144;s:1:\"b\";s:42:\"consultar auditoria da alimentacao escolar\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:1:{i:0;i:7;}}i:144;a:4:{s:1:\"a\";i:145;s:1:\"b\";s:41:\"consultar auditoria psicossocial sigilosa\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:1:{i:0;i:8;}}i:145;a:4:{s:1:\"a\";i:146;s:1:\"b\";s:39:\"visualizar dados sensiveis de auditoria\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:3:{i:0;i:5;i:1;i:6;i:2;i:8;}}i:146;a:4:{s:1:\"a\";i:147;s:1:\"b\";s:14:\"acessar painel\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:1:{i:0;i:6;}}i:147;a:4:{s:1:\"a\";i:148;s:1:\"b\";s:19:\"visualizar usuarios\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:1:{i:0;i:6;}}i:148;a:4:{s:1:\"a\";i:149;s:1:\"b\";s:13:\"criar usuario\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:1:{i:0;i:6;}}i:149;a:4:{s:1:\"a\";i:150;s:1:\"b\";s:14:\"editar usuario\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:1:{i:0;i:6;}}i:150;a:4:{s:1:\"a\";i:151;s:1:\"b\";s:23:\"ativar inativar usuario\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:1:{i:0;i:6;}}i:151;a:4:{s:1:\"a\";i:152;s:1:\"b\";s:22:\"visualizar instituicao\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:1:{i:0;i:6;}}i:152;a:4:{s:1:\"a\";i:153;s:1:\"b\";s:18:\"editar instituicao\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:1:{i:0;i:6;}}i:153;a:4:{s:1:\"a\";i:154;s:1:\"b\";s:24:\"visualizar configuracoes\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:1:{i:0;i:6;}}i:154;a:4:{s:1:\"a\";i:155;s:1:\"b\";s:20:\"editar configuracoes\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:1:{i:0;i:6;}}i:155;a:4:{s:1:\"a\";i:156;s:1:\"b\";s:18:\"visualizar escolas\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:1:{i:0;i:6;}}i:156;a:4:{s:1:\"a\";i:157;s:1:\"b\";s:12:\"criar escola\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:1:{i:0;i:6;}}i:157;a:4:{s:1:\"a\";i:158;s:1:\"b\";s:13:\"editar escola\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:1:{i:0;i:6;}}i:158;a:4:{s:1:\"a\";i:159;s:1:\"b\";s:22:\"ativar inativar escola\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:1:{i:0;i:6;}}i:159;a:4:{s:1:\"a\";i:160;s:1:\"b\";s:23:\"visualizar funcionarios\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:1:{i:0;i:6;}}i:160;a:4:{s:1:\"a\";i:161;s:1:\"b\";s:17:\"criar funcionario\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:1:{i:0;i:6;}}i:161;a:4:{s:1:\"a\";i:162;s:1:\"b\";s:18:\"editar funcionario\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:1:{i:0;i:6;}}i:162;a:4:{s:1:\"a\";i:163;s:1:\"b\";s:27:\"ativar inativar funcionario\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:1:{i:0;i:6;}}}s:5:\"roles\";a:8:{i:0;a:3:{s:1:\"a\";i:1;s:1:\"b\";s:19:\"Secretário Escolar\";s:1:\"c\";s:3:\"web\";}i:1;a:3:{s:1:\"a\";i:2;s:1:\"b\";s:23:\"Administrador da Escola\";s:1:\"c\";s:3:\"web\";}i:2;a:3:{s:1:\"a\";i:4;s:1:\"b\";s:23:\"Coordenador Pedagógico\";s:1:\"c\";s:3:\"web\";}i:3;a:3:{s:1:\"a\";i:5;s:1:\"b\";s:15:\"Diretor Escolar\";s:1:\"c\";s:3:\"web\";}i:4;a:3:{s:1:\"a\";i:6;s:1:\"b\";s:21:\"Administrador da Rede\";s:1:\"c\";s:3:\"web\";}i:5;a:3:{s:1:\"a\";i:3;s:1:\"b\";s:9:\"Professor\";s:1:\"c\";s:3:\"web\";}i:6;a:3:{s:1:\"a\";i:7;s:1:\"b\";s:13:\"Nutricionista\";s:1:\"c\";s:3:\"web\";}i:7;a:3:{s:1:\"a\";i:8;s:1:\"b\";s:25:\"Psicologia/Psicopedagogia\";s:1:\"c\";s:3:\"web\";}}}', 1774110608);
+('spatie.permission.cache', 'a:3:{s:5:\"alias\";a:4:{s:1:\"a\";s:2:\"id\";s:1:\"b\";s:4:\"name\";s:1:\"c\";s:10:\"guard_name\";s:1:\"r\";s:5:\"roles\";}s:11:\"permissions\";a:167:{i:0;a:4:{s:1:\"a\";i:1;s:1:\"b\";s:17:\"visualizar alunos\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:5:{i:0;i:1;i:1;i:2;i:2;i:4;i:3;i:5;i:4;i:9;}}i:1;a:4:{s:1:\"a\";i:2;s:1:\"b\";s:11:\"criar aluno\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:5:{i:0;i:1;i:1;i:2;i:2;i:4;i:3;i:5;i:4;i:9;}}i:2;a:4:{s:1:\"a\";i:3;s:1:\"b\";s:12:\"editar aluno\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:5:{i:0;i:1;i:1;i:2;i:2;i:4;i:3;i:5;i:4;i:9;}}i:3;a:4:{s:1:\"a\";i:4;s:1:\"b\";s:14:\"detalhar aluno\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:5:{i:0;i:1;i:1;i:2;i:2;i:4;i:3;i:5;i:4;i:9;}}i:4;a:4:{s:1:\"a\";i:5;s:1:\"b\";s:21:\"ativar inativar aluno\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:4:{i:0;i:1;i:1;i:2;i:2;i:5;i:3;i:9;}}i:5;a:4:{s:1:\"a\";i:6;s:1:\"b\";s:16:\"consultar turmas\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:5:{i:0;i:1;i:1;i:2;i:2;i:4;i:3;i:5;i:4;i:9;}}i:6;a:4:{s:1:\"a\";i:7;s:1:\"b\";s:14:\"detalhar turma\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:3:{i:0;i:1;i:1;i:2;i:2;i:5;}}i:7;a:4:{s:1:\"a\";i:8;s:1:\"b\";s:16:\"cadastrar turmas\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:5:{i:0;i:1;i:1;i:2;i:2;i:4;i:3;i:5;i:4;i:9;}}i:8;a:4:{s:1:\"a\";i:9;s:1:\"b\";s:13:\"editar turmas\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:5:{i:0;i:1;i:1;i:2;i:2;i:4;i:3;i:5;i:4;i:9;}}i:9;a:4:{s:1:\"a\";i:10;s:1:\"b\";s:14:\"excluir turmas\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:3:{i:0;i:1;i:1;i:2;i:2;i:5;}}i:10;a:4:{s:1:\"a\";i:11;s:1:\"b\";s:21:\"consultar matrículas\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:5:{i:0;i:1;i:1;i:2;i:2;i:4;i:3;i:5;i:4;i:9;}}i:11;a:4:{s:1:\"a\";i:12;s:1:\"b\";s:20:\"cadastrar matrícula\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:5:{i:0;i:1;i:1;i:2;i:2;i:4;i:3;i:5;i:4;i:9;}}i:12;a:4:{s:1:\"a\";i:13;s:1:\"b\";s:33:\"visualizar detalhes da matrícula\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:5:{i:0;i:1;i:1;i:2;i:2;i:4;i:3;i:5;i:4;i:9;}}i:13;a:4:{s:1:\"a\";i:14;s:1:\"b\";s:8:\"enturmar\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:5:{i:0;i:1;i:1;i:2;i:2;i:4;i:3;i:5;i:4;i:9;}}i:14;a:4:{s:1:\"a\";i:15;s:1:\"b\";s:10:\"transferir\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:5:{i:0;i:1;i:1;i:2;i:2;i:4;i:3;i:5;i:4;i:9;}}i:15;a:4:{s:1:\"a\";i:16;s:1:\"b\";s:12:\"rematricular\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:5:{i:0;i:1;i:1;i:2;i:2;i:4;i:3;i:5;i:4;i:9;}}i:16;a:4:{s:1:\"a\";i:17;s:1:\"b\";s:21:\"gerenciar disciplinas\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:2:{i:0;i:4;i:1;i:5;}}i:17;a:4:{s:1:\"a\";i:18;s:1:\"b\";s:18:\"gerenciar matrizes\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:2:{i:0;i:4;i:1;i:5;}}i:18;a:4:{s:1:\"a\";i:19;s:1:\"b\";s:18:\"consultar matrizes\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:3:{i:0;i:4;i:1;i:5;i:2;i:9;}}i:19;a:4:{s:1:\"a\";i:20;s:1:\"b\";s:17:\"consultar diarios\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:6:{i:0;i:1;i:1;i:2;i:2;i:4;i:3;i:5;i:4;i:6;i:5;i:9;}}i:20;a:4:{s:1:\"a\";i:21;s:1:\"b\";s:13:\"criar diarios\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:2:{i:0;i:3;i:1;i:6;}}i:21;a:4:{s:1:\"a\";i:22;s:1:\"b\";s:15:\"registrar aulas\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:2:{i:0;i:3;i:1;i:6;}}i:22;a:4:{s:1:\"a\";i:23;s:1:\"b\";s:17:\"lancar frequencia\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:2:{i:0;i:3;i:1;i:6;}}i:23;a:4:{s:1:\"a\";i:24;s:1:\"b\";s:23:\"gerenciar planejamentos\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:2:{i:0;i:3;i:1;i:6;}}i:24;a:4:{s:1:\"a\";i:25;s:1:\"b\";s:33:\"registrar observacoes pedagogicas\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:2:{i:0;i:3;i:1;i:6;}}i:25;a:4:{s:1:\"a\";i:26;s:1:\"b\";s:33:\"registrar ocorrencias pedagogicas\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:2:{i:0;i:3;i:1;i:6;}}i:26;a:4:{s:1:\"a\";i:27;s:1:\"b\";s:33:\"gerenciar pendencias do professor\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:2:{i:0;i:3;i:1;i:6;}}i:27;a:4:{s:1:\"a\";i:28;s:1:\"b\";s:34:\"acompanhar diarios pedagogicamente\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:3:{i:0;i:4;i:1;i:5;i:2;i:6;}}i:28;a:4:{s:1:\"a\";i:29;s:1:\"b\";s:26:\"validar planejamento anual\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:3:{i:0;i:4;i:1;i:5;i:2;i:6;}}i:29;a:4:{s:1:\"a\";i:30;s:1:\"b\";s:28:\"validar planejamento semanal\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:3:{i:0;i:4;i:1;i:5;i:2;i:6;}}i:30;a:4:{s:1:\"a\";i:31;s:1:\"b\";s:25:\"validar aulas registradas\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:3:{i:0;i:4;i:1;i:5;i:2;i:6;}}i:31;a:4:{s:1:\"a\";i:32;s:1:\"b\";s:32:\"acompanhar frequencia pedagogica\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:3:{i:0;i:4;i:1;i:5;i:2;i:6;}}i:32;a:4:{s:1:\"a\";i:33;s:1:\"b\";s:32:\"acompanhar rendimento pedagogico\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:3:{i:0;i:4;i:1;i:5;i:2;i:6;}}i:33;a:4:{s:1:\"a\";i:34;s:1:\"b\";s:26:\"acompanhar alunos em risco\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:3:{i:0;i:4;i:1;i:5;i:2;i:6;}}i:34;a:4:{s:1:\"a\";i:35;s:1:\"b\";s:29:\"gerenciar pendencias docentes\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:3:{i:0;i:4;i:1;i:5;i:2;i:6;}}i:35;a:4:{s:1:\"a\";i:36;s:1:\"b\";s:12:\"ver horarios\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:4:{i:0;i:4;i:1;i:5;i:2;i:6;i:3;i:9;}}i:36;a:4:{s:1:\"a\";i:37;s:1:\"b\";s:29:\"acompanhar diarios da direcao\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:2:{i:0;i:5;i:1;i:6;}}i:37;a:4:{s:1:\"a\";i:38;s:1:\"b\";s:33:\"validar planejamento pela direcao\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:2:{i:0;i:5;i:1;i:6;}}i:38;a:4:{s:1:\"a\";i:39;s:1:\"b\";s:26:\"validar aulas pela direcao\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:2:{i:0;i:5;i:1;i:6;}}i:39;a:4:{s:1:\"a\";i:40;s:1:\"b\";s:27:\"justificar faltas de alunos\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:3:{i:0;i:4;i:1;i:5;i:2;i:6;}}i:40;a:4:{s:1:\"a\";i:41;s:1:\"b\";s:27:\"liberar prazo de lancamento\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:3:{i:0;i:4;i:1;i:5;i:2;i:6;}}i:41;a:4:{s:1:\"a\";i:42;s:1:\"b\";s:32:\"registrar faltas de funcionarios\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:2:{i:0;i:5;i:1;i:6;}}i:42;a:4:{s:1:\"a\";i:43;s:1:\"b\";s:25:\"iniciar fechamento letivo\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:2:{i:0;i:5;i:1;i:6;}}i:43;a:4:{s:1:\"a\";i:44;s:1:\"b\";s:26:\"concluir fechamento letivo\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:2:{i:0;i:5;i:1;i:6;}}i:44;a:4:{s:1:\"a\";i:45;s:1:\"b\";s:32:\"validar planejamento por periodo\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:3:{i:0;i:4;i:1;i:5;i:2;i:6;}}i:45;a:4:{s:1:\"a\";i:46;s:1:\"b\";s:39:\"consultar notas e conceitos pedagogicos\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:3:{i:0;i:4;i:1;i:5;i:2;i:6;}}i:46;a:4:{s:1:\"a\";i:47;s:1:\"b\";s:37:\"alterar notas e conceitos pedagogicos\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:3:{i:0;i:4;i:1;i:5;i:2;i:6;}}i:47;a:4:{s:1:\"a\";i:48;s:1:\"b\";s:34:\"consultar horarios pedagogicamente\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:3:{i:0;i:4;i:1;i:5;i:2;i:6;}}i:48;a:4:{s:1:\"a\";i:49;s:1:\"b\";s:34:\"cadastrar horarios pedagogicamente\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:3:{i:0;i:4;i:1;i:5;i:2;i:6;}}i:49;a:4:{s:1:\"a\";i:50;s:1:\"b\";s:31:\"editar horarios pedagogicamente\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:2:{i:0;i:4;i:1;i:6;}}i:50;a:4:{s:1:\"a\";i:51;s:1:\"b\";s:36:\"reorganizar horarios pedagogicamente\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:2:{i:0;i:4;i:1;i:6;}}i:51;a:4:{s:1:\"a\";i:52;s:1:\"b\";s:31:\"consultar aulas pedagogicamente\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:3:{i:0;i:4;i:1;i:5;i:2;i:6;}}i:52;a:4:{s:1:\"a\";i:53;s:1:\"b\";s:29:\"ajustar aulas pedagogicamente\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:3:{i:0;i:4;i:1;i:5;i:2;i:6;}}i:53;a:4:{s:1:\"a\";i:54;s:1:\"b\";s:45:\"validar planejamento por periodo pela direcao\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:2:{i:0;i:5;i:1;i:6;}}i:54;a:4:{s:1:\"a\";i:55;s:1:\"b\";s:38:\"consultar notas e conceitos da direcao\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:2:{i:0;i:5;i:1;i:6;}}i:55;a:4:{s:1:\"a\";i:56;s:1:\"b\";s:36:\"alterar notas e conceitos da direcao\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:2:{i:0;i:5;i:1;i:6;}}i:56;a:4:{s:1:\"a\";i:57;s:1:\"b\";s:29:\"consultar horarios da direcao\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:2:{i:0;i:5;i:1;i:6;}}i:57;a:4:{s:1:\"a\";i:58;s:1:\"b\";s:29:\"cadastrar horarios da direcao\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:2:{i:0;i:5;i:1;i:6;}}i:58;a:4:{s:1:\"a\";i:59;s:1:\"b\";s:26:\"editar horarios da direcao\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:2:{i:0;i:5;i:1;i:6;}}i:59;a:4:{s:1:\"a\";i:60;s:1:\"b\";s:31:\"reorganizar horarios da direcao\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:2:{i:0;i:5;i:1;i:6;}}i:60;a:4:{s:1:\"a\";i:61;s:1:\"b\";s:26:\"consultar aulas da direcao\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:2:{i:0;i:5;i:1;i:6;}}i:61;a:4:{s:1:\"a\";i:62;s:1:\"b\";s:24:\"ajustar aulas da direcao\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:2:{i:0;i:5;i:1;i:6;}}i:62;a:4:{s:1:\"a\";i:63;s:1:\"b\";s:29:\"consultar alimentacao escolar\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:5:{i:0;i:1;i:1;i:2;i:2;i:4;i:3;i:5;i:4;i:9;}}i:63;a:4:{s:1:\"a\";i:64;s:1:\"b\";s:19:\"cadastrar alimentos\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:4:{i:0;i:1;i:1;i:2;i:2;i:5;i:3;i:7;}}i:64;a:4:{s:1:\"a\";i:65;s:1:\"b\";s:16:\"editar alimentos\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:4:{i:0;i:1;i:1;i:2;i:2;i:5;i:3;i:7;}}i:65;a:4:{s:1:\"a\";i:66;s:1:\"b\";s:30:\"registrar entrada de alimentos\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:4:{i:0;i:1;i:1;i:2;i:2;i:5;i:3;i:7;}}i:66;a:4:{s:1:\"a\";i:67;s:1:\"b\";s:28:\"registrar saida de alimentos\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:4:{i:0;i:1;i:1;i:2;i:2;i:5;i:3;i:7;}}i:67;a:4:{s:1:\"a\";i:68;s:1:\"b\";s:22:\"lancar cardapio diario\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:4:{i:0;i:1;i:1;i:2;i:2;i:5;i:3;i:7;}}i:68;a:4:{s:1:\"a\";i:69;s:1:\"b\";s:30:\"consultar estoque de alimentos\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:3:{i:0;i:1;i:1;i:2;i:2;i:5;}}i:69;a:4:{s:1:\"a\";i:70;s:1:\"b\";s:36:\"consultar movimentacoes de alimentos\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:3:{i:0;i:1;i:1;i:2;i:2;i:5;}}i:70;a:4:{s:1:\"a\";i:71;s:1:\"b\";s:33:\"cadastrar categorias de alimentos\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:4:{i:0;i:1;i:1;i:2;i:2;i:5;i:3;i:7;}}i:71;a:4:{s:1:\"a\";i:72;s:1:\"b\";s:35:\"cadastrar fornecedores de alimentos\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:4:{i:0;i:1;i:1;i:2;i:2;i:5;i:3;i:7;}}i:72;a:4:{s:1:\"a\";i:73;s:1:\"b\";s:30:\"editar categorias de alimentos\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:4:{i:0;i:1;i:1;i:2;i:2;i:5;i:3;i:7;}}i:73;a:4:{s:1:\"a\";i:74;s:1:\"b\";s:32:\"editar fornecedores de alimentos\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:4:{i:0;i:1;i:1;i:2;i:2;i:5;i:3;i:7;}}i:74;a:4:{s:1:\"a\";i:75;s:1:\"b\";s:31:\"acessar portal da nutricionista\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:1:{i:0;i:7;}}i:75;a:4:{s:1:\"a\";i:76;s:1:\"b\";s:36:\"consultar alimentos da nutricionista\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:1:{i:0;i:7;}}i:76;a:4:{s:1:\"a\";i:77;s:1:\"b\";s:37:\"consultar categorias da nutricionista\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:1:{i:0;i:7;}}i:77;a:4:{s:1:\"a\";i:78;s:1:\"b\";s:39:\"consultar fornecedores da nutricionista\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:1:{i:0;i:7;}}i:78;a:4:{s:1:\"a\";i:79;s:1:\"b\";s:36:\"consultar cardapios da nutricionista\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:1:{i:0;i:7;}}i:79;a:4:{s:1:\"a\";i:80;s:1:\"b\";s:34:\"consultar estoque da nutricionista\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:1:{i:0;i:7;}}i:80;a:4:{s:1:\"a\";i:81;s:1:\"b\";s:35:\"consultar validade da nutricionista\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:1:{i:0;i:7;}}i:81;a:4:{s:1:\"a\";i:82;s:1:\"b\";s:40:\"consultar movimentacoes da nutricionista\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:1:{i:0;i:7;}}i:82;a:4:{s:1:\"a\";i:83;s:1:\"b\";s:50:\"consultar comparativo de alimentacao entre escolas\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:1:{i:0;i:7;}}i:83;a:4:{s:1:\"a\";i:84;s:1:\"b\";s:46:\"consultar relatorios gerenciais da alimentacao\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:1:{i:0;i:7;}}i:84;a:4:{s:1:\"a\";i:85;s:1:\"b\";s:27:\"acessar modulo psicossocial\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:1:{i:0;i:8;}}i:85;a:4:{s:1:\"a\";i:86;s:1:\"b\";s:29:\"consultar agenda psicossocial\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:1:{i:0;i:8;}}i:86;a:4:{s:1:\"a\";i:87;s:1:\"b\";s:36:\"registrar atendimentos psicossociais\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:1:{i:0;i:8;}}i:87;a:4:{s:1:\"a\";i:88;s:1:\"b\";s:32:\"consultar historico psicossocial\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:1:{i:0;i:8;}}i:88;a:4:{s:1:\"a\";i:89;s:1:\"b\";s:45:\"registrar planos de intervencao psicossociais\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:1:{i:0;i:8;}}i:89;a:4:{s:1:\"a\";i:90;s:1:\"b\";s:39:\"registrar encaminhamentos psicossociais\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:1:{i:0;i:8;}}i:90;a:4:{s:1:\"a\";i:91;s:1:\"b\";s:39:\"registrar casos disciplinares sigilosos\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:1:{i:0;i:8;}}i:91;a:4:{s:1:\"a\";i:92;s:1:\"b\";s:40:\"emitir relatorios tecnicos psicossociais\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:1:{i:0;i:8;}}i:92;a:4:{s:1:\"a\";i:93;s:1:\"b\";s:37:\"acessar dados sigilosos psicossociais\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:1:{i:0;i:8;}}i:93;a:4:{s:1:\"a\";i:94;s:1:\"b\";s:30:\"consultar documentos escolares\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:4:{i:0;i:1;i:1;i:4;i:2;i:5;i:3;i:9;}}i:94;a:4:{s:1:\"a\";i:95;s:1:\"b\";s:30:\"emitir declaracao de matricula\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:1:{i:0;i:1;}}i:95;a:4:{s:1:\"a\";i:96;s:1:\"b\";s:31:\"emitir declaracao de frequencia\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:1:{i:0;i:1;}}i:96;a:4:{s:1:\"a\";i:97;s:1:\"b\";s:31:\"emitir comprovante de matricula\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:1:{i:0;i:1;}}i:97;a:4:{s:1:\"a\";i:98;s:1:\"b\";s:31:\"emitir ficha cadastral do aluno\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:1:{i:0;i:1;}}i:98;a:4:{s:1:\"a\";i:99;s:1:\"b\";s:32:\"emitir ficha individual do aluno\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:1:{i:0;i:1;}}i:99;a:4:{s:1:\"a\";i:100;s:1:\"b\";s:28:\"emitir guia de transferencia\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:1:{i:0;i:1;}}i:100;a:4:{s:1:\"a\";i:101;s:1:\"b\";s:24:\"emitir historico escolar\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:1:{i:0;i:1;}}i:101;a:4:{s:1:\"a\";i:102;s:1:\"b\";s:18:\"emitir ata escolar\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:1:{i:0;i:1;}}i:102;a:4:{s:1:\"a\";i:103;s:1:\"b\";s:21:\"emitir oficio escolar\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:1:{i:0;i:1;}}i:103;a:4:{s:1:\"a\";i:104;s:1:\"b\";s:43:\"consultar documentos institucionais da rede\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:1:{i:0;i:6;}}i:104;a:4:{s:1:\"a\";i:105;s:1:\"b\";s:35:\"emitir oficio institucional da rede\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:1:{i:0;i:6;}}i:105;a:4:{s:1:\"a\";i:106;s:1:\"b\";s:35:\"emitir modelo institucional da rede\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:1:{i:0;i:6;}}i:106;a:4:{s:1:\"a\";i:107;s:1:\"b\";s:39:\"consultar documentos da direcao escolar\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:1:{i:0;i:5;}}i:107;a:4:{s:1:\"a\";i:108;s:1:\"b\";s:36:\"emitir documentos da direcao escolar\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:1:{i:0;i:5;}}i:108;a:4:{s:1:\"a\";i:109;s:1:\"b\";s:32:\"consultar documentos pedagogicos\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:2:{i:0;i:4;i:1;i:5;}}i:109;a:4:{s:1:\"a\";i:110;s:1:\"b\";s:29:\"emitir documentos pedagogicos\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:1:{i:0;i:4;}}i:110;a:4:{s:1:\"a\";i:111;s:1:\"b\";s:33:\"consultar documentos do professor\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:1:{i:0;i:3;}}i:111;a:4:{s:1:\"a\";i:112;s:1:\"b\";s:30:\"emitir documentos do professor\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:1:{i:0;i:3;}}i:112;a:4:{s:1:\"a\";i:113;s:1:\"b\";s:34:\"consultar documentos psicossociais\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:1:{i:0;i:8;}}i:113;a:4:{s:1:\"a\";i:114;s:1:\"b\";s:31:\"emitir documentos psicossociais\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:1:{i:0;i:8;}}i:114;a:4:{s:1:\"a\";i:115;s:1:\"b\";s:28:\"consultar relatorios da rede\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:1:{i:0;i:6;}}i:115;a:4:{s:1:\"a\";i:116;s:1:\"b\";s:38:\"emitir relatorio institucional da rede\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:1:{i:0;i:6;}}i:116;a:4:{s:1:\"a\";i:117;s:1:\"b\";s:38:\"emitir relatorio de matriculas da rede\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:1:{i:0;i:6;}}i:117;a:4:{s:1:\"a\";i:118;s:1:\"b\";s:42:\"emitir relatorio de situacao de matriculas\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:1:{i:0;i:6;}}i:118;a:4:{s:1:\"a\";i:119;s:1:\"b\";s:30:\"emitir relatorio de alunos aee\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:3:{i:0;i:1;i:1;i:2;i:2;i:6;}}i:119;a:4:{s:1:\"a\";i:120;s:1:\"b\";s:43:\"emitir relatorio quantitativo de matriculas\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:3:{i:0;i:1;i:1;i:2;i:2;i:6;}}i:120;a:4:{s:1:\"a\";i:121;s:1:\"b\";s:31:\"emitir relatorio mapa de turmas\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:3:{i:0;i:1;i:1;i:2;i:2;i:6;}}i:121;a:4:{s:1:\"a\";i:122;s:1:\"b\";s:41:\"emitir relatorio de professores por turma\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:3:{i:0;i:1;i:1;i:2;i:2;i:6;}}i:122;a:4:{s:1:\"a\";i:123;s:1:\"b\";s:29:\"emitir relatorio de auditoria\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:1:{i:0;i:6;}}i:123;a:4:{s:1:\"a\";i:124;s:1:\"b\";s:30:\"consultar relatorios escolares\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:5:{i:0;i:1;i:1;i:2;i:2;i:4;i:3;i:5;i:4;i:9;}}i:124;a:4:{s:1:\"a\";i:125;s:1:\"b\";s:43:\"emitir relatorios administrativos escolares\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:2:{i:0;i:1;i:1;i:2;}}i:125;a:4:{s:1:\"a\";i:126;s:1:\"b\";s:42:\"emitir relatorio de frequencia consolidada\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:2:{i:0;i:1;i:1;i:2;}}i:126;a:4:{s:1:\"a\";i:127;s:1:\"b\";s:34:\"emitir relatorio historico escolar\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:3:{i:0;i:1;i:1;i:2;i:2;i:5;}}i:127;a:4:{s:1:\"a\";i:128;s:1:\"b\";s:33:\"emitir relatorio ficha individual\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:4:{i:0;i:1;i:1;i:2;i:2;i:4;i:3;i:5;}}i:128;a:4:{s:1:\"a\";i:129;s:1:\"b\";s:39:\"emitir relatorio de alimentacao escolar\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:2:{i:0;i:1;i:1;i:2;}}i:129;a:4:{s:1:\"a\";i:130;s:1:\"b\";s:41:\"consultar notas e conceitos em relatorios\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:2:{i:0;i:1;i:1;i:2;}}i:130;a:4:{s:1:\"a\";i:131;s:1:\"b\";s:32:\"consultar relatorios pedagogicos\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:2:{i:0;i:4;i:1;i:5;}}i:131;a:4:{s:1:\"a\";i:132;s:1:\"b\";s:29:\"emitir relatorios pedagogicos\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:1:{i:0;i:4;}}i:132;a:4:{s:1:\"a\";i:133;s:1:\"b\";s:39:\"consultar relatorios da direcao escolar\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:1:{i:0;i:5;}}i:133;a:4:{s:1:\"a\";i:134;s:1:\"b\";s:36:\"emitir relatorios da direcao escolar\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:1:{i:0;i:5;}}i:134;a:4:{s:1:\"a\";i:135;s:1:\"b\";s:37:\"consultar relatorios da nutricionista\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:1:{i:0;i:7;}}i:135;a:4:{s:1:\"a\";i:136;s:1:\"b\";s:34:\"emitir relatorios da nutricionista\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:1:{i:0;i:7;}}i:136;a:4:{s:1:\"a\";i:137;s:1:\"b\";s:45:\"consultar relatorios tecnicos do psicossocial\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:1:{i:0;i:8;}}i:137;a:4:{s:1:\"a\";i:138;s:1:\"b\";s:42:\"emitir relatorios tecnicos do psicossocial\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:1:{i:0;i:8;}}i:138;a:4:{s:1:\"a\";i:139;s:1:\"b\";s:27:\"consultar auditoria da rede\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:1:{i:0;i:6;}}i:139;a:4:{s:1:\"a\";i:140;s:1:\"b\";s:27:\"consultar auditoria escolar\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:5:{i:0;i:1;i:1;i:2;i:2;i:4;i:3;i:5;i:4;i:9;}}i:140;a:4:{s:1:\"a\";i:141;s:1:\"b\";s:30:\"consultar auditoria pedagogica\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:2:{i:0;i:4;i:1;i:5;}}i:141;a:4:{s:1:\"a\";i:142;s:1:\"b\";s:38:\"consultar auditoria da direcao escolar\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:1:{i:0;i:5;}}i:142;a:4:{s:1:\"a\";i:143;s:1:\"b\";s:47:\"consultar auditoria do proprio trabalho docente\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:1:{i:0;i:3;}}i:143;a:4:{s:1:\"a\";i:144;s:1:\"b\";s:42:\"consultar auditoria da alimentacao escolar\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:1:{i:0;i:7;}}i:144;a:4:{s:1:\"a\";i:145;s:1:\"b\";s:41:\"consultar auditoria psicossocial sigilosa\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:1:{i:0;i:8;}}i:145;a:4:{s:1:\"a\";i:146;s:1:\"b\";s:39:\"visualizar dados sensiveis de auditoria\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:3:{i:0;i:5;i:1;i:6;i:2;i:8;}}i:146;a:4:{s:1:\"a\";i:147;s:1:\"b\";s:14:\"acessar painel\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:1:{i:0;i:6;}}i:147;a:4:{s:1:\"a\";i:148;s:1:\"b\";s:19:\"visualizar usuarios\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:1:{i:0;i:6;}}i:148;a:4:{s:1:\"a\";i:149;s:1:\"b\";s:13:\"criar usuario\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:1:{i:0;i:6;}}i:149;a:4:{s:1:\"a\";i:150;s:1:\"b\";s:14:\"editar usuario\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:1:{i:0;i:6;}}i:150;a:4:{s:1:\"a\";i:151;s:1:\"b\";s:23:\"ativar inativar usuario\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:1:{i:0;i:6;}}i:151;a:4:{s:1:\"a\";i:152;s:1:\"b\";s:22:\"visualizar instituicao\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:1:{i:0;i:6;}}i:152;a:4:{s:1:\"a\";i:153;s:1:\"b\";s:18:\"editar instituicao\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:1:{i:0;i:6;}}i:153;a:4:{s:1:\"a\";i:154;s:1:\"b\";s:24:\"visualizar configuracoes\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:1:{i:0;i:6;}}i:154;a:4:{s:1:\"a\";i:155;s:1:\"b\";s:20:\"editar configuracoes\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:1:{i:0;i:6;}}i:155;a:4:{s:1:\"a\";i:156;s:1:\"b\";s:18:\"visualizar escolas\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:1:{i:0;i:6;}}i:156;a:4:{s:1:\"a\";i:157;s:1:\"b\";s:12:\"criar escola\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:1:{i:0;i:6;}}i:157;a:4:{s:1:\"a\";i:158;s:1:\"b\";s:13:\"editar escola\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:1:{i:0;i:6;}}i:158;a:4:{s:1:\"a\";i:159;s:1:\"b\";s:22:\"ativar inativar escola\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:1:{i:0;i:6;}}i:159;a:4:{s:1:\"a\";i:160;s:1:\"b\";s:23:\"visualizar funcionarios\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:1:{i:0;i:6;}}i:160;a:4:{s:1:\"a\";i:161;s:1:\"b\";s:17:\"criar funcionario\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:1:{i:0;i:6;}}i:161;a:4:{s:1:\"a\";i:162;s:1:\"b\";s:18:\"editar funcionario\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:1:{i:0;i:6;}}i:162;a:4:{s:1:\"a\";i:163;s:1:\"b\";s:27:\"ativar inativar funcionario\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:1:{i:0;i:6;}}i:163;a:4:{s:1:\"a\";i:164;s:1:\"b\";s:18:\"gerenciar horarios\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:3:{i:0;i:4;i:1;i:5;i:2;i:9;}}i:164;a:4:{s:1:\"a\";i:165;s:1:\"b\";s:42:\"consultar demandas psicossociais escolares\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:3:{i:0;i:4;i:1;i:5;i:2;i:9;}}i:165;a:4:{s:1:\"a\";i:166;s:1:\"b\";s:42:\"registrar demandas psicossociais escolares\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:3:{i:0;i:4;i:1;i:5;i:2;i:9;}}i:166;a:3:{s:1:\"a\";i:167;s:1:\"b\";s:30:\"acesso irrestrito psicossocial\";s:1:\"c\";s:3:\"web\";}}s:5:\"roles\";a:9:{i:0;a:3:{s:1:\"a\";i:1;s:1:\"b\";s:19:\"Secretário Escolar\";s:1:\"c\";s:3:\"web\";}i:1;a:3:{s:1:\"a\";i:2;s:1:\"b\";s:23:\"Administrador da Escola\";s:1:\"c\";s:3:\"web\";}i:2;a:3:{s:1:\"a\";i:4;s:1:\"b\";s:23:\"Coordenador Pedagógico\";s:1:\"c\";s:3:\"web\";}i:3;a:3:{s:1:\"a\";i:5;s:1:\"b\";s:15:\"Diretor Escolar\";s:1:\"c\";s:3:\"web\";}i:4;a:3:{s:1:\"a\";i:9;s:1:\"b\";s:23:\"Técnico Administrativo\";s:1:\"c\";s:3:\"web\";}i:5;a:3:{s:1:\"a\";i:6;s:1:\"b\";s:21:\"Administrador da Rede\";s:1:\"c\";s:3:\"web\";}i:6;a:3:{s:1:\"a\";i:3;s:1:\"b\";s:9:\"Professor\";s:1:\"c\";s:3:\"web\";}i:7;a:3:{s:1:\"a\";i:7;s:1:\"b\";s:13:\"Nutricionista\";s:1:\"c\";s:3:\"web\";}i:8;a:3:{s:1:\"a\";i:8;s:1:\"b\";s:25:\"Psicologia/Psicopedagogia\";s:1:\"c\";s:3:\"web\";}}}', 1777660066);
 
 -- --------------------------------------------------------
 
@@ -317,7 +408,7 @@ CREATE TABLE `demandas_psicossociais` (
   `profissional_responsavel_id` bigint(20) UNSIGNED DEFAULT NULL,
   `tipo_atendimento` enum('psicologia','psicopedagogia','psicossocial') NOT NULL DEFAULT 'psicologia',
   `origem_demanda` enum('coordenacao','direcao','professor','familia','triagem_interna','demanda_espontanea','outro') NOT NULL,
-  `tipo_publico` enum('aluno','professor','funcionario','responsavel') NOT NULL,
+  `tipo_publico` enum('aluno','professor','funcionario','responsavel','coletivo') NOT NULL,
   `aluno_id` bigint(20) UNSIGNED DEFAULT NULL,
   `funcionario_id` bigint(20) UNSIGNED DEFAULT NULL,
   `responsavel_nome` varchar(255) DEFAULT NULL,
@@ -330,6 +421,7 @@ CREATE TABLE `demandas_psicossociais` (
   `observacoes` text DEFAULT NULL,
   `encaminhado_para_atendimento` tinyint(1) NOT NULL DEFAULT 0,
   `atendimento_id` bigint(20) UNSIGNED DEFAULT NULL,
+  `aberta_pela_escola` tinyint(1) NOT NULL DEFAULT 0,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -382,7 +474,8 @@ CREATE TABLE `diarios_professor` (
 --
 
 INSERT INTO `diarios_professor` (`id`, `escola_id`, `turma_id`, `disciplina_id`, `professor_id`, `ano_letivo`, `periodo_tipo`, `periodo_referencia`, `situacao`, `observacoes_gerais`, `created_at`, `updated_at`) VALUES
-(2, 6, 3, 3, 6, 2026, 'bimestre', '1', 'em_andamento', NULL, '2026-03-20 00:22:41', '2026-03-20 00:22:41');
+(2, 6, 3, 3, 6, 2026, 'bimestre', '1', 'em_andamento', NULL, '2026-03-20 00:22:41', '2026-03-20 00:22:41'),
+(3, 6, 3, 9, 6, 2026, 'bimestre', '1', 'em_andamento', NULL, '2026-05-01 01:49:55', '2026-05-01 01:49:55');
 
 -- --------------------------------------------------------
 
@@ -484,7 +577,8 @@ CREATE TABLE `escolas` (
 
 INSERT INTO `escolas` (`id`, `nome`, `cnpj`, `inep`, `qtd_salas`, `ato_posse_diretor`, `email`, `telefone`, `cep`, `endereco`, `bairro`, `localidade`, `cidade`, `uf`, `nome_gestor`, `cpf_gestor`, `ato_criacao`, `ato_autoriza`, `ato_recon`, `ativo`, `created_at`, `updated_at`) VALUES
 (5, 'Escola Municipal Zózimo Lima', '00.000.000/0001-00', NULL, NULL, NULL, 'zozimo@gmail.com', '(79) 0000-0000', '49700-000', 'Rua Principal, 100', 'Centro', NULL, 'Capela', 'SE', 'Gestora da Zózimo Lima', '44444444444', NULL, NULL, NULL, 1, '2026-03-18 01:23:19', '2026-03-19 22:07:49'),
-(6, 'Escola Municipal Major Honorino Leal', '36.564.071/0001-64', NULL, NULL, NULL, 'major@gmail.com', '(79) 55555-5555', '49700-000', 'Rua Coelho e Campos, 1201', 'Centro', NULL, 'Capela', 'SE', 'Nome da Gestora da Major', '66666666666', NULL, NULL, NULL, 1, '2026-03-19 22:09:12', '2026-03-19 22:09:12');
+(6, 'Escola Municipal Major Honorino Leal', '36.564.071/0001-64', '28014294', 12, '23/2021', 'major@gmail.com', '(79) 55555-5555', '49700-000', 'Rua Coelho e Campos, 1201', 'Centro', NULL, 'Capela', 'SE', 'Nome da Gestora da Major', '44444444444', 'DECRETO Nº 100/1979', 'decreto 28/1985', 'portaria 25/1986', 1, '2026-03-19 22:09:12', '2026-04-14 15:02:15'),
+(7, 'Escola Municipal Aurelina de Melo Sobral', NULL, '28014499', NULL, NULL, 'escolaaurelina@gmail.com', '(79) 9 8852-6545', '49700-000', 'Avenida Ariovaldo Barreto, 645', 'São Cristóvão', NULL, 'Capela', 'SE', 'Gestora da Escola Aurelina', '333.333.333-33', NULL, NULL, NULL, 1, '2026-04-14 14:19:25', '2026-04-14 14:19:25');
 
 -- --------------------------------------------------------
 
@@ -590,9 +684,9 @@ CREATE TABLE `frequencias_aula` (
 CREATE TABLE `funcionarios` (
   `id` bigint(20) UNSIGNED NOT NULL,
   `nome` varchar(255) NOT NULL,
-  `cpf` varchar(255) NOT NULL,
+  `cpf` varchar(500) DEFAULT NULL,
   `email` varchar(255) DEFAULT NULL,
-  `telefone` varchar(255) DEFAULT NULL,
+  `telefone` varchar(500) DEFAULT NULL,
   `cargo` varchar(255) NOT NULL,
   `ativo` tinyint(1) NOT NULL DEFAULT 1,
   `created_at` timestamp NULL DEFAULT NULL,
@@ -610,7 +704,12 @@ INSERT INTO `funcionarios` (`id`, `nome`, `cpf`, `email`, `telefone`, `cargo`, `
 (5, 'Naíne Ferreira dos Santos', '33333333333', 'naine@gmail.com', '(99) 99999-9999', 'Psicólogo', 1, '2026-03-19 20:49:58', '2026-03-19 20:49:58'),
 (6, 'Prefessor Amado Silva', '77777777777', 'professor@gmail.com', '(79) 44444-4444', 'Professor', 1, '2026-03-19 23:15:10', '2026-03-19 23:15:10'),
 (7, 'Coordenadora Escolar', '99999999999', 'coordenadora@gmail.com', '(79) 66666-6666', 'Coordenador', 1, '2026-03-20 00:02:17', '2026-03-20 00:02:17'),
-(8, 'Assistente Administrativo Escolar', '88888888888', 'assistente@gmail.com', '(79) 22222-2222', 'Secretário Escolar', 1, '2026-03-20 00:09:18', '2026-03-20 00:09:18');
+(8, 'Assistente Administrativo Escolar', '88888888888', 'assistente@gmail.com', '(79) 22222-2222', 'Secretário Escolar', 1, '2026-03-20 00:09:18', '2026-03-20 00:09:18'),
+(9, 'Luiz Gonzaga dos Santos', '695.569.412-41', 'luiz@gmail.com', '(79) 9 9956-7463', 'Vigilante', 1, '2026-04-14 14:21:29', '2026-04-14 14:21:29'),
+(10, 'Chico Soares Buarque', '896.542.785-85', 'chico@gmail.com', '(79) 9 5241-8574', 'Secretário Escolar', 1, '2026-04-14 14:22:42', '2026-04-14 14:22:42'),
+(11, 'Diretora da Escola Major', '98765432100', 'diretora@major.com', '(79) 7777-77777', 'Diretor', 1, '2026-04-28 15:36:51', '2026-04-28 15:36:51'),
+(12, 'Diretora da Escola Zozimo', '98765432111', 'diretora@zozimo.com', '(79) 8888-77777', 'Diretor', 1, '2026-04-28 15:50:42', '2026-04-28 15:50:42'),
+(13, 'Luiz Gonzaga', '666.666.666-66', 'luiz@gmail.com', '(79) 9 9999-9999', 'Professor', 1, '2026-04-30 21:35:03', '2026-04-30 21:35:03');
 
 -- --------------------------------------------------------
 
@@ -637,7 +736,38 @@ INSERT INTO `funcionario_escola` (`id`, `funcionario_id`, `escola_id`, `created_
 (4, 5, 5, NULL, NULL),
 (5, 6, 6, NULL, NULL),
 (6, 7, 6, NULL, NULL),
-(7, 8, 6, NULL, NULL);
+(7, 8, 6, NULL, NULL),
+(8, 9, 7, NULL, NULL),
+(9, 10, 7, NULL, NULL),
+(10, 11, 6, NULL, NULL),
+(11, 12, 6, NULL, NULL),
+(12, 13, 6, NULL, NULL),
+(13, 13, 5, NULL, NULL);
+
+-- --------------------------------------------------------
+
+--
+-- Estrutura para tabela `historico_escolar`
+--
+
+CREATE TABLE `historico_escolar` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `aluno_id` bigint(20) UNSIGNED NOT NULL,
+  `escola_origem` varchar(150) DEFAULT NULL,
+  `escola_inep` varchar(8) DEFAULT NULL,
+  `rede` enum('municipal','publica','privada','outra') DEFAULT NULL,
+  `cidade_uf` varchar(50) DEFAULT NULL,
+  `serie_cursada` varchar(30) DEFAULT NULL,
+  `ano_cursado` year(4) DEFAULT NULL,
+  `situacao` enum('nao_informado','transferido','concluiu','cursando','desistente') DEFAULT NULL,
+  `data_transferencia` date DEFAULT NULL,
+  `serie_pretendida` varchar(30) DEFAULT NULL,
+  `turno` enum('manha','tarde','noite','integral') DEFAULT NULL,
+  `pendencias` tinyint(1) NOT NULL DEFAULT 0,
+  `obs_pendencias` text DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -666,10 +796,13 @@ CREATE TABLE `horario_aulas` (
 --
 
 INSERT INTO `horario_aulas` (`id`, `escola_id`, `turma_id`, `disciplina_id`, `professor_id`, `dia_semana`, `horario_inicial`, `horario_final`, `ordem_aula`, `ativo`, `created_at`, `updated_at`, `deleted_at`) VALUES
-(1, 6, 3, 3, 6, 2, '12:30:00', '14:10:00', 1, 1, '2026-03-20 00:20:39', '2026-03-20 00:20:39', NULL),
-(2, 6, 3, 5, 6, 2, '14:10:00', '15:00:00', NULL, 1, '2026-03-20 00:20:39', '2026-03-20 00:20:39', NULL),
-(3, 6, 3, 6, 6, 2, '15:15:00', '16:05:00', NULL, 1, '2026-03-20 00:20:39', '2026-03-20 00:20:39', NULL),
-(4, 6, 3, 9, 6, 2, '16:05:00', '16:55:00', NULL, 1, '2026-03-20 00:20:39', '2026-03-20 00:20:39', NULL);
+(1, 6, 3, 3, 6, 2, '12:30:00', '13:20:00', 1, 1, '2026-03-20 00:20:39', '2026-04-30 21:37:34', NULL),
+(2, 6, 3, 5, 6, 2, '14:10:00', '15:00:00', NULL, 1, '2026-03-20 00:20:39', '2026-04-30 21:30:33', '2026-04-30 21:30:33'),
+(3, 6, 3, 6, 6, 2, '15:15:00', '16:05:00', NULL, 1, '2026-03-20 00:20:39', '2026-04-30 21:30:21', '2026-04-30 21:30:21'),
+(4, 6, 3, 9, 6, 2, '16:05:00', '16:55:00', 5, 1, '2026-03-20 00:20:39', '2026-04-30 21:55:30', NULL),
+(5, 6, 3, 3, 6, 2, '13:20:00', '14:10:00', 2, 1, '2026-04-30 21:52:39', '2026-04-30 21:52:39', NULL),
+(6, 6, 3, 6, 13, 2, '14:10:00', '15:00:00', 3, 1, '2026-04-30 22:09:31', '2026-04-30 22:09:31', NULL),
+(7, 6, 3, 4, 13, 2, '15:15:00', '16:05:00', 4, 1, '2026-04-30 22:10:52', '2026-04-30 22:10:52', NULL);
 
 -- --------------------------------------------------------
 
@@ -783,6 +916,14 @@ CREATE TABLE `lancamentos_avaliativos` (
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+--
+-- Despejando dados para a tabela `lancamentos_avaliativos`
+--
+
+INSERT INTO `lancamentos_avaliativos` (`id`, `diario_professor_id`, `matricula_id`, `usuario_registro_id`, `tipo_avaliacao`, `avaliacao_referencia`, `valor_numerico`, `conceito`, `observacoes`, `created_at`, `updated_at`) VALUES
+(2, 2, 5, 12, 'nota', 'bimestre 1', 9.50, NULL, NULL, '2026-04-30 23:07:29', '2026-04-30 23:07:29'),
+(3, 2, 7, 12, 'nota', 'bimestre 1', 7.60, NULL, NULL, '2026-04-30 23:07:41', '2026-04-30 23:07:41');
+
 -- --------------------------------------------------------
 
 --
@@ -817,6 +958,23 @@ CREATE TABLE `matriculas` (
   `ano_letivo` year(4) NOT NULL,
   `tipo` enum('regular','aee') NOT NULL DEFAULT 'regular',
   `status` enum('ativa','concluida','cancelada','transferida','rematriculada') NOT NULL DEFAULT 'ativa',
+  `turno` enum('manha','tarde','noite','integral') DEFAULT NULL,
+  `serie_pretendida` varchar(50) DEFAULT NULL,
+  `escola_origem` varchar(255) DEFAULT NULL,
+  `escola_inep` varchar(8) DEFAULT NULL,
+  `rede` enum('municipal','publica','privada','outra') DEFAULT NULL,
+  `cidade_uf` varchar(100) DEFAULT NULL,
+  `serie_cursada` varchar(50) DEFAULT NULL,
+  `ano_cursado` year(4) DEFAULT NULL,
+  `situacao` enum('transferido','concluiu','cursando','desistente') DEFAULT NULL,
+  `data_transferencia` date DEFAULT NULL,
+  `transporte` tinyint(1) NOT NULL DEFAULT 0,
+  `transporte_veiculo` enum('nao','vans','onibus','bicicleta','outros') DEFAULT NULL,
+  `bolsa_familia` tinyint(1) NOT NULL DEFAULT 0,
+  `bolsa_cartao` varchar(11) DEFAULT NULL,
+  `escolarizacao_outro` enum('nao','hospital','domicilio') DEFAULT NULL,
+  `pendencias` tinyint(1) NOT NULL DEFAULT 0,
+  `obs_pendencias` text DEFAULT NULL,
   `matricula_regular_id` bigint(20) UNSIGNED DEFAULT NULL,
   `data_matricula` date NOT NULL,
   `data_encerramento` date DEFAULT NULL,
@@ -829,9 +987,31 @@ CREATE TABLE `matriculas` (
 -- Despejando dados para a tabela `matriculas`
 --
 
-INSERT INTO `matriculas` (`id`, `aluno_id`, `escola_id`, `turma_id`, `ano_letivo`, `tipo`, `status`, `matricula_regular_id`, `data_matricula`, `data_encerramento`, `observacoes`, `created_at`, `updated_at`) VALUES
-(2, 3, 5, 2, '2026', 'regular', 'ativa', NULL, '2026-03-17', NULL, NULL, '2026-03-18 01:59:30', '2026-03-18 01:59:30'),
-(3, 4, 5, 2, '2026', 'regular', 'ativa', NULL, '2026-03-20', NULL, NULL, '2026-03-20 19:10:50', '2026-03-20 19:10:50');
+INSERT INTO `matriculas` (`id`, `aluno_id`, `escola_id`, `turma_id`, `ano_letivo`, `tipo`, `status`, `turno`, `serie_pretendida`, `escola_origem`, `escola_inep`, `rede`, `cidade_uf`, `serie_cursada`, `ano_cursado`, `situacao`, `data_transferencia`, `transporte`, `transporte_veiculo`, `bolsa_familia`, `bolsa_cartao`, `escolarizacao_outro`, `pendencias`, `obs_pendencias`, `matricula_regular_id`, `data_matricula`, `data_encerramento`, `observacoes`, `created_at`, `updated_at`) VALUES
+(2, 3, 5, 2, '2026', 'regular', 'ativa', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, NULL, NULL, 0, NULL, NULL, '2026-03-17', NULL, NULL, '2026-03-18 01:59:30', '2026-03-18 01:59:30'),
+(3, 4, 5, 2, '2026', 'regular', 'ativa', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, NULL, NULL, 0, NULL, NULL, '2026-03-20', NULL, NULL, '2026-03-20 19:10:50', '2026-03-20 19:10:50'),
+(4, 5, 6, 4, '2026', 'regular', 'ativa', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, NULL, NULL, 0, NULL, NULL, '2026-04-28', NULL, 'Será enturmado em outro momento', '2026-04-28 15:59:01', '2026-04-28 16:00:42'),
+(5, 6, 6, 3, '2026', 'regular', 'ativa', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, NULL, NULL, 0, NULL, NULL, '2026-04-28', NULL, 'Aluna matriculada de primeira no 9º ano - a', '2026-04-28 16:28:13', '2026-04-28 16:28:13'),
+(6, 5, 6, 4, '2026', 'aee', 'ativa', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, NULL, NULL, 0, NULL, NULL, '2026-04-28', NULL, NULL, '2026-04-28 20:29:03', '2026-04-28 20:29:03'),
+(7, 9, 6, 3, '2026', 'regular', 'ativa', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, NULL, NULL, 0, NULL, NULL, '2026-01-08', NULL, NULL, '2026-04-30 23:03:02', '2026-04-30 23:03:02'),
+(8, 10, 6, 3, '2026', 'regular', 'ativa', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, NULL, NULL, 0, NULL, NULL, '2026-01-08', NULL, NULL, '2026-04-30 23:03:02', '2026-04-30 23:03:02'),
+(9, 11, 6, 3, '2026', 'regular', 'ativa', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, NULL, NULL, 0, NULL, NULL, '2026-01-08', NULL, NULL, '2026-04-30 23:03:03', '2026-04-30 23:03:03'),
+(10, 12, 6, 3, '2026', 'regular', 'ativa', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, NULL, NULL, 0, NULL, NULL, '2026-01-08', NULL, NULL, '2026-04-30 23:03:03', '2026-04-30 23:03:03'),
+(11, 13, 6, 3, '2026', 'regular', 'ativa', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, NULL, NULL, 0, NULL, NULL, '2026-01-08', NULL, NULL, '2026-04-30 23:03:03', '2026-04-30 23:03:03'),
+(12, 14, 6, 3, '2026', 'regular', 'ativa', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, NULL, NULL, 0, NULL, NULL, '2026-01-08', NULL, NULL, '2026-04-30 23:03:03', '2026-04-30 23:03:03'),
+(13, 15, 6, 3, '2026', 'regular', 'ativa', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, NULL, NULL, 0, NULL, NULL, '2026-01-08', NULL, NULL, '2026-04-30 23:03:03', '2026-04-30 23:03:03'),
+(14, 16, 6, 3, '2026', 'regular', 'ativa', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, NULL, NULL, 0, NULL, NULL, '2026-01-08', NULL, NULL, '2026-04-30 23:03:03', '2026-04-30 23:03:03'),
+(15, 17, 6, 3, '2026', 'regular', 'ativa', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, NULL, NULL, 0, NULL, NULL, '2026-01-08', NULL, NULL, '2026-04-30 23:03:03', '2026-04-30 23:03:03'),
+(16, 18, 6, 3, '2026', 'regular', 'ativa', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, NULL, NULL, 0, NULL, NULL, '2026-01-08', NULL, NULL, '2026-04-30 23:03:03', '2026-04-30 23:03:03'),
+(17, 19, 6, 3, '2026', 'regular', 'ativa', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, NULL, NULL, 0, NULL, NULL, '2026-01-08', NULL, NULL, '2026-04-30 23:03:03', '2026-04-30 23:03:03'),
+(18, 20, 6, 3, '2026', 'regular', 'ativa', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, NULL, NULL, 0, NULL, NULL, '2026-01-08', NULL, NULL, '2026-04-30 23:03:03', '2026-04-30 23:03:03'),
+(19, 21, 6, 3, '2026', 'regular', 'ativa', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, NULL, NULL, 0, NULL, NULL, '2026-01-08', NULL, NULL, '2026-04-30 23:03:03', '2026-04-30 23:03:03'),
+(20, 22, 6, 3, '2026', 'regular', 'ativa', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, NULL, NULL, 0, NULL, NULL, '2026-01-08', NULL, NULL, '2026-04-30 23:03:03', '2026-04-30 23:03:03'),
+(21, 23, 6, 3, '2026', 'regular', 'ativa', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, NULL, NULL, 0, NULL, NULL, '2026-01-08', NULL, NULL, '2026-04-30 23:03:03', '2026-04-30 23:03:03'),
+(22, 24, 6, 3, '2026', 'regular', 'ativa', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, NULL, NULL, 0, NULL, NULL, '2026-01-08', NULL, NULL, '2026-04-30 23:03:03', '2026-04-30 23:03:03'),
+(23, 25, 6, 3, '2026', 'regular', 'ativa', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, NULL, NULL, 0, NULL, NULL, '2026-01-08', NULL, NULL, '2026-04-30 23:03:03', '2026-04-30 23:03:03'),
+(24, 26, 6, 3, '2026', 'regular', 'ativa', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, NULL, NULL, 0, NULL, NULL, '2026-01-08', NULL, NULL, '2026-04-30 23:03:03', '2026-04-30 23:03:03'),
+(25, 27, 6, 3, '2026', 'regular', 'ativa', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, NULL, NULL, 0, NULL, NULL, '2026-01-09', NULL, NULL, '2026-04-30 23:03:03', '2026-04-30 23:03:03');
 
 -- --------------------------------------------------------
 
@@ -854,7 +1034,11 @@ CREATE TABLE `matricula_historicos` (
 
 INSERT INTO `matricula_historicos` (`id`, `matricula_id`, `acao`, `descricao`, `usuario_id`, `created_at`) VALUES
 (1, 2, 'criacao', 'Matrícula regular realizada para o ano letivo 2026.', 9, '2026-03-18 01:59:30'),
-(2, 3, 'criacao', 'Matrícula regular realizada para o ano letivo 2026.', 8, '2026-03-20 19:10:50');
+(2, 3, 'criacao', 'Matrícula regular realizada para o ano letivo 2026.', 8, '2026-03-20 19:10:50'),
+(3, 4, 'criacao', 'Matrícula regular realizada para o ano letivo 2026.', 14, '2026-04-28 15:59:01'),
+(4, 4, 'enturmacao', 'Aluno alocado na turma ID: 4.', 17, '2026-04-28 16:00:42'),
+(5, 5, 'criacao', 'Matrícula regular realizada para o ano letivo 2026.', 17, '2026-04-28 16:28:13'),
+(6, 6, 'criacao', 'Matrícula aee realizada para o ano letivo 2026.', 17, '2026-04-28 20:29:03');
 
 -- --------------------------------------------------------
 
@@ -991,7 +1175,28 @@ INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES
 (49, '2026_03_20_153343_create_triagens_psicossociais_table', 4),
 (50, '2026_03_20_153412_create_sessoes_atendimentos_table', 4),
 (51, '2026_03_20_153444_create_devolutivas_psicossociais_table', 4),
-(52, '2026_03_20_153511_create_reavaliacoes_psicossociais_table', 4);
+(52, '2026_03_20_153511_create_reavaliacoes_psicossociais_table', 4),
+(53, '2026_03_22_154437_add_encerramento_fields_to_atendimentos_psicossociais_table', 5),
+(54, '2026_04_01_120000_add_coletivo_to_demandas_psicossociais_tipo_publico', 5),
+(55, '2026_04_01_133000_add_aberta_pela_escola_to_demandas_psicossociais_table', 5),
+(56, '2026_04_01_134000_add_demandas_psicossociais_escolares_permissions', 5),
+(57, '2026_04_01_150000_add_acesso_irrestrito_psicossocial_permission', 5),
+(58, '2026_04_28_140357_create_aluno_enderecos_table', 6),
+(59, '2026_04_28_140420_create_aluno_saude_table', 7),
+(60, '2026_04_28_140439_create_aluno_autorizacoes_table', 8),
+(61, '2026_04_28_140502_create_historico_escolar_table', 9),
+(62, '2026_04_13_000001_add_escola_id_to_alunos_table', 10),
+(63, '2026_04_13_145454_add_detalhes_escola_to_escolas_table', 11),
+(64, '2026_04_13_160000_add_localidade_to_escolas_table', 11),
+(65, '2026_04_13_170000_fix_missing_columns_on_escolas_table', 11),
+(66, '2026_04_27_231437_expand_encrypted_fields', 11),
+(67, '2026_04_27_232059_expand_aluno_cpf_field', 11),
+(68, '2026_04_28_120000_add_columns_to_matriculas_table', 11),
+(69, '2026_04_30_203515_create_planejamento_unidades_table', 12),
+(70, '2026_04_30_231009_drop_planejamentos_semanais_add_campos_planejamentos_periodo', 13),
+(71, '2026_04_30_235500_normalize_planejamentos_periodo_campos_pedagogicos', 14),
+(72, '2026_04_30_235600_default_unidade_planejamentos_anuais', 14),
+(73, '2026_04_30_235700_ensure_status_planejamentos_anuais', 14);
 
 -- --------------------------------------------------------
 
@@ -1038,7 +1243,10 @@ INSERT INTO `modelo_has_perfis` (`role_id`, `model_type`, `model_id`) VALUES
 (1, 'App\\Models\\Usuario', 9),
 (1, 'App\\Models\\Usuario', 14),
 (3, 'App\\Models\\Usuario', 12),
+(3, 'App\\Models\\Usuario', 19),
 (4, 'App\\Models\\Usuario', 13),
+(5, 'App\\Models\\Usuario', 17),
+(5, 'App\\Models\\Usuario', 18),
 (6, 'App\\Models\\Usuario', 8),
 (7, 'App\\Models\\Usuario', 10),
 (8, 'App\\Models\\Usuario', 11);
@@ -1202,41 +1410,92 @@ CREATE TABLE `perfil_has_permissoes` (
 INSERT INTO `perfil_has_permissoes` (`permission_id`, `role_id`) VALUES
 (1, 1),
 (1, 2),
+(1, 4),
+(1, 5),
+(1, 9),
 (2, 1),
 (2, 2),
+(2, 4),
+(2, 5),
+(2, 9),
 (3, 1),
 (3, 2),
+(3, 4),
+(3, 5),
+(3, 9),
 (4, 1),
 (4, 2),
+(4, 4),
+(4, 5),
+(4, 9),
 (5, 1),
 (5, 2),
+(5, 5),
+(5, 9),
 (6, 1),
 (6, 2),
+(6, 4),
+(6, 5),
+(6, 9),
 (7, 1),
 (7, 2),
+(7, 5),
 (8, 1),
 (8, 2),
+(8, 4),
+(8, 5),
+(8, 9),
 (9, 1),
 (9, 2),
+(9, 4),
+(9, 5),
+(9, 9),
 (10, 1),
 (10, 2),
+(10, 5),
 (11, 1),
 (11, 2),
+(11, 4),
+(11, 5),
+(11, 9),
 (12, 1),
 (12, 2),
+(12, 4),
+(12, 5),
+(12, 9),
 (13, 1),
 (13, 2),
+(13, 4),
+(13, 5),
+(13, 9),
 (14, 1),
 (14, 2),
+(14, 4),
+(14, 5),
+(14, 9),
 (15, 1),
 (15, 2),
+(15, 4),
+(15, 5),
+(15, 9),
 (16, 1),
 (16, 2),
+(16, 4),
+(16, 5),
+(16, 9),
+(17, 4),
+(17, 5),
+(18, 4),
+(18, 5),
+(19, 4),
+(19, 5),
+(19, 9),
 (20, 1),
 (20, 2),
 (20, 4),
 (20, 5),
 (20, 6),
+(20, 9),
 (21, 3),
 (21, 6),
 (22, 3),
@@ -1252,31 +1511,43 @@ INSERT INTO `perfil_has_permissoes` (`permission_id`, `role_id`) VALUES
 (27, 3),
 (27, 6),
 (28, 4),
+(28, 5),
 (28, 6),
 (29, 4),
+(29, 5),
 (29, 6),
 (30, 4),
+(30, 5),
 (30, 6),
 (31, 4),
+(31, 5),
 (31, 6),
 (32, 4),
+(32, 5),
 (32, 6),
 (33, 4),
+(33, 5),
 (33, 6),
 (34, 4),
+(34, 5),
 (34, 6),
 (35, 4),
+(35, 5),
 (35, 6),
+(36, 4),
 (36, 5),
 (36, 6),
+(36, 9),
 (37, 5),
 (37, 6),
 (38, 5),
 (38, 6),
 (39, 5),
 (39, 6),
+(40, 4),
 (40, 5),
 (40, 6),
+(41, 4),
 (41, 5),
 (41, 6),
 (42, 5),
@@ -1286,22 +1557,29 @@ INSERT INTO `perfil_has_permissoes` (`permission_id`, `role_id`) VALUES
 (44, 5),
 (44, 6),
 (45, 4),
+(45, 5),
 (45, 6),
 (46, 4),
+(46, 5),
 (46, 6),
 (47, 4),
+(47, 5),
 (47, 6),
 (48, 4),
+(48, 5),
 (48, 6),
 (49, 4),
+(49, 5),
 (49, 6),
 (50, 4),
 (50, 6),
 (51, 4),
 (51, 6),
 (52, 4),
+(52, 5),
 (52, 6),
 (53, 4),
+(53, 5),
 (53, 6),
 (54, 5),
 (54, 6),
@@ -1323,7 +1601,9 @@ INSERT INTO `perfil_has_permissoes` (`permission_id`, `role_id`) VALUES
 (62, 6),
 (63, 1),
 (63, 2),
+(63, 4),
 (63, 5),
+(63, 9),
 (64, 1),
 (64, 2),
 (64, 5),
@@ -1386,6 +1666,9 @@ INSERT INTO `perfil_has_permissoes` (`permission_id`, `role_id`) VALUES
 (92, 8),
 (93, 8),
 (94, 1),
+(94, 4),
+(94, 5),
+(94, 9),
 (95, 1),
 (96, 1),
 (97, 1),
@@ -1401,6 +1684,7 @@ INSERT INTO `perfil_has_permissoes` (`permission_id`, `role_id`) VALUES
 (107, 5),
 (108, 5),
 (109, 4),
+(109, 5),
 (110, 4),
 (111, 3),
 (112, 3),
@@ -1425,6 +1709,9 @@ INSERT INTO `perfil_has_permissoes` (`permission_id`, `role_id`) VALUES
 (123, 6),
 (124, 1),
 (124, 2),
+(124, 4),
+(124, 5),
+(124, 9),
 (125, 1),
 (125, 2),
 (126, 1),
@@ -1441,6 +1728,7 @@ INSERT INTO `perfil_has_permissoes` (`permission_id`, `role_id`) VALUES
 (130, 1),
 (130, 2),
 (131, 4),
+(131, 5),
 (132, 4),
 (133, 5),
 (134, 5),
@@ -1451,7 +1739,11 @@ INSERT INTO `perfil_has_permissoes` (`permission_id`, `role_id`) VALUES
 (139, 6),
 (140, 1),
 (140, 2),
+(140, 4),
+(140, 5),
+(140, 9),
 (141, 4),
+(141, 5),
 (142, 5),
 (143, 3),
 (144, 7),
@@ -1475,7 +1767,16 @@ INSERT INTO `perfil_has_permissoes` (`permission_id`, `role_id`) VALUES
 (160, 6),
 (161, 6),
 (162, 6),
-(163, 6);
+(163, 6),
+(164, 4),
+(164, 5),
+(164, 9),
+(165, 4),
+(165, 5),
+(165, 9),
+(166, 4),
+(166, 5),
+(166, 9);
 
 -- --------------------------------------------------------
 
@@ -1503,7 +1804,8 @@ INSERT INTO `perfis` (`id`, `name`, `guard_name`, `created_at`, `updated_at`) VA
 (5, 'Diretor Escolar', 'web', '2026-03-18 01:20:36', '2026-03-18 01:20:36'),
 (6, 'Administrador da Rede', 'web', '2026-03-18 01:20:36', '2026-03-18 01:20:36'),
 (7, 'Nutricionista', 'web', '2026-03-18 01:20:39', '2026-03-18 01:20:39'),
-(8, 'Psicologia/Psicopedagogia', 'web', '2026-03-18 01:20:40', '2026-03-18 01:20:40');
+(8, 'Psicologia/Psicopedagogia', 'web', '2026-03-18 01:20:40', '2026-03-18 01:20:40'),
+(9, 'Técnico Administrativo', 'web', '2026-04-28 14:15:31', '2026-04-28 14:15:31');
 
 -- --------------------------------------------------------
 
@@ -1686,7 +1988,11 @@ INSERT INTO `permissoes` (`id`, `name`, `guard_name`, `created_at`, `updated_at`
 (160, 'visualizar funcionarios', 'web', '2026-03-18 01:23:19', '2026-03-18 01:23:19'),
 (161, 'criar funcionario', 'web', '2026-03-18 01:23:19', '2026-03-18 01:23:19'),
 (162, 'editar funcionario', 'web', '2026-03-18 01:23:19', '2026-03-18 01:23:19'),
-(163, 'ativar inativar funcionario', 'web', '2026-03-18 01:23:19', '2026-03-18 01:23:19');
+(163, 'ativar inativar funcionario', 'web', '2026-03-18 01:23:19', '2026-03-18 01:23:19'),
+(164, 'gerenciar horarios', 'web', '2026-04-28 14:15:31', '2026-04-28 14:15:31'),
+(165, 'consultar demandas psicossociais escolares', 'web', '2026-04-28 14:15:31', '2026-04-28 14:15:31'),
+(166, 'registrar demandas psicossociais escolares', 'web', '2026-04-28 14:15:31', '2026-04-28 14:15:31'),
+(167, 'acesso irrestrito psicossocial', 'web', '2026-04-28 15:46:34', '2026-04-28 15:46:34');
 
 -- --------------------------------------------------------
 
@@ -1697,6 +2003,8 @@ INSERT INTO `permissoes` (`id`, `name`, `guard_name`, `created_at`, `updated_at`
 CREATE TABLE `planejamentos_anuais` (
   `id` bigint(20) UNSIGNED NOT NULL,
   `diario_professor_id` bigint(20) UNSIGNED NOT NULL,
+  `unidade` tinyint(4) NOT NULL DEFAULT 1,
+  `status` varchar(20) DEFAULT 'rascunho',
   `periodo_vigencia_inicio` date DEFAULT NULL,
   `periodo_vigencia_fim` date DEFAULT NULL,
   `tema_gerador` varchar(255) DEFAULT NULL,
@@ -1717,6 +2025,20 @@ CREATE TABLE `planejamentos_anuais` (
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+--
+-- Despejando dados para a tabela `planejamentos_anuais`
+--
+
+INSERT INTO `planejamentos_anuais` (`id`, `diario_professor_id`, `unidade`, `status`, `periodo_vigencia_inicio`, `periodo_vigencia_fim`, `tema_gerador`, `objetivos_gerais`, `competencias_habilidades`, `conteudos`, `metodologia`, `recursos_didaticos`, `estrategias_pedagogicas`, `instrumentos_avaliacao`, `adequacoes_inclusao`, `estrategias_metodologicas`, `criterios_avaliacao`, `cronograma_previsto`, `referencias`, `observacoes`, `created_at`, `updated_at`) VALUES
+(1, 2, 1, 'enviado', NULL, NULL, 'Todo planejamento Unidade I - Unidade(s) Temática(s)', 'Todo planejamento Unidade I', 'Todo planejamento Unidade I', 'Todo planejamento Unidade I', 'Todo planejamento Unidade I', 'Todo planejamento Unidade I', 'Todo planejamento Unidade I', 'Todo planejamento Unidade I', 'Todo planejamento Unidade I', NULL, NULL, NULL, 'Todo planejamento Unidade I', 'Todo planejamento Unidade I', '2026-05-01 01:30:06', '2026-05-01 01:46:19'),
+(2, 2, 2, 'enviado', NULL, NULL, 'Todo planejamento Unidade II', 'Todo planejamento Unidade II', 'Todo planejamento Unidade II', 'Todo planejamento Unidade II', 'Todo planejamento Unidade II - Metodologias / Estratégias', 'Todo planejamento Unidade II', 'Todo planejamento Unidade II', 'Todo planejamento Unidade II', 'Todo planejamento Unidade II', NULL, NULL, NULL, 'Todo planejamento Unidade II', 'Todo planejamento Unidade II', '2026-05-01 01:44:52', '2026-05-01 01:46:19'),
+(3, 2, 3, 'enviado', NULL, NULL, 'Todo planejamento nasce unidade III', 'Todo planejamento nasce unidade III', 'Todo planejamento nasce unidade III - Habilidades (BNCC)', 'Todo planejamento nasce unidade III', 'Todo planejamento nasce unidade III', 'Todo planejamento nasce unidade III', 'Todo planejamento nasce unidade III', 'Todo planejamento nasce unidade III', 'Todo planejamento nasce unidade III', NULL, NULL, NULL, 'Todo planejamento nasce unidade III', 'Todo planejamento nasce unidade III', '2026-05-01 01:44:52', '2026-05-01 01:46:19'),
+(4, 2, 4, 'enviado', NULL, NULL, 'Todo planejamento nasce unidade IV', 'Todo planejamento nasce unidade IV - Objetivos das aulas', 'Todo planejamento nasce unidade IV', 'Todo planejamento nasce unidade IV', 'Todo planejamento nasce unidade IV', 'Todo planejamento nasce unidade IV', 'Todo planejamento nasce unidade IV', 'Todo planejamento nasce unidade IV', 'Todo planejamento nasce unidade IV', NULL, NULL, NULL, 'Todo planejamento nasce unidade IV', 'Todo planejamento nasce unidade IV', '2026-05-01 01:44:52', '2026-05-01 01:46:19'),
+(5, 3, 1, 'enviado', NULL, NULL, 'Diario de Educação Física - Unidade I', 'Diario de Educação Física - Unidade I', 'Diario de Educação Física - Unidade I', 'Diario de Educação Física - Unidade I', 'Diario de Educação Física - Unidade I', 'Diario de Educação Física - Unidade I', 'Diario de Educação Física - Unidade I', 'Diario de Educação Física - Unidade I', 'Diario de Educação Física - Unidade I', NULL, NULL, NULL, 'Diario de Educação Física - Unidade I', 'Diario de Educação Física - Unidade I', '2026-05-01 01:51:55', '2026-05-01 01:52:12'),
+(6, 3, 2, 'enviado', NULL, NULL, 'Diario de Educação Física - Unidade II', 'Diario de Educação Física - Unidade II', 'Diario de Educação Física - Unidade II', 'Diario de Educação Física - Unidade II', 'Diario de Educação Física - Unidade II', 'Diario de Educação Física - Unidade II', 'Diario de Educação Física - Unidade II', 'Diario de Educação Física - Unidade II', 'Diario de Educação Física - Unidade II', NULL, NULL, NULL, 'Diario de Educação Física - Unidade II', 'Diario de Educação Física - Unidade II', '2026-05-01 01:51:55', '2026-05-01 01:52:12'),
+(7, 3, 3, 'enviado', NULL, NULL, 'Diario de Educação Física - Unidade III', 'Diario de Educação Física - Unidade III', 'Diario de Educação Física - Unidade III', 'Diario de Educação Física - Unidade III', 'Diario de Educação Física - Unidade III', NULL, 'Diario de Educação Física - Unidade III', 'Diario de Educação Física - Unidade III', 'Diario de Educação Física - Unidade III', NULL, NULL, NULL, 'Diario de Educação Física - Unidade III', 'Diario de Educação Física - Unidade III', '2026-05-01 01:51:55', '2026-05-01 01:52:12'),
+(8, 3, 4, 'enviado', NULL, NULL, 'Diario de Educação Física - Unidade IV', 'Diario de Educação Física - Unidade IV', 'Diario de Educação Física - Unidade IV', 'Diario de Educação Física - Unidade IV', 'Diario de Educação Física - Unidade IV', 'Diario de Educação Física - Unidade IV', 'Diario de Educação Física - Unidade IV', 'Diario de Educação Física - Unidade IV', 'Diario de Educação Física - Unidade IV', NULL, NULL, NULL, 'Diario de Educação Física - Unidade IV', 'Diario de Educação Física - Unidade IV', '2026-05-01 01:51:55', '2026-05-01 01:52:12');
+
 -- --------------------------------------------------------
 
 --
@@ -1727,6 +2049,9 @@ CREATE TABLE `planejamentos_periodo` (
   `id` bigint(20) UNSIGNED NOT NULL,
   `diario_professor_id` bigint(20) UNSIGNED NOT NULL,
   `tipo_planejamento` varchar(20) NOT NULL,
+  `status` varchar(20) DEFAULT 'rascunho',
+  `unidade` tinyint(4) DEFAULT NULL,
+  `tema_gerador` varchar(255) DEFAULT NULL,
   `periodo_referencia` varchar(120) DEFAULT NULL,
   `data_inicio` date NOT NULL,
   `data_fim` date NOT NULL,
@@ -1738,30 +2063,20 @@ CREATE TABLE `planejamentos_periodo` (
   `estrategias_pedagogicas` text DEFAULT NULL,
   `instrumentos_avaliacao` text DEFAULT NULL,
   `observacoes` text DEFAULT NULL,
+  `referencias` text DEFAULT NULL,
   `adequacoes_inclusao` text DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- --------------------------------------------------------
-
 --
--- Estrutura para tabela `planejamentos_semanais`
+-- Despejando dados para a tabela `planejamentos_periodo`
 --
 
-CREATE TABLE `planejamentos_semanais` (
-  `id` bigint(20) UNSIGNED NOT NULL,
-  `diario_professor_id` bigint(20) UNSIGNED NOT NULL,
-  `data_inicio_semana` date NOT NULL,
-  `data_fim_semana` date NOT NULL,
-  `objetivos_semana` text NOT NULL,
-  `conteudos_previstos` text NOT NULL,
-  `estrategias` text DEFAULT NULL,
-  `avaliacao_prevista` text DEFAULT NULL,
-  `observacoes` text DEFAULT NULL,
-  `created_at` timestamp NULL DEFAULT NULL,
-  `updated_at` timestamp NULL DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+INSERT INTO `planejamentos_periodo` (`id`, `diario_professor_id`, `tipo_planejamento`, `status`, `unidade`, `tema_gerador`, `periodo_referencia`, `data_inicio`, `data_fim`, `objetivos_aprendizagem`, `habilidades_competencias`, `conteudos`, `metodologia`, `recursos_didaticos`, `estrategias_pedagogicas`, `instrumentos_avaliacao`, `observacoes`, `referencias`, `adequacoes_inclusao`, `created_at`, `updated_at`) VALUES
+(1, 2, 'quinzenal', 'enviado', NULL, 'Saúde e vida', '2ª Quizena de abril', '2026-04-15', '2026-04-30', 'Objetivos da aula serão debatidos', 'BNCC005TP', 'Encontrar a saúde através de treinamentos', 'Futebol, veleibol', 'Quadra de esporte, bolas', 'Jogos, brincadeiras, corridas', 'Fazer 20 repetições de cada exercício', 'Fazer a aula do dia', 'Livros, internet, IA', 'Inserir deficientes', '2026-05-01 03:23:18', '2026-05-01 03:23:39'),
+(2, 2, 'quinzenal', 'rascunho', NULL, 'Jogos e cidadania', '1ª Quizena de maio', '2026-05-01', '2026-05-15', 'Testando para ver se altera', 'Será que vai alterar', 'Espero que sim', 'Pois, eu acho que não vai alterar nada', 'Também viu, pelo visto esse cara é bom', 'Hum! Rapaz acho que vai dar certo', 'E se deixar algum campo sem alterar', 'Fez nada! Isso é conversa pra boi dormir', 'teste', 'Dizem que é, ele fez um sistema em menos de 30min', '2026-05-01 03:25:44', '2026-05-01 03:41:57'),
+(3, 2, 'quinzenal', 'rascunho', NULL, 'Recreação com saúde', '2ª Quizena de maio', '2026-05-16', '2026-05-30', 'Recreação', 'EFC3958', 'Será feito por ele', 'Com certeza os alunos', 'Sim ele já foi para os EUA', 'Esse professor é fera', 'Serão bem avaliados', 'Mentira', 'As duas coisas', 'Verdade', '2026-05-01 03:47:38', '2026-05-01 03:47:38');
 
 -- --------------------------------------------------------
 
@@ -1926,7 +2241,102 @@ INSERT INTO `registros_auditoria` (`id`, `usuario_id`, `escola_id`, `modulo`, `a
 (109, 11, 6, 'psicossocial', 'visualizacao_sensivel', 'Atendimento Psicossocial', 'App\\Models\\AtendimentoPsicossocial', 3, 'sigiloso', '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36', NULL, NULL, '{\"rota\":\"psicologia.show\",\"portal_origem\":\"psicossocial\",\"metodo_http\":\"GET\",\"atendimento_id\":3,\"tipo_publico\":\"aluno\",\"nivel_sigilo\":\"restrito\"}', '2026-03-20 18:24:38', '2026-03-20 18:24:38'),
 (110, 11, 6, 'psicossocial', 'visualizacao_sensivel', 'Atendimento Psicossocial', 'App\\Models\\AtendimentoPsicossocial', 3, 'sigiloso', '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36', NULL, NULL, '{\"rota\":\"psicologia.show\",\"portal_origem\":\"psicossocial\",\"metodo_http\":\"GET\",\"atendimento_id\":3,\"tipo_publico\":\"aluno\",\"nivel_sigilo\":\"restrito\"}', '2026-03-20 18:45:18', '2026-03-20 18:45:18'),
 (111, 11, 6, 'psicossocial', 'visualizacao_sensivel', 'Atendimento Psicossocial', 'App\\Models\\AtendimentoPsicossocial', 3, 'sigiloso', '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36', NULL, NULL, '{\"rota\":\"psicologia.show\",\"portal_origem\":\"psicossocial\",\"metodo_http\":\"GET\",\"atendimento_id\":3,\"tipo_publico\":\"aluno\",\"nivel_sigilo\":\"restrito\"}', '2026-03-20 18:46:30', '2026-03-20 18:46:30'),
-(112, 8, 5, 'matriculas', 'criacao', 'Matricula', 'App\\Models\\Matricula', 3, 'alto', '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36 Edg/145.0.0.0', NULL, '{\"aluno_id\":\"4\",\"escola_id\":5,\"turma_id\":\"2\",\"ano_letivo\":\"2026\",\"tipo\":\"regular\",\"status\":\"ativa\",\"data_matricula\":\"2026-03-20 00:00:00\"}', '{\"rota\":\"secretaria-escolar.matriculas.store\",\"portal_origem\":\"secretaria-escolar\",\"metodo_http\":\"POST\",\"aluno_id\":\"4\",\"turma_id\":\"2\",\"ano_letivo\":2026,\"tipo_matricula\":\"regular\"}', '2026-03-20 19:10:50', '2026-03-20 19:10:50');
+(112, 8, 5, 'matriculas', 'criacao', 'Matricula', 'App\\Models\\Matricula', 3, 'alto', '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36 Edg/145.0.0.0', NULL, '{\"aluno_id\":\"4\",\"escola_id\":5,\"turma_id\":\"2\",\"ano_letivo\":\"2026\",\"tipo\":\"regular\",\"status\":\"ativa\",\"data_matricula\":\"2026-03-20 00:00:00\"}', '{\"rota\":\"secretaria-escolar.matriculas.store\",\"portal_origem\":\"secretaria-escolar\",\"metodo_http\":\"POST\",\"aluno_id\":\"4\",\"turma_id\":\"2\",\"ano_letivo\":2026,\"tipo_matricula\":\"regular\"}', '2026-03-20 19:10:50', '2026-03-20 19:10:50'),
+(113, 8, NULL, 'escolas', 'criacao', 'Escola', 'App\\Models\\Escola', 7, 'medio', '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36', NULL, '{\"nome\":\"Escola Municipal Aurelina de Melo Sobral\",\"cnpj\":null,\"email\":\"escolaaurelina@gmail.com\",\"telefone\":\"(79) 9 8852-6545\",\"cidade\":\"Capela\",\"uf\":\"SE\"}', '{\"rota\":\"secretaria.escolas.store\",\"portal_origem\":\"secretaria\",\"metodo_http\":\"POST\"}', '2026-04-14 14:19:25', '2026-04-14 14:19:25'),
+(114, 8, NULL, 'funcionarios', 'criacao', 'Funcionario', 'App\\Models\\Funcionario', 9, 'medio', '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36', NULL, '{\"nome\":\"Luiz Gonzaga dos Santos\",\"cpf\":\"695.569.412-41\",\"email\":\"luiz@gmail.com\",\"telefone\":\"(79) 9 9956-7463\",\"cargo\":\"Vigilante\"}', '{\"rota\":\"secretaria.funcionarios.store\",\"portal_origem\":\"secretaria\",\"metodo_http\":\"POST\"}', '2026-04-14 14:21:29', '2026-04-14 14:21:29'),
+(115, 8, NULL, 'funcionarios', 'criacao', 'Funcionario', 'App\\Models\\Funcionario', 10, 'medio', '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36', NULL, '{\"nome\":\"Chico Soares Buarque\",\"cpf\":\"896.542.785-85\",\"email\":\"chico@gmail.com\",\"telefone\":\"(79) 9 5241-8574\",\"cargo\":\"Secret\\u00e1rio Escolar\"}', '{\"rota\":\"secretaria.funcionarios.store\",\"portal_origem\":\"secretaria\",\"metodo_http\":\"POST\"}', '2026-04-14 14:22:42', '2026-04-14 14:22:42'),
+(117, 8, NULL, 'funcionarios', 'criacao', 'Funcionario', 'App\\Models\\Funcionario', 11, 'medio', '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36 Edg/147.0.0.0', NULL, '{\"nome\":\"Diretora da Escola Major\",\"cpf\":\"98765432100\",\"email\":\"diretora@major.com\",\"telefone\":\"(79) 7777-77777\",\"cargo\":\"Diretor\"}', '{\"rota\":\"secretaria.funcionarios.store\",\"portal_origem\":\"secretaria\",\"metodo_http\":\"POST\"}', '2026-04-28 15:36:51', '2026-04-28 15:36:51'),
+(119, 8, NULL, 'usuarios', 'criacao', 'Usuario', 'App\\Models\\Usuario', 17, 'alto', '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36 Edg/147.0.0.0', NULL, '{\"name\":\"Diretora da Escola Major\",\"email\":\"diretora@major.com\",\"ativo\":\"1\",\"funcionario_id\":\"11\"}', '{\"rota\":\"secretaria.usuarios.store\",\"portal_origem\":\"secretaria\",\"metodo_http\":\"POST\"}', '2026-04-28 15:46:33', '2026-04-28 15:46:33'),
+(120, 8, NULL, 'funcionarios', 'criacao', 'Funcionario', 'App\\Models\\Funcionario', 12, 'medio', '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36 Edg/147.0.0.0', NULL, '{\"nome\":\"Diretora da Escola Zozimo\",\"cpf\":\"98765432111\",\"email\":\"diretora@zozimo.com\",\"telefone\":\"(79) 8888-77777\",\"cargo\":\"Diretor\"}', '{\"rota\":\"secretaria.funcionarios.store\",\"portal_origem\":\"secretaria\",\"metodo_http\":\"POST\"}', '2026-04-28 15:50:42', '2026-04-28 15:50:42'),
+(121, 8, NULL, 'usuarios', 'criacao', 'Usuario', 'App\\Models\\Usuario', 18, 'alto', '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36 Edg/147.0.0.0', NULL, '{\"name\":\"Diretora da Escola Zozimo\",\"email\":\"diretora@zozimo.com\",\"ativo\":\"1\",\"funcionario_id\":\"12\"}', '{\"rota\":\"secretaria.usuarios.store\",\"portal_origem\":\"secretaria\",\"metodo_http\":\"POST\"}', '2026-04-28 15:51:13', '2026-04-28 15:51:13'),
+(122, 14, NULL, 'alunos', 'criacao', 'Aluno', 'App\\Models\\Aluno', 5, 'alto', '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36 Edg/147.0.0.0', NULL, '{\"nome_completo\":\"Eduardo silva santos gonzaga\",\"data_nascimento\":\"2015-05-01 00:00:00\",\"responsavel_nome\":\"CLARICE DOS SANTOS ANDRADE\",\"responsavel_telefone\":\"79999999999\",\"cidade\":\"Capela\",\"uf\":\"SE\",\"rgm\":\"20260003\"}', '{\"rota\":\"secretaria-escolar.alunos.store\",\"portal_origem\":\"secretaria-escolar\",\"metodo_http\":\"POST\"}', '2026-04-28 15:57:37', '2026-04-28 15:57:37'),
+(123, 14, 6, 'matriculas', 'criacao', 'Matricula', 'App\\Models\\Matricula', 4, 'alto', '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36 Edg/147.0.0.0', NULL, '{\"aluno_id\":\"5\",\"escola_id\":6,\"turma_id\":null,\"ano_letivo\":\"2026\",\"tipo\":\"regular\",\"status\":\"ativa\",\"data_matricula\":\"2026-04-28 00:00:00\"}', '{\"rota\":\"secretaria-escolar.matriculas.store\",\"portal_origem\":\"secretaria-escolar\",\"metodo_http\":\"POST\",\"aluno_id\":\"5\",\"ano_letivo\":2026,\"tipo_matricula\":\"regular\"}', '2026-04-28 15:59:01', '2026-04-28 15:59:01');
+INSERT INTO `registros_auditoria` (`id`, `usuario_id`, `escola_id`, `modulo`, `acao`, `tipo_registro`, `registro_type`, `registro_id`, `nivel_sensibilidade`, `ip`, `user_agent`, `valores_antes`, `valores_depois`, `contexto`, `created_at`, `updated_at`) VALUES
+(124, 17, 6, 'turmas', 'criacao', 'Turma', 'App\\Models\\Turma', 4, 'medio', '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36', NULL, '{\"escola_id\":6,\"modalidade_id\":\"2\",\"nome\":\"2\\u00ba Ano - A\",\"turno\":\"Matutino\",\"ano_letivo\":\"2026\",\"vagas\":\"30\"}', '{\"rota\":\"secretaria-escolar.turmas.store\",\"portal_origem\":\"secretaria-escolar\",\"metodo_http\":\"POST\"}', '2026-04-28 16:00:02', '2026-04-28 16:00:02'),
+(125, 17, 6, 'matriculas', 'alteracao', 'Matricula', 'App\\Models\\Matricula', 4, 'alto', '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36', '{\"turma_id\":null}', '{\"turma_id\":4}', '{\"rota\":\"secretaria-escolar.matriculas.enturmar.store\",\"portal_origem\":\"secretaria-escolar\",\"metodo_http\":\"POST\",\"aluno_id\":5,\"turma_id\":4,\"ano_letivo\":2026,\"tipo_matricula\":\"regular\"}', '2026-04-28 16:00:42', '2026-04-28 16:00:42'),
+(126, 17, NULL, 'alunos', 'criacao', 'Aluno', 'App\\Models\\Aluno', 6, 'alto', '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36', NULL, '{\"nome_completo\":\"Wilma sondre sandes\",\"data_nascimento\":\"2013-02-14 00:00:00\",\"responsavel_nome\":\"monica nascimento\",\"responsavel_telefone\":\"(79) 96666-6666\",\"cidade\":\"Aracaju\",\"uf\":\"SE\",\"rgm\":\"20260004\"}', '{\"rota\":\"secretaria-escolar.alunos.store\",\"portal_origem\":\"secretaria-escolar\",\"metodo_http\":\"POST\"}', '2026-04-28 16:27:04', '2026-04-28 16:27:04'),
+(127, 17, 6, 'matriculas', 'criacao', 'Matricula', 'App\\Models\\Matricula', 5, 'alto', '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36', NULL, '{\"aluno_id\":\"6\",\"escola_id\":6,\"turma_id\":\"3\",\"ano_letivo\":\"2026\",\"tipo\":\"regular\",\"status\":\"ativa\",\"data_matricula\":\"2026-04-28 00:00:00\"}', '{\"rota\":\"secretaria-escolar.matriculas.store\",\"portal_origem\":\"secretaria-escolar\",\"metodo_http\":\"POST\",\"aluno_id\":\"6\",\"turma_id\":\"3\",\"ano_letivo\":2026,\"tipo_matricula\":\"regular\"}', '2026-04-28 16:28:13', '2026-04-28 16:28:13'),
+(128, 17, NULL, 'alunos', 'criacao', 'Aluno', 'App\\Models\\Aluno', 7, 'alto', '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36', NULL, '{\"nome_completo\":\"samile santana dos santos\",\"data_nascimento\":\"2010-08-25 00:00:00\",\"responsavel_nome\":\"maria das flores silva\",\"responsavel_telefone\":\"(79) 0000-00000\",\"cidade\":\"Aracaju\",\"uf\":\"SE\",\"rgm\":\"20260005\"}', '{\"rota\":\"secretaria-escolar.alunos.store\",\"portal_origem\":\"secretaria-escolar\",\"metodo_http\":\"POST\"}', '2026-04-28 19:08:34', '2026-04-28 19:08:34'),
+(129, 17, NULL, 'alunos', 'alteracao', 'Aluno', 'App\\Models\\Aluno', 5, 'alto', '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36', '{\"data_nascimento\":\"2015-05-01\",\"responsavel_nome\":\"CLARICE DOS SANTOS ANDRADE\"}', '{\"data_nascimento\":\"2015-05-01 00:00:00\",\"responsavel_nome\":\"antonio silveira santos\"}', '{\"rota\":\"secretaria-escolar.alunos.update\",\"portal_origem\":\"secretaria-escolar\",\"metodo_http\":\"PUT\"}', '2026-04-28 20:12:00', '2026-04-28 20:12:00'),
+(130, 17, NULL, 'alunos', 'alteracao', 'Aluno', 'App\\Models\\Aluno', 5, 'alto', '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36', '{\"data_nascimento\":\"2015-05-01\",\"responsavel_nome\":\"antonio silveira santos\"}', '{\"data_nascimento\":\"2015-05-01 00:00:00\",\"responsavel_nome\":\"clarice dos santos andrade\"}', '{\"rota\":\"secretaria-escolar.alunos.update\",\"portal_origem\":\"secretaria-escolar\",\"metodo_http\":\"PUT\"}', '2026-04-28 20:12:37', '2026-04-28 20:12:37'),
+(131, 17, 6, 'aee', 'criacao', 'Matricula', 'App\\Models\\Matricula', 6, 'alto', '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36', NULL, '{\"aluno_id\":\"5\",\"escola_id\":6,\"turma_id\":\"4\",\"ano_letivo\":\"2026\",\"tipo\":\"aee\",\"status\":\"ativa\",\"data_matricula\":\"2026-04-28 00:00:00\"}', '{\"rota\":\"secretaria-escolar.matriculas.store\",\"portal_origem\":\"secretaria-escolar\",\"metodo_http\":\"POST\",\"aluno_id\":\"5\",\"turma_id\":\"4\",\"ano_letivo\":2026,\"tipo_matricula\":\"aee\"}', '2026-04-28 20:29:03', '2026-04-28 20:29:03'),
+(132, 12, 6, 'documentos', 'emissao_documento', 'Emissao de Documento', NULL, NULL, 'medio', '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36 Edg/147.0.0.0', NULL, NULL, '{\"rota\":\"professor.documentos.preview\",\"portal_origem\":\"professor\",\"metodo_http\":\"POST\",\"portal\":\"professor\",\"tipo_documento\":\"relatorio-operacional-turma\",\"titulo_documento\":\"Relatorio Operacional da Turma\"}', '2026-04-29 04:24:29', '2026-04-29 04:24:29'),
+(133, 12, 6, 'documentos', 'emissao_documento', 'Emissao de Documento', NULL, NULL, 'medio', '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36 Edg/147.0.0.0', NULL, NULL, '{\"rota\":\"professor.documentos.print\",\"portal_origem\":\"professor\",\"metodo_http\":\"POST\",\"portal\":\"professor\",\"tipo_documento\":\"relatorio-operacional-turma\",\"titulo_documento\":\"Relatorio Operacional da Turma\"}', '2026-04-29 04:24:43', '2026-04-29 04:24:43'),
+(134, 17, 6, 'horarios', 'exclusao', 'Horario de Aula', 'App\\Models\\HorarioAula', 3, 'medio', '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36', '{\"escola_id\":6,\"turma_id\":3,\"disciplina_id\":6,\"professor_id\":6,\"dia_semana\":2,\"horario_inicial\":\"15:15:00\",\"horario_final\":\"16:05:00\",\"ordem_aula\":null,\"ativo\":1}', NULL, '{\"rota\":\"secretaria-escolar.horarios.destroy\",\"portal_origem\":\"secretaria-escolar\",\"metodo_http\":\"DELETE\"}', '2026-04-30 21:30:22', '2026-04-30 21:30:22'),
+(135, 17, 6, 'horarios', 'exclusao', 'Horario de Aula', 'App\\Models\\HorarioAula', 2, 'medio', '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36', '{\"escola_id\":6,\"turma_id\":3,\"disciplina_id\":5,\"professor_id\":6,\"dia_semana\":2,\"horario_inicial\":\"14:10:00\",\"horario_final\":\"15:00:00\",\"ordem_aula\":null,\"ativo\":1}', NULL, '{\"rota\":\"secretaria-escolar.horarios.destroy\",\"portal_origem\":\"secretaria-escolar\",\"metodo_http\":\"DELETE\"}', '2026-04-30 21:30:33', '2026-04-30 21:30:33'),
+(136, 8, NULL, 'funcionarios', 'criacao', 'Funcionario', 'App\\Models\\Funcionario', 13, 'medio', '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:150.0) Gecko/20100101 Firefox/150.0', NULL, '{\"nome\":\"Luiz Gonzaga\",\"cpf\":\"666.666.666-66\",\"email\":\"luiz@gmail.com\",\"telefone\":\"(79) 9 9999-9999\",\"cargo\":\"Professor\"}', '{\"rota\":\"secretaria.funcionarios.store\",\"portal_origem\":\"secretaria\",\"metodo_http\":\"POST\"}', '2026-04-30 21:35:03', '2026-04-30 21:35:03'),
+(137, 8, NULL, 'usuarios', 'criacao', 'Usuario', 'App\\Models\\Usuario', 19, 'alto', '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:150.0) Gecko/20100101 Firefox/150.0', NULL, '{\"name\":\"Luiz Gonzaga\",\"email\":\"luiz@gmail.com\",\"ativo\":\"1\",\"funcionario_id\":\"13\"}', '{\"rota\":\"secretaria.usuarios.store\",\"portal_origem\":\"secretaria\",\"metodo_http\":\"POST\"}', '2026-04-30 21:35:47', '2026-04-30 21:35:47'),
+(138, 17, 6, 'horarios', 'alteracao', 'Horario de Aula', 'App\\Models\\HorarioAula', 1, 'medio', '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36', '{\"horario_inicial\":\"12:30:00\",\"horario_final\":\"14:10:00\"}', '{\"horario_inicial\":\"12:30\",\"horario_final\":\"13:20\"}', '{\"rota\":\"secretaria-escolar.horarios.update\",\"portal_origem\":\"secretaria-escolar\",\"metodo_http\":\"PUT\"}', '2026-04-30 21:37:34', '2026-04-30 21:37:34'),
+(139, 17, 6, 'horarios', 'alteracao', 'Horario de Aula', 'App\\Models\\HorarioAula', 1, 'medio', '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36', '{\"horario_inicial\":\"12:30:00\",\"horario_final\":\"14:10:00\"}', '{\"horario_inicial\":\"12:30\",\"horario_final\":\"13:20\"}', '{\"rota\":\"secretaria-escolar.horarios.update\",\"portal_origem\":\"secretaria-escolar\",\"metodo_http\":\"PUT\"}', '2026-04-30 21:37:34', '2026-04-30 21:37:34'),
+(140, 17, 6, 'horarios', 'criacao', 'Horario de Aula', 'App\\Models\\HorarioAula', 5, 'medio', '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36', NULL, '{\"escola_id\":\"6\",\"turma_id\":\"3\",\"disciplina_id\":\"3\",\"professor_id\":\"6\",\"dia_semana\":\"2\",\"horario_inicial\":\"13:20\",\"horario_final\":\"14:10\",\"ordem_aula\":\"2\",\"ativo\":true}', '{\"rota\":\"secretaria-escolar.coordenacao.horarios.store\",\"portal_origem\":\"coordenacao\",\"metodo_http\":\"POST\"}', '2026-04-30 21:52:39', '2026-04-30 21:52:39'),
+(141, 17, 6, 'horarios', 'alteracao', 'Horario de Aula', 'App\\Models\\HorarioAula', 4, 'medio', '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36', '{\"horario_inicial\":\"16:05:00\",\"horario_final\":\"16:55:00\",\"ordem_aula\":null}', '{\"horario_inicial\":\"16:05\",\"horario_final\":\"16:55\",\"ordem_aula\":\"4\"}', '{\"rota\":\"secretaria-escolar.horarios.update\",\"portal_origem\":\"secretaria-escolar\",\"metodo_http\":\"PUT\"}', '2026-04-30 21:55:22', '2026-04-30 21:55:22'),
+(142, 17, 6, 'horarios', 'alteracao', 'Horario de Aula', 'App\\Models\\HorarioAula', 4, 'medio', '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36', '{\"horario_inicial\":\"16:05:00\",\"horario_final\":\"16:55:00\",\"ordem_aula\":4}', '{\"horario_inicial\":\"16:05\",\"horario_final\":\"16:55\",\"ordem_aula\":\"5\"}', '{\"rota\":\"secretaria-escolar.horarios.update\",\"portal_origem\":\"secretaria-escolar\",\"metodo_http\":\"PUT\"}', '2026-04-30 21:55:30', '2026-04-30 21:55:30'),
+(143, 17, 6, 'horarios', 'criacao', 'Horario de Aula', 'App\\Models\\HorarioAula', 6, 'medio', '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36', NULL, '{\"escola_id\":\"6\",\"turma_id\":\"3\",\"disciplina_id\":\"6\",\"professor_id\":\"13\",\"dia_semana\":\"2\",\"horario_inicial\":\"14:10\",\"horario_final\":\"15:00\",\"ordem_aula\":\"3\",\"ativo\":true}', '{\"rota\":\"secretaria-escolar.coordenacao.horarios.store\",\"portal_origem\":\"coordenacao\",\"metodo_http\":\"POST\"}', '2026-04-30 22:09:31', '2026-04-30 22:09:31'),
+(144, 17, 6, 'horarios', 'criacao', 'Horario de Aula', 'App\\Models\\HorarioAula', 7, 'medio', '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36', NULL, '{\"escola_id\":\"6\",\"turma_id\":\"3\",\"disciplina_id\":\"4\",\"professor_id\":\"13\",\"dia_semana\":\"2\",\"horario_inicial\":\"15:15\",\"horario_final\":\"16:05\",\"ordem_aula\":\"4\",\"ativo\":true}', '{\"rota\":\"secretaria-escolar.coordenacao.horarios.store\",\"portal_origem\":\"coordenacao\",\"metodo_http\":\"POST\"}', '2026-04-30 22:10:52', '2026-04-30 22:10:52'),
+(145, NULL, NULL, 'alunos', 'criacao', 'Aluno', 'App\\Models\\Aluno', 8, 'alto', '127.0.0.1', 'Symfony', NULL, '{\"rgm\":\"2026\\/0031\",\"nome_completo\":\"GUSTAVO SOUZA MENEZES\",\"data_nascimento\":\"2012-02-07 00:00:00\",\"responsavel_nome\":\"\",\"responsavel_telefone\":\"(79) 99967-2972\",\"cidade\":\"\",\"uf\":\"\",\"ativo\":true}', '{\"metodo_http\":\"GET\"}', '2026-04-30 23:02:06', '2026-04-30 23:02:06'),
+(146, NULL, NULL, 'alunos', 'criacao', 'Aluno', 'App\\Models\\Aluno', 9, 'alto', '127.0.0.1', 'Symfony', NULL, '{\"rgm\":\"2026\\/0032\",\"nome_completo\":\"JOSE CELIO SANTOS JUNIOR\",\"data_nascimento\":\"2011-04-22 00:00:00\",\"responsavel_nome\":\"SANDRA DE JESUS SANTOS\",\"responsavel_telefone\":\"\",\"cidade\":\"\",\"uf\":\"\",\"ativo\":true}', '{\"metodo_http\":\"GET\"}', '2026-04-30 23:03:02', '2026-04-30 23:03:02'),
+(147, NULL, 6, 'matriculas', 'criacao', 'Matricula', 'App\\Models\\Matricula', 7, 'alto', '127.0.0.1', 'Symfony', NULL, '{\"aluno_id\":9,\"escola_id\":6,\"turma_id\":3,\"ano_letivo\":2026,\"tipo\":\"regular\",\"status\":\"ativa\",\"data_matricula\":\"2026-01-08 00:00:00\"}', '{\"metodo_http\":\"GET\",\"aluno_id\":9,\"turma_id\":3,\"ano_letivo\":2026,\"tipo_matricula\":\"regular\"}', '2026-04-30 23:03:02', '2026-04-30 23:03:02'),
+(148, NULL, NULL, 'alunos', 'criacao', 'Aluno', 'App\\Models\\Aluno', 10, 'alto', '127.0.0.1', 'Symfony', NULL, '{\"rgm\":\"2026\\/0033\",\"nome_completo\":\"JULIA VITORIA FARIAS DE MELO\",\"data_nascimento\":\"2010-10-02 00:00:00\",\"responsavel_nome\":\"JULIANA DE MELO SANTOS\",\"responsavel_telefone\":\"\",\"cidade\":\"\",\"uf\":\"\",\"ativo\":true}', '{\"metodo_http\":\"GET\"}', '2026-04-30 23:03:02', '2026-04-30 23:03:02'),
+(149, NULL, 6, 'matriculas', 'criacao', 'Matricula', 'App\\Models\\Matricula', 8, 'alto', '127.0.0.1', 'Symfony', NULL, '{\"aluno_id\":10,\"escola_id\":6,\"turma_id\":3,\"ano_letivo\":2026,\"tipo\":\"regular\",\"status\":\"ativa\",\"data_matricula\":\"2026-01-08 00:00:00\"}', '{\"metodo_http\":\"GET\",\"aluno_id\":10,\"turma_id\":3,\"ano_letivo\":2026,\"tipo_matricula\":\"regular\"}', '2026-04-30 23:03:02', '2026-04-30 23:03:02'),
+(150, NULL, NULL, 'alunos', 'criacao', 'Aluno', 'App\\Models\\Aluno', 11, 'alto', '127.0.0.1', 'Symfony', NULL, '{\"rgm\":\"2026\\/0036\",\"nome_completo\":\"MYCAEL SOARES LINS DOS SANTOS\",\"data_nascimento\":\"2012-06-16 00:00:00\",\"responsavel_nome\":\"TAMIRES MARIA DA SILVA LINS\",\"responsavel_telefone\":\"\",\"cidade\":\"\",\"uf\":\"\",\"ativo\":true}', '{\"metodo_http\":\"GET\"}', '2026-04-30 23:03:03', '2026-04-30 23:03:03'),
+(151, NULL, 6, 'matriculas', 'criacao', 'Matricula', 'App\\Models\\Matricula', 9, 'alto', '127.0.0.1', 'Symfony', NULL, '{\"aluno_id\":11,\"escola_id\":6,\"turma_id\":3,\"ano_letivo\":2026,\"tipo\":\"regular\",\"status\":\"ativa\",\"data_matricula\":\"2026-01-08 00:00:00\"}', '{\"metodo_http\":\"GET\",\"aluno_id\":11,\"turma_id\":3,\"ano_letivo\":2026,\"tipo_matricula\":\"regular\"}', '2026-04-30 23:03:03', '2026-04-30 23:03:03'),
+(152, NULL, NULL, 'alunos', 'criacao', 'Aluno', 'App\\Models\\Aluno', 12, 'alto', '127.0.0.1', 'Symfony', NULL, '{\"rgm\":\"2026\\/0037\",\"nome_completo\":\"MURILO GABRIEL SANTOS DE MELO\",\"data_nascimento\":\"2012-03-21 00:00:00\",\"responsavel_nome\":\"MARIA JOSE SANTOS DE MELO\",\"responsavel_telefone\":\"\",\"cidade\":\"\",\"uf\":\"\",\"ativo\":true}', '{\"metodo_http\":\"GET\"}', '2026-04-30 23:03:03', '2026-04-30 23:03:03'),
+(153, NULL, 6, 'matriculas', 'criacao', 'Matricula', 'App\\Models\\Matricula', 10, 'alto', '127.0.0.1', 'Symfony', NULL, '{\"aluno_id\":12,\"escola_id\":6,\"turma_id\":3,\"ano_letivo\":2026,\"tipo\":\"regular\",\"status\":\"ativa\",\"data_matricula\":\"2026-01-08 00:00:00\"}', '{\"metodo_http\":\"GET\",\"aluno_id\":12,\"turma_id\":3,\"ano_letivo\":2026,\"tipo_matricula\":\"regular\"}', '2026-04-30 23:03:03', '2026-04-30 23:03:03'),
+(154, NULL, NULL, 'alunos', 'criacao', 'Aluno', 'App\\Models\\Aluno', 13, 'alto', '127.0.0.1', 'Symfony', NULL, '{\"rgm\":\"2026\\/0038\",\"nome_completo\":\"MICHEL NIBERT MENEZES SANTOS\",\"data_nascimento\":\"2012-06-14 00:00:00\",\"responsavel_nome\":\"EDILENE MENSES SANTOS\",\"responsavel_telefone\":\"\",\"cidade\":\"\",\"uf\":\"\",\"ativo\":true}', '{\"metodo_http\":\"GET\"}', '2026-04-30 23:03:03', '2026-04-30 23:03:03'),
+(155, NULL, 6, 'matriculas', 'criacao', 'Matricula', 'App\\Models\\Matricula', 11, 'alto', '127.0.0.1', 'Symfony', NULL, '{\"aluno_id\":13,\"escola_id\":6,\"turma_id\":3,\"ano_letivo\":2026,\"tipo\":\"regular\",\"status\":\"ativa\",\"data_matricula\":\"2026-01-08 00:00:00\"}', '{\"metodo_http\":\"GET\",\"aluno_id\":13,\"turma_id\":3,\"ano_letivo\":2026,\"tipo_matricula\":\"regular\"}', '2026-04-30 23:03:03', '2026-04-30 23:03:03'),
+(156, NULL, NULL, 'alunos', 'criacao', 'Aluno', 'App\\Models\\Aluno', 14, 'alto', '127.0.0.1', 'Symfony', NULL, '{\"rgm\":\"2026\\/0039\",\"nome_completo\":\"MAYRA ELIZA NASCIMENTO ARAGAO\",\"data_nascimento\":\"2011-12-18 00:00:00\",\"responsavel_nome\":\"ROSANGELA SANTOS DO NASCIMENTO\",\"responsavel_telefone\":\"\",\"cidade\":\"\",\"uf\":\"\",\"ativo\":true}', '{\"metodo_http\":\"GET\"}', '2026-04-30 23:03:03', '2026-04-30 23:03:03'),
+(157, NULL, 6, 'matriculas', 'criacao', 'Matricula', 'App\\Models\\Matricula', 12, 'alto', '127.0.0.1', 'Symfony', NULL, '{\"aluno_id\":14,\"escola_id\":6,\"turma_id\":3,\"ano_letivo\":2026,\"tipo\":\"regular\",\"status\":\"ativa\",\"data_matricula\":\"2026-01-08 00:00:00\"}', '{\"metodo_http\":\"GET\",\"aluno_id\":14,\"turma_id\":3,\"ano_letivo\":2026,\"tipo_matricula\":\"regular\"}', '2026-04-30 23:03:03', '2026-04-30 23:03:03'),
+(158, NULL, NULL, 'alunos', 'criacao', 'Aluno', 'App\\Models\\Aluno', 15, 'alto', '127.0.0.1', 'Symfony', NULL, '{\"rgm\":\"2026\\/0052\",\"nome_completo\":\"TARCIANA ANDRADE SANTOS\",\"data_nascimento\":\"2011-08-25 00:00:00\",\"responsavel_nome\":\"JOSINETE DOS SANTOS\",\"responsavel_telefone\":\"\",\"cidade\":\"\",\"uf\":\"\",\"ativo\":true}', '{\"metodo_http\":\"GET\"}', '2026-04-30 23:03:03', '2026-04-30 23:03:03'),
+(159, NULL, 6, 'matriculas', 'criacao', 'Matricula', 'App\\Models\\Matricula', 13, 'alto', '127.0.0.1', 'Symfony', NULL, '{\"aluno_id\":15,\"escola_id\":6,\"turma_id\":3,\"ano_letivo\":2026,\"tipo\":\"regular\",\"status\":\"ativa\",\"data_matricula\":\"2026-01-08 00:00:00\"}', '{\"metodo_http\":\"GET\",\"aluno_id\":15,\"turma_id\":3,\"ano_letivo\":2026,\"tipo_matricula\":\"regular\"}', '2026-04-30 23:03:03', '2026-04-30 23:03:03'),
+(160, NULL, NULL, 'alunos', 'criacao', 'Aluno', 'App\\Models\\Aluno', 16, 'alto', '127.0.0.1', 'Symfony', NULL, '{\"rgm\":\"2026\\/0154\",\"nome_completo\":\"ERICK ANDRADE DOS SANTOS\",\"data_nascimento\":\"2011-08-31 00:00:00\",\"responsavel_nome\":\"JESSICA ANDRADE DA SILVA\",\"responsavel_telefone\":\"\",\"cidade\":\"\",\"uf\":\"\",\"ativo\":true}', '{\"metodo_http\":\"GET\"}', '2026-04-30 23:03:03', '2026-04-30 23:03:03'),
+(161, NULL, 6, 'matriculas', 'criacao', 'Matricula', 'App\\Models\\Matricula', 14, 'alto', '127.0.0.1', 'Symfony', NULL, '{\"aluno_id\":16,\"escola_id\":6,\"turma_id\":3,\"ano_letivo\":2026,\"tipo\":\"regular\",\"status\":\"ativa\",\"data_matricula\":\"2026-01-08 00:00:00\"}', '{\"metodo_http\":\"GET\",\"aluno_id\":16,\"turma_id\":3,\"ano_letivo\":2026,\"tipo_matricula\":\"regular\"}', '2026-04-30 23:03:03', '2026-04-30 23:03:03'),
+(162, NULL, NULL, 'alunos', 'criacao', 'Aluno', 'App\\Models\\Aluno', 17, 'alto', '127.0.0.1', 'Symfony', NULL, '{\"rgm\":\"2026\\/0155\",\"nome_completo\":\"RUAN CARLOS DE MELO PRADO\",\"data_nascimento\":\"2011-04-23 00:00:00\",\"responsavel_nome\":\"MARIA ROMANA DE MELO\",\"responsavel_telefone\":\"\",\"cidade\":\"\",\"uf\":\"\",\"ativo\":true}', '{\"metodo_http\":\"GET\"}', '2026-04-30 23:03:03', '2026-04-30 23:03:03'),
+(163, NULL, 6, 'matriculas', 'criacao', 'Matricula', 'App\\Models\\Matricula', 15, 'alto', '127.0.0.1', 'Symfony', NULL, '{\"aluno_id\":17,\"escola_id\":6,\"turma_id\":3,\"ano_letivo\":2026,\"tipo\":\"regular\",\"status\":\"ativa\",\"data_matricula\":\"2026-01-08 00:00:00\"}', '{\"metodo_http\":\"GET\",\"aluno_id\":17,\"turma_id\":3,\"ano_letivo\":2026,\"tipo_matricula\":\"regular\"}', '2026-04-30 23:03:03', '2026-04-30 23:03:03'),
+(164, NULL, NULL, 'alunos', 'criacao', 'Aluno', 'App\\Models\\Aluno', 18, 'alto', '127.0.0.1', 'Symfony', NULL, '{\"rgm\":\"2026\\/0414\",\"nome_completo\":\"THAYSLANE CONCEICAO DOS SANTOS\",\"data_nascimento\":\"2011-05-24 00:00:00\",\"responsavel_nome\":\"MARIA TATIANE DOS SANTOS\",\"responsavel_telefone\":\"\",\"cidade\":\"\",\"uf\":\"\",\"ativo\":true}', '{\"metodo_http\":\"GET\"}', '2026-04-30 23:03:03', '2026-04-30 23:03:03'),
+(165, NULL, 6, 'matriculas', 'criacao', 'Matricula', 'App\\Models\\Matricula', 16, 'alto', '127.0.0.1', 'Symfony', NULL, '{\"aluno_id\":18,\"escola_id\":6,\"turma_id\":3,\"ano_letivo\":2026,\"tipo\":\"regular\",\"status\":\"ativa\",\"data_matricula\":\"2026-01-08 00:00:00\"}', '{\"metodo_http\":\"GET\",\"aluno_id\":18,\"turma_id\":3,\"ano_letivo\":2026,\"tipo_matricula\":\"regular\"}', '2026-04-30 23:03:03', '2026-04-30 23:03:03'),
+(166, NULL, NULL, 'alunos', 'criacao', 'Aluno', 'App\\Models\\Aluno', 19, 'alto', '127.0.0.1', 'Symfony', NULL, '{\"rgm\":\"2026\\/1901\",\"nome_completo\":\"MARIA EDUARDA SANTOS SILVA\",\"data_nascimento\":\"2012-02-02 00:00:00\",\"responsavel_nome\":\"ROSILEIDE SANTOS SILVA\",\"responsavel_telefone\":\"\",\"cidade\":\"\",\"uf\":\"\",\"ativo\":true}', '{\"metodo_http\":\"GET\"}', '2026-04-30 23:03:03', '2026-04-30 23:03:03'),
+(167, NULL, 6, 'matriculas', 'criacao', 'Matricula', 'App\\Models\\Matricula', 17, 'alto', '127.0.0.1', 'Symfony', NULL, '{\"aluno_id\":19,\"escola_id\":6,\"turma_id\":3,\"ano_letivo\":2026,\"tipo\":\"regular\",\"status\":\"ativa\",\"data_matricula\":\"2026-01-08 00:00:00\"}', '{\"metodo_http\":\"GET\",\"aluno_id\":19,\"turma_id\":3,\"ano_letivo\":2026,\"tipo_matricula\":\"regular\"}', '2026-04-30 23:03:03', '2026-04-30 23:03:03'),
+(168, NULL, NULL, 'alunos', 'criacao', 'Aluno', 'App\\Models\\Aluno', 20, 'alto', '127.0.0.1', 'Symfony', NULL, '{\"rgm\":\"2026\\/1902\",\"nome_completo\":\"LAVINIA MELO ANDRADE\",\"data_nascimento\":\"2011-06-18 00:00:00\",\"responsavel_nome\":\"\",\"responsavel_telefone\":\"\",\"cidade\":\"\",\"uf\":\"\",\"ativo\":true}', '{\"metodo_http\":\"GET\"}', '2026-04-30 23:03:03', '2026-04-30 23:03:03'),
+(169, NULL, 6, 'matriculas', 'criacao', 'Matricula', 'App\\Models\\Matricula', 18, 'alto', '127.0.0.1', 'Symfony', NULL, '{\"aluno_id\":20,\"escola_id\":6,\"turma_id\":3,\"ano_letivo\":2026,\"tipo\":\"regular\",\"status\":\"ativa\",\"data_matricula\":\"2026-01-08 00:00:00\"}', '{\"metodo_http\":\"GET\",\"aluno_id\":20,\"turma_id\":3,\"ano_letivo\":2026,\"tipo_matricula\":\"regular\"}', '2026-04-30 23:03:03', '2026-04-30 23:03:03'),
+(170, NULL, NULL, 'alunos', 'criacao', 'Aluno', 'App\\Models\\Aluno', 21, 'alto', '127.0.0.1', 'Symfony', NULL, '{\"rgm\":\"2026\\/1907\",\"nome_completo\":\"MIKAELLE RAQUEL OLIVEIRA SILVA\",\"data_nascimento\":\"2011-10-03 00:00:00\",\"responsavel_nome\":\"\",\"responsavel_telefone\":\"\",\"cidade\":\"\",\"uf\":\"\",\"ativo\":true}', '{\"metodo_http\":\"GET\"}', '2026-04-30 23:03:03', '2026-04-30 23:03:03'),
+(171, NULL, 6, 'matriculas', 'criacao', 'Matricula', 'App\\Models\\Matricula', 19, 'alto', '127.0.0.1', 'Symfony', NULL, '{\"aluno_id\":21,\"escola_id\":6,\"turma_id\":3,\"ano_letivo\":2026,\"tipo\":\"regular\",\"status\":\"ativa\",\"data_matricula\":\"2026-01-08 00:00:00\"}', '{\"metodo_http\":\"GET\",\"aluno_id\":21,\"turma_id\":3,\"ano_letivo\":2026,\"tipo_matricula\":\"regular\"}', '2026-04-30 23:03:03', '2026-04-30 23:03:03'),
+(172, NULL, NULL, 'alunos', 'criacao', 'Aluno', 'App\\Models\\Aluno', 22, 'alto', '127.0.0.1', 'Symfony', NULL, '{\"rgm\":\"2026\\/2258\",\"nome_completo\":\"ADRIELI VIEIRA DO NASCIMENTO\",\"data_nascimento\":\"2010-10-29 00:00:00\",\"responsavel_nome\":\"ADELMO CLEMENTE DO NASCIMENTO\",\"responsavel_telefone\":\"\",\"cidade\":\"\",\"uf\":\"\",\"ativo\":true}', '{\"metodo_http\":\"GET\"}', '2026-04-30 23:03:03', '2026-04-30 23:03:03'),
+(173, NULL, 6, 'matriculas', 'criacao', 'Matricula', 'App\\Models\\Matricula', 20, 'alto', '127.0.0.1', 'Symfony', NULL, '{\"aluno_id\":22,\"escola_id\":6,\"turma_id\":3,\"ano_letivo\":2026,\"tipo\":\"regular\",\"status\":\"ativa\",\"data_matricula\":\"2026-01-08 00:00:00\"}', '{\"metodo_http\":\"GET\",\"aluno_id\":22,\"turma_id\":3,\"ano_letivo\":2026,\"tipo_matricula\":\"regular\"}', '2026-04-30 23:03:03', '2026-04-30 23:03:03'),
+(174, NULL, NULL, 'alunos', 'criacao', 'Aluno', 'App\\Models\\Aluno', 23, 'alto', '127.0.0.1', 'Symfony', NULL, '{\"rgm\":\"2026\\/2515\",\"nome_completo\":\"MARIA HELLOYSE SILVA SANTOS\",\"data_nascimento\":\"2012-02-07 00:00:00\",\"responsavel_nome\":\"ANNE ROBERTA SILVA SANTOS \",\"responsavel_telefone\":\"\",\"cidade\":\"\",\"uf\":\"\",\"ativo\":true}', '{\"metodo_http\":\"GET\"}', '2026-04-30 23:03:03', '2026-04-30 23:03:03'),
+(175, NULL, 6, 'matriculas', 'criacao', 'Matricula', 'App\\Models\\Matricula', 21, 'alto', '127.0.0.1', 'Symfony', NULL, '{\"aluno_id\":23,\"escola_id\":6,\"turma_id\":3,\"ano_letivo\":2026,\"tipo\":\"regular\",\"status\":\"ativa\",\"data_matricula\":\"2026-01-08 00:00:00\"}', '{\"metodo_http\":\"GET\",\"aluno_id\":23,\"turma_id\":3,\"ano_letivo\":2026,\"tipo_matricula\":\"regular\"}', '2026-04-30 23:03:03', '2026-04-30 23:03:03'),
+(176, NULL, NULL, 'alunos', 'criacao', 'Aluno', 'App\\Models\\Aluno', 24, 'alto', '127.0.0.1', 'Symfony', NULL, '{\"rgm\":\"2026\\/3710\",\"nome_completo\":\"JOICE RAQUELY DA CONCEICAO SANTOS\",\"data_nascimento\":\"2011-05-19 00:00:00\",\"responsavel_nome\":\"VALDENI DOS SANTOS\",\"responsavel_telefone\":\"\",\"cidade\":\"\",\"uf\":\"\",\"ativo\":true}', '{\"metodo_http\":\"GET\"}', '2026-04-30 23:03:03', '2026-04-30 23:03:03'),
+(177, NULL, 6, 'matriculas', 'criacao', 'Matricula', 'App\\Models\\Matricula', 22, 'alto', '127.0.0.1', 'Symfony', NULL, '{\"aluno_id\":24,\"escola_id\":6,\"turma_id\":3,\"ano_letivo\":2026,\"tipo\":\"regular\",\"status\":\"ativa\",\"data_matricula\":\"2026-01-08 00:00:00\"}', '{\"metodo_http\":\"GET\",\"aluno_id\":24,\"turma_id\":3,\"ano_letivo\":2026,\"tipo_matricula\":\"regular\"}', '2026-04-30 23:03:03', '2026-04-30 23:03:03'),
+(178, NULL, NULL, 'alunos', 'criacao', 'Aluno', 'App\\Models\\Aluno', 25, 'alto', '127.0.0.1', 'Symfony', NULL, '{\"rgm\":\"2026\\/3825\",\"nome_completo\":\"ARYEL ISAAC ROCHA BATISTA\",\"data_nascimento\":\"2011-09-27 00:00:00\",\"responsavel_nome\":\"GLEYCIELE ROCHA SANTOS\",\"responsavel_telefone\":\"\",\"cidade\":\"\",\"uf\":\"\",\"ativo\":true}', '{\"metodo_http\":\"GET\"}', '2026-04-30 23:03:03', '2026-04-30 23:03:03'),
+(179, NULL, 6, 'matriculas', 'criacao', 'Matricula', 'App\\Models\\Matricula', 23, 'alto', '127.0.0.1', 'Symfony', NULL, '{\"aluno_id\":25,\"escola_id\":6,\"turma_id\":3,\"ano_letivo\":2026,\"tipo\":\"regular\",\"status\":\"ativa\",\"data_matricula\":\"2026-01-08 00:00:00\"}', '{\"metodo_http\":\"GET\",\"aluno_id\":25,\"turma_id\":3,\"ano_letivo\":2026,\"tipo_matricula\":\"regular\"}', '2026-04-30 23:03:03', '2026-04-30 23:03:03'),
+(180, NULL, NULL, 'alunos', 'criacao', 'Aluno', 'App\\Models\\Aluno', 26, 'alto', '127.0.0.1', 'Symfony', NULL, '{\"rgm\":\"2026\\/6044\",\"nome_completo\":\"DOUGLAS RENATO ANDRADE SANTOS\",\"data_nascimento\":\"2011-07-16 00:00:00\",\"responsavel_nome\":\"RENATA ANDRADE DA SILVA\",\"responsavel_telefone\":\"(79) 99927-1400\",\"cidade\":\"\",\"uf\":\"\",\"ativo\":true}', '{\"metodo_http\":\"GET\"}', '2026-04-30 23:03:03', '2026-04-30 23:03:03'),
+(181, NULL, 6, 'matriculas', 'criacao', 'Matricula', 'App\\Models\\Matricula', 24, 'alto', '127.0.0.1', 'Symfony', NULL, '{\"aluno_id\":26,\"escola_id\":6,\"turma_id\":3,\"ano_letivo\":2026,\"tipo\":\"regular\",\"status\":\"ativa\",\"data_matricula\":\"2026-01-08 00:00:00\"}', '{\"metodo_http\":\"GET\",\"aluno_id\":26,\"turma_id\":3,\"ano_letivo\":2026,\"tipo_matricula\":\"regular\"}', '2026-04-30 23:03:03', '2026-04-30 23:03:03'),
+(182, NULL, NULL, 'alunos', 'criacao', 'Aluno', 'App\\Models\\Aluno', 27, 'alto', '127.0.0.1', 'Symfony', NULL, '{\"rgm\":\"2026\\/7401\",\"nome_completo\":\"ARIELLY CELINY DOS SANTOS\",\"data_nascimento\":\"2012-02-13 00:00:00\",\"responsavel_nome\":\"MARIA CLEONILDE SANTOS\",\"responsavel_telefone\":\"\",\"cidade\":\"\",\"uf\":\"\",\"ativo\":true}', '{\"metodo_http\":\"GET\"}', '2026-04-30 23:03:03', '2026-04-30 23:03:03'),
+(183, NULL, 6, 'matriculas', 'criacao', 'Matricula', 'App\\Models\\Matricula', 25, 'alto', '127.0.0.1', 'Symfony', NULL, '{\"aluno_id\":27,\"escola_id\":6,\"turma_id\":3,\"ano_letivo\":2026,\"tipo\":\"regular\",\"status\":\"ativa\",\"data_matricula\":\"2026-01-09 00:00:00\"}', '{\"metodo_http\":\"GET\",\"aluno_id\":27,\"turma_id\":3,\"ano_letivo\":2026,\"tipo_matricula\":\"regular\"}', '2026-04-30 23:03:03', '2026-04-30 23:03:03'),
+(184, 12, 6, 'aulas', 'criacao', 'Registro de Aula', 'App\\Models\\RegistroAula', 2, 'medio', '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36 Edg/147.0.0.0', NULL, '{\"data_aula\":\"2026-04-27 00:00:00\",\"titulo\":\"Exerc\\u00edcios\",\"conteudo_ministrado\":\"Atividades de fixa\\u00e7\\u00e3o\",\"quantidade_aulas\":\"1\",\"aula_dada\":true}', '{\"rota\":\"professor.diario.registro-aula.store\",\"portal_origem\":\"professor\",\"metodo_http\":\"POST\",\"diario_professor_id\":2,\"professor_id\":6,\"turma_id\":3,\"disciplina_id\":3,\"ano_letivo\":2026}', '2026-04-30 23:06:32', '2026-04-30 23:06:32'),
+(185, 12, 6, 'avaliacoes', 'criacao', 'Lancamento Avaliativo', 'App\\Models\\LancamentoAvaliativo', 2, 'alto', '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36 Edg/147.0.0.0', NULL, '{\"avaliacao_referencia\":\"bimestre 1\",\"tipo_avaliacao\":\"nota\",\"valor_numerico\":\"9.5\",\"conceito\":null,\"observacoes\":null}', '{\"rota\":\"professor.diario.avaliacoes.store\",\"portal_origem\":\"professor\",\"metodo_http\":\"POST\",\"diario_professor_id\":2,\"professor_id\":6,\"turma_id\":3,\"disciplina_id\":3,\"ano_letivo\":2026,\"matricula_id\":\"5\"}', '2026-04-30 23:07:29', '2026-04-30 23:07:29'),
+(186, 12, 6, 'avaliacoes', 'criacao', 'Lancamento Avaliativo', 'App\\Models\\LancamentoAvaliativo', 3, 'alto', '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36 Edg/147.0.0.0', NULL, '{\"avaliacao_referencia\":\"bimestre 1\",\"tipo_avaliacao\":\"nota\",\"valor_numerico\":\"7.6\",\"conceito\":null,\"observacoes\":null}', '{\"rota\":\"professor.diario.avaliacoes.store\",\"portal_origem\":\"professor\",\"metodo_http\":\"POST\",\"diario_professor_id\":2,\"professor_id\":6,\"turma_id\":3,\"disciplina_id\":3,\"ano_letivo\":2026,\"matricula_id\":\"7\"}', '2026-04-30 23:07:41', '2026-04-30 23:07:41'),
+(187, NULL, 6, 'planejamentos', 'criacao', 'Planejamento Anual', 'App\\Models\\PlanejamentoAnual', 1, 'medio', '127.0.0.1', 'Symfony', NULL, '{\"conteudos\":\"1\\u00aaUnidade: Direitos e deveres do cidad\\u00e3o\\\\n2\\u00aaUnidade: Alimenta\\u00e7\\u00e3o equilibrada\\\\n3\\u00aaUnidade: Ecossistemas\\\\n4\\u00aaUnidade: Democracia\",\"metodologia\":\"1\\u00aaUnidade: Aulas expositivas e debates\\\\n2\\u00aaUnidade: \\u5b9e\\u9a8c pr\\u00e1ticos\\\\n3\\u00aaUnidade: Sa\\u00eddas de campo\\\\n4\\u00aaUnidade: Simula\\u00e7\\u00f5es\",\"recursos_didaticos\":\"Quadro, projetor, v\\u00eddeos, material did\\u00e1tico\",\"estrategias_pedagogicas\":\"Trabalhos em grupo, apresenta\\u00e7\\u00e3o oral, projetos\",\"instrumentos_avaliacao\":\"Prova, trabalho, participa\\u00e7\\u00e3o, autoavalia\\u00e7\\u00e3o\"}', '{\"metodo_http\":\"GET\",\"diario_professor_id\":2,\"professor_id\":6,\"turma_id\":3,\"disciplina_id\":3,\"ano_letivo\":2026}', '2026-05-01 00:15:18', '2026-05-01 00:15:18'),
+(188, 12, 6, 'planejamentos', 'criacao', 'Planejamento Anual', 'App\\Models\\PlanejamentoAnual', 1, 'medio', '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36 Edg/147.0.0.0', NULL, '{\"conteudos\":\"1\\u00aaUnidade: O status existe nas tr\\u00eas tabelas (rascunho \\u2192 enviado \\u2192 aprovado \\u2192 devolvido), mas n\\u00e3o h\\u00e1 bot\\u00e3o \\\"Enviar para aprova\\u00e7\\u00e3o\\\" no formul\\u00e1rio do professor. Todo planejamento nasce como rascunho e permanece assim at\\u00e9 a coordena\\u00e7\\u00e3o agir. O fluxo correto seria:\",\"metodologia\":\"1\\u00aaUnidade: nasce como rascunho e permanece assim at\\u00e9 a coordena\\u00e7\\u00e3o agir. O fluxo correto seria:\",\"recursos_didaticos\":\"1\\u00aaUnidade: nasce como rascunho e permanece assim at\\u00e9 a coordena\\u00e7\\u00e3o agir. O fluxo correto seria:\",\"estrategias_pedagogicas\":\"1\\u00aaUnidade: nasce como rascunho e permanece assim at\\u00e9 a coordena\\u00e7\\u00e3o agir. O fluxo correto seria:\",\"instrumentos_avaliacao\":\"1\\u00aaUnidade: nasce como rascunho e permanece assim at\\u00e9 a coordena\\u00e7\\u00e3o agir. O fluxo correto seria:\"}', '{\"rota\":\"professor.diario.planejamento-anual.store\",\"portal_origem\":\"professor\",\"metodo_http\":\"POST\",\"diario_professor_id\":2,\"professor_id\":6,\"turma_id\":3,\"disciplina_id\":3,\"ano_letivo\":2026}', '2026-05-01 01:01:08', '2026-05-01 01:01:08'),
+(189, 12, 6, 'planejamentos', 'alteracao', 'Planejamento Anual', 'App\\Models\\PlanejamentoAnual', 1, 'medio', '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36 Edg/147.0.0.0', '{\"conteudos\":\"1\\u00aaUnidade: O status existe nas tr\\u00eas tabelas (rascunho \\u2192 enviado \\u2192 aprovado \\u2192 devolvido), mas n\\u00e3o h\\u00e1 bot\\u00e3o \\\"Enviar para aprova\\u00e7\\u00e3o\\\" no formul\\u00e1rio do professor. Todo planejamento nasce como rascunho e permanece assim at\\u00e9 a coordena\\u00e7\\u00e3o agir. O fluxo correto seria:\",\"metodologia\":\"1\\u00aaUnidade: nasce como rascunho e permanece assim at\\u00e9 a coordena\\u00e7\\u00e3o agir. O fluxo correto seria:\",\"recursos_didaticos\":\"1\\u00aaUnidade: nasce como rascunho e permanece assim at\\u00e9 a coordena\\u00e7\\u00e3o agir. O fluxo correto seria:\",\"estrategias_pedagogicas\":\"1\\u00aaUnidade: nasce como rascunho e permanece assim at\\u00e9 a coordena\\u00e7\\u00e3o agir. O fluxo correto seria:\",\"instrumentos_avaliacao\":\"1\\u00aaUnidade: nasce como rascunho e permanece assim at\\u00e9 a coordena\\u00e7\\u00e3o agir. O fluxo correto seria:\"}', '{\"conteudos\":\"1\\u00aaUnidade: O status existe nas tr\\u00eas tabelas (rascunho \\u2192 enviado \\u2192 aprovado \\u2192 devolvido), mas n\\u00e3o h\\u00e1 bot\\u00e3o \\\"Enviar para aprova\\u00e7\\u00e3o\\\" no formul\\u00e1rio do professor. Todo planejamento nasce como rascunho e permanece assim at\\u00e9 a coordena\\u00e7\\u00e3o agir. O fluxo correto seria:\\n2\\u00aaUnidade: nasce como rascunho e permanece assim at\\u00e9 a coordena\\u00e7\\u00e3o agir. O fluxo correto seria:\\n3\\u00aaUnidade: t\\u00e9 a coordena\\u00e7\\u00e3o agir. O fluxo correto seria:\\n4\\u00aaUnidade: cObjeto(s) de Conhecimento \\/ Conte\\u00fado(s)\",\"metodologia\":\"1\\u00aaUnidade: nasce como rascunho e permanece assim at\\u00e9 a coordena\\u00e7\\u00e3o agir. O fluxo correto seria:\\n2\\u00aaUnidade: nasce como rascunho e permanece assim at\\u00e9 a coordena\\u00e7\\u00e3o agir. O fluxo correto seria:\\n3\\u00aaUnidade: t\\u00e9 a coordena\\u00e7\\u00e3o agir. O fluxo correto seria:\\n4\\u00aaUnidade: Objeto(s) de Conhecimento \\/ Conte\\u00fado(s)\",\"recursos_didaticos\":\"1\\u00aaUnidade: 1\\u00aaUnidade: nasce como rascunho e permanece assim at\\u00e9 a coordena\\u00e7\\u00e3o agir. O fluxo correto seria:\\n2\\u00aaUnidade: 1\\u00aaUnidade: nasce como rascunho e permanece assim at\\u00e9 a coordena\\u00e7\\u00e3o agir. O fluxo correto seria:\\n3\\u00aaUnidade: 1\\u00aaUnidade: nasce como rascunho e permanece assim at\\u00e9 a coordena\\u00e7\\u00e3o agir. O fluxo correto seria:\\n4\\u00aaUnidade: 1\\u00aaUnidade: nasce como rascunho e permanece assim at\\u00e9 a coordena\\u00e7\\u00e3o agir. O fluxo correto seria:\",\"estrategias_pedagogicas\":\"1\\u00aaUnidade: nasce como rascunho e permanece assim at\\u00e9 a coordena\\u00e7\\u00e3o agir. O fluxo correto seria:\\n2\\u00aaUnidade: t\\u00e9 a coordena\\u00e7\\u00e3o agir. O fluxo correto seria:\\n3\\u00aaUnidade: t\\u00e9 a coordena\\u00e7\\u00e3o agir. O fluxo correto seria:\\n4\\u00aaUnidade: Objeto(s) de Conhecimento \\/ Conte\\u00fado(s)\",\"instrumentos_avaliacao\":\"1\\u00aaUnidade: 1\\u00aaUnidade: nasce como rascunho e permanece assim at\\u00e9 a coordena\\u00e7\\u00e3o agir. O fluxo correto seria:\\n2\\u00aaUnidade: 1\\u00aaUnidade: nasce como rascunho e permanece assim at\\u00e9 a coordena\\u00e7\\u00e3o agir. O fluxo correto seria:\\n3\\u00aaUnidade: 1\\u00aaUnidade: nasce como rascunho e permanece assim at\\u00e9 a coordena\\u00e7\\u00e3o agir. O fluxo correto seria:\\n4\\u00aaUnidade: 1\\u00aaUnidade: nasce como rascunho e permanece assim at\\u00e9 a coordena\\u00e7\\u00e3o agir. O fluxo correto seria:\"}', '{\"rota\":\"professor.diario.planejamento-anual.store\",\"portal_origem\":\"professor\",\"metodo_http\":\"POST\",\"diario_professor_id\":2,\"professor_id\":6,\"turma_id\":3,\"disciplina_id\":3,\"ano_letivo\":2026}', '2026-05-01 01:17:29', '2026-05-01 01:17:29'),
+(190, 12, 6, 'planejamentos', 'alteracao', 'Planejamento Anual', 'App\\Models\\PlanejamentoAnual', 1, 'medio', '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36 Edg/147.0.0.0', '{\"conteudos\":\"1\\u00aaUnidade: O status existe nas tr\\u00eas tabelas (rascunho \\u2192 enviado \\u2192 aprovado \\u2192 devolvido), mas n\\u00e3o h\\u00e1 bot\\u00e3o \\\"Enviar para aprova\\u00e7\\u00e3o\\\" no formul\\u00e1rio do professor. Todo planejamento nasce como rascunho e permanece assim at\\u00e9 a coordena\\u00e7\\u00e3o agir. O fluxo correto seria:\\n2\\u00aaUnidade: nasce como rascunho e permanece assim at\\u00e9 a coordena\\u00e7\\u00e3o agir. O fluxo correto seria:\\n3\\u00aaUnidade: t\\u00e9 a coordena\\u00e7\\u00e3o agir. O fluxo correto seria:\\n4\\u00aaUnidade: cObjeto(s) de Conhecimento \\/ Conte\\u00fado(s)\",\"metodologia\":\"1\\u00aaUnidade: nasce como rascunho e permanece assim at\\u00e9 a coordena\\u00e7\\u00e3o agir. O fluxo correto seria:\\n2\\u00aaUnidade: nasce como rascunho e permanece assim at\\u00e9 a coordena\\u00e7\\u00e3o agir. O fluxo correto seria:\\n3\\u00aaUnidade: t\\u00e9 a coordena\\u00e7\\u00e3o agir. O fluxo correto seria:\\n4\\u00aaUnidade: Objeto(s) de Conhecimento \\/ Conte\\u00fado(s)\",\"recursos_didaticos\":\"1\\u00aaUnidade: 1\\u00aaUnidade: nasce como rascunho e permanece assim at\\u00e9 a coordena\\u00e7\\u00e3o agir. O fluxo correto seria:\\n2\\u00aaUnidade: 1\\u00aaUnidade: nasce como rascunho e permanece assim at\\u00e9 a coordena\\u00e7\\u00e3o agir. O fluxo correto seria:\\n3\\u00aaUnidade: 1\\u00aaUnidade: nasce como rascunho e permanece assim at\\u00e9 a coordena\\u00e7\\u00e3o agir. O fluxo correto seria:\\n4\\u00aaUnidade: 1\\u00aaUnidade: nasce como rascunho e permanece assim at\\u00e9 a coordena\\u00e7\\u00e3o agir. O fluxo correto seria:\",\"estrategias_pedagogicas\":\"1\\u00aaUnidade: nasce como rascunho e permanece assim at\\u00e9 a coordena\\u00e7\\u00e3o agir. O fluxo correto seria:\\n2\\u00aaUnidade: t\\u00e9 a coordena\\u00e7\\u00e3o agir. O fluxo correto seria:\\n3\\u00aaUnidade: t\\u00e9 a coordena\\u00e7\\u00e3o agir. O fluxo correto seria:\\n4\\u00aaUnidade: Objeto(s) de Conhecimento \\/ Conte\\u00fado(s)\",\"instrumentos_avaliacao\":\"1\\u00aaUnidade: 1\\u00aaUnidade: nasce como rascunho e permanece assim at\\u00e9 a coordena\\u00e7\\u00e3o agir. O fluxo correto seria:\\n2\\u00aaUnidade: 1\\u00aaUnidade: nasce como rascunho e permanece assim at\\u00e9 a coordena\\u00e7\\u00e3o agir. O fluxo correto seria:\\n3\\u00aaUnidade: 1\\u00aaUnidade: nasce como rascunho e permanece assim at\\u00e9 a coordena\\u00e7\\u00e3o agir. O fluxo correto seria:\\n4\\u00aaUnidade: 1\\u00aaUnidade: nasce como rascunho e permanece assim at\\u00e9 a coordena\\u00e7\\u00e3o agir. O fluxo correto seria:\"}', '{\"conteudos\":\"1\\u00aaUnidade: Todo planejamento nasce como rascunho e permanece assim at\\u00e9 a coordena\\u00e7\\u00e3o agir\\n2\\u00aaUnidade: Todo planejamento nasce unidade II\\n3\\u00aaUnidade: Todo planejamento nasce unidade III\\n4\\u00aaUnidade: Todo planejamento nasce unidade IV\",\"metodologia\":\"1\\u00aaUnidade: Todo planejamento nasce como rascunho e permanece assim at\\u00e9 a coordena\\u00e7\\u00e3o agir\\n2\\u00aaUnidade: Todo planejamento nasce unidade II\\n3\\u00aaUnidade: Todo planejamento nasce unidade III\\n4\\u00aaUnidade: Todo planejamento nasce unidade IV\",\"recursos_didaticos\":\"1\\u00aaUnidade: Todo planejamento nasce como rascunho e permanece assim at\\u00e9 a coordena\\u00e7\\u00e3o agir\\n2\\u00aaUnidade: Todo planejamento nasce unidade II\\n3\\u00aaUnidade: Todo planejamento nasce unidade III\\n4\\u00aaUnidade: Todo planejamento nasce unidade IV\",\"estrategias_pedagogicas\":\"1\\u00aaUnidade: Todo planejamento nasce como rascunho e permanece assim at\\u00e9 a coordena\\u00e7\\u00e3o agir\\n2\\u00aaUnidade: Todo planejamento nasce unidade II\\n3\\u00aaUnidade: Todo planejamento nasce unidade III\\n4\\u00aaUnidade: Todo planejamento nasce unidade IV\",\"instrumentos_avaliacao\":\"1\\u00aaUnidade: Todo planejamento nasce como rascunho e permanece assim at\\u00e9 a coordena\\u00e7\\u00e3o agir\\n2\\u00aaUnidade: Todo planejamento nasce unidade II\\n3\\u00aaUnidade: Todo planejamento nasce unidade III\\n4\\u00aaUnidade: Todo planejamento nasce unidade IV\"}', '{\"rota\":\"professor.diario.planejamento-anual.store\",\"portal_origem\":\"professor\",\"metodo_http\":\"POST\",\"diario_professor_id\":2,\"professor_id\":6,\"turma_id\":3,\"disciplina_id\":3,\"ano_letivo\":2026}', '2026-05-01 01:23:04', '2026-05-01 01:23:04'),
+(191, 12, 6, 'planejamentos', 'alteracao', 'Planejamento Anual', 'App\\Models\\PlanejamentoAnual', 1, 'medio', '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36 Edg/147.0.0.0', '{\"conteudos\":\"1\\u00aaUnidade: Todo planejamento nasce como rascunho e permanece assim at\\u00e9 a coordena\\u00e7\\u00e3o agir\\n2\\u00aaUnidade: Todo planejamento nasce unidade II\\n3\\u00aaUnidade: Todo planejamento nasce unidade III\\n4\\u00aaUnidade: Todo planejamento nasce unidade IV\",\"metodologia\":\"1\\u00aaUnidade: Todo planejamento nasce como rascunho e permanece assim at\\u00e9 a coordena\\u00e7\\u00e3o agir\\n2\\u00aaUnidade: Todo planejamento nasce unidade II\\n3\\u00aaUnidade: Todo planejamento nasce unidade III\\n4\\u00aaUnidade: Todo planejamento nasce unidade IV\",\"recursos_didaticos\":\"1\\u00aaUnidade: Todo planejamento nasce como rascunho e permanece assim at\\u00e9 a coordena\\u00e7\\u00e3o agir\\n2\\u00aaUnidade: Todo planejamento nasce unidade II\\n3\\u00aaUnidade: Todo planejamento nasce unidade III\\n4\\u00aaUnidade: Todo planejamento nasce unidade IV\",\"estrategias_pedagogicas\":\"1\\u00aaUnidade: Todo planejamento nasce como rascunho e permanece assim at\\u00e9 a coordena\\u00e7\\u00e3o agir\\n2\\u00aaUnidade: Todo planejamento nasce unidade II\\n3\\u00aaUnidade: Todo planejamento nasce unidade III\\n4\\u00aaUnidade: Todo planejamento nasce unidade IV\",\"instrumentos_avaliacao\":\"1\\u00aaUnidade: Todo planejamento nasce como rascunho e permanece assim at\\u00e9 a coordena\\u00e7\\u00e3o agir\\n2\\u00aaUnidade: Todo planejamento nasce unidade II\\n3\\u00aaUnidade: Todo planejamento nasce unidade III\\n4\\u00aaUnidade: Todo planejamento nasce unidade IV\"}', '{\"conteudos\":\"1\\u00aaUnidade: Todo planejamento nasce unidade I\\n2\\u00aaUnidade: Todo planejamento nasce unidade II\\n3\\u00aaUnidade: Todo planejamento nasce unidade III\\n4\\u00aaUnidade: Todo planejamento nasce unidade IV\",\"metodologia\":\"1\\u00aaUnidade: Todo planejamento nasce unidade I\\n2\\u00aaUnidade: Todo planejamento nasce unidade II\\n3\\u00aaUnidade: Todo planejamento nasce unidade III\\n4\\u00aaUnidade: Todo planejamento nasce unidade IV\",\"recursos_didaticos\":\"1\\u00aaUnidade: Todo planejamento nasce unidade I\\n2\\u00aaUnidade: 1\\u00aaUnidade: Todo planejamento nasce como rascunho e permanece assim at\\u00e9 a coordena\\u00e7\\u00e3o agir\\r\\n2\\u00aaUnidade: Todo planejamento nasce unidade II\\r\\n3\\u00aaUnidade: Todo planejamento nasce unidade III\\r\\n4\\u00aaUnidade: Todo planejamento nasce unidade IV\\n3\\u00aaUnidade: 1\\u00aaUnidade: Todo planejamento nasce como rascunho e permanece assim at\\u00e9 a coordena\\u00e7\\u00e3o agir\\r\\n2\\u00aaUnidade: Todo planejamento nasce unidade II\\r\\n3\\u00aaUnidade: Todo planejamento nasce unidade III\\r\\n4\\u00aaUnidade: Todo planejamento nasce unidade IV\\n4\\u00aaUnidade: 1\\u00aaUnidade: Todo planejamento nasce como rascunho e permanece assim at\\u00e9 a coordena\\u00e7\\u00e3o agir\\r\\n2\\u00aaUnidade: Todo planejamento nasce unidade II\\r\\n3\\u00aaUnidade: Todo planejamento nasce unidade III\\r\\n4\\u00aaUnidade: Todo planejamento nasce unidade IV\",\"estrategias_pedagogicas\":\"1\\u00aaUnidade: Todo planejamento nasce unidade I\\n2\\u00aaUnidade: Todo planejamento nasce unidade II\\n3\\u00aaUnidade: Todo planejamento nasce unidade III\\n4\\u00aaUnidade: Todo planejamento nasce unidade IV\",\"instrumentos_avaliacao\":\"1\\u00aaUnidade: Todo planejamento nasce unidade I\\n2\\u00aaUnidade: 1\\u00aaUnidade: Todo planejamento nasce como rascunho e permanece assim at\\u00e9 a coordena\\u00e7\\u00e3o agir\\r\\n2\\u00aaUnidade: Todo planejamento nasce unidade II\\r\\n3\\u00aaUnidade: Todo planejamento nasce unidade III\\r\\n4\\u00aaUnidade: Todo planejamento nasce unidade IV\\n3\\u00aaUnidade: 1\\u00aaUnidade: Todo planejamento nasce como rascunho e permanece assim at\\u00e9 a coordena\\u00e7\\u00e3o agir\\r\\n2\\u00aaUnidade: Todo planejamento nasce unidade II\\r\\n3\\u00aaUnidade: Todo planejamento nasce unidade III\\r\\n4\\u00aaUnidade: Todo planejamento nasce unidade IV\\n4\\u00aaUnidade: 1\\u00aaUnidade: Todo planejamento nasce como rascunho e permanece assim at\\u00e9 a coordena\\u00e7\\u00e3o agir\\r\\n2\\u00aaUnidade: Todo planejamento nasce unidade II\\r\\n3\\u00aaUnidade: Todo planejamento nasce unidade III\\r\\n4\\u00aaUnidade: Todo planejamento nasce unidade IV\"}', '{\"rota\":\"professor.diario.planejamento-anual.store\",\"portal_origem\":\"professor\",\"metodo_http\":\"POST\",\"diario_professor_id\":2,\"professor_id\":6,\"turma_id\":3,\"disciplina_id\":3,\"ano_letivo\":2026}', '2026-05-01 01:24:11', '2026-05-01 01:24:11'),
+(192, 12, 6, 'planejamentos', 'criacao', 'Planejamento Anual', 'App\\Models\\PlanejamentoAnual', 1, 'medio', '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36 Edg/147.0.0.0', NULL, '{\"conteudos\":\"1\\u00aaUnidade: Todo planejamento nasce unidade I\\n2\\u00aaUnidade: Todo planejamento nasce unidade II\\n3\\u00aaUnidade: Todo planejamento nasce unidade III\\n4\\u00aaUnidade: Todo planejamento nasce unidade IV\",\"metodologia\":\"1\\u00aaUnidade: Todo planejamento nasce unidade I\\n2\\u00aaUnidade: Todo planejamento nasce unidade II\\n3\\u00aaUnidade: Todo planejamento nasce unidade III\\n4\\u00aaUnidade: Todo planejamento nasce unidade IV\",\"recursos_didaticos\":\"1\\u00aaUnidade: Todo planejamento nasce unidade I\\n2\\u00aaUnidade: Todo planejamento nasce unidade II\\n3\\u00aaUnidade: Todo planejamento nasce unidade III\\n4\\u00aaUnidade: Todo planejamento nasce unidade IV\",\"estrategias_pedagogicas\":\"1\\u00aaUnidade: Todo planejamento nasce unidade I\\n2\\u00aaUnidade: Todo planejamento nasce unidade II\\n3\\u00aaUnidade: Todo planejamento nasce unidade III\\n4\\u00aaUnidade: Todo planejamento nasce unidade IV\",\"instrumentos_avaliacao\":\"1\\u00aaUnidade: Todo planejamento nasce unidade I\\n2\\u00aaUnidade: Todo planejamento nasce unidade II\\n3\\u00aaUnidade: Todo planejamento nasce unidade III\\n4\\u00aaUnidade: Todo planejamento nasce unidade IV\"}', '{\"rota\":\"professor.diario.planejamento-anual.store\",\"portal_origem\":\"professor\",\"metodo_http\":\"POST\",\"diario_professor_id\":2,\"professor_id\":6,\"turma_id\":3,\"disciplina_id\":3,\"ano_letivo\":2026}', '2026-05-01 01:30:06', '2026-05-01 01:30:06');
+INSERT INTO `registros_auditoria` (`id`, `usuario_id`, `escola_id`, `modulo`, `acao`, `tipo_registro`, `registro_type`, `registro_id`, `nivel_sensibilidade`, `ip`, `user_agent`, `valores_antes`, `valores_depois`, `contexto`, `created_at`, `updated_at`) VALUES
+(193, 12, 6, 'planejamentos', 'alteracao', 'Planejamento Anual', 'App\\Models\\PlanejamentoAnual', 1, 'medio', '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36 Edg/147.0.0.0', '{\"conteudos\":\"1\\u00aaUnidade: Todo planejamento nasce unidade I\\n2\\u00aaUnidade: Todo planejamento nasce unidade II\\n3\\u00aaUnidade: Todo planejamento nasce unidade III\\n4\\u00aaUnidade: Todo planejamento nasce unidade IV\",\"metodologia\":\"1\\u00aaUnidade: Todo planejamento nasce unidade I\\n2\\u00aaUnidade: Todo planejamento nasce unidade II\\n3\\u00aaUnidade: Todo planejamento nasce unidade III\\n4\\u00aaUnidade: Todo planejamento nasce unidade IV\",\"recursos_didaticos\":\"1\\u00aaUnidade: Todo planejamento nasce unidade I\\n2\\u00aaUnidade: Todo planejamento nasce unidade II\\n3\\u00aaUnidade: Todo planejamento nasce unidade III\\n4\\u00aaUnidade: Todo planejamento nasce unidade IV\",\"estrategias_pedagogicas\":\"1\\u00aaUnidade: Todo planejamento nasce unidade I\\n2\\u00aaUnidade: Todo planejamento nasce unidade II\\n3\\u00aaUnidade: Todo planejamento nasce unidade III\\n4\\u00aaUnidade: Todo planejamento nasce unidade IV\",\"instrumentos_avaliacao\":\"1\\u00aaUnidade: Todo planejamento nasce unidade I\\n2\\u00aaUnidade: Todo planejamento nasce unidade II\\n3\\u00aaUnidade: Todo planejamento nasce unidade III\\n4\\u00aaUnidade: Todo planejamento nasce unidade IV\"}', '{\"conteudos\":\"Todo planejamento Unidade I\",\"metodologia\":\"Todo planejamento Unidade I\",\"recursos_didaticos\":\"Todo planejamento Unidade I\",\"estrategias_pedagogicas\":\"Todo planejamento Unidade I\",\"instrumentos_avaliacao\":\"Todo planejamento Unidade I\"}', '{\"rota\":\"professor.diario.planejamento-anual.store\",\"portal_origem\":\"professor\",\"metodo_http\":\"POST\",\"diario_professor_id\":2,\"professor_id\":6,\"turma_id\":3,\"disciplina_id\":3,\"ano_letivo\":2026}', '2026-05-01 01:44:52', '2026-05-01 01:44:52'),
+(194, 12, 6, 'planejamentos', 'criacao', 'Planejamento Anual', 'App\\Models\\PlanejamentoAnual', 2, 'medio', '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36 Edg/147.0.0.0', NULL, '{\"conteudos\":\"Todo planejamento Unidade II\",\"metodologia\":\"Todo planejamento Unidade II\",\"estrategias_pedagogicas\":\"Todo planejamento Unidade II\",\"recursos_didaticos\":\"Todo planejamento Unidade II\",\"instrumentos_avaliacao\":\"Todo planejamento Unidade II\"}', '{\"rota\":\"professor.diario.planejamento-anual.store\",\"portal_origem\":\"professor\",\"metodo_http\":\"POST\",\"diario_professor_id\":2,\"professor_id\":6,\"turma_id\":3,\"disciplina_id\":3,\"ano_letivo\":2026}', '2026-05-01 01:44:52', '2026-05-01 01:44:52'),
+(195, 12, 6, 'planejamentos', 'criacao', 'Planejamento Anual', 'App\\Models\\PlanejamentoAnual', 3, 'medio', '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36 Edg/147.0.0.0', NULL, '{\"conteudos\":\"Todo planejamento nasce unidade III\",\"metodologia\":\"Todo planejamento nasce unidade III\",\"estrategias_pedagogicas\":\"Todo planejamento nasce unidade III\",\"recursos_didaticos\":\"Todo planejamento nasce unidade III\",\"instrumentos_avaliacao\":\"Todo planejamento nasce unidade III\"}', '{\"rota\":\"professor.diario.planejamento-anual.store\",\"portal_origem\":\"professor\",\"metodo_http\":\"POST\",\"diario_professor_id\":2,\"professor_id\":6,\"turma_id\":3,\"disciplina_id\":3,\"ano_letivo\":2026}', '2026-05-01 01:44:52', '2026-05-01 01:44:52'),
+(196, 12, 6, 'planejamentos', 'criacao', 'Planejamento Anual', 'App\\Models\\PlanejamentoAnual', 4, 'medio', '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36 Edg/147.0.0.0', NULL, '{\"conteudos\":\"Todo planejamento nasce unidade IV\",\"metodologia\":\"Todo planejamento nasce unidade IV\",\"estrategias_pedagogicas\":\"Todo planejamento nasce unidade IV\",\"recursos_didaticos\":\"Todo planejamento nasce unidade IV\",\"instrumentos_avaliacao\":\"Todo planejamento nasce unidade IV\"}', '{\"rota\":\"professor.diario.planejamento-anual.store\",\"portal_origem\":\"professor\",\"metodo_http\":\"POST\",\"diario_professor_id\":2,\"professor_id\":6,\"turma_id\":3,\"disciplina_id\":3,\"ano_letivo\":2026}', '2026-05-01 01:44:52', '2026-05-01 01:44:52'),
+(197, 12, 6, 'planejamentos', 'alteracao', 'Planejamento Anual', 'App\\Models\\PlanejamentoAnual', 2, 'medio', '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36 Edg/147.0.0.0', '{\"metodologia\":\"Todo planejamento Unidade II\"}', '{\"metodologia\":\"Todo planejamento Unidade II - Metodologias \\/ Estrat\\u00e9gias\"}', '{\"rota\":\"professor.diario.planejamento-anual.store\",\"portal_origem\":\"professor\",\"metodo_http\":\"POST\",\"diario_professor_id\":2,\"professor_id\":6,\"turma_id\":3,\"disciplina_id\":3,\"ano_letivo\":2026}', '2026-05-01 01:45:50', '2026-05-01 01:45:50'),
+(198, 12, 6, 'diarios', 'criacao', 'Diario do Professor', 'App\\Models\\DiarioProfessor', 3, 'medio', '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36 Edg/147.0.0.0', NULL, '{\"escola_id\":\"6\",\"turma_id\":\"3\",\"disciplina_id\":\"9\",\"professor_id\":6,\"ano_letivo\":\"2026\",\"periodo_tipo\":\"bimestre\",\"periodo_referencia\":\"1\"}', '{\"rota\":\"professor.diario.store\",\"portal_origem\":\"professor\",\"metodo_http\":\"POST\",\"professor_id\":6,\"turma_id\":\"3\"}', '2026-05-01 01:49:55', '2026-05-01 01:49:55'),
+(199, 12, 6, 'planejamentos', 'criacao', 'Planejamento Anual', 'App\\Models\\PlanejamentoAnual', 5, 'medio', '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36 Edg/147.0.0.0', NULL, '{\"conteudos\":\"Diario de Educa\\u00e7\\u00e3o F\\u00edsica - Unidade I\",\"metodologia\":\"Diario de Educa\\u00e7\\u00e3o F\\u00edsica - Unidade I\",\"estrategias_pedagogicas\":\"Diario de Educa\\u00e7\\u00e3o F\\u00edsica - Unidade I\",\"recursos_didaticos\":\"Diario de Educa\\u00e7\\u00e3o F\\u00edsica - Unidade I\",\"instrumentos_avaliacao\":\"Diario de Educa\\u00e7\\u00e3o F\\u00edsica - Unidade I\"}', '{\"rota\":\"professor.diario.planejamento-anual.store\",\"portal_origem\":\"professor\",\"metodo_http\":\"POST\",\"diario_professor_id\":3,\"professor_id\":6,\"turma_id\":3,\"disciplina_id\":9,\"ano_letivo\":2026}', '2026-05-01 01:51:55', '2026-05-01 01:51:55'),
+(200, 12, 6, 'planejamentos', 'criacao', 'Planejamento Anual', 'App\\Models\\PlanejamentoAnual', 6, 'medio', '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36 Edg/147.0.0.0', NULL, '{\"conteudos\":\"Diario de Educa\\u00e7\\u00e3o F\\u00edsica - Unidade II\",\"metodologia\":\"Diario de Educa\\u00e7\\u00e3o F\\u00edsica - Unidade II\",\"estrategias_pedagogicas\":\"Diario de Educa\\u00e7\\u00e3o F\\u00edsica - Unidade II\",\"recursos_didaticos\":\"Diario de Educa\\u00e7\\u00e3o F\\u00edsica - Unidade II\",\"instrumentos_avaliacao\":\"Diario de Educa\\u00e7\\u00e3o F\\u00edsica - Unidade II\"}', '{\"rota\":\"professor.diario.planejamento-anual.store\",\"portal_origem\":\"professor\",\"metodo_http\":\"POST\",\"diario_professor_id\":3,\"professor_id\":6,\"turma_id\":3,\"disciplina_id\":9,\"ano_letivo\":2026}', '2026-05-01 01:51:55', '2026-05-01 01:51:55'),
+(201, 12, 6, 'planejamentos', 'criacao', 'Planejamento Anual', 'App\\Models\\PlanejamentoAnual', 7, 'medio', '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36 Edg/147.0.0.0', NULL, '{\"conteudos\":\"Diario de Educa\\u00e7\\u00e3o F\\u00edsica - Unidade III\",\"metodologia\":\"Diario de Educa\\u00e7\\u00e3o F\\u00edsica - Unidade III\",\"estrategias_pedagogicas\":\"Diario de Educa\\u00e7\\u00e3o F\\u00edsica - Unidade III\",\"recursos_didaticos\":null,\"instrumentos_avaliacao\":\"Diario de Educa\\u00e7\\u00e3o F\\u00edsica - Unidade III\"}', '{\"rota\":\"professor.diario.planejamento-anual.store\",\"portal_origem\":\"professor\",\"metodo_http\":\"POST\",\"diario_professor_id\":3,\"professor_id\":6,\"turma_id\":3,\"disciplina_id\":9,\"ano_letivo\":2026}', '2026-05-01 01:51:55', '2026-05-01 01:51:55'),
+(202, 12, 6, 'planejamentos', 'criacao', 'Planejamento Anual', 'App\\Models\\PlanejamentoAnual', 8, 'medio', '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36 Edg/147.0.0.0', NULL, '{\"conteudos\":\"Diario de Educa\\u00e7\\u00e3o F\\u00edsica - Unidade IV\",\"metodologia\":\"Diario de Educa\\u00e7\\u00e3o F\\u00edsica - Unidade IV\",\"estrategias_pedagogicas\":\"Diario de Educa\\u00e7\\u00e3o F\\u00edsica - Unidade IV\",\"recursos_didaticos\":\"Diario de Educa\\u00e7\\u00e3o F\\u00edsica - Unidade IV\",\"instrumentos_avaliacao\":\"Diario de Educa\\u00e7\\u00e3o F\\u00edsica - Unidade IV\"}', '{\"rota\":\"professor.diario.planejamento-anual.store\",\"portal_origem\":\"professor\",\"metodo_http\":\"POST\",\"diario_professor_id\":3,\"professor_id\":6,\"turma_id\":3,\"disciplina_id\":9,\"ano_letivo\":2026}', '2026-05-01 01:51:55', '2026-05-01 01:51:55'),
+(203, 12, 6, 'planejamentos', 'criacao', 'Planejamento por Periodo', 'App\\Models\\PlanejamentoPeriodo', 1, 'medio', '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36 Edg/147.0.0.0', NULL, '{\"tipo_planejamento\":\"quinzenal\",\"data_inicio\":\"2026-04-15 00:00:00\",\"data_fim\":\"2026-04-30 00:00:00\",\"objetivos_aprendizagem\":\"Objetivos da aula ser\\u00e3o debatidos\",\"conteudos\":\"Encontrar a sa\\u00fade atrav\\u00e9s de treinamentos\",\"metodologia\":\"Futebol, veleibol\"}', '{\"rota\":\"professor.diario.planejamento-periodo.store\",\"portal_origem\":\"professor\",\"metodo_http\":\"POST\",\"diario_professor_id\":2,\"professor_id\":6,\"turma_id\":3,\"disciplina_id\":3,\"ano_letivo\":2026}', '2026-05-01 03:23:18', '2026-05-01 03:23:18'),
+(204, 12, 6, 'planejamentos', 'criacao', 'Planejamento por Periodo', 'App\\Models\\PlanejamentoPeriodo', 2, 'medio', '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36 Edg/147.0.0.0', NULL, '{\"tipo_planejamento\":\"quinzenal\",\"data_inicio\":\"2026-05-01 00:00:00\",\"data_fim\":\"2026-05-15 00:00:00\",\"objetivos_aprendizagem\":\"Objetivos da aula\",\"conteudos\":\"Objeto(s) de Conhecimento \\/ Conteudo(s)\",\"metodologia\":\"Metodologias \\/ estrategias\"}', '{\"rota\":\"professor.diario.planejamento-periodo.store\",\"portal_origem\":\"professor\",\"metodo_http\":\"POST\",\"diario_professor_id\":2,\"professor_id\":6,\"turma_id\":3,\"disciplina_id\":3,\"ano_letivo\":2026}', '2026-05-01 03:25:44', '2026-05-01 03:25:44'),
+(205, 12, 6, 'planejamentos', 'alteracao', 'Planejamento por Periodo', 'App\\Models\\PlanejamentoPeriodo', 2, 'medio', '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36 Edg/147.0.0.0', '{\"data_inicio\":\"2026-05-01\",\"data_fim\":\"2026-05-15\",\"objetivos_aprendizagem\":\"Objetivos da aula\",\"conteudos\":\"Objeto(s) de Conhecimento \\/ Conteudo(s)\",\"metodologia\":\"Metodologias \\/ estrategias\"}', '{\"data_inicio\":\"2026-05-01 00:00:00\",\"data_fim\":\"2026-05-15 00:00:00\",\"objetivos_aprendizagem\":\"Testando para ver se altera\",\"conteudos\":\"Espero que sim\",\"metodologia\":\"Pois, eu acho que n\\u00e3o vai alterar nada\"}', '{\"rota\":\"professor.diario.planejamento-periodo.store\",\"portal_origem\":\"professor\",\"metodo_http\":\"POST\",\"diario_professor_id\":2,\"professor_id\":6,\"turma_id\":3,\"disciplina_id\":3,\"ano_letivo\":2026}', '2026-05-01 03:28:51', '2026-05-01 03:28:51'),
+(206, 12, 6, 'planejamentos', 'alteracao', 'Planejamento por Periodo', 'App\\Models\\PlanejamentoPeriodo', 2, 'medio', '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36 Edg/147.0.0.0', '{\"data_inicio\":\"2026-05-01\",\"data_fim\":\"2026-05-15\"}', '{\"data_inicio\":\"2026-05-01 00:00:00\",\"data_fim\":\"2026-05-15 00:00:00\"}', '{\"rota\":\"professor.diario.planejamento-periodo.store\",\"portal_origem\":\"professor\",\"metodo_http\":\"POST\",\"diario_professor_id\":2,\"professor_id\":6,\"turma_id\":3,\"disciplina_id\":3,\"ano_letivo\":2026}', '2026-05-01 03:41:57', '2026-05-01 03:41:57'),
+(207, 12, 6, 'planejamentos', 'criacao', 'Planejamento por Periodo', 'App\\Models\\PlanejamentoPeriodo', 3, 'medio', '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36 Edg/147.0.0.0', NULL, '{\"tipo_planejamento\":\"quinzenal\",\"data_inicio\":\"2026-05-16 00:00:00\",\"data_fim\":\"2026-05-30 00:00:00\",\"objetivos_aprendizagem\":\"Recrea\\u00e7\\u00e3o\",\"conteudos\":\"Ser\\u00e1 feito por ele\",\"metodologia\":\"Com certeza os alunos\"}', '{\"rota\":\"professor.diario.planejamento-periodo.store\",\"portal_origem\":\"professor\",\"metodo_http\":\"POST\",\"diario_professor_id\":2,\"professor_id\":6,\"turma_id\":3,\"disciplina_id\":3,\"ano_letivo\":2026}', '2026-05-01 03:47:38', '2026-05-01 03:47:38');
 
 -- --------------------------------------------------------
 
@@ -1956,7 +2366,8 @@ CREATE TABLE `registros_aula` (
 --
 
 INSERT INTO `registros_aula` (`id`, `diario_professor_id`, `horario_aula_id`, `usuario_registro_id`, `data_aula`, `titulo`, `conteudo_previsto`, `conteudo_ministrado`, `metodologia`, `recursos_utilizados`, `quantidade_aulas`, `aula_dada`, `created_at`, `updated_at`) VALUES
-(1, 2, 1, 12, '2026-03-16', 'Números naturais - Operações de soma e subtração', NULL, 'Operações com números naturais, operações de soma e subtração, problemas envolvendo as operações.', NULL, NULL, 2, 1, '2026-03-20 00:24:56', '2026-03-20 00:24:56');
+(1, 2, 1, 12, '2026-03-16', 'Números naturais - Operações de soma e subtração', NULL, 'Operações com números naturais, operações de soma e subtração, problemas envolvendo as operações.', NULL, NULL, 2, 1, '2026-03-20 00:24:56', '2026-03-20 00:24:56'),
+(2, 2, 5, 12, '2026-04-27', 'Exercícios', NULL, 'Atividades de fixação', NULL, NULL, 1, 1, '2026-04-30 23:06:32', '2026-04-30 23:06:32');
 
 -- --------------------------------------------------------
 
@@ -2005,8 +2416,7 @@ CREATE TABLE `sessions` (
 --
 
 INSERT INTO `sessions` (`id`, `user_id`, `ip_address`, `user_agent`, `payload`, `last_activity`) VALUES
-('9ThbH1UzEGHEqTPK22FUEGRdmWELXTnKE0jfYVSU', 11, '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36', 'YTo1OntzOjY6Il90b2tlbiI7czo0MDoiNHVIbGRwQnRIcHF1V2NiZmVKWWJEUTg2UWFYRUNtd3BpanBCdWlJUyI7czozOiJ1cmwiO2E6MDp7fXM6OToiX3ByZXZpb3VzIjthOjE6e3M6MzoidXJsIjtzOjgwOiJodHRwOi8vbG9jYWxob3N0L3Npc3RlbWEtZXNjb2xhci9wdWJsaWMvcHNpY29sb2dpYS1wc2ljb3BlZGFnb2dpYS9kZW1hbmRhcy9jcmlhciI7fXM6NjoiX2ZsYXNoIjthOjI6e3M6Mzoib2xkIjthOjA6e31zOjM6Im5ldyI7YTowOnt9fXM6NTA6ImxvZ2luX3dlYl81OWJhMzZhZGRjMmIyZjk0MDE1ODBmMDE0YzdmNThlYTRlMzA5ODlkIjtpOjExO30=', 1774024292),
-('fT500boW0GVPjePdb8CLBVELrylvo2xW7fnWitt2', 8, '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36 Edg/145.0.0.0', 'YTo1OntzOjY6Il90b2tlbiI7czo0MDoiRHN4aDh5WUNObUFudUJSellnWThQVTBFS1ZXVDZzak9XcDN6amhpQiI7czo2OiJfZmxhc2giO2E6Mjp7czozOiJvbGQiO2E6MDp7fXM6MzoibmV3IjthOjA6e319czozOiJ1cmwiO2E6MDp7fXM6OToiX3ByZXZpb3VzIjthOjE6e3M6MzoidXJsIjtzOjY5OiJodHRwOi8vbG9jYWxob3N0L3Npc3RlbWEtZXNjb2xhci9wdWJsaWMvc2VjcmV0YXJpYS1lc2NvbGFyL21hdHJpY3VsYXMiO31zOjUwOiJsb2dpbl93ZWJfNTliYTM2YWRkYzJiMmY5NDAxNTgwZjAxNGM3ZjU4ZWE0ZTMwOTg5ZCI7aTo4O30=', 1774023051);
+('sUxvCrtFxODXeGtdQoHBbnJhz2tQQZLQAvgnHOIb', 12, '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36 Edg/147.0.0.0', 'YTo1OntzOjY6Il90b2tlbiI7czo0MDoidEdKb3I5WXRSWkx6YnQzSEx6a2Q0ZkhsRFdid0hINHcyYWtjakd3TCI7czozOiJ1cmwiO2E6MDp7fXM6OToiX3ByZXZpb3VzIjthOjE6e3M6MzoidXJsIjtzOjU4OiJodHRwOi8vbG9jYWxob3N0L3Npc3RlbWEtZXNjb2xhci9wdWJsaWMvcHJvZmVzc29yL2RpYXJpby8yIjt9czo2OiJfZmxhc2giO2E6Mjp7czozOiJvbGQiO2E6MDp7fXM6MzoibmV3IjthOjA6e319czo1MDoibG9naW5fd2ViXzU5YmEzNmFkZGMyYjJmOTQwMTU4MGYwMTRjN2Y1OGVhNGUzMDk4OWQiO2k6MTI7fQ==', 1777596458);
 
 -- --------------------------------------------------------
 
@@ -2090,7 +2500,8 @@ CREATE TABLE `turmas` (
 
 INSERT INTO `turmas` (`id`, `escola_id`, `modalidade_id`, `matriz_id`, `serie_etapa`, `nome`, `turno`, `ano_letivo`, `vagas`, `is_multisseriada`, `ativa`, `created_at`, `updated_at`) VALUES
 (2, 5, 3, 3, '9º Ano', '9º Ano - a', 'Noturno', '2026', 36, 0, 1, '2026-03-18 01:58:24', '2026-03-18 01:58:24'),
-(3, 6, 3, 3, '9º', '9º Ano - a', 'Vespertino', '2026', 35, 0, 1, '2026-03-20 00:15:13', '2026-03-20 00:15:13');
+(3, 6, 3, 3, '9º', '9º Ano - a', 'Vespertino', '2026', 35, 0, 1, '2026-03-20 00:15:13', '2026-03-20 00:15:13'),
+(4, 6, 2, 2, '2º Ano', '2º Ano - A', 'Matutino', '2026', 30, 0, 1, '2026-04-28 16:00:02', '2026-04-28 16:00:02');
 
 -- --------------------------------------------------------
 
@@ -2117,13 +2528,16 @@ CREATE TABLE `usuarios` (
 --
 
 INSERT INTO `usuarios` (`id`, `name`, `email`, `email_verified_at`, `password`, `ativo`, `funcionario_id`, `remember_token`, `theme`, `created_at`, `updated_at`) VALUES
-(8, 'Administrador', 'admin@sistema.com', NULL, '$2y$12$RensC3/A9hYERx9QhiZaWetcgJ3.7IpLJpnFoNS6UWerBUS2oWWZq', 1, NULL, 'F0xneK8jUjLCC3uIOWwJpoJeyFjqppl2pdrCYvp9Ic3mRSU9WTRUhALkdPoF', 'lilas', '2026-03-18 01:23:19', '2026-03-18 01:23:19'),
+(8, 'Administrador', 'admin@sistema.com', NULL, '$2y$12$RensC3/A9hYERx9QhiZaWetcgJ3.7IpLJpnFoNS6UWerBUS2oWWZq', 1, NULL, 'ud9JgNaqbT3l77jY3MAE0XsJCYTP6AyEGgirdQf1Y7dmeJlMNVqvsjsaS3Xo', 'lilas', '2026-03-18 01:23:19', '2026-03-18 01:23:19'),
 (9, 'José da Silva', 'jose@gmail.com', NULL, '$2y$12$xLQPyKL7Jaw1tMqGVqmiK.9fSHatOVA0NwCF5lO.2SHotIA385yee', 1, 2, NULL, 'lilas', '2026-03-18 01:37:13', '2026-03-18 01:37:13'),
 (10, 'Ane Ravenala da Silva', 'nutricionista@sistema.local', NULL, '$2y$12$7UUouXCqUj..S8qs.ACYouoJZSNxywHLKe58ip4jOQW81/ia6sIDy', 1, 3, NULL, 'lilas', '2026-03-18 02:10:56', '2026-03-18 02:10:56'),
 (11, 'Naíne Ferreira dos Santos', 'naine@gmail.com', NULL, '$2y$12$fw1zBmIdUCKpiUV/SojTvuK1k/y9HFJcdw9zLctMRqay99UXs/R.i', 1, 5, NULL, 'lilas', '2026-03-19 21:37:38', '2026-03-19 21:37:38'),
-(12, 'Prefessor Amado Silva', 'professor@gmail.com', NULL, '$2y$12$JJ9aVWYEt4P/6jgNf3Te/OR.amIOGd1m6Lad2dU4kOU9TgHCAGOJm', 1, 6, NULL, 'verde', '2026-03-19 23:15:44', '2026-03-19 23:58:35'),
+(12, 'Prefessor Amado Silva', 'professor@gmail.com', NULL, '$2y$12$JJ9aVWYEt4P/6jgNf3Te/OR.amIOGd1m6Lad2dU4kOU9TgHCAGOJm', 1, 6, 'kk4x5AmZq91tqZgFmsUSjbcgCF2tEdOmcmPJA5hoehWN0XUGj51f4FWwMnG2', 'verde', '2026-03-19 23:15:44', '2026-04-30 21:59:19'),
 (13, 'Coordenadora Escolar', 'coordenadora@gmail.com', NULL, '$2y$12$XatoXavvAQ33JjJCZOuKJehSD1P/aSB0eDxUsgyd.R3pVEtxCR6A6', 1, 7, NULL, 'lilas', '2026-03-20 00:02:50', '2026-03-20 00:02:50'),
-(14, 'Assistente Administrativo Escolar', 'assistente@gmail.com', NULL, '$2y$12$iZJTpKHJXSn/kYVKi1Mn4eLDWyNC98O1tTYTN9cKMhweszUxpjali', 1, 8, NULL, 'lilas', '2026-03-20 00:09:42', '2026-03-20 00:09:42');
+(14, 'Assistente Administrativo Escolar', 'assistente@gmail.com', NULL, '$2y$12$iZJTpKHJXSn/kYVKi1Mn4eLDWyNC98O1tTYTN9cKMhweszUxpjali', 1, 8, NULL, 'lilas', '2026-03-20 00:09:42', '2026-03-20 00:09:42'),
+(17, 'Diretora da Escola Major', 'diretora@major.com', NULL, '$2y$12$EAYdWeUoDNMXPGSGOFUSjOaLNgmVaWV6XQusHNaLhW0ntRLIRS6uO', 1, 11, NULL, 'lilas', '2026-04-28 15:46:33', '2026-04-28 15:46:33'),
+(18, 'Diretora da Escola Zozimo', 'diretora@zozimo.com', NULL, '$2y$12$tTHCmDF2uSYkMdOSiXpeF.7zhHUrup3/rPGt9AMy42oHsGPhyUGcu', 1, 12, NULL, 'lilas', '2026-04-28 15:51:13', '2026-04-28 15:51:13'),
+(19, 'Luiz Gonzaga', 'luiz@gmail.com', NULL, '$2y$12$84dQBqcVxtQo0ZOu2vwzpOZQucZif40JJLfneCniYuQmEXZrlWKlK', 1, 13, NULL, 'lilas', '2026-04-30 21:35:47', '2026-04-30 21:35:47');
 
 -- --------------------------------------------------------
 
@@ -2149,7 +2563,11 @@ INSERT INTO `usuarios_escolas` (`id`, `usuario_id`, `escola_id`, `created_at`, `
 (6, 12, 5, NULL, NULL),
 (7, 12, 6, NULL, NULL),
 (8, 13, 6, NULL, NULL),
-(9, 14, 6, NULL, NULL);
+(9, 14, 6, NULL, NULL),
+(12, 17, 6, NULL, NULL),
+(13, 18, 5, NULL, NULL),
+(14, 19, 5, NULL, NULL),
+(15, 19, 6, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -2220,6 +2638,28 @@ ALTER TABLE `alunos`
   ADD PRIMARY KEY (`id`),
   ADD UNIQUE KEY `alunos_rgm_unique` (`rgm`),
   ADD UNIQUE KEY `alunos_cpf_unique` (`cpf`);
+
+--
+-- Índices de tabela `aluno_autorizacoes`
+--
+ALTER TABLE `aluno_autorizacoes`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `aluno_autorizacoes_aluno_id_index` (`aluno_id`);
+
+--
+-- Índices de tabela `aluno_enderecos`
+--
+ALTER TABLE `aluno_enderecos`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `aluno_enderecos_aluno_id_index` (`aluno_id`),
+  ADD KEY `aluno_enderecos_principal_index` (`principal`);
+
+--
+-- Índices de tabela `aluno_saude`
+--
+ALTER TABLE `aluno_saude`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `aluno_saude_aluno_id_index` (`aluno_id`);
 
 --
 -- Índices de tabela `atendidos_externos`
@@ -2391,6 +2831,13 @@ ALTER TABLE `funcionario_escola`
   ADD PRIMARY KEY (`id`),
   ADD KEY `funcionario_escola_funcionario_id_foreign` (`funcionario_id`),
   ADD KEY `funcionario_escola_escola_id_foreign` (`escola_id`);
+
+--
+-- Índices de tabela `historico_escolar`
+--
+ALTER TABLE `historico_escolar`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `historico_escolar_aluno_id_index` (`aluno_id`);
 
 --
 -- Índices de tabela `horario_aulas`
@@ -2587,7 +3034,7 @@ ALTER TABLE `permissoes`
 --
 ALTER TABLE `planejamentos_anuais`
   ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `planejamentos_anuais_diario_professor_id_unique` (`diario_professor_id`);
+  ADD UNIQUE KEY `planejamentos_anuais_diario_unidade_unique` (`diario_professor_id`,`unidade`);
 
 --
 -- Índices de tabela `planejamentos_periodo`
@@ -2596,13 +3043,6 @@ ALTER TABLE `planejamentos_periodo`
   ADD PRIMARY KEY (`id`),
   ADD UNIQUE KEY `planejamentos_periodo_unico` (`diario_professor_id`,`tipo_planejamento`,`data_inicio`),
   ADD KEY `planejamentos_periodo_diario_tipo_idx` (`diario_professor_id`,`tipo_planejamento`);
-
---
--- Índices de tabela `planejamentos_semanais`
---
-ALTER TABLE `planejamentos_semanais`
-  ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `planejamento_semanal_unico` (`diario_professor_id`,`data_inicio_semana`);
 
 --
 -- Índices de tabela `planos_intervencao_psicossociais`
@@ -2739,7 +3179,25 @@ ALTER TABLE `alimentos`
 -- AUTO_INCREMENT de tabela `alunos`
 --
 ALTER TABLE `alunos`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=28;
+
+--
+-- AUTO_INCREMENT de tabela `aluno_autorizacoes`
+--
+ALTER TABLE `aluno_autorizacoes`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT de tabela `aluno_enderecos`
+--
+ALTER TABLE `aluno_enderecos`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT de tabela `aluno_saude`
+--
+ALTER TABLE `aluno_saude`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT de tabela `atendidos_externos`
@@ -2793,7 +3251,7 @@ ALTER TABLE `devolutivas_psicossociais`
 -- AUTO_INCREMENT de tabela `diarios_professor`
 --
 ALTER TABLE `diarios_professor`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT de tabela `disciplinas`
@@ -2811,7 +3269,7 @@ ALTER TABLE `encaminhamentos_psicossociais`
 -- AUTO_INCREMENT de tabela `escolas`
 --
 ALTER TABLE `escolas`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT de tabela `failed_jobs`
@@ -2847,19 +3305,25 @@ ALTER TABLE `frequencias_aula`
 -- AUTO_INCREMENT de tabela `funcionarios`
 --
 ALTER TABLE `funcionarios`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
 
 --
 -- AUTO_INCREMENT de tabela `funcionario_escola`
 --
 ALTER TABLE `funcionario_escola`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
+
+--
+-- AUTO_INCREMENT de tabela `historico_escolar`
+--
+ALTER TABLE `historico_escolar`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT de tabela `horario_aulas`
 --
 ALTER TABLE `horario_aulas`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT de tabela `instituicoes`
@@ -2883,7 +3347,7 @@ ALTER TABLE `justificativas_falta_aluno`
 -- AUTO_INCREMENT de tabela `lancamentos_avaliativos`
 --
 ALTER TABLE `lancamentos_avaliativos`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT de tabela `liberacoes_prazo_professor`
@@ -2895,13 +3359,13 @@ ALTER TABLE `liberacoes_prazo_professor`
 -- AUTO_INCREMENT de tabela `matriculas`
 --
 ALTER TABLE `matriculas`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=26;
 
 --
 -- AUTO_INCREMENT de tabela `matricula_historicos`
 --
 ALTER TABLE `matricula_historicos`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT de tabela `matrizes_curriculares`
@@ -2919,7 +3383,7 @@ ALTER TABLE `matriz_disciplina`
 -- AUTO_INCREMENT de tabela `migrations`
 --
 ALTER TABLE `migrations`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=53;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=74;
 
 --
 -- AUTO_INCREMENT de tabela `modalidades_ensino`
@@ -2961,31 +3425,25 @@ ALTER TABLE `pendencias_professor`
 -- AUTO_INCREMENT de tabela `perfis`
 --
 ALTER TABLE `perfis`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- AUTO_INCREMENT de tabela `permissoes`
 --
 ALTER TABLE `permissoes`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=164;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=168;
 
 --
 -- AUTO_INCREMENT de tabela `planejamentos_anuais`
 --
 ALTER TABLE `planejamentos_anuais`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT de tabela `planejamentos_periodo`
 --
 ALTER TABLE `planejamentos_periodo`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT de tabela `planejamentos_semanais`
---
-ALTER TABLE `planejamentos_semanais`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT de tabela `planos_intervencao_psicossociais`
@@ -3003,13 +3461,13 @@ ALTER TABLE `reavaliacoes_psicossociais`
 -- AUTO_INCREMENT de tabela `registros_auditoria`
 --
 ALTER TABLE `registros_auditoria`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=113;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=208;
 
 --
 -- AUTO_INCREMENT de tabela `registros_aula`
 --
 ALTER TABLE `registros_aula`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT de tabela `relatorios_tecnicos_psicossociais`
@@ -3033,19 +3491,19 @@ ALTER TABLE `triagens_psicossociais`
 -- AUTO_INCREMENT de tabela `turmas`
 --
 ALTER TABLE `turmas`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT de tabela `usuarios`
 --
 ALTER TABLE `usuarios`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
 
 --
 -- AUTO_INCREMENT de tabela `usuarios_escolas`
 --
 ALTER TABLE `usuarios_escolas`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
 
 --
 -- AUTO_INCREMENT de tabela `validacoes_direcao`
@@ -3076,6 +3534,24 @@ ALTER TABLE `acompanhamentos_pedagogicos_aluno`
 --
 ALTER TABLE `alimentos`
   ADD CONSTRAINT `alimentos_categoria_alimento_id_foreign` FOREIGN KEY (`categoria_alimento_id`) REFERENCES `categorias_alimentos` (`id`);
+
+--
+-- Restrições para tabelas `aluno_autorizacoes`
+--
+ALTER TABLE `aluno_autorizacoes`
+  ADD CONSTRAINT `aluno_autorizacoes_aluno_id_foreign` FOREIGN KEY (`aluno_id`) REFERENCES `alunos` (`id`) ON DELETE CASCADE;
+
+--
+-- Restrições para tabelas `aluno_enderecos`
+--
+ALTER TABLE `aluno_enderecos`
+  ADD CONSTRAINT `aluno_enderecos_aluno_id_foreign` FOREIGN KEY (`aluno_id`) REFERENCES `alunos` (`id`) ON DELETE CASCADE;
+
+--
+-- Restrições para tabelas `aluno_saude`
+--
+ALTER TABLE `aluno_saude`
+  ADD CONSTRAINT `aluno_saude_aluno_id_foreign` FOREIGN KEY (`aluno_id`) REFERENCES `alunos` (`id`) ON DELETE CASCADE;
 
 --
 -- Restrições para tabelas `atendidos_externos`
@@ -3178,6 +3654,12 @@ ALTER TABLE `frequencias_aula`
 ALTER TABLE `funcionario_escola`
   ADD CONSTRAINT `funcionario_escola_escola_id_foreign` FOREIGN KEY (`escola_id`) REFERENCES `escolas` (`id`) ON DELETE CASCADE,
   ADD CONSTRAINT `funcionario_escola_funcionario_id_foreign` FOREIGN KEY (`funcionario_id`) REFERENCES `funcionarios` (`id`) ON DELETE CASCADE;
+
+--
+-- Restrições para tabelas `historico_escolar`
+--
+ALTER TABLE `historico_escolar`
+  ADD CONSTRAINT `historico_escolar_aluno_id_foreign` FOREIGN KEY (`aluno_id`) REFERENCES `alunos` (`id`) ON DELETE CASCADE;
 
 --
 -- Restrições para tabelas `horario_aulas`
@@ -3306,12 +3788,6 @@ ALTER TABLE `planejamentos_anuais`
 --
 ALTER TABLE `planejamentos_periodo`
   ADD CONSTRAINT `planejamentos_periodo_diario_professor_id_foreign` FOREIGN KEY (`diario_professor_id`) REFERENCES `diarios_professor` (`id`) ON DELETE CASCADE;
-
---
--- Restrições para tabelas `planejamentos_semanais`
---
-ALTER TABLE `planejamentos_semanais`
-  ADD CONSTRAINT `planejamentos_semanais_diario_professor_id_foreign` FOREIGN KEY (`diario_professor_id`) REFERENCES `diarios_professor` (`id`) ON DELETE CASCADE;
 
 --
 -- Restrições para tabelas `planos_intervencao_psicossociais`
