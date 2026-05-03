@@ -238,6 +238,11 @@ class CoordenacaoPedagogicaTest extends TestCase
             'status' => 'validado',
         ]);
 
+        $this->assertDatabaseHas('planejamentos_periodo', [
+            'id' => $planejamentoPeriodo->id,
+            'status' => 'aprovado',
+        ]);
+
         $this->assertDatabaseHas('lancamentos_avaliativos', [
             'id' => $avaliacao->id,
             'avaliacao_referencia' => 'Prova 1 revisada',

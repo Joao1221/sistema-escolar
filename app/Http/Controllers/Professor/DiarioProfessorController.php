@@ -11,7 +11,7 @@ use App\Http\Requests\StoreOcorrenciaDiarioRequest;
 use App\Http\Requests\StorePendenciaProfessorRequest;
 use App\Http\Requests\StorePlanejamentoAnualRequest;
 use App\Http\Requests\StorePlanejamentoPeriodoRequest;
-use App\Http\Requests\StorePlanejamentoSemanalRequest;
+use App\Models\PlanejamentoPeriodo;
 use App\Http\Requests\StoreRegistroAulaRequest;
 use App\Models\DiarioProfessor;
 use App\Services\DiarioProfessorService;
@@ -111,17 +111,6 @@ class DiarioProfessorController extends Controller
             ->with('success', 'Planejamento anual salvo com sucesso.');
     }
 
-    public function storePlanejamentoSemanal(StorePlanejamentoSemanalRequest $request, DiarioProfessor $diario): RedirectResponse
-    {
-        $this->authorize('gerenciarPlanejamento', $diario);
-
-        $this->diarioProfessorService->salvarPlanejamentoSemanal($diario, $request->validated());
-
-        return redirect()
-            ->route('professor.diario.show', $diario)
-            ->with('success', 'Planejamento semanal registrado com sucesso.');
-    }
-
     public function storePlanejamentoPeriodo(StorePlanejamentoPeriodoRequest $request, DiarioProfessor $diario): RedirectResponse
     {
         $this->authorize('gerenciarPlanejamento', $diario);
@@ -131,6 +120,28 @@ class DiarioProfessorController extends Controller
         return redirect()
             ->route('professor.diario.show', $diario)
             ->with('success', 'Planejamento do periodo registrado com sucesso.');
+    }
+
+    public function enviarPlanejamentoAnual(DiarioProfessor $diario): RedirectResponse
+    {
+        $this->authorize('gerenciarPlanejamento', $diario);
+
+        $this->diarioProfessorService->enviarPlanejamentoAnual($diario);
+
+        return redirect()
+            ->route('professor.diario.show', $diario)
+            ->with('success', 'Planejamento anual enviado para aprovacao da coordenacao.');
+    }
+
+    public function enviarPlanejamentoPeriodo(DiarioProfessor $diario, PlanejamentoPeriodo $planejamento): RedirectResponse
+    {
+        $this->authorize('gerenciarPlanejamento', $diario);
+
+        $this->diarioProfessorService->enviarPlanejamentoPeriodo($diario, $planejamento);
+
+        return redirect()
+            ->route('professor.diario.show', $diario)
+            ->with('success', 'Planejamento enviado para aprovacao da coordenacao.');
     }
 
     public function storeRegistroAula(StoreRegistroAulaRequest $request, DiarioProfessor $diario): RedirectResponse

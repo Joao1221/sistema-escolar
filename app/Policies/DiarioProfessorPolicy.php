@@ -68,11 +68,6 @@ class DiarioProfessorPolicy
         return $usuario->can('validar planejamento anual') && $this->podeConsultar($usuario, $diario);
     }
 
-    public function validarPlanejamentoSemanal(Usuario $usuario, DiarioProfessor $diario): bool
-    {
-        return $usuario->can('validar planejamento semanal') && $this->podeConsultar($usuario, $diario);
-    }
-
     public function validarRegistroAula(Usuario $usuario, DiarioProfessor $diario): bool
     {
         return $usuario->can('validar aulas registradas') && $this->podeConsultar($usuario, $diario);

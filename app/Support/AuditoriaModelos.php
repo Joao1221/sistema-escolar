@@ -26,7 +26,6 @@ use App\Models\MovimentacaoAlimento;
 use App\Models\PendenciaProfessor;
 use App\Models\PlanejamentoAnual;
 use App\Models\PlanejamentoPeriodo;
-use App\Models\PlanejamentoSemanal;
 use App\Models\PlanoIntervencaoPsicossocial;
 use App\Models\RegistroAula;
 use App\Models\RelatorioTecnicoPsicossocial;
@@ -78,7 +77,6 @@ class AuditoriaModelos
             DiarioProfessor::class => self::config('diarios', 'Diario do Professor', 'medio', ['escola_id', 'turma_id', 'disciplina_id', 'professor_id', 'ano_letivo', 'periodo_tipo', 'periodo_referencia', 'situacao'], escola: fn (DiarioProfessor $model) => $model->escola_id, contexto: fn (DiarioProfessor $model) => ['professor_id' => $model->professor_id, 'turma_id' => $model->turma_id]),
             PlanejamentoAnual::class => self::config('planejamentos', 'Planejamento Anual', 'medio', ['objetivos_aprendizagem', 'habilidades_competencias', 'conteudos', 'metodologia', 'recursos_didaticos', 'estrategias_pedagogicas', 'instrumentos_avaliacao'], escola: fn (PlanejamentoAnual $model) => $model->diarioProfessor?->escola_id, contexto: fn (PlanejamentoAnual $model) => self::contextoDiario($model->diarioProfessor)),
             PlanejamentoPeriodo::class => self::config('planejamentos', 'Planejamento por Periodo', 'medio', ['tipo_planejamento', 'data_inicio', 'data_fim', 'objetivos_aprendizagem', 'conteudos', 'metodologia'], escola: fn (PlanejamentoPeriodo $model) => $model->diarioProfessor?->escola_id, contexto: fn (PlanejamentoPeriodo $model) => self::contextoDiario($model->diarioProfessor)),
-            PlanejamentoSemanal::class => self::config('planejamentos', 'Planejamento Semanal', 'medio', ['data_inicio_semana', 'data_fim_semana', 'conteudos', 'metodologia', 'objetivos'], escola: fn (PlanejamentoSemanal $model) => $model->diarioProfessor?->escola_id, contexto: fn (PlanejamentoSemanal $model) => self::contextoDiario($model->diarioProfessor)),
             RegistroAula::class => self::config('aulas', 'Registro de Aula', 'medio', ['data_aula', 'titulo', 'conteudo_previsto', 'conteudo_ministrado', 'quantidade_aulas', 'aula_dada'], escola: fn (RegistroAula $model) => $model->diarioProfessor?->escola_id, contexto: fn (RegistroAula $model) => self::contextoDiario($model->diarioProfessor)),
             FrequenciaAula::class => self::config('frequencia', 'Frequencia de Aula', 'alto', ['situacao', 'justificativa', 'observacao'], escola: fn (FrequenciaAula $model) => $model->registroAula?->diarioProfessor?->escola_id, contexto: fn (FrequenciaAula $model) => self::contextoDiario($model->registroAula?->diarioProfessor) + ['matricula_id' => $model->matricula_id]),
             LancamentoAvaliativo::class => self::config('avaliacoes', 'Lancamento Avaliativo', 'alto', ['tipo_avaliacao', 'avaliacao_referencia', 'valor_numerico', 'conceito', 'observacoes'], escola: fn (LancamentoAvaliativo $model) => $model->diarioProfessor?->escola_id, contexto: fn (LancamentoAvaliativo $model) => self::contextoDiario($model->diarioProfessor) + ['matricula_id' => $model->matricula_id]),

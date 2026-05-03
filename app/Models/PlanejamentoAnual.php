@@ -9,10 +9,17 @@ class PlanejamentoAnual extends Model
 {
     use HasFactory;
 
+    const STATUS_RASCUNHO = 'rascunho';
+    const STATUS_ENVIADO = 'enviado';
+    const STATUS_APROVADO = 'aprovado';
+    const STATUS_DEVOLVIDO = 'devolvido';
+
     protected $table = 'planejamentos_anuais';
 
     protected $fillable = [
         'diario_professor_id',
+        'unidade',
+        'status',
         'tema_gerador',
         'periodo_vigencia_inicio',
         'periodo_vigencia_fim',
@@ -34,6 +41,7 @@ class PlanejamentoAnual extends Model
     protected $casts = [
         'periodo_vigencia_inicio' => 'date',
         'periodo_vigencia_fim' => 'date',
+        'unidade' => 'integer',
     ];
 
     public function diarioProfessor()
@@ -50,4 +58,5 @@ class PlanejamentoAnual extends Model
     {
         return $this->morphOne(ValidacaoDirecao::class, 'validavel');
     }
+
 }

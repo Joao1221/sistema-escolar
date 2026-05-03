@@ -9,11 +9,18 @@ class PlanejamentoPeriodo extends Model
 {
     use HasFactory;
 
+    const STATUS_RASCUNHO = 'rascunho';
+    const STATUS_ENVIADO = 'enviado';
+    const STATUS_APROVADO = 'aprovado';
+    const STATUS_DEVOLVIDO = 'devolvido';
+
     protected $table = 'planejamentos_periodo';
 
     protected $fillable = [
         'diario_professor_id',
         'tipo_planejamento',
+        'status',
+        'tema_gerador',
         'periodo_referencia',
         'data_inicio',
         'data_fim',
@@ -25,6 +32,7 @@ class PlanejamentoPeriodo extends Model
         'estrategias_pedagogicas',
         'instrumentos_avaliacao',
         'observacoes',
+        'referencias',
         'adequacoes_inclusao',
     ];
 

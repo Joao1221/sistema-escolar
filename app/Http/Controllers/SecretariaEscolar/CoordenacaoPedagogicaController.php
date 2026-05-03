@@ -7,7 +7,6 @@ use App\Http\Requests\StoreAcompanhamentoPedagogicoAlunoRequest;
 use App\Http\Requests\StorePendenciaDocenteCoordenacaoRequest;
 use App\Http\Requests\StoreValidacaoPlanejamentoAnualRequest;
 use App\Http\Requests\StoreValidacaoPlanejamentoPeriodoRequest;
-use App\Http\Requests\StoreValidacaoPlanejamentoSemanalRequest;
 use App\Http\Requests\StoreValidacaoRegistroAulaRequest;
 use App\Http\Requests\UpdateLancamentoAvaliativoCoordenacaoRequest;
 use App\Http\Requests\UpdateRegistroAulaCoordenacaoRequest;
@@ -16,7 +15,6 @@ use App\Models\LancamentoAvaliativo;
 use App\Models\Matricula;
 use App\Models\PlanejamentoAnual;
 use App\Models\PlanejamentoPeriodo;
-use App\Models\PlanejamentoSemanal;
 use App\Models\RegistroAula;
 use App\Services\CoordenacaoPedagogicaService;
 use Illuminate\Http\Request;
@@ -75,23 +73,6 @@ class CoordenacaoPedagogicaController extends Controller
         );
 
         return back()->with('success', 'Planejamento anual validado com sucesso.');
-    }
-
-    public function validarPlanejamentoSemanal(
-        StoreValidacaoPlanejamentoSemanalRequest $request,
-        DiarioProfessor $diario,
-        PlanejamentoSemanal $planejamento
-    ) {
-        $this->authorize('validarPlanejamentoSemanal', $diario);
-
-        $this->coordenacaoPedagogicaService->validarPlanejamentoSemanal(
-            $request->user(),
-            $diario,
-            $planejamento,
-            $request->validated()
-        );
-
-        return back()->with('success', 'Planejamento semanal validado com sucesso.');
     }
 
     public function validarPlanejamentoPeriodo(

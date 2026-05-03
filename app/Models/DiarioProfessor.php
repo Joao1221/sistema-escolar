@@ -49,12 +49,12 @@ class DiarioProfessor extends Model
 
     public function planejamentoAnual()
     {
-        return $this->hasOne(PlanejamentoAnual::class);
+        return $this->hasOne(PlanejamentoAnual::class)->ofMany('unidade', 'min');
     }
 
-    public function planejamentosSemanais()
+    public function planejamentosAnuais()
     {
-        return $this->hasMany(PlanejamentoSemanal::class)->orderByDesc('data_inicio_semana');
+        return $this->hasMany(PlanejamentoAnual::class)->orderBy('unidade');
     }
 
     public function planejamentosPeriodo()

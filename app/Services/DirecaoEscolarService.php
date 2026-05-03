@@ -16,7 +16,6 @@ use App\Models\LiberacaoPrazoProfessor;
 use App\Models\PendenciaProfessor;
 use App\Models\PlanejamentoAnual;
 use App\Models\PlanejamentoPeriodo;
-use App\Models\PlanejamentoSemanal;
 use App\Models\RegistroAula;
 use App\Models\Turma;
 use App\Models\Usuario;
@@ -42,7 +41,6 @@ class DirecaoEscolarService
                 'professor',
                 'planejamentoAnual.validacaoDirecao',
                 'planejamentosPeriodo.validacaoDirecao',
-                'planejamentosSemanais.validacaoDirecao',
                 'registrosAula.validacaoDirecao',
             ])
             ->withCount([
@@ -70,7 +68,6 @@ class DirecaoEscolarService
             $query->where(function (Builder $subquery) use ($status) {
                 $subquery->whereHas('planejamentoAnual.validacaoDirecao', fn (Builder $q) => $q->where('status', $status))
                     ->orWhereHas('planejamentosPeriodo.validacaoDirecao', fn (Builder $q) => $q->where('status', $status))
-                    ->orWhereHas('planejamentosSemanais.validacaoDirecao', fn (Builder $q) => $q->where('status', $status))
                     ->orWhereHas('registrosAula.validacaoDirecao', fn (Builder $q) => $q->where('status', $status));
             });
         }
@@ -130,8 +127,8 @@ class DirecaoEscolarService
             'disciplina',
             'professor',
             'planejamentoAnual.validacaoDirecao.usuarioDirecao',
+            'planejamentosAnuais',
             'planejamentosPeriodo.validacaoDirecao.usuarioDirecao',
-            'planejamentosSemanais.validacaoDirecao.usuarioDirecao',
             'registrosAula.validacaoDirecao.usuarioDirecao',
             'registrosAula.frequencias.matricula.aluno',
             'registrosAula.frequencias.justificativaDirecao.usuarioDirecao',
@@ -160,8 +157,7 @@ class DirecaoEscolarService
             'horariosTurma' => $horariosTurma,
             'metricas' => [
                 'planejamentos_validados' => ($diario->planejamentoAnual?->validacaoDirecao?->status === 'validado' ? 1 : 0)
-                    + $diario->planejamentosPeriodo->filter(fn ($planejamento) => $planejamento->validacaoDirecao?->status === 'validado')->count()
-                    + $diario->planejamentosSemanais->filter(fn (PlanejamentoSemanal $planejamento) => $planejamento->validacaoDirecao?->status === 'validado')->count(),
+                    + $diario->planejamentosPeriodo->filter(fn ($planejamento) => $planejamento->validacaoDirecao?->status === 'validado')->count(),
                 'aulas_validadas' => $diario->registrosAula->filter(fn (RegistroAula $registro) => $registro->validacaoDirecao?->status === 'validado')->count(),
                 'avaliacoes_lancadas' => $diario->lancamentosAvaliativos->count(),
                 'faltas_justificadas' => $diario->justificativasFaltaAluno()->count(),
@@ -174,13 +170,30 @@ class DirecaoEscolarService
     public function validarPlanejamento(
         Usuario $usuario,
         DiarioProfessor $diario,
-        PlanejamentoAnual|PlanejamentoSemanal|PlanejamentoPeriodo $planejamento,
+        PlanejamentoAnual|PlanejamentoPeriodo $planejamento,
         array $dados
     ): ValidacaoDirecao {
         $this->garantirAcessoAoDiario($usuario, $diario);
         $this->garantirItemPertenceAoDiario($diario, $planejamento->diario_professor_id);
 
-        return $this->salvarValidacao($diario, $planejamento, $usuario, $dados);
+        $validacao = $this->salvarValidacao($diario, $planejamento, $usuario, $dados);
+
+        if ($planejamento instanceof PlanejamentoAnual) {
+            $novoStatus = $dados['status'] === 'validado'
+                ? PlanejamentoAnual::STATUS_APROVADO
+                : PlanejamentoAnual::STATUS_DEVOLVIDO;
+
+            PlanejamentoAnual::where('diario_professor_id', $diario->id)
+                ->update(['status' => $novoStatus]);
+        } else {
+            $planejamento->update([
+                'status' => $dados['status'] === 'validado'
+                    ? PlanejamentoPeriodo::STATUS_APROVADO
+                    : PlanejamentoPeriodo::STATUS_DEVOLVIDO,
+            ]);
+        }
+
+        return $validacao;
     }
 
     public function validarRegistroAula(

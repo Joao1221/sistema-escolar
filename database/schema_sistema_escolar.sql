@@ -1737,6 +1737,8 @@ INSERT INTO `permissoes` (`id`, `name`, `guard_name`, `created_at`, `updated_at`
 CREATE TABLE `planejamentos_anuais` (
   `id` bigint(20) UNSIGNED NOT NULL,
   `diario_professor_id` bigint(20) UNSIGNED NOT NULL,
+  `unidade` tinyint(4) DEFAULT NULL COMMENT 'Unidade/Bimestre (1-4)',
+  `status` varchar(20) NOT NULL DEFAULT 'rascunho' COMMENT 'rascunho, enviado, aprovado, devolvido',
   `periodo_vigencia_inicio` date DEFAULT NULL,
   `periodo_vigencia_fim` date DEFAULT NULL,
   `tema_gerador` varchar(255) DEFAULT NULL,
@@ -1767,6 +1769,7 @@ CREATE TABLE `planejamentos_periodo` (
   `id` bigint(20) UNSIGNED NOT NULL,
   `diario_professor_id` bigint(20) UNSIGNED NOT NULL,
   `tipo_planejamento` varchar(20) NOT NULL,
+  `status` varchar(20) NOT NULL DEFAULT 'rascunho' COMMENT 'rascunho, enviado, aprovado, devolvido',
   `periodo_referencia` varchar(120) DEFAULT NULL,
   `data_inicio` date NOT NULL,
   `data_fim` date NOT NULL,
@@ -1792,6 +1795,7 @@ CREATE TABLE `planejamentos_periodo` (
 CREATE TABLE `planejamentos_semanais` (
   `id` bigint(20) UNSIGNED NOT NULL,
   `diario_professor_id` bigint(20) UNSIGNED NOT NULL,
+  `status` varchar(20) NOT NULL DEFAULT 'rascunho' COMMENT 'rascunho, enviado, aprovado, devolvido',
   `data_inicio_semana` date NOT NULL,
   `data_fim_semana` date NOT NULL,
   `objetivos_semana` text NOT NULL,

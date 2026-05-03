@@ -15,7 +15,6 @@ use App\Models\FrequenciaAula;
 use App\Models\LancamentoAvaliativo;
 use App\Models\PlanejamentoAnual;
 use App\Models\PlanejamentoPeriodo;
-use App\Models\PlanejamentoSemanal;
 use App\Models\RegistroAula;
 use App\Http\Requests\UpdateLancamentoAvaliativoDirecaoRequest;
 use App\Http\Requests\UpdateRegistroAulaDirecaoRequest;
@@ -77,23 +76,6 @@ class DirecaoEscolarController extends Controller
         );
 
         return back()->with('success', 'Planejamento anual validado pela direcao com sucesso.');
-    }
-
-    public function validarPlanejamentoSemanal(
-        StoreValidacaoPlanejamentoDirecaoRequest $request,
-        DiarioProfessor $diario,
-        PlanejamentoSemanal $planejamento
-    ) {
-        $this->authorize('validarPlanejamentoDirecao', $diario);
-
-        $this->direcaoEscolarService->validarPlanejamento(
-            $request->user(),
-            $diario,
-            $planejamento,
-            $request->validated()
-        );
-
-        return back()->with('success', 'Planejamento semanal validado pela direcao com sucesso.');
     }
 
     public function validarPlanejamentoPeriodo(

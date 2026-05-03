@@ -5,6 +5,19 @@
             'ajustes_solicitados' => 'bg-amber-100 text-amber-800',
             'pendente' => 'bg-slate-100 text-slate-700',
         ];
+        $camposPlanejamentoAulas = [
+            'tema_gerador' => 'Unidade(s) Tematica(s)',
+            'conteudos' => 'Objeto(s) de Conhecimento / Conteudo(s)',
+            'habilidades_competencias' => 'Habilidades (BNCC)',
+            'objetivos_aprendizagem' => 'Objetivos da aula',
+            'metodologia' => 'Metodologias / estrategias',
+            'estrategias_pedagogicas' => 'Atividades (desenvolvimento da aula)',
+            'recursos_didaticos' => 'Recursos didaticos',
+            'instrumentos_avaliacao' => 'Avaliacao da aprendizagem',
+            'adequacoes_inclusao' => 'Adequacoes / Inclusao (AEE / adaptacoes)',
+            'observacoes' => 'Observacoes do professor',
+            'referencias' => 'Referencias bibliograficas',
+        ];
         $acompanhamentosPorMatricula = $diario->acompanhamentosPedagogicos->keyBy('matricula_id');
     @endphp
 
@@ -103,10 +116,21 @@
                             <div class="flex flex-col gap-3 lg:flex-row lg:items-start lg:justify-between">
                                 <div>
                                     <p class="text-sm font-semibold text-slate-900">{{ ucfirst($planejamento->tipo_planejamento) }} • {{ optional($planejamento->data_inicio)->format('d/m/Y') }} a {{ optional($planejamento->data_fim)->format('d/m/Y') }}</p>
-                                    <p class="mt-2 text-sm text-slate-600">{{ $planejamento->objetivos_aprendizagem }}</p>
-                                    @if ($planejamento->conteudos)<p class="mt-2 text-xs uppercase tracking-[0.18em] text-slate-400">{{ $planejamento->conteudos }}</p>@endif
+                                    @if($planejamento->periodo_referencia)
+                                        <p class="mt-1 text-xs font-semibold uppercase tracking-[0.18em] text-slate-400">Referencia: {{ $planejamento->periodo_referencia }}</p>
+                                    @endif
                                 </div>
                                 <span class="rounded-full px-3 py-1 text-xs font-bold uppercase tracking-[0.18em] {{ $statusClasses[$planejamento->validacaoPedagogica?->status ?? 'pendente'] }}">{{ str_replace('_', ' ', $planejamento->validacaoPedagogica?->status ?? 'pendente') }}</span>
+                            </div>
+                            <div class="mt-4 grid gap-3 text-sm text-slate-600">
+                                @foreach($camposPlanejamentoAulas as $campo => $rotulo)
+                                    @if(filled($planejamento->{$campo}))
+                                        <div>
+                                            <span class="font-semibold text-slate-900">{{ $rotulo }}:</span><br>
+                                            {!! nl2br(e($planejamento->{$campo})) !!}
+                                        </div>
+                                    @endif
+                                @endforeach
                             </div>
                             <form method="POST" action="{{ route('secretaria-escolar.coordenacao.diarios.planejamento-periodo.validar', [$diario, $planejamento]) }}" class="mt-4 grid gap-4 lg:grid-cols-[180px_1fr_1fr_auto]">
                                 @csrf
@@ -122,34 +146,6 @@
                 </div>
             </div>
 
-            <div class="rounded-[2rem] border border-emerald-100 bg-white p-6 shadow-sm">
-                <div class="flex items-center justify-between gap-3">
-                    <h2 class="text-xl font-outfit font-semibold text-slate-900">Planejamentos semanais legados</h2>
-                    <span class="rounded-full bg-sky-100 px-3 py-1 text-xs font-bold uppercase tracking-[0.18em] text-sky-800">{{ $diario->planejamentosSemanais->count() }} semana(s)</span>
-                </div>
-                <div class="mt-5 space-y-4">
-                    @forelse ($diario->planejamentosSemanais as $planejamento)
-                        <article class="rounded-[1.6rem] border border-slate-200 p-5">
-                            <div class="flex flex-col gap-3 lg:flex-row lg:items-start lg:justify-between">
-                                <div>
-                                    <p class="text-sm font-semibold text-slate-900">{{ optional($planejamento->data_inicio_semana)->format('d/m/Y') }} a {{ optional($planejamento->data_fim_semana)->format('d/m/Y') }}</p>
-                                    <p class="mt-2 text-sm text-slate-600">{{ $planejamento->objetivos_semana }}</p>
-                                </div>
-                                <span class="rounded-full px-3 py-1 text-xs font-bold uppercase tracking-[0.18em] {{ $statusClasses[$planejamento->validacaoPedagogica?->status ?? 'pendente'] }}">{{ str_replace('_', ' ', $planejamento->validacaoPedagogica?->status ?? 'pendente') }}</span>
-                            </div>
-                            <form method="POST" action="{{ route('secretaria-escolar.coordenacao.diarios.planejamento-semanal.validar', [$diario, $planejamento]) }}" class="mt-4 grid gap-4 lg:grid-cols-[180px_1fr_1fr_auto]">
-                                @csrf
-                                <select name="status" class="rounded-2xl border-slate-200 text-sm"><option value="validado">Validado</option><option value="ajustes_solicitados">Solicitar ajustes</option></select>
-                                <textarea name="parecer" rows="3" class="rounded-2xl border-slate-200 text-sm" placeholder="Parecer pedagogico"></textarea>
-                                <textarea name="observacoes_internas" rows="3" class="rounded-2xl border-slate-200 text-sm" placeholder="Observacao interna"></textarea>
-                                <button type="submit" class="inline-flex items-center justify-center rounded-2xl bg-sky-600 px-5 py-3 text-xs font-bold uppercase tracking-[0.18em] text-white transition hover:bg-sky-700">Validar</button>
-                            </form>
-                        </article>
-                    @empty
-                        <p class="text-sm text-slate-500">Nenhum planejamento semanal legado registrado.</p>
-                    @endforelse
-                </div>
-            </div>
         </section>
 
         <section class="rounded-[2rem] border border-emerald-100 bg-white p-6 shadow-sm">

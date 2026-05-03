@@ -101,7 +101,6 @@
             @forelse ($diarios as $diario)
                 @php
                     $statusAnual = $diario->planejamentoAnual?->validacaoPedagogica?->status ?? 'pendente';
-                    $semanaisValidados = $diario->planejamentosSemanais->filter(fn ($item) => $item->validacaoPedagogica?->status === 'validado')->count();
                     $aulasValidadas = $diario->registrosAula->filter(fn ($item) => $item->validacaoPedagogica?->status === 'validado')->count();
                     $badgeClasses = [
                         'validado' => 'bg-emerald-100 text-emerald-800',
@@ -123,10 +122,6 @@
                     </div>
 
                     <div class="mt-5 grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
-                        <div class="rounded-2xl bg-slate-50 px-4 py-3">
-                            <p class="text-[11px] font-bold uppercase tracking-[0.2em] text-slate-500">Semanais</p>
-                            <p class="mt-2 text-lg font-semibold text-slate-900">{{ $semanaisValidados }}/{{ $diario->planejamentos_semanais_count }}</p>
-                        </div>
                         <div class="rounded-2xl bg-slate-50 px-4 py-3">
                             <p class="text-[11px] font-bold uppercase tracking-[0.2em] text-slate-500">Aulas validadas</p>
                             <p class="mt-2 text-lg font-semibold text-slate-900">{{ $aulasValidadas }}/{{ $diario->registros_aula_count }}</p>

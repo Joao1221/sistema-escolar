@@ -14,10 +14,12 @@ class StorePlanejamentoPeriodoRequest extends FormRequest
     public function rules(): array
     {
         return [
+            'planejamento_periodo_id' => ['nullable', 'integer'],
             'tipo_planejamento' => ['required', 'in:semanal,quinzenal,mensal,semestral'],
             'periodo_referencia' => ['nullable', 'string', 'max:255'],
             'data_inicio' => ['required', 'date'],
             'data_fim' => ['required', 'date', 'after_or_equal:data_inicio'],
+            'tema_gerador' => ['nullable', 'string', 'max:255'],
             'objetivos_aprendizagem' => ['required', 'string'],
             'habilidades_competencias' => ['nullable', 'string'],
             'conteudos' => ['required', 'string'],
@@ -26,6 +28,7 @@ class StorePlanejamentoPeriodoRequest extends FormRequest
             'estrategias_pedagogicas' => ['nullable', 'string'],
             'instrumentos_avaliacao' => ['nullable', 'string'],
             'observacoes' => ['nullable', 'string'],
+            'referencias' => ['nullable', 'string'],
             'adequacoes_inclusao' => ['nullable', 'string'],
         ];
     }

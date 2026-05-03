@@ -166,11 +166,17 @@ class DiarioProfessorTest extends TestCase
             'periodo_referencia' => 'Abril/2026',
             'data_inicio' => '2026-04-01',
             'data_fim' => '2026-04-30',
+            'tema_gerador' => 'Praticas de linguagem',
             'objetivos_aprendizagem' => 'Desenvolver leitura e interpretacao.',
             'habilidades_competencias' => 'Leitura, oralidade e escrita.',
             'conteudos' => 'Genero textual e ortografia.',
             'metodologia' => 'Aulas dialogadas.',
+            'recursos_didaticos' => 'Livro didatico e quadro.',
+            'estrategias_pedagogicas' => 'Leitura compartilhada e producao textual.',
             'instrumentos_avaliacao' => 'Rubricas e atividades.',
+            'adequacoes_inclusao' => 'Atividades adaptadas quando necessario.',
+            'observacoes' => 'Turma com bom engajamento.',
+            'referencias' => 'BNCC e livro didatico adotado.',
         ]);
 
         $response->assertRedirect();
@@ -178,6 +184,52 @@ class DiarioProfessorTest extends TestCase
             'diario_professor_id' => $diario->id,
             'tipo_planejamento' => 'mensal',
             'periodo_referencia' => 'Abril/2026',
+            'tema_gerador' => 'Praticas de linguagem',
+            'referencias' => 'BNCC e livro didatico adotado.',
+        ]);
+
+        $planejamento = \App\Models\PlanejamentoPeriodo::firstOrFail();
+
+        $this->actingAs($usuarioProfessor)
+            ->get('/professor/diario/' . $diario->id)
+            ->assertOk()
+            ->assertSee('Editar planejamento')
+            ->assertSee('Enviar para validacao da coordenacao');
+
+        $this->actingAs($usuarioProfessor)->post('/professor/diario/' . $diario->id . '/planejamento-periodo', [
+            'planejamento_periodo_id' => $planejamento->id,
+            'tipo_planejamento' => 'mensal',
+            'periodo_referencia' => 'Abril/2026 revisado',
+            'data_inicio' => '2026-04-01',
+            'data_fim' => '2026-04-30',
+            'tema_gerador' => 'Praticas de linguagem revisadas',
+            'objetivos_aprendizagem' => 'Desenvolver leitura, interpretacao e reescrita.',
+            'habilidades_competencias' => 'Leitura, oralidade, escrita e revisao textual.',
+            'conteudos' => 'Genero textual, ortografia e pontuacao.',
+            'metodologia' => 'Aulas dialogadas e oficinas.',
+            'recursos_didaticos' => 'Livro didatico, quadro e textos impressos.',
+            'estrategias_pedagogicas' => 'Leitura compartilhada, producao textual e revisao em pares.',
+            'instrumentos_avaliacao' => 'Rubricas, atividades e autoavaliacao.',
+            'adequacoes_inclusao' => 'Atividades adaptadas quando necessario.',
+            'observacoes' => 'Ajuste realizado antes do envio.',
+            'referencias' => 'BNCC e livro didatico adotado.',
+        ])->assertRedirect();
+
+        $this->assertDatabaseCount('planejamentos_periodo', 1);
+        $this->assertDatabaseHas('planejamentos_periodo', [
+            'id' => $planejamento->id,
+            'periodo_referencia' => 'Abril/2026 revisado',
+            'tema_gerador' => 'Praticas de linguagem revisadas',
+            'observacoes' => 'Ajuste realizado antes do envio.',
+        ]);
+
+        $this->actingAs($usuarioProfessor)
+            ->patch('/professor/diario/' . $diario->id . '/planejamento-periodo/' . $planejamento->id . '/enviar')
+            ->assertRedirect();
+
+        $this->assertDatabaseHas('planejamentos_periodo', [
+            'id' => $planejamento->id,
+            'status' => 'enviado',
         ]);
     }
 

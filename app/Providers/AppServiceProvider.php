@@ -26,7 +26,6 @@ use App\Models\MovimentacaoAlimento;
 use App\Models\PendenciaProfessor;
 use App\Models\PlanejamentoAnual;
 use App\Models\PlanejamentoPeriodo;
-use App\Models\PlanejamentoSemanal;
 use App\Models\PlanoIntervencaoPsicossocial;
 use App\Models\RegistroAula;
 use App\Models\RelatorioTecnicoPsicossocial;
@@ -78,7 +77,6 @@ class AppServiceProvider extends ServiceProvider
             DiarioProfessor::class,
             PlanejamentoAnual::class,
             PlanejamentoPeriodo::class,
-            PlanejamentoSemanal::class,
             RegistroAula::class,
             FrequenciaAula::class,
             LancamentoAvaliativo::class,

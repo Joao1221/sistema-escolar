@@ -12,13 +12,15 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('alunos', function (Blueprint $table) {
-            $table->foreignId('escola_id')
-                ->nullable()
-                ->after('id')
-                ->constrained('escolas')
-                ->nullOnDelete();
-        });
+        if (! Schema::hasColumn('alunos', 'escola_id')) {
+            Schema::table('alunos', function (Blueprint $table) {
+                $table->foreignId('escola_id')
+                    ->nullable()
+                    ->after('id')
+                    ->constrained('escolas')
+                    ->nullOnDelete();
+            });
+        }
 
         DB::statement("
             UPDATE alunos a

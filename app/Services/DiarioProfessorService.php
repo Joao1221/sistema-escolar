@@ -12,7 +12,6 @@ use App\Models\OcorrenciaDiario;
 use App\Models\PendenciaProfessor;
 use App\Models\PlanejamentoAnual;
 use App\Models\PlanejamentoPeriodo;
-use App\Models\PlanejamentoSemanal;
 use App\Models\RegistroAula;
 use App\Models\Usuario;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
@@ -152,8 +151,9 @@ class DiarioProfessorService
             'turma.modalidade',
             'disciplina',
             'professor',
-            'planejamentoAnual',
-            'planejamentosSemanais',
+            'planejamentoAnual.validacaoPedagogica',
+            'planejamentosAnuais',
+            'planejamentosPeriodo',
             'planejamentosPeriodo.validacaoPedagogica',
             'planejamentosPeriodo.validacaoDirecao',
             'registrosAula.horarioAula',
@@ -188,30 +188,151 @@ class DiarioProfessorService
             ->get();
     }
 
-    public function salvarPlanejamentoAnual(DiarioProfessor $diario, array $dados): PlanejamentoAnual
+    public function salvarPlanejamentoAnual(DiarioProfessor $diario, array $dados): void
     {
-        return DB::transaction(function () use ($diario, $dados) {
-            return PlanejamentoAnual::updateOrCreate(
-                ['diario_professor_id' => $diario->id],
-                $dados + ['diario_professor_id' => $diario->id]
-            );
+        $aguardando = PlanejamentoAnual::where('diario_professor_id', $diario->id)
+            ->where('status', PlanejamentoAnual::STATUS_ENVIADO)
+            ->exists();
+
+        if ($aguardando) {
+            throw ValidationException::withMessages([
+                'planejamento_anual' => 'O planejamento anual esta aguardando aprovacao da coordenacao e nao pode ser alterado.',
+            ]);
+        }
+
+        DB::transaction(function () use ($diario, $dados) {
+            foreach ([1, 2, 3, 4] as $i) {
+                $u = $dados['unidades'][$i] ?? [];
+
+                PlanejamentoAnual::updateOrCreate(
+                    ['diario_professor_id' => $diario->id, 'unidade' => $i],
+                    [
+                        'diario_professor_id' => $diario->id,
+                        'unidade'              => $i,
+                        'status'               => PlanejamentoAnual::STATUS_RASCUNHO,
+                        'tema_gerador'         => $u['tema_gerador'] ?? null,
+                        'objetivos_gerais'     => $u['objetivos_aprendizagem'] ?? null,
+                        'competencias_habilidades' => $u['habilidades_competencias'] ?? null,
+                        'conteudos'            => $u['conteudos'] ?? null,
+                        'metodologia'          => $u['metodologia'] ?? null,
+                        'estrategias_pedagogicas' => $u['estrategias_pedagogicas'] ?? null,
+                        'recursos_didaticos'   => $u['recursos_didaticos'] ?? null,
+                        'instrumentos_avaliacao' => $u['instrumentos_avaliacao'] ?? null,
+                        'adequacoes_inclusao'  => $u['adequacoes_inclusao'] ?? null,
+                        'observacoes'          => $u['observacoes'] ?? null,
+                        'referencias'          => $u['referencias'] ?? null,
+                    ]
+                );
+            }
+        });
+    }
+
+    public function enviarPlanejamentoAnual(DiarioProfessor $diario): void
+    {
+        $planejamentos = PlanejamentoAnual::where('diario_professor_id', $diario->id)->get();
+
+        if ($planejamentos->isEmpty()) {
+            throw ValidationException::withMessages([
+                'planejamento_anual' => 'Nenhuma unidade do planejamento anual foi registrada.',
+            ]);
+        }
+
+        $referencia = $planejamentos->first();
+
+        if (! in_array($referencia->status, [PlanejamentoAnual::STATUS_RASCUNHO, PlanejamentoAnual::STATUS_DEVOLVIDO], true)) {
+            throw ValidationException::withMessages([
+                'planejamento_anual' => 'O planejamento anual nao pode ser enviado com status: ' . $referencia->status . '.',
+            ]);
+        }
+
+        DB::transaction(function () use ($planejamentos) {
+            foreach ($planejamentos as $p) {
+                $p->update(['status' => PlanejamentoAnual::STATUS_ENVIADO]);
+            }
+        });
+    }
+
+    public function enviarPlanejamentoPeriodo(DiarioProfessor $diario, PlanejamentoPeriodo $planejamento): PlanejamentoPeriodo
+    {
+        if ((int) $planejamento->diario_professor_id !== (int) $diario->id) {
+            throw ValidationException::withMessages([
+                'planejamento' => 'Este planejamento nao pertence ao diario informado.',
+            ]);
+        }
+
+        if (! in_array($planejamento->status, [PlanejamentoPeriodo::STATUS_RASCUNHO, PlanejamentoPeriodo::STATUS_DEVOLVIDO], true)) {
+            throw ValidationException::withMessages([
+                'planejamento' => 'Este planejamento nao pode ser enviado com status: ' . $planejamento->status . '.',
+            ]);
+        }
+
+        return DB::transaction(function () use ($planejamento) {
+            $planejamento->update(['status' => PlanejamentoPeriodo::STATUS_ENVIADO]);
+            return $planejamento->refresh();
         });
     }
 
     public function salvarPlanejamentoPeriodo(DiarioProfessor $diario, array $dados): PlanejamentoPeriodo
     {
         return DB::transaction(function () use ($diario, $dados) {
+            $planejamentoId = $dados['planejamento_periodo_id'] ?? null;
+            unset($dados['planejamento_periodo_id']);
+
+            if ($planejamentoId) {
+                $planejamento = PlanejamentoPeriodo::query()
+                    ->where('diario_professor_id', $diario->id)
+                    ->whereKey($planejamentoId)
+                    ->firstOrFail();
+
+                if (! in_array($planejamento->status, [PlanejamentoPeriodo::STATUS_RASCUNHO, PlanejamentoPeriodo::STATUS_DEVOLVIDO], true)) {
+                    throw ValidationException::withMessages([
+                        'planejamento_periodo_id' => 'Este planejamento nao pode ser alterado porque ja foi enviado para aprovacao ou aprovado.',
+                    ]);
+                }
+
+                $duplicado = PlanejamentoPeriodo::query()
+                    ->where('diario_professor_id', $diario->id)
+                    ->where('tipo_planejamento', $dados['tipo_planejamento'])
+                    ->whereDate('data_inicio', $dados['data_inicio'])
+                    ->whereKeyNot($planejamento->id)
+                    ->exists();
+
+                if ($duplicado) {
+                    throw ValidationException::withMessages([
+                        'data_inicio' => 'Ja existe outro planejamento para este tipo e data inicial neste diario.',
+                    ]);
+                }
+
+                $planejamento->update($dados + [
+                    'status' => PlanejamentoPeriodo::STATUS_RASCUNHO,
+                ]);
+
+                return $planejamento->refresh();
+            }
+
+            $planejamento = PlanejamentoPeriodo::query()
+                ->where('diario_professor_id', $diario->id)
+                ->where('tipo_planejamento', $dados['tipo_planejamento'])
+                ->whereDate('data_inicio', $dados['data_inicio'])
+                ->first();
+
+            if ($planejamento && ! in_array($planejamento->status, [PlanejamentoPeriodo::STATUS_RASCUNHO, PlanejamentoPeriodo::STATUS_DEVOLVIDO], true)) {
+                throw ValidationException::withMessages([
+                    'data_inicio' => 'Ja existe um planejamento para este tipo e data inicial aguardando aprovacao ou ja aprovado.',
+                ]);
+            }
+
+            if ($planejamento) {
+                $planejamento->update($dados + [
+                    'status' => PlanejamentoPeriodo::STATUS_RASCUNHO,
+                ]);
+
+                return $planejamento->refresh();
+            }
+
             return PlanejamentoPeriodo::create($dados + [
                 'diario_professor_id' => $diario->id,
-            ]);
-        });
-    }
-
-    public function salvarPlanejamentoSemanal(DiarioProfessor $diario, array $dados): PlanejamentoSemanal
-    {
-        return DB::transaction(function () use ($diario, $dados) {
-            return PlanejamentoSemanal::create($dados + [
-                'diario_professor_id' => $diario->id,
+                'status' => PlanejamentoPeriodo::STATUS_RASCUNHO,
             ]);
         });
     }

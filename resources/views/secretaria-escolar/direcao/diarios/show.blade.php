@@ -5,6 +5,19 @@
             'ajustes_solicitados' => 'bg-amber-100 text-amber-800',
             'pendente' => 'bg-slate-100 text-slate-700',
         ];
+        $camposPlanejamentoAulas = [
+            'tema_gerador' => 'Unidade(s) Tematica(s)',
+            'conteudos' => 'Objeto(s) de Conhecimento / Conteudo(s)',
+            'habilidades_competencias' => 'Habilidades (BNCC)',
+            'objetivos_aprendizagem' => 'Objetivos da aula',
+            'metodologia' => 'Metodologias / estrategias',
+            'estrategias_pedagogicas' => 'Atividades (desenvolvimento da aula)',
+            'recursos_didaticos' => 'Recursos didaticos',
+            'instrumentos_avaliacao' => 'Avaliacao da aprendizagem',
+            'adequacoes_inclusao' => 'Adequacoes / Inclusao (AEE / adaptacoes)',
+            'observacoes' => 'Observacoes do professor',
+            'referencias' => 'Referencias bibliograficas',
+        ];
     @endphp
 
     <div class="space-y-8">
@@ -100,9 +113,21 @@
                             <div class="flex flex-col gap-3 lg:flex-row lg:items-start lg:justify-between">
                                 <div>
                                     <p class="text-sm font-semibold text-slate-900">{{ ucfirst($planejamento->tipo_planejamento) }} • {{ optional($planejamento->data_inicio)->format('d/m/Y') }} a {{ optional($planejamento->data_fim)->format('d/m/Y') }}</p>
-                                    <p class="mt-2 text-sm text-slate-600">{{ $planejamento->objetivos_aprendizagem }}</p>
+                                    @if($planejamento->periodo_referencia)
+                                        <p class="mt-1 text-xs font-semibold uppercase tracking-[0.18em] text-slate-400">Referencia: {{ $planejamento->periodo_referencia }}</p>
+                                    @endif
                                 </div>
                                 <span class="rounded-full px-3 py-1 text-xs font-bold uppercase tracking-[0.18em] {{ $statusClasses[$planejamento->validacaoDirecao?->status ?? 'pendente'] }}">{{ str_replace('_', ' ', $planejamento->validacaoDirecao?->status ?? 'pendente') }}</span>
+                            </div>
+                            <div class="mt-4 grid gap-3 text-sm text-slate-600">
+                                @foreach($camposPlanejamentoAulas as $campo => $rotulo)
+                                    @if(filled($planejamento->{$campo}))
+                                        <div>
+                                            <span class="font-semibold text-slate-900">{{ $rotulo }}:</span><br>
+                                            {!! nl2br(e($planejamento->{$campo})) !!}
+                                        </div>
+                                    @endif
+                                @endforeach
                             </div>
                             <form method="POST" action="{{ route('secretaria-escolar.direcao.diarios.planejamento-periodo.validar', [$diario, $planejamento]) }}" class="mt-4 grid gap-4 lg:grid-cols-[180px_1fr_1fr_auto]">
                                 @csrf

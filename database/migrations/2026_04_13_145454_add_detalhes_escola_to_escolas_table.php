@@ -12,12 +12,24 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('escolas', function (Blueprint $table) {
-            $table->string('inep', 8)->nullable()->after('cnpj');
-            $table->string('ato_posse_diretor', 30)->nullable()->after('cpf_gestor');
-            $table->integer('qtd_salas')->nullable()->default(0)->after('ativo');
-            $table->string('ato_criacao', 30)->nullable();
-            $table->string('ato_autoriza', 30)->nullable();
-            $table->string('ato_recon', 30)->nullable();
+            if (! Schema::hasColumn('escolas', 'inep')) {
+                $table->string('inep', 8)->nullable()->after('cnpj');
+            }
+            if (! Schema::hasColumn('escolas', 'ato_posse_diretor')) {
+                $table->string('ato_posse_diretor', 30)->nullable()->after('cpf_gestor');
+            }
+            if (! Schema::hasColumn('escolas', 'qtd_salas')) {
+                $table->integer('qtd_salas')->nullable()->default(0)->after('ativo');
+            }
+            if (! Schema::hasColumn('escolas', 'ato_criacao')) {
+                $table->string('ato_criacao', 30)->nullable();
+            }
+            if (! Schema::hasColumn('escolas', 'ato_autoriza')) {
+                $table->string('ato_autoriza', 30)->nullable();
+            }
+            if (! Schema::hasColumn('escolas', 'ato_recon')) {
+                $table->string('ato_recon', 30)->nullable();
+            }
         });
     }
 

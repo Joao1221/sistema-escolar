@@ -13,7 +13,6 @@ use App\Models\Matricula;
 use App\Models\PendenciaProfessor;
 use App\Models\PlanejamentoAnual;
 use App\Models\PlanejamentoPeriodo;
-use App\Models\PlanejamentoSemanal;
 use App\Models\RegistroAula;
 use App\Models\Turma;
 use App\Models\Usuario;
@@ -40,14 +39,12 @@ class CoordenacaoPedagogicaService
                 'professor',
                 'planejamentoAnual.validacaoPedagogica',
                 'planejamentosPeriodo.validacaoPedagogica',
-                'planejamentosSemanais.validacaoPedagogica',
                 'registrosAula.validacaoPedagogica',
                 'acompanhamentosPedagogicos',
             ])
             ->withCount([
                 'registrosAula',
                 'planejamentosPeriodo',
-                'planejamentosSemanais',
                 'pendencias',
                 'acompanhamentosPedagogicos as alunos_em_risco_count' => function (Builder $query) {
                     $query->whereIn('situacao_risco', ['moderado', 'alto', 'critico']);
@@ -76,7 +73,6 @@ class CoordenacaoPedagogicaService
             $query->where(function (Builder $subquery) use ($status) {
                 $subquery->whereHas('planejamentoAnual.validacaoPedagogica', fn (Builder $q) => $q->where('status', $status))
                     ->orWhereHas('planejamentosPeriodo.validacaoPedagogica', fn (Builder $q) => $q->where('status', $status))
-                    ->orWhereHas('planejamentosSemanais.validacaoPedagogica', fn (Builder $q) => $q->where('status', $status))
                     ->orWhereHas('registrosAula.validacaoPedagogica', fn (Builder $q) => $q->where('status', $status));
             });
         }
@@ -99,8 +95,8 @@ class CoordenacaoPedagogicaService
             'disciplina',
             'professor',
             'planejamentoAnual.validacaoPedagogica.usuarioCoordenador',
+            'planejamentosAnuais',
             'planejamentosPeriodo.validacaoPedagogica.usuarioCoordenador',
-            'planejamentosSemanais.validacaoPedagogica.usuarioCoordenador',
             'registrosAula.validacaoPedagogica.usuarioCoordenador',
             'registrosAula.frequencias.matricula.aluno',
             'observacoesAluno.matricula.aluno',
@@ -131,9 +127,6 @@ class CoordenacaoPedagogicaService
                 'planejamentos_periodo_validados' => $diario->planejamentosPeriodo
                     ->filter(fn ($planejamento) => $planejamento->validacaoPedagogica?->status === 'validado')
                     ->count(),
-                'planejamentos_semanais_validados' => $diario->planejamentosSemanais
-                    ->filter(fn (PlanejamentoSemanal $planejamento) => $planejamento->validacaoPedagogica?->status === 'validado')
-                    ->count(),
                 'aulas_validadas' => $diario->registrosAula
                     ->filter(fn (RegistroAula $registro) => $registro->validacaoPedagogica?->status === 'validado')
                     ->count(),
@@ -155,7 +148,16 @@ class CoordenacaoPedagogicaService
         $this->garantirAcessoAoDiario($usuario, $diario);
         $this->garantirItemPertenceAoDiario($diario, $planejamento->diario_professor_id);
 
-        return $this->salvarValidacao($diario, $planejamento, $usuario, $dados);
+        $validacao = $this->salvarValidacao($diario, $planejamento, $usuario, $dados);
+
+        $novoStatus = $dados['status'] === 'validado'
+            ? PlanejamentoAnual::STATUS_APROVADO
+            : PlanejamentoAnual::STATUS_DEVOLVIDO;
+
+        PlanejamentoAnual::where('diario_professor_id', $diario->id)
+            ->update(['status' => $novoStatus]);
+
+        return $validacao;
     }
 
     public function validarPlanejamentoPeriodo(
@@ -167,19 +169,15 @@ class CoordenacaoPedagogicaService
         $this->garantirAcessoAoDiario($usuario, $diario);
         $this->garantirItemPertenceAoDiario($diario, $planejamento->diario_professor_id);
 
-        return $this->salvarValidacao($diario, $planejamento, $usuario, $dados);
-    }
+        $validacao = $this->salvarValidacao($diario, $planejamento, $usuario, $dados);
 
-    public function validarPlanejamentoSemanal(
-        Usuario $usuario,
-        DiarioProfessor $diario,
-        PlanejamentoSemanal $planejamento,
-        array $dados
-    ): ValidacaoPedagogica {
-        $this->garantirAcessoAoDiario($usuario, $diario);
-        $this->garantirItemPertenceAoDiario($diario, $planejamento->diario_professor_id);
+        $planejamento->update([
+            'status' => $dados['status'] === 'validado'
+                ? PlanejamentoPeriodo::STATUS_APROVADO
+                : PlanejamentoPeriodo::STATUS_DEVOLVIDO,
+        ]);
 
-        return $this->salvarValidacao($diario, $planejamento, $usuario, $dados);
+        return $validacao;
     }
 
     public function validarRegistroAula(

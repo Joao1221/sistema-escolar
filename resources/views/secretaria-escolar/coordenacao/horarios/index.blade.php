@@ -16,7 +16,7 @@
         </section>
 
         <section class="rounded-[2rem] border border-emerald-100 bg-white p-6 shadow-sm">
-            <form method="GET" action="{{ route('secretaria-escolar.coordenacao.horarios.index') }}" class="grid gap-4 md:grid-cols-2 xl:grid-cols-5">
+            <form method="GET" action="{{ route('secretaria-escolar.coordenacao.horarios.index') }}" class="grid gap-4 md:grid-cols-2 lg:grid-cols-4 xl:grid-cols-5">
                 <div>
                     <label for="escola_id" class="text-xs font-bold uppercase tracking-[0.18em] text-slate-500">Escola</label>
                     <select id="escola_id" name="escola_id" class="mt-2 block w-full rounded-2xl border-slate-200 text-sm">
@@ -53,11 +53,11 @@
                         @endforeach
                     </select>
                 </div>
-                <div class="flex items-end gap-3">
-                    <button type="submit" class="inline-flex items-center rounded-2xl bg-slate-900 px-5 py-3 text-xs font-bold uppercase tracking-[0.18em] text-white transition hover:bg-slate-800">
+                <div class="flex items-end gap-2 xl:gap-3">
+                    <button type="submit" class="inline-flex items-center rounded-2xl bg-slate-900 px-4 py-3 text-xs font-bold uppercase tracking-[0.18em] text-white transition hover:bg-slate-800 xl:px-5">
                         Filtrar
                     </button>
-                    <a href="{{ route('secretaria-escolar.coordenacao.horarios.index') }}" class="inline-flex items-center rounded-2xl border border-slate-200 px-5 py-3 text-xs font-bold uppercase tracking-[0.18em] text-slate-600 transition hover:bg-slate-50">
+                    <a href="{{ route('secretaria-escolar.coordenacao.horarios.index') }}" class="inline-flex items-center rounded-2xl border border-slate-200 px-4 py-3 text-xs font-bold uppercase tracking-[0.18em] text-slate-600 transition hover:bg-slate-50 xl:px-5">
                         Limpar
                     </a>
                 </div>

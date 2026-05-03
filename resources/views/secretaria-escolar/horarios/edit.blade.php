@@ -20,7 +20,7 @@
         @endif
 
         <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
-            <form action="{{ route('secretaria.horarios.update', $horario->id) }}" method="POST">
+            <form action="{{ route('secretaria-escolar.horarios.update', $horario->id) }}" method="POST">
                 @csrf
                 @method('PUT')
                 
@@ -91,7 +91,7 @@
                 </div>
 
                 <div class="px-6 py-5 bg-slate-50 flex items-center justify-end space-x-4 border-t border-slate-200">
-                    <a href="{{ route('secretaria.horarios.index') }}" class="inline-flex items-center px-4 py-2 bg-white border border-slate-300 rounded-md font-semibold text-xs text-slate-700 uppercase tracking-widest hover:bg-slate-50 transition ease-in-out duration-150 shadow-sm">
+                    <a href="{{ route('secretaria-escolar.horarios.index') }}" class="inline-flex items-center px-4 py-2 bg-white border border-slate-300 rounded-md font-semibold text-xs text-slate-700 uppercase tracking-widest hover:bg-slate-50 transition ease-in-out duration-150 shadow-sm">
                         Cancelar
                     </a>
                     <button type="submit" class="inline-flex items-center px-6 py-2 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-slate-900 focus:outline-none focus:ring-2 focus:ring-slate-500 focus:ring-offset-2 transition ease-in-out duration-150 shadow-sm" style="background-color: #000000;">

@@ -279,7 +279,6 @@ Route::middleware(['auth', 'role:Administrador da Rede|Secretário Escolar|Admin
         Route::get('/diarios/{diario}', [CoordenacaoPedagogicaController::class, 'show'])->name('diarios.show');
         Route::post('/diarios/{diario}/planejamento-anual/{planejamento}/validacao', [CoordenacaoPedagogicaController::class, 'validarPlanejamentoAnual'])->name('diarios.planejamento-anual.validar');
         Route::post('/diarios/{diario}/planejamentos-periodo/{planejamento}/validacao', [CoordenacaoPedagogicaController::class, 'validarPlanejamentoPeriodo'])->name('diarios.planejamento-periodo.validar');
-        Route::post('/diarios/{diario}/planejamentos-semanais/{planejamento}/validacao', [CoordenacaoPedagogicaController::class, 'validarPlanejamentoSemanal'])->name('diarios.planejamento-semanal.validar');
         Route::post('/diarios/{diario}/registros-aula/{registro}/validacao', [CoordenacaoPedagogicaController::class, 'validarRegistroAula'])->name('diarios.registro-aula.validar');
         Route::put('/diarios/{diario}/registros-aula/{registro}', [CoordenacaoPedagogicaController::class, 'updateRegistroAula'])->name('diarios.registro-aula.update');
         Route::put('/diarios/{diario}/avaliacoes/{avaliacao}', [CoordenacaoPedagogicaController::class, 'updateAvaliacao'])->name('diarios.avaliacoes.update');
@@ -308,7 +307,6 @@ Route::middleware(['auth', 'role:Administrador da Rede|Secretário Escolar|Admin
         Route::get('/diarios/{diario}', [DirecaoEscolarController::class, 'show'])->name('diarios.show');
         Route::post('/diarios/{diario}/planejamento-anual/{planejamento}/validacao', [DirecaoEscolarController::class, 'validarPlanejamentoAnual'])->name('diarios.planejamento-anual.validar');
         Route::post('/diarios/{diario}/planejamentos-periodo/{planejamento}/validacao', [DirecaoEscolarController::class, 'validarPlanejamentoPeriodo'])->name('diarios.planejamento-periodo.validar');
-        Route::post('/diarios/{diario}/planejamentos-semanais/{planejamento}/validacao', [DirecaoEscolarController::class, 'validarPlanejamentoSemanal'])->name('diarios.planejamento-semanal.validar');
         Route::post('/diarios/{diario}/registros-aula/{registro}/validacao', [DirecaoEscolarController::class, 'validarRegistroAula'])->name('diarios.registro-aula.validar');
         Route::put('/diarios/{diario}/registros-aula/{registro}', [DirecaoEscolarController::class, 'updateRegistroAula'])->name('diarios.registro-aula.update');
         Route::put('/diarios/{diario}/avaliacoes/{avaliacao}', [DirecaoEscolarController::class, 'updateAvaliacao'])->name('diarios.avaliacoes.update');
@@ -411,8 +409,9 @@ Route::middleware(['auth', 'can:criar diarios'])->prefix('professor')->name('pro
     Route::post('/diario', [DiarioProfessorController::class, 'store'])->name('diario.store');
     Route::get('/diario/{diario}', [DiarioProfessorController::class, 'show'])->name('diario.show');
     Route::post('/diario/{diario}/planejamento-anual', [DiarioProfessorController::class, 'storePlanejamentoAnual'])->name('diario.planejamento-anual.store');
-    Route::post('/diario/{diario}/planejamento-semanal', [DiarioProfessorController::class, 'storePlanejamentoSemanal'])->name('diario.planejamento-semanal.store');
+    Route::patch('/diario/{diario}/planejamento-anual/enviar', [DiarioProfessorController::class, 'enviarPlanejamentoAnual'])->name('diario.planejamento-anual.enviar');
     Route::post('/diario/{diario}/planejamento-periodo', [DiarioProfessorController::class, 'storePlanejamentoPeriodo'])->name('diario.planejamento-periodo.store');
+    Route::patch('/diario/{diario}/planejamento-periodo/{planejamento}/enviar', [DiarioProfessorController::class, 'enviarPlanejamentoPeriodo'])->name('diario.planejamento-periodo.enviar');
     Route::post('/diario/{diario}/registro-aula', [DiarioProfessorController::class, 'storeRegistroAula'])->name('diario.registro-aula.store');
     Route::post('/diario/{diario}/frequencia', [DiarioProfessorController::class, 'storeFrequencia'])->name('diario.frequencia.store');
     Route::post('/diario/{diario}/avaliacoes', [DiarioProfessorController::class, 'storeAvaliacao'])->name('diario.avaliacoes.store');
